@@ -1,7 +1,11 @@
 path = require "path"
-runas = require "runas"
+latexmk = require "./latexmk"
 
 module.exports =
+  configDefaults:
+    latexmkPath: "/usr/texbin/latexmk"
+    outputDirectory: ""
+
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
 
@@ -9,22 +13,27 @@ module.exports =
     editor = atom.workspace.activePaneItem
     file = editor.buffer.file
 
-    if file?
-      dir = path.dirname(file.path)
-      outdir = path.join(dir, "output") # TODO: Make this configurable.
+    unless file?
+      return -1 # Magic value... replace?
 
-      # TODO: Find a reasonable way to resolve `latexmk` regardless of platform.
-      status = runas("/usr/texbin/latexmk", [
-        "--pdf",
-        "--f",
-        "--interaction=nonstopmode",
-        "--outdir=#{outdir}",
-        file.path
-      ])
+    # Save file if it's dirty. Should this be configurable?
+    editor.save() if editor.isModified()
 
-      if status == 0
-        # TODO: Display a more visible success message.
-        console.info "Success!"
-      else
-        # TODO: Introduce proper error and warning handling.
-        console.error "TeXification failed! Check the log file for more info..."
+    # TODO: Find a reasonable way to resolve `latexmk` regardless of platform.
+    latexmkPath = atom.config.get("latex.latexmkPath")
+
+    args = [
+      "--pdf"
+      "--f"
+      "--interaction=nonstopmode"
+      "--cd"
+      file.path
+    ]
+
+    dir = path.dirname(file.path)
+    outdir = atom.config.get("latex.outputDirectory")
+    if outdir?.length
+      outdir = path.join(dir, outdir)
+      args[-1..] = ["--outdir=#{outdir}"].concat(args[-1..])
+
+    exitCode = latexmk.run(latexmkPath, args)
