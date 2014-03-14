@@ -1,0 +1,11 @@
+"menu": [
+  {
+    "label": "Packages"
+    "submenu": [
+      "label": "LaTeX"
+      "submenu": [
+        { "label": "Build", "command": "latex:build" }
+      ]
+    ]
+  }
+]
