@@ -11,7 +11,7 @@ module.exports =
 
   build: ->
     editor = atom.workspace.activePaneItem
-    file = editor.buffer.file
+    file = editor?.buffer.file
 
     unless file?
       return -1 # Magic value... replace?
