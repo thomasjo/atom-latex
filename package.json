@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "fs-plus": "~2.0.0",
-    "runas": "~0.5.4",
     "temp": "~0.7.0",
     "wrench": "~1.5.8"
   }

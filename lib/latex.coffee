@@ -36,4 +36,4 @@ module.exports =
       outdir = path.join(dir, outdir)
       args[-1..] = ["--outdir=#{outdir}"].concat(args[-1..])
 
-    exitCode = latexmk.run(latexmkPath, args)
+    latexmk.run(latexmkPath, args)
