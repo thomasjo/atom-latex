@@ -5,7 +5,7 @@ module.exports =
     # TODO: Add support killing the process.
     proc = child_process.exec(path + " " + args.join " ")
 
-    proc.on 'close', (code, signal) ->
+    proc.on "close", (code, signal) =>
       if code == 0
         # TODO: Display a more visible success message.
         console.info "Success!"
