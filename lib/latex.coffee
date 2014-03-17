@@ -9,6 +9,7 @@ module.exports =
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
 
+  # TODO: Now that we're async, we need to always return a promise or some such.
   build: ->
     editor = atom.workspace.activePaneItem
     file = editor?.buffer.file
@@ -36,4 +37,4 @@ module.exports =
       outdir = path.join(dir, outdir)
       args[-1..] = ["--outdir=#{outdir}"].concat(args[-1..])
 
-    latexmk.run(latexmkPath, args)
+    proc = latexmk.run(latexmkPath, args)

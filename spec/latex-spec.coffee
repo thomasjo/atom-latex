@@ -32,9 +32,18 @@ describe "Latex", ->
 
     it "runs `latexmk` for existing files", ->
       editor = atom.workspaceView.openSync("file.tex")
-      exitCode = latex.build()
 
-      expect(exitCode).toEqual(0)
+      [exitCode, done] = []
+      proc = latex.build()
+      proc.on "close", (code) ->
+        exitCode = code
+        done = true
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(exitCode).toEqual(0)
 
     it "saves the file before building, if modified", ->
       editor = atom.workspaceView.openSync("file.tex")
