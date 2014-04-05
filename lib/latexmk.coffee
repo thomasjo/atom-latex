@@ -3,7 +3,7 @@ child_process = require "child_process"
 module.exports =
   run: (path, args) ->
     # TODO: Add support killing the process.
-    proc = child_process.exec(path + " " + args.join " ")
+    proc = child_process.exec(path + " " + args.join(" "))
 
     proc.on "close", (code, signal) =>
       if code == 0
