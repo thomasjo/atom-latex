@@ -10,7 +10,7 @@ module.exports =
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
 
-  # TODO: Now that we're async, we need to always return a promise or some such.
+  # TODO: Now that we're async, should we always return a promise or some such?
   build: ->
     editor = atom.workspace.activePaneItem
     file = editor?.buffer.file
