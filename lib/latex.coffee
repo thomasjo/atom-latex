@@ -5,6 +5,7 @@ module.exports =
   configDefaults:
     latexmkPath: "/usr/texbin/latexmk"
     outputDirectory: ""
+    enableShellEscape: false
 
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
@@ -22,19 +23,5 @@ module.exports =
 
     # TODO: Find a reasonable way to resolve `latexmk` regardless of platform.
     latexmkPath = atom.config.get("latex.latexmkPath")
-
-    args = [
-      "--pdf"
-      "--f"
-      "--interaction=nonstopmode"
-      "--cd"
-      file.path
-    ]
-
-    dir = path.dirname(file.path)
-    outdir = atom.config.get("latex.outputDirectory")
-    if outdir?.length
-      outdir = path.join(dir, outdir)
-      args[-1..] = ["--outdir=#{outdir}"].concat(args[-1..])
-
+    args = latexmk.constructArgs(file.path)
     proc = latexmk.run(latexmkPath, args)
