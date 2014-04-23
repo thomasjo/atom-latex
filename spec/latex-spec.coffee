@@ -8,8 +8,6 @@ wrench = require "wrench"
 latex = require "../lib/latex"
 
 describe "Latex", ->
-  [editor] = []
-
   beforeEach ->
     tempPath = fs.realpathSync(temp.mkdirSync("atom-latex"))
     fixturesPath = atom.project.getPath()
@@ -20,8 +18,10 @@ describe "Latex", ->
     atom.workspace = atom.workspaceView.model
 
     # Ensure package has sensible config values
-    atom.config.set("latex.latexmkPath", path.join(fixturesPath, "latexmk.sh"))
+    atom.config.set("latex.texPath", "#{fixturesPath}:$PATH")
     atom.config.set("latex.outputDirectory", "output")
+
+    latex.initialize()
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->
