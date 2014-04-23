@@ -2,9 +2,11 @@ child_process = require "child_process"
 path = require "path"
 
 module.exports =
-  run: (path, args) ->
+  executable: "latexmk"
+
+  run: (args) ->
     # TODO: Add support for killing the process.
-    proc = child_process.exec(path + " " + args.join(" "))
+    proc = child_process.exec("#{@executable} #{args.join(" ")}")
 
     proc.on "close", (code, signal) =>
       if code == 0
@@ -27,7 +29,6 @@ module.exports =
     pdfOpts = [] # TODO: Add default opts (-synctex=1, -file-line-error, ...)
     enableShellEscape = atom.config.get("latex.enableShellEscape")
     pdfOpts.push("-shell-escape %O %S") if enableShellEscape?
-
     args.push("--pdflatex=\"pdflatex #{pdfOpts.join(" ")}\"")
 
     dir = path.dirname(filePath)
