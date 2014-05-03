@@ -4,16 +4,11 @@ path = require "path"
 module.exports =
   executable: "latexmk"
 
-  run: (args) ->
+  run: (args, callback) ->
     # TODO: Add support for killing the process.
     proc = child_process.exec("#{@executable} #{args.join(" ")}")
     proc.on "close", (code, signal) =>
-      if code == 0
-        # TODO: Display a more visible success message.
-        console.info "Success!" unless atom.inSpecMode()
-      else
-        # TODO: Introduce proper error and warning handling.
-        console.error "TeXification failed! Check the log file for more info..." unless atom.inSpecMode()
+      callback(code)
     proc
 
   constructArgs: (filePath) ->

@@ -26,30 +26,29 @@ describe "Latex", ->
   describe "build", ->
     it "does nothing for new, unsaved files", ->
       editor = atom.workspaceView.openSync()
-      exitCode = latex.build()
+      fakeInvoked = false
+      fake = -> fakeInvoked = true
 
-      expect(exitCode).toEqual(undefined)
+      spyOn(latex, "showResult").andCallFake(fake)
+      spyOn(latex, "showError").andCallFake(fake)
+
+      expect(fakeInvoked).toEqual(false)
 
     it "runs `latexmk` for existing files", ->
       editor = atom.workspaceView.openSync("file.tex")
-
       [exitCode, done] = []
-      proc = latex.build()
-      proc.on "close", (code) ->
-        exitCode = code
-        done = true
 
-      waitsFor ->
-        done
+      spyOn(latex, "showResult").andCallFake -> done = true
+      latex.build()
 
-      runs ->
-        expect(exitCode).toEqual(0)
+      waitsFor -> done
+      runs -> expect(latex.showResult).toHaveBeenCalled();
 
     it "saves the file before building, if modified", ->
       editor = atom.workspaceView.openSync("file.tex")
+
       editor.moveCursorToBottom()
       editor.insertNewline()
-      expect(editor.isModified()).toEqual(true)
-
       latex.build()
+
       expect(editor.isModified()).toEqual(false)
