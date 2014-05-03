@@ -12,17 +12,15 @@ module.exports =
     atom.workspaceView.command "latex:build", => @build()
 
   initialize: ->
-    envPath = process.env.PATH
+    atom.config.observe "latex.texPath", => @setPath()
+
+  setPath: ->
     texPath = atom.config.get("latex.texPath")
-    texPathSansMarker = texPath?.replace("$PATH", "")
-    if texPath? and texPath.length == texPathSansMarker.length
+    unless texPath?.indexOf("$PATH") >= 0
       console.error "latex.texPath MUST contain $PATH at some point"
-      return -1
-
-    hasAllPaths = texPathSansMarker?.split(":").every (path) ->
-      envPath.indexOf(path) > -1
-
-    process.env.PATH = texPath.replace("$PATH", envPath) unless hasAllPaths
+      return
+    @envPath = process.env.PATH unless @envPath?
+    process.env.PATH = texPath.replace("$PATH", @envPath)
 
   build: ->
     editor = atom.workspace.activePaneItem
