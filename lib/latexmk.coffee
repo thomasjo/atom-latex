@@ -24,7 +24,11 @@ module.exports =
       "-pdf"
     ]
 
-    pdfOpts = [] # TODO: Add default opts (-synctex=1, -file-line-error, ...)
+    pdfOpts = [
+      "-synctex=1"
+      "-file-line-error"
+    ]
+
     enableShellEscape = atom.config.get("latex.enableShellEscape")
     pdfOpts.push("-shell-escape %O %S") if enableShellEscape?
     args.push("--pdflatex=\"pdflatex #{pdfOpts.join(" ")}\"")
