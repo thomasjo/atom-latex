@@ -31,7 +31,7 @@ module.exports =
 
     enableShellEscape = atom.config.get("latex.enableShellEscape")
     pdfOpts.push("-shell-escape %O %S") if enableShellEscape?
-    args.push("--pdflatex=\"pdflatex #{pdfOpts.join(" ")}\"")
+    args.push("-pdflatex=\"pdflatex #{pdfOpts.join(" ")}\"")
 
     dir = path.dirname(filePath)
     outdir = atom.config.get("latex.outputDirectory")
