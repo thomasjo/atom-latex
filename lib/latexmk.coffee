@@ -7,7 +7,6 @@ module.exports =
   run: (args) ->
     # TODO: Add support for killing the process.
     proc = child_process.exec("#{@executable} #{args.join(" ")}")
-
     proc.on "close", (code, signal) =>
       if code == 0
         # TODO: Display a more visible success message.
@@ -15,7 +14,6 @@ module.exports =
       else
         # TODO: Introduce proper error and warning handling.
         console.error "TeXification failed! Check the log file for more info..." unless atom.inSpecMode()
-
     proc
 
   constructArgs: (filePath) ->

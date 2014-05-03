@@ -28,7 +28,7 @@ describe "Latex", ->
       editor = atom.workspaceView.openSync()
       exitCode = latex.build()
 
-      expect(exitCode).toEqual(-1)
+      expect(exitCode).toEqual(undefined)
 
     it "runs `latexmk` for existing files", ->
       editor = atom.workspaceView.openSync("file.tex")

@@ -26,7 +26,8 @@ module.exports =
     editor = atom.workspace.activePaneItem
     file = editor?.buffer.file
     unless file?
-      return -1
+      # TODO: Show info message that the file has to be saved once?
+      return
 
     editor.save() if editor.isModified() # NOTE: Should this be configurable?
     args = latexmk.constructArgs(file.path)
