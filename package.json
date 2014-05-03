@@ -13,7 +13,7 @@
     "atom": ">0.65.0"
   },
   "dependencies": {
-    "fs-plus": "~2.0.0",
+    "fs-plus": "~2.2.0",
     "temp": "~0.7.0",
     "wrench": "~1.5.8"
   }
