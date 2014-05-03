@@ -21,8 +21,6 @@ describe "Latex", ->
     atom.config.set("latex.texPath", "#{fixturesPath}:$PATH")
     atom.config.set("latex.outputDirectory", "output")
 
-    latex.initialize()
-
   describe "build", ->
     it "does nothing for new, unsaved files", ->
       editor = atom.workspaceView.openSync()

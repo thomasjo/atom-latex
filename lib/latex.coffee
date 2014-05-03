@@ -8,19 +8,7 @@ module.exports =
     enableShellEscape: false
 
   activate: ->
-    @initialize()
     atom.workspaceView.command "latex:build", => @build()
-
-  initialize: ->
-    atom.config.observe "latex.texPath", => @setPath()
-
-  setPath: ->
-    texPath = atom.config.get("latex.texPath")
-    unless texPath?.indexOf("$PATH") >= 0
-      console.error "latex.texPath MUST contain $PATH at some point"
-      return
-    @envPath = process.env.PATH unless @envPath?
-    process.env.PATH = texPath.replace("$PATH", @envPath)
 
   build: ->
     editor = atom.workspace.activePaneItem

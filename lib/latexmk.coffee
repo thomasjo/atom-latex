@@ -5,9 +5,12 @@ module.exports =
   executable: "latexmk"
 
   run: (args, callback) ->
+    command = "#{@executable} #{args.join(" ")}"
+    options = env: PATH: @constructPath()
+
     # TODO: Add support for killing the process.
-    proc = child_process.exec("#{@executable} #{args.join(" ")}")
-    proc.on "close", (code, signal) =>
+    proc = child_process.exec(command, options)
+    proc.on "close", (code, signal) ->
       callback(code)
     proc
 
@@ -36,3 +39,7 @@ module.exports =
 
     args.push(filePath)
     args
+
+  constructPath: ->
+    texPath = atom.config.get("latex.texPath")
+    texPath?.replace("$PATH", process.env.PATH)
