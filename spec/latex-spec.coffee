@@ -18,8 +18,9 @@ describe "Latex", ->
     atom.workspace = atom.workspaceView.model
 
     # Ensure package has sensible config values
-    atom.config.set("latex.texPath", "#{fixturesPath}:$PATH")
+    atom.config.set("latex.texPath", "$PATH:/usr/texbin")
     atom.config.set("latex.outputDirectory", "output")
+    atom.config.set("latex.enableShellEscape", false)
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->
@@ -50,3 +51,14 @@ describe "Latex", ->
       latex.build()
 
       expect(editor.isModified()).toEqual(false)
+
+
+    it "supports paths containing spaces", ->
+      editor = atom.workspaceView.openSync("filename with spaces.tex")
+      [exitCode, done] = []
+
+      spyOn(latex, "showResult").andCallFake -> done = true
+      latex.build()
+
+      waitsFor -> done
+      runs -> expect(latex.showResult).toHaveBeenCalled();

@@ -35,9 +35,9 @@ module.exports =
     if outdir?.length
       dir = path.dirname(filePath)
       outdir = path.join(dir, outdir)
-      args.push("-outdir=#{outdir}")
+      args.push("-outdir=\"#{outdir}\"")
 
-    args.push(filePath)
+    args.push("\"#{filePath}\"")
     args
 
   constructPath: ->
