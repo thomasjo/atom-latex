@@ -1,3 +1,5 @@
+ProgressIndicatorView = require "./progress-indicator-view"
+
 path = require "path"
 latexmk = require "./latexmk"
 
@@ -18,8 +20,12 @@ module.exports =
       return
 
     editor.save() if editor.isModified() # NOTE: Should this be configurable?
+
     args = latexmk.constructArgs(file.path)
+    @showProgressIndicator()
     proc = latexmk.run args, (statusCode) =>
+      @destroyProgressIndicator()
+
       if statusCode == 0
         @showResult()
       else
@@ -34,3 +40,14 @@ module.exports =
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
     console.error error unless atom.inSpecMode()
+
+  showProgressIndicator: ->
+    return @indicator if @indicator?
+
+    @indicator = new ProgressIndicatorView
+    atom.workspaceView.statusBar.prependRight(@indicator)
+    @indicator
+
+  destroyProgressIndicator: ->
+    @indicator?.destroy()
+    @indicator = null
