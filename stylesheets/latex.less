@@ -1,0 +1,28 @@
+@import "ui-variables";
+
+.latex-progress-indicator {
+  color: @text-color-info;
+
+  .dot {
+    opacity: 0;
+    -webkit-animation: dot 1.0s infinite;
+
+    &.one {
+      -webkit-animation-delay: 0.0s;
+    }
+
+    &.two {
+      -webkit-animation-delay: 0.2s;
+    }
+
+    &.three {
+      -webkit-animation-delay: 0.3s;
+    }
+  }
+}
+
+@-webkit-keyframes dot {
+  0% { opacity: 0; }
+  50% { opacity: 0.1; }
+  100% { opacity: 1; }
+}
