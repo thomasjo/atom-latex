@@ -1,4 +1,4 @@
-# LaTeX package
+# LaTeX package [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
 
 A simple package for Atom that compiles LaTeX files by invoking latexmk.
 
