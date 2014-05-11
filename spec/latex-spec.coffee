@@ -1,11 +1,22 @@
-{WorkspaceView} = require "atom"
-
 fs = require "fs-plus"
 path = require "path"
 temp = require "temp"
 wrench = require "wrench"
 
 latex = require "../lib/latex"
+
+{View, WorkspaceView} = require "atom"
+
+class StatusBarMock extends View
+  @content: ->
+    @div class: "status-bar tool-panel panel-bottom", =>
+      @div outlet: "rightPanel", class: "status-bar-right pull-right"
+
+  attach: ->
+    atom.workspaceView.appendToTop(this)
+
+  prependRight: (view) ->
+    @rightPanel.append(view)
 
 describe "Latex", ->
   beforeEach ->
@@ -15,6 +26,8 @@ describe "Latex", ->
     atom.project.setPath(tempPath)
 
     atom.workspaceView = new WorkspaceView
+    atom.workspaceView.statusBar = new StatusBarMock
+    atom.workspaceView.statusBar.attach()
     atom.workspace = atom.workspaceView.model
 
     # Ensure package has sensible config values
@@ -51,7 +64,6 @@ describe "Latex", ->
       latex.build()
 
       expect(editor.isModified()).toEqual(false)
-
 
     it "supports paths containing spaces", ->
       editor = atom.workspaceView.openSync("filename with spaces.tex")

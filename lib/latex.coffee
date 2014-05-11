@@ -1,7 +1,7 @@
-ProgressIndicatorView = require "./progress-indicator-view"
-
 path = require "path"
 latexmk = require "./latexmk"
+
+ProgressIndicatorView = require "./progress-indicator-view"
 
 module.exports =
   configDefaults:
@@ -45,7 +45,7 @@ module.exports =
     return @indicator if @indicator?
 
     @indicator = new ProgressIndicatorView
-    atom.workspaceView.statusBar.prependRight(@indicator)
+    atom.workspaceView.statusBar?.prependRight(@indicator)
     @indicator
 
   destroyProgressIndicator: ->
