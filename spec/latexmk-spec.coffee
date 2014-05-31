@@ -36,11 +36,9 @@ describe "latexmk", ->
 
     it "reads `latex.texPath` as configured", ->
       latexmk.constructPath()
-
       expect(atom.config.get).toHaveBeenCalledWith("latex.texPath")
 
     it "replaces $PATH with process.env.PATH", ->
       expectedPath = "#{process.env.PATH}:/usr/texbin"
       path = latexmk.constructPath()
-
       expect(path).toEqual(expectedPath)
