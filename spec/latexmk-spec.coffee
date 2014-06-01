@@ -6,10 +6,6 @@ spyOnConfig = (key, value) =>
     return null
 
 describe "latexmk", ->
-  describe "run", ->
-    xit "...", ->
-      return
-
   describe "constructArgs", ->
     beforeEach ->
       @filePath = "foo.tex"
