@@ -33,6 +33,13 @@ describe "latexmk", ->
       arg = latexmk.constructArgs(@filePath)?.splice(-2, 1)[0]
       expect(arg).toEqual(expectedArg)
 
+    it "adds -outdir=<path> argument according to package config", ->
+      outdir = "bar"
+      expectedArg = "-outdir=\"#{outdir}\""
+      spyOnConfig("latex.outputDirectory", outdir)
+      arg = latexmk.constructArgs(@filePath)?.splice(-2, 1)[0]
+      expect(arg).toEqual(expectedArg)
+
   describe "constructPath", ->
     beforeEach ->
       spyOnConfig("latex.texPath", "$PATH:/usr/texbin")
