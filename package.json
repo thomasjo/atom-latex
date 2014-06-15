@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "fs-plus": "~2.2.0",
-    "temp": "~0.7.0",
+    "temp": "~0.8.0",
     "wrench": "~1.5.8"
   }
 }
