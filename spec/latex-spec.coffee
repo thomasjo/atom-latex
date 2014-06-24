@@ -2,7 +2,6 @@ fs = require "fs-plus"
 path = require "path"
 temp = require "temp"
 wrench = require "wrench"
-
 latex = require "../lib/latex"
 
 {View, WorkspaceView} = require "atom"
