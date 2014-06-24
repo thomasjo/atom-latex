@@ -1,11 +1,12 @@
 child_process = require "child_process"
 path = require "path"
 
-module.exports =
-  executable: "latexmk"
+Builder = require "./builder"
 
+module.exports =
+class LatexmkBuilder extends Builder
   run: (args, callback) ->
-    command = "#{@executable} #{args.join(" ")}"
+    command = "latexmk #{args.join(" ")}"
     options = env: PATH: @constructPath()
 
     # TODO: Add support for killing the process.

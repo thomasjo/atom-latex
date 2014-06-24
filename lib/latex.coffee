@@ -1,6 +1,6 @@
 path = require "path"
-latexmk = require "./latexmk"
 
+LatexmkBuilder = require "./latexmk"
 ProgressIndicatorView = require "./progress-indicator-view"
 
 module.exports =
@@ -34,7 +34,7 @@ module.exports =
     return
 
   getBuilder: ->
-    latexmk
+    new LatexmkBuilder()
 
   showResult: ->
     # TODO: Display a more visible success message.
