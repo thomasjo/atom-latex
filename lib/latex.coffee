@@ -21,9 +21,10 @@ module.exports =
 
     editor.save() if editor.isModified() # NOTE: Should this be configurable?
 
-    args = latexmk.constructArgs(file.path)
+    builder = @getBuilder()
+    args = builder.constructArgs(file.path)
     @showProgressIndicator()
-    proc = latexmk.run args, (statusCode) =>
+    proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
 
       if statusCode == 0
@@ -32,6 +33,9 @@ module.exports =
         @showError("TeXification failed! Check the log file for more info...")
 
     return
+
+  getBuilder: ->
+    latexmk
 
   showResult: ->
     # TODO: Display a more visible success message.
