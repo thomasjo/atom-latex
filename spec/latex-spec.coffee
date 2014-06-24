@@ -18,6 +18,18 @@ class StatusBarMock extends View
   prependRight: (view) ->
     @rightPanel.append(view)
 
+fakeBuilder =
+  executable: ""  # TODO: Remove this from builder signature.
+
+  run: (args, callback) ->
+    callback(0)
+
+  constructArgs: (filePath) ->
+    return []
+
+  constructPath: ->
+    return ""
+
 describe "Latex", ->
   beforeEach ->
     tempPath = fs.realpathSync(temp.mkdirSync("atom-latex"))
@@ -34,6 +46,8 @@ describe "Latex", ->
     atom.config.set("latex.texPath", "$PATH:/usr/texbin")
     atom.config.set("latex.outputDirectory", "output")
     atom.config.set("latex.enableShellEscape", false)
+
+    spyOn(latex, "getBuilder").andReturn(fakeBuilder)
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->
