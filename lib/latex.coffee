@@ -26,7 +26,6 @@ module.exports =
     @showProgressIndicator()
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
-
       if statusCode == 0
         @showResult()
       else
