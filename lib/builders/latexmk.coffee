@@ -40,7 +40,3 @@ class LatexmkBuilder extends Builder
 
     args.push("\"#{filePath}\"")
     args
-
-  constructPath: ->
-    texPath = atom.config.get("latex.texPath")
-    texPath?.replace("$PATH", process.env.PATH)
