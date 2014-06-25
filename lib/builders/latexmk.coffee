@@ -1,7 +1,7 @@
 child_process = require "child_process"
 path = require "path"
 
-Builder = require "./builder"
+Builder = require "../builder"
 
 module.exports =
 class LatexmkBuilder extends Builder

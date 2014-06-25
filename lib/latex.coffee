@@ -1,6 +1,6 @@
 path = require "path"
 
-LatexmkBuilder = require "./latexmk"
+LatexmkBuilder = require "./builders/latexmk"
 ProgressIndicatorView = require "./progress-indicator-view"
 
 module.exports =

@@ -1,4 +1,4 @@
-LatexmkBuilder = require "../lib/latexmk"
+LatexmkBuilder = require "../../lib/builders/latexmk"
 
 spyOnConfig = (key, value) =>
   spyOn(atom.config, "get").andCallFake (_key) =>
