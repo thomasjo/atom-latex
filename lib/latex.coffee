@@ -28,8 +28,26 @@ module.exports =
       @destroyProgressIndicator()
       if statusCode == 0
         @showResult()
+      else if statusCode == 127
+        @showError(
+          """
+          TeXification failed! Builder executable not found.
+
+            latex.texPath
+              as configured: #{atom.config.get("latex.texPath")}
+              when resolved: #{builder.constructPath()}
+
+          Make sure latex.texPath is configured correctly; either adjust it \
+          via the settings view, or directly in your config.cson file.
+          """
+        )
       else
-        @showError("TeXification failed! Check the log file for more info...")
+        @showError(
+          """
+          TeXification failed with status code #{statusCode}! \
+          Check the log file for more info...
+          """
+        )
 
     return
 
