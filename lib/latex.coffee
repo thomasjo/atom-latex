@@ -28,8 +28,11 @@ module.exports =
       @destroyProgressIndicator()
       if statusCode == 0
         @showResult()
+      else if statusCode == 127 # Command not found, help user troubleshoot.
+        path = new LatexmkBuilder().constructPath()
+        @showError("TeXification failed! Latexmk not found. (Path: '#{path}'.) Adjust your path in latex settings pane...")
       else
-        @showError("TeXification failed! Check the log file for more info...")
+        @showError("TeXification failed with status code #{statusCode}! Check the log file for more info...")
 
     return
 
