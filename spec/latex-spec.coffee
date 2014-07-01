@@ -40,7 +40,7 @@ describe "Latex", ->
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->
-      editor = atom.workspaceView.openSync()
+      editor = atom.workspace.openSync()
       fakeInvoked = false
       fake = -> fakeInvoked = true
 
@@ -50,7 +50,7 @@ describe "Latex", ->
       expect(fakeInvoked).toEqual(false)
 
     it "runs `latexmk` for existing files", ->
-      editor = atom.workspaceView.openSync("file.tex")
+      editor = atom.workspace.openSync("file.tex")
       [exitCode, done] = []
 
       spyOn(latex, "showResult").andCallFake -> done = true
@@ -60,7 +60,7 @@ describe "Latex", ->
       runs -> expect(latex.showResult).toHaveBeenCalled();
 
     it "saves the file before building, if modified", ->
-      editor = atom.workspaceView.openSync("file.tex")
+      editor = atom.workspace.openSync("file.tex")
 
       editor.moveCursorToBottom()
       editor.insertNewline()
@@ -69,7 +69,7 @@ describe "Latex", ->
       expect(editor.isModified()).toEqual(false)
 
     it "supports paths containing spaces", ->
-      editor = atom.workspaceView.openSync("filename with spaces.tex")
+      editor = atom.workspace.openSync("filename with spaces.tex")
       [exitCode, done] = []
 
       spyOn(latex, "showResult").andCallFake -> done = true
