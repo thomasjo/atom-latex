@@ -1,3 +1,7 @@
+## 0.11.0
+* Merged [Pull Request 10](https://github.com/thomasjo/atom-latex/pull/10).
+  * Improves the error messages to help users debug e.g. bad `PATH`.
+
 ## 0.10.0
 * Refactor code to minimize direct dependence on `latexmk` in an attempt
   to prepare for future support of other TeX builders.
