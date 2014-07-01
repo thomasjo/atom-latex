@@ -52,7 +52,7 @@ module.exports =
     return
 
   getBuilder: ->
-    new LatexmkBuilder()
+    new LatexmkBuilder
 
   showResult: ->
     # TODO: Display a more visible success message.

@@ -11,23 +11,13 @@ class StatusBarMock extends View
     @div class: "status-bar tool-panel panel-bottom", =>
       @div outlet: "rightPanel", class: "status-bar-right pull-right"
 
-  attach: ->
-    atom.workspaceView.appendToTop(this)
-
-  prependRight: (view) ->
-    @rightPanel.append(view)
+  attach: -> atom.workspaceView.appendToTop(this)
+  prependRight: (view) -> @rightPanel.append(view)
 
 fakeBuilder =
-  executable: ""  # TODO: Remove this from builder signature.
-
-  run: (args, callback) ->
-    callback(0)
-
-  constructArgs: (filePath) ->
-    return []
-
-  constructPath: ->
-    return ""
+  run: (args, callback) -> callback(0)
+  constructArgs: (filePath) -> return []
+  constructPath: -> return ""
 
 describe "Latex", ->
   beforeEach ->

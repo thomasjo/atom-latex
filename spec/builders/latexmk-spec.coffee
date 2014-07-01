@@ -9,7 +9,7 @@ describe "LatexmkBuilder", ->
   [builder] = []
 
   beforeEach ->
-    builder = new LatexmkBuilder()
+    builder = new LatexmkBuilder
 
   describe "constructArgs", ->
     beforeEach ->
