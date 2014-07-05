@@ -2,6 +2,7 @@ path = require "path"
 
 LatexmkBuilder = require "./builders/latexmk"
 ProgressIndicatorView = require "./progress-indicator-view"
+ErrorIndicatorView = require "./error-indicator-view"
 
 module.exports =
   configDefaults:
@@ -23,6 +24,8 @@ module.exports =
 
     builder = @getBuilder()
     args = builder.constructArgs(file.path)
+
+    @destroyErrorIndicator()
     @showProgressIndicator()
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
@@ -61,6 +64,7 @@ module.exports =
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
     console.error error unless atom.inSpecMode()
+    @showErrorIndicator()
 
   showProgressIndicator: ->
     return @indicator if @indicator?
@@ -69,6 +73,17 @@ module.exports =
     atom.workspaceView.statusBar?.prependRight(@indicator)
     @indicator
 
+  showErrorIndicator: ->
+    return @errorIndicator if @errorIndicator?
+
+    @errorIndicator = new ErrorIndicatorView
+    atom.workspaceView.statusBar?.prependRight(@errorIndicator)
+    @errorIndicator
+
   destroyProgressIndicator: ->
     @indicator?.destroy()
     @indicator = null
+
+  destroyErrorIndicator: ->
+    @errorIndicator?.destroy()
+    @errorIndicator = null
