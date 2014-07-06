@@ -9,6 +9,7 @@ class Builder
 
   run: -> null
   constructArgs: -> null
+  parseLogFile: (texFilePath) -> null
 
   constructChildProcessOptions: ->
     env = _.clone(process.env)
@@ -19,3 +20,9 @@ class Builder
   constructPath: ->
     texPath = atom.config.get("latex.texPath")
     texPath?.replace("$PATH", process.env[@envPathKey])
+
+  resolveLogFilePath: (texFilePath) ->
+    outputDirectory = atom.config.get("latex.outputDirectory") ? ""
+    currentDirectory = path.dirname(texFilePath)
+    fileName = path.basename(texFilePath).replace(/\.tex$/, ".log")
+    logFilePath = path.join(currentDirectory, outputDirectory, fileName)

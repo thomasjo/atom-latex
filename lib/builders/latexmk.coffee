@@ -1,12 +1,15 @@
 child_process = require "child_process"
+fs = require "fs-plus"
 path = require "path"
 Builder = require "../builder"
+LogParser = require "../parsers/log-parser"
 
 module.exports =
 class LatexmkBuilder extends Builder
   run: (args, callback) ->
     command = "latexmk #{args.join(" ")}"
     options = @constructChildProcessOptions()
+    options.env["max_print_line"] = 1000  # Max log file line length.
 
     # TODO: Add support for killing the process.
     proc = child_process.exec(command, options)
@@ -39,3 +42,10 @@ class LatexmkBuilder extends Builder
 
     args.push("\"#{filePath}\"")
     args
+
+  parseLogFile: (texFilePath) ->
+    logFilePath = @resolveLogFilePath(texFilePath)
+    return unless fs.existsSync(logFilePath)
+
+    parser = new LogParser(logFilePath)
+    result = parser.parse()
