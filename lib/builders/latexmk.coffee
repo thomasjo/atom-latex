@@ -3,6 +3,7 @@ path = require "path"
 MasterTexFinder = require '../master-tex-finder'
 
 Builder = require "../builder"
+MasterTexFinder = require "../master-tex-finder"
 
 module.exports =
 class LatexmkBuilder extends Builder
@@ -39,5 +40,12 @@ class LatexmkBuilder extends Builder
       outdir = path.join(dir, outdir)
       args.push("-outdir=\"#{outdir}\"")
 
-    args.push("\"#{filePath}\"")
+    masterTexPath = new MasterTexFinder(filePath.path).masterTexPath()
+
+    unless masterTexPath is null
+      args.push("\"#{masterTexPath}\"")
+    else
+      args.push("\"#{filePath}\"")
+      console.error "Cannot find latex master file"
+
     args
