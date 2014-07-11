@@ -30,6 +30,9 @@ Current wish list, in a semi-prioritized order.
  - [ ] Configurable.
 - [ ] Support for compilers other than latexmk.
  - [ ] Add support for non-PDF typesetting (e.g. dvi).
+- [ ] Project management.
+ - [ ] Setting to override the output directory.
+ - [ ] Setting to override the builder.
 
 If you see something that's missing, or disagree with the prioritization,
 consider submitting a [feature request](https://github.com/thomasjo/atom-latex/issues?labels=feature&state=open),
