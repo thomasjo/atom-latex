@@ -26,6 +26,10 @@ Current wish list, in a semi-prioritized order.
  - [ ] Error handling.
  - [ ] Warnings, and other non-critical messages.
 - [ ] BibTeX autocompletion support.
+- [ ] Project management
+ - [ ] setting to indicate the latex master file
+ - [ ] setting to indicate the output directory
+ - [ ] setting to indicate the building tool
 - [ ] Open PDF automatically.
  - [ ] Configurable.
 - [ ] Support for compilers other than latexmk.
