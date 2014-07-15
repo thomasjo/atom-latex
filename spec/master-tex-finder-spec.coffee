@@ -6,7 +6,7 @@ describe 'MasterTexFinder', ->
 
   beforeEach ->
     fixturesPath = atom.project.getPath()
-    inc2Path = path.join(fixturesPath, 'project', 'inc2.tex')
+    inc2Path = path.join(fixturesPath, 'master-tex-finder', 'inc2.tex')
     mtFinder = new MasterTexFinder(inc2Path)
 
   describe 'masterTexPath', ->
