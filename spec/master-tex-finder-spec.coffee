@@ -5,20 +5,29 @@ describe 'MasterTexFinder', ->
   [fixturesPath] = []
 
   beforeEach ->
-    fixturesPath = path.join(atom.project.getPath(), 'master-tex-finder')
+    fixturesPath = path.join(atom.project.getPath(), 'master-tex-finder', 'single-master')
 
   describe 'masterTexPath', ->
     it 'returns the master tex file for the current project', ->
       inc2Path = path.join(fixturesPath, 'inc2.tex')
       mtFinder = new MasterTexFinder(inc2Path)
-      expect( path.basename(mtFinder.masterTexPath()) ).toEqual('master.tex')
+      expect( mtFinder.masterTexPath() ).toEqual([path.join(fixturesPath,'master.tex')])
 
     it 'immediately return the given file, if itself is a root-file', ->
       masterFile = path.join( fixturesPath, 'master.tex' )
-      mtFinder = new MasterTexFinder(masterFile)
-      spyOn(mtFinder, 'texFilesList')
-      expect( mtFinder.masterTexPath() ).toEqual( masterFile )
+      mtFinder = new MasterTexFinder( masterFile )
+      spyOn( mtFinder, 'texFilesList' )
+      expect( mtFinder.masterTexPath() ).toEqual( [masterFile] )
       expect( mtFinder.texFilesList ).not.toHaveBeenCalled()
+
+    it 'returns more than one result if more than one file is a master file', ->
+      multiMasterFixturePath = path.join(atom.project.getPath(), 'master-tex-finder', 'multiple-masters')
+      inc1Path = path.join( multiMasterFixturePath, 'inc1.tex' )
+      mtFinder = new MasterTexFinder( inc1Path )
+      master1Path = path.join( multiMasterFixturePath, 'master1.tex')
+      master2Path = path.join( multiMasterFixturePath, 'master2.tex')
+      expect( mtFinder.masterTexPath() ).toEqual( [master1Path, master2Path] )
+
 
   describe 'isMasterFile', ->
     it 'returns true if the given file is the master file', ->

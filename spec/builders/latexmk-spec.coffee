@@ -14,7 +14,7 @@ describe "LatexmkBuilder", ->
 
   describe "constructArgs", ->
     beforeEach ->
-      @fixturesPath = path.join(atom.project.getPath(), "master-tex-finder")
+      @fixturesPath = path.join(atom.project.getPath(), "master-tex-finder", "single-master")
       @filePath = path.join(@fixturesPath, "master.tex")
 
     it "produces default arguments when package has default config values", ->

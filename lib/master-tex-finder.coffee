@@ -27,14 +27,15 @@ class MasterTexFinder
 
   # Returns the latex master file for the current directory.
   masterTexPath: ->
-    return @filePath if @filePath != null && @isMasterFile(@filePath)
+    return [@filePath] if @filePath != null && @isMasterFile(@filePath)
 
     files = @texFilesList()
-    return null if files.length == 0
-    return files[0] if files.length == 1
+    return [] if files.length == 0
+    return files if files.length == 1
 
+    result = []
     for masterCandidate in files
       if @isMasterFile path.join(@projPath, masterCandidate)
-        return path.join(@projPath, masterCandidate)
+        result.push path.join(@projPath, masterCandidate)
 
-    return null
+    return result

@@ -42,7 +42,7 @@ class LatexmkBuilder extends Builder
 
     masterTexPath = new MasterTexFinder(filePath).masterTexPath()
 
-    unless masterTexPath is null
+    unless masterTexPath.length != 1
       args.push("\"#{masterTexPath}\"")
     else
       args.push("\"#{filePath}\"")
