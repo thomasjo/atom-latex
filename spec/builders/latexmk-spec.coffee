@@ -1,4 +1,5 @@
 LatexmkBuilder = require "../../lib/builders/latexmk"
+path = require "path"
 
 spyOnConfig = (key, value) =>
   spyOn(atom.config, "get").andCallFake (_key) =>
@@ -13,7 +14,8 @@ describe "LatexmkBuilder", ->
 
   describe "constructArgs", ->
     beforeEach ->
-      @filePath = "foo.tex"
+      @fixturesPath = path.join(atom.project.getPath(), "master-tex-finder")
+      @filePath = path.join(@fixturesPath, "master.tex")
 
     it "produces default arguments when package has default config values", ->
       expectedArgs = [
@@ -36,7 +38,7 @@ describe "LatexmkBuilder", ->
 
     it "adds -outdir=<path> argument according to package config", ->
       outdir = "bar"
-      expectedArg = "-outdir=\"#{outdir}\""
+      expectedArg = "-outdir=\"#{path.join(@fixturesPath,outdir)}\""
       spyOnConfig("latex.outputDirectory", outdir)
       arg = builder.constructArgs(@filePath)?.splice(-2, 1)[0]
       expect(arg).toEqual(expectedArg)

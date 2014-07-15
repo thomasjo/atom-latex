@@ -23,17 +23,18 @@ class MasterTexFinder
 
   # Returns true iff fname is a master file (contains the documentclass declaration)
   isMasterFile: (fname) ->
-    fpath = path.join(@projPath, fname)
-    fs.readFileSync(fpath).toString().match( /^\s*\\documentclass(\[.*\])?\{.*\}/ ) != null
+    fs.readFileSync(fname).toString().match( /^\s*\\documentclass(\[.*\])?\{.*\}/ ) != null
 
   # Returns the latex master file for the current directory.
   masterTexPath: ->
+    return @filePath if @filePath != null && @isMasterFile(@filePath)
+
     files = @texFilesList()
     return null if files.length == 0
     return files[0] if files.length == 1
 
     for masterCandidate in files
-      if @isMasterFile masterCandidate
+      if @isMasterFile path.join(@projPath, masterCandidate)
         return path.join(@projPath, masterCandidate)
 
     return null
