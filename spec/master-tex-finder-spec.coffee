@@ -16,7 +16,7 @@ describe 'MasterTexFinder', ->
     it 'immediately return the given file, if itself is a root-file', ->
       masterFile = path.join( fixturesPath, 'master.tex' )
       mtFinder = new MasterTexFinder( masterFile )
-      spyOn( mtFinder, 'texFilesList' )
+      spyOn( mtFinder, 'texFilesList' ).andCallThrough()
       expect( mtFinder.masterTexPath() ).toEqual( [masterFile] )
       expect( mtFinder.texFilesList ).not.toHaveBeenCalled()
 
@@ -28,6 +28,12 @@ describe 'MasterTexFinder', ->
       master2Path = path.join( multiMasterFixturePath, 'master2.tex')
       expect( mtFinder.masterTexPath() ).toEqual( [master1Path, master2Path] )
 
+    it 'immediately returns the file specified by the magic comment when present', ->
+      inc1Path = path.join(fixturesPath, 'inc1.tex')
+      mtFinder = new MasterTexFinder(inc1Path)
+      spyOn( mtFinder, 'texFilesList' ).andCallThrough()
+      expect( mtFinder.masterTexPath() ).toEqual([path.join(fixturesPath,'master.tex')])
+      expect( mtFinder.texFilesList ).not.toHaveBeenCalled()
 
   describe 'isMasterFile', ->
     it 'returns true if the given file is the master file', ->

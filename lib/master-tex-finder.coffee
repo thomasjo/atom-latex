@@ -1,5 +1,6 @@
 fs = require 'fs'
 path = require 'path'
+MagicParser = require './parsers/magic-parser'
 
 # MasterTexFinder is a utility class returning the master tex file
 # in a latex project. The algorithm always returns a result unless
@@ -25,9 +26,23 @@ class MasterTexFinder
   isMasterFile: (fname) ->
     fs.readFileSync(fname).toString().match( /^\s*\\documentclass(\[.*\])?\{.*\}/ ) != null
 
-  # Returns the latex master file for the current directory.
+  findMagicCommentRoot: ->
+    {root} = new MagicParser(@filePath).parse()
+    return null if !root?
+
+    path.join(@projPath,root)
+
+
+  # Returns an array of latex master files.
+  #
+  # If the @filePath is itself a master file, it returns immediately
+  # If @filePath contains a magic comment uses that comment to find determine the master file
+  # Otherwise it searches the directory where @filePath is contained for files
+  # having a "documentclass" declaration.
   masterTexPath: ->
     return [@filePath] if @filePath != null && @isMasterFile(@filePath)
+    magicRoot = @findMagicCommentRoot()
+    return [magicRoot] if magicRoot?
 
     files = @texFilesList()
     return [] if files.length == 0
