@@ -26,24 +26,18 @@ class MasterTexFinder
   isMasterFile: (fname) ->
     fs.readFileSync(fname).toString().match( /^\s*\\documentclass(\[.*\])?\{.*\}/ ) != null
 
-  findMagicCommentRoot: ->
+  # Returns an array containing the path to the root file indicated by a magic
+  # comment in @filePath.
+  # Returns null if no magic comment can be found in @filePath.
+  magicCommentMasterFile: ->
     {root} = new MagicParser(@filePath).parse()
     return null if !root?
 
-    path.join(@projPath,root)
+    [path.join(@projPath,root)]
 
-
-  # Returns an array of latex master files.
-  #
-  # If the @filePath is itself a master file, it returns immediately
-  # If @filePath contains a magic comment uses that comment to find determine the master file
-  # Otherwise it searches the directory where @filePath is contained for files
-  # having a "documentclass" declaration.
-  masterTexPath: ->
-    return [@filePath] if @filePath != null && @isMasterFile(@filePath)
-    magicRoot = @findMagicCommentRoot()
-    return [magicRoot] if magicRoot?
-
+  # Returns the list of tex files in the directory where @filePath lives that
+  # contain a documentclass declaration.
+  heuristicSearchMasterFile: ->
     files = @texFilesList()
     return [] if files.length == 0
     return files if files.length == 1
@@ -54,3 +48,12 @@ class MasterTexFinder
         result.push path.join(@projPath, masterCandidate)
 
     return result
+
+  # Returns an array of latex master files.
+  #
+  # If the @filePath is itself a master file, it returns immediately
+  # If @filePath contains a magic comment uses that comment to find determine the master file
+  # Otherwise it searches the directory where @filePath is contained for files
+  # having a "documentclass" declaration.
+  masterTexPath: ->
+    @isMasterFile(@filePath) && [@filePath] || @magicCommentMasterFile() || @heuristicSearchMasterFile()
