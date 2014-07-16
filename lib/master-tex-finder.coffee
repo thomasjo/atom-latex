@@ -25,6 +25,10 @@ class MasterTexFinder
   isInvalidFilePath: ->
     return !fs.existsSync(@filePath)
 
+  # Returns true if fname is not a valid file name, returns false otherwise
+  invalidFilePath: ->
+    return !fs.existsSync(@filePath)
+
   # Returns true iff fname is a master file (contains the documentclass declaration)
   isMasterFile: (fname) ->
     fs.readFileSync(fname).toString().match(/(^\s*|\n\s*)\\documentclass(\[.*\])?\{.*\}/) != null
@@ -38,6 +42,15 @@ class MasterTexFinder
 
     path.join(@projectPath, root)
 
+  detectChildren: (file) ->
+    matches = fs.readFileSync(file).toString().match(/\\input\{(.*?)\}|\\include\{(.*?)\}/g)
+    return [] if !matches
+    projectPath = @projectPath
+    matches.map (texCommand) ->
+      [all, input, include] = texCommand.match(/\\input\{(.*?)\}|\\include\{(.*?)\}/)
+      match = path.basename(input || include, ".tex") + ".tex"
+      path.resolve(projectPath, match)
+
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   getHeuristicSearchMasterFile: ->
@@ -45,13 +58,21 @@ class MasterTexFinder
     return @filePath if files.length == 0
     return files[0] if files.length == 1
 
-    result = []
-    for masterCandidate in files
-      if @isMasterFile(path.join(@projectPath, masterCandidate))
-        result.push(path.join(@projectPath, masterCandidate))
+    parents = {}
+    for file in files
+      for childFile in @detectChildren(path.join(@projectPath,file))
+        parents[childFile] ||= []
+        parents[childFile].push(path.resolve(@projectPath,file))
 
-    if result.length == 1
-      return result[0]
+    master = path.resolve(@projectPath,@filePath)
+    while parents[master] && master != parents[master]
+      master = parents[master]
+
+    if master.length == 1
+      return master[0]
+    else
+      console.warn "Cannot find latex master file"
+      return @filePath
 
     console.warn "Cannot find latex master file" unless atom.inSpecMode()
     @filePath
