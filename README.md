@@ -10,7 +10,7 @@ Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
 a .tex file.
 
 ## Status
-Please not that this package is in an **alpha** state. Right now everything is
+Please note that this package is in an **alpha** state. Right now everything is
 very naïve. As an example, there's no real error handling; the package merely
 prints an error message to the console indicating that an error occurred during
 the build, and to check the log file manually...
