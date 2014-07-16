@@ -1,5 +1,6 @@
 child_process = require "child_process"
 path = require "path"
+MasterTexFinder = require '../master-tex-finder'
 
 Builder = require "../builder"
 
