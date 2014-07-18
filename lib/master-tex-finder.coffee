@@ -47,6 +47,15 @@ class MasterTexFinder
       match = path.basename(input || include, ".tex") + ".tex"
       path.resolve(projectPath, match)
 
+  detectChildren: (file) ->
+    matches = fs.readFileSync(file).toString().match(/\\input\{(.*?)\}|\\include\{(.*?)\}/g)
+    return [] if !matches
+    projPath = @projPath
+    matches.map (texCommand) ->
+      [all, input, include] = texCommand.match(/\\input\{(.*?)\}|\\include\{(.*?)\}/)
+      match = input || include
+      path.resolve(projPath, match)
+
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   getHeuristicSearchMasterFile: ->
