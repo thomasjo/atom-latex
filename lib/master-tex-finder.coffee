@@ -39,6 +39,15 @@ class MasterTexFinder
 
     path.join(@projPath,root)
 
+  detectChildren: (file) ->
+    matches = fs.readFileSync(file).toString().match(/\\input\{(.*?)\}|\\include\{(.*?)\}/g)
+    return [] if !matches
+    projPath = @projPath
+    matches.map (texCommand) ->
+      [all, input, include] = texCommand.match(/\\input\{(.*?)\}|\\include\{(.*?)\}/)
+      match = input || include
+      path.resolve(projPath, match)
+
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   heuristicSearchMasterFile: ->
@@ -46,14 +55,19 @@ class MasterTexFinder
     return @filePath if files.length == 0
     return files[0] if files.length == 1
 
-    result = []
-    for masterCandidate in files
-      if @isMasterFile path.join(@projPath, masterCandidate)
-        result.push path.join(@projPath, masterCandidate)
+    parents = {}
+    for file in files
+      for childFile in @detectChildren(path.join(@projPath,file))
+        parents[childFile] ||= []
+        parents[childFile].push(path.resolve(@projPath,file))
 
+    console.log(JSON.stringify(parents))
+    master = path.resolve(@projPath,@filePath)
+    while parents[master] && master != parents[master]
+      master = parents[master]
 
-    if result.length == 1
-      return result[0]
+    if master.length == 1
+      return master[0]
     else
       console.warn "Cannot find latex master file"
       return @filePath
