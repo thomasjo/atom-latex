@@ -24,7 +24,7 @@ class MasterTexFinder
 
   # Returns true iff fname is a master file (contains the documentclass declaration)
   isMasterFile: (fname) ->
-    fs.readFileSync(fname).toString().match( /^\s*\\documentclass(\[.*\])?\{.*\}/ ) != null
+    fs.readFileSync(fname).toString().match( /[^|\n\s*]\\documentclass(\[.*\])?\{.*\}/ ) != null
 
   # Returns an array containing the path to the root file indicated by a magic
   # comment in @filePath.
