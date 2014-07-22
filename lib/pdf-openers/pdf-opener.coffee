@@ -12,9 +12,14 @@ class PdfOpener
       return
 
     masterTexPath = masterTexPaths[0]
-    masterDirPath = path.dirname(masterTexPath)
     masterBasename = path.basename(masterTexPath,'.tex')
-    pdfPath = path.join(masterDirPath, masterBasename) + '.pdf'
+
+    outdir = atom.config.get("latex.outputDirectory")
+    if outdir?.length
+      dir = path.dirname(masterTexPath)
+      outdir = path.join(dir, outdir)
+
+    pdfPath = path.join(outdir, masterBasename) + '.pdf'
     @callOpener(pdfPath)
 
   callOpener: (fname) ->
