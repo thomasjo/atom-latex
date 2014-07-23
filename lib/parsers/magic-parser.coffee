@@ -14,7 +14,7 @@ class MagicParser
         ^%\s*    # Optional whitespace.
         !TEX     # Magic marker.
         \s+      # Semi-optional whitespace.
-        (\w+)    # [1] Captures the magic keyword. E.g. 'root'.
+        (\w+)    # [1] Captures the magic keyword. E.g. "root".
         \s*=\s*  # Equal sign wrapped in optional whitespace.
         (.*)     # [2] Captures everything following the equal sign.
         $ ///
