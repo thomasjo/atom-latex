@@ -26,19 +26,19 @@ describe "MasterTexFinder", ->
       mtFinder = new MasterTexFinder(inc2Path)
       expect(mtFinder.masterTexPath()).toEqual(inc2Path)
 
-    it 'immediately return the given file, if itself is a root-file', ->
-      masterFile = path.join( fixturesPath, 'master.tex' )
-      mtFinder = new MasterTexFinder( masterFile )
-      spyOn( mtFinder, 'texFilesList' ).andCallThrough()
-      expect( mtFinder.masterTexPath() ).toEqual( masterFile )
-      expect( mtFinder.texFilesList ).not.toHaveBeenCalled()
+    it "immediately return the given file, if itself is a root-file", ->
+      masterFile = path.join(fixturesPath, "master.tex")
+      mtFinder = new MasterTexFinder(masterFile)
+      spyOn(mtFinder, "texFilesList").andCallThrough()
+      expect(mtFinder.masterTexPath()).toEqual(masterFile)
+      expect(mtFinder.texFilesList).not.toHaveBeenCalled()
 
-    it 'returns the correct master file when more than one master is present', ->
-      multiMasterFixturePath = path.join(atom.project.getPath(), 'master-tex-finder', 'multiple-masters')
-      inc1Path = path.join( multiMasterFixturePath, 'inc1.tex' )
-      mtFinder = new MasterTexFinder( inc1Path )
-      master1Path = path.join( multiMasterFixturePath, 'master1.tex')
-      expect( mtFinder.masterTexPath() ).toEqual( master1Path )
+    it "returns the correct master file when more than one master is present", ->
+      multiMasterFixturePath = path.join(atom.project.getPath(), "master-tex-finder", "multiple-masters")
+      inc1Path = path.join(multiMasterFixturePath, "inc1.tex")
+      mtFinder = new MasterTexFinder(inc1Path)
+      master1Path = path.join(multiMasterFixturePath, "master1.tex")
+      expect(mtFinder.masterTexPath()).toEqual(master1Path)
 
     it "immediately returns the file specified by the magic comment when present", ->
       inc1Path = path.join(fixturesPath, "inc1.tex")
@@ -67,11 +67,11 @@ describe "MasterTexFinder", ->
       mtFinder = new MasterTexFinder("bar.tex")
       expect(mtFinder.invalidFilePath("bar.tex")).toBe(true)
 
-  describe 'detectChildren', ->
-    it 'returns the list of children of a given file', ->
-      masterPath = path.join(fixturesPath, 'master.tex')
+  describe "detectChildren", ->
+    it "returns the list of children of a given file", ->
+      masterPath = path.join(fixturesPath, "master.tex")
       mtFinder = new MasterTexFinder(masterPath)
       children = mtFinder.detectChildren(masterPath)
-      childList = ['inc1.tex', 'inc2.tex', 'inc3.tex'].map (file)->
+      childList = ["inc1.tex", "inc2.tex", "inc3.tex"].map (file)->
         path.join(fixturesPath, file)
       expect(children).toEqual(childList)

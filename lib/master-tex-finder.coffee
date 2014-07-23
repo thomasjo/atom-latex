@@ -45,7 +45,7 @@ class MasterTexFinder
     projPath = @projPath
     matches.map (texCommand) ->
       [all, input, include] = texCommand.match(/\\input\{(.*?)\}|\\include\{(.*?)\}/)
-      match = path.basename(input || include, '.tex') + '.tex'
+      match = path.basename(input || include, ".tex") + ".tex"
       path.resolve(projPath, match)
 
   # Returns the list of tex files in the directory where @filePath lives that
