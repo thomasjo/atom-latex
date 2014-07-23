@@ -1,6 +1,5 @@
 child_process = require "child_process"
 path = require "path"
-MasterTexFinder = require '../master-tex-finder'
 
 Builder = require "../builder"
 MasterTexFinder = require "../master-tex-finder"
@@ -41,11 +40,6 @@ class LatexmkBuilder extends Builder
       args.push("-outdir=\"#{outdir}\"")
 
     masterTexPath = new MasterTexFinder(filePath).masterTexPath()
-
-    unless masterTexPath.length != 1
-      args.push("\"#{masterTexPath}\"")
-    else
-      args.push("\"#{filePath}\"")
-      console.error "Cannot find latex master file"
+    args.push("\"#{masterTexPath}\"")
 
     args

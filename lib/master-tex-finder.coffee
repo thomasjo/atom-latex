@@ -22,6 +22,10 @@ class MasterTexFinder
     fs.readdirSync(@projPath).filter (fname) ->
       fname.match /\.tex$/
 
+  # Returns true if fname is not a valid file name, returns false otherwise
+  invalidFilePath: ->
+    return !fs.existsSync(@filePath)
+
   # Returns true iff fname is a master file (contains the documentclass declaration)
   isMasterFile: (fname) ->
     fs.readFileSync(fname).toString().match( /(^\s*|\n\s*)\\documentclass(\[.*\])?\{.*\}/ ) != null
@@ -33,27 +37,37 @@ class MasterTexFinder
     {root} = new MagicParser(@filePath).parse()
     return null if !root?
 
-    [path.join(@projPath,root)]
+    path.join(@projPath,root)
 
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   heuristicSearchMasterFile: ->
     files = @texFilesList()
-    return [] if files.length == 0
-    return files if files.length == 1
+    return @filePath if files.length == 0
+    return files[0] if files.length == 1
 
     result = []
     for masterCandidate in files
       if @isMasterFile path.join(@projPath, masterCandidate)
         result.push path.join(@projPath, masterCandidate)
 
-    return result
 
-  # Returns an array of latex master files.
+    if result.length == 1
+      return result[0]
+    else
+      console.warn "Cannot find latex master file"
+      return @filePath
+
+
+  # Returns the a latex master file.
   #
+  # If no latex master file can be found or if @filePath is an invalid file name returns @filePath
   # If the @filePath is itself a master file, it returns immediately
   # If @filePath contains a magic comment uses that comment to find determine the master file
   # Otherwise it searches the directory where @filePath is contained for files
   # having a "documentclass" declaration.
   masterTexPath: ->
-    @isMasterFile(@filePath) && [@filePath] || @magicCommentMasterFile() || @heuristicSearchMasterFile()
+    @invalidFilePath() && @filePath ||
+    @isMasterFile(@filePath) && @filePath ||
+    @magicCommentMasterFile() ||
+    @heuristicSearchMasterFile()
