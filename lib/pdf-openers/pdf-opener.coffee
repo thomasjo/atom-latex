@@ -5,13 +5,7 @@ module.exports =
 class PdfOpener
   open: (fileName) ->
     masterTexFinder = new MasterTexFinder(fileName.toString())
-    masterTexPaths = masterTexFinder.masterTexPath()
-
-    if masterTexPaths.length != 1
-      console.warn('No (or more than one) master tex path found')
-      return
-
-    masterTexPath = masterTexPaths[0]
+    masterTexPath = masterTexFinder.masterTexPath()
     masterBasename = path.basename(masterTexPath,'.tex')
 
     outdir = atom.config.get("latex.outputDirectory")
