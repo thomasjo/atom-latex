@@ -60,7 +60,6 @@ class MasterTexFinder
         parents[childFile] ||= []
         parents[childFile].push(path.resolve(@projectPath,file))
 
-    console.log(JSON.stringify(parents))
     master = path.resolve(@projectPath,@filePath)
     while parents[master] && master != parents[master]
       master = parents[master]
