@@ -39,7 +39,7 @@ class LatexmkBuilder extends Builder
       outdir = path.join(dir, outdir)
       args.push("-outdir=\"#{outdir}\"")
 
-    masterTexPath = new MasterTexFinder(filePath).masterTexPath()
+    masterTexPath = new MasterTexFinder(filePath).getMasterTexPath()
     args.push("\"#{masterTexPath}\"")
 
     args
