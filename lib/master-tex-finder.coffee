@@ -65,17 +65,26 @@ class MasterTexFinder
         parents[childFile].push(path.resolve(@projectPath,file))
 
     master = path.resolve(@projectPath,@filePath)
-    while parents[master] && master != parents[master]
+    visited = {}
+    while !visited[master] && parents[master]
+      visited[master] = true
       master = parents[master]
 
-    if master.length == 1
-      return master[0]
-    else
-      console.warn "Cannot find latex master file"
+    if visited[master]
+      console.warn "Detected loopy inclusions, cannot determine latex master file" unless atom.inSpecMode()
       return @filePath
 
-    console.warn "Cannot find latex master file" unless atom.inSpecMode()
-    @filePath
+    if master.length != 1
+      console.warn "Cannot find latex master file, candidates are:" + JSON.stringify(master) unless atom.inSpecMode()
+      return @filePath
+
+    result = master[0]
+
+    if !@isMasterFile(result)
+      console.warn "Found candidate latex master file:" + result + " but it does not seem to be a master file" unless atom.inSpecMode()
+      return @filePath
+
+    return result
 
   # Returns the a latex master file.
   #
