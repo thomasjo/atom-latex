@@ -4,7 +4,8 @@
     "submenu": [
       "label": "LaTeX"
       "submenu": [
-        { "label": "Build", "command": "latex:build" }
+        { "label": "Build", "command": "latex:build" },
+        { "label": "Open PDF", "command": "latex:open-pdf" }
       ]
     ]
   }

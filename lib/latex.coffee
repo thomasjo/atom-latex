@@ -3,6 +3,7 @@ path = require "path"
 LatexmkBuilder = require "./builders/latexmk"
 ProgressIndicatorView = require "./progress-indicator-view"
 ErrorIndicatorView = require "./error-indicator-view"
+PreviewPdfOpener = require './pdf-openers/preview-pdf-opener'
 
 module.exports =
   configDefaults:
@@ -12,6 +13,7 @@ module.exports =
 
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
+    atom.workspaceView.command "latex:open-pdf", => @openPdf()
 
   build: ->
     editor = atom.workspace.activePaneItem
@@ -56,6 +58,22 @@ module.exports =
 
   getBuilder: ->
     new LatexmkBuilder
+
+  openPdf: ->
+    # it should check for OS and preferences and call the correct
+    # opener. Currently it assumes to be on OS X and calls Preview
+    editor = atom.workspace.activePaneItem
+    file = editor?.buffer.file
+
+    unless file?
+      console.log('No file opened in the editor')
+      return
+
+    @getPdfOpener().open(file.path)
+
+  getPdfOpener: ->
+    new PreviewPdfOpener
+
 
   showResult: ->
     # TODO: Display a more visible success message.
