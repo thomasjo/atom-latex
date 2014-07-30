@@ -43,13 +43,13 @@ describe "LatexmkBuilder", ->
 
   describe "constructPath", ->
     beforeEach ->
-      spyOnConfig("latex.texPath", "$PATH:/usr/texbin")
+      spyOnConfig("latex.texPath", "/usr/texbin")
 
     it "reads `latex.texPath` as configured", ->
       builder.constructPath()
       expect(atom.config.get).toHaveBeenCalledWith("latex.texPath")
 
-    it "replaces $PATH with process.env.PATH", ->
-      expectedPath = "#{process.env.PATH}:/usr/texbin"
+    it "attach process.env.PATH to the exec's PATH", ->
+      expectedPath = "/usr/texbin:#{process.env.PATH}"
       path = builder.constructPath()
       expect(path).toEqual(expectedPath)

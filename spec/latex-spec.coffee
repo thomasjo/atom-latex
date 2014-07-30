@@ -32,7 +32,7 @@ describe "Latex", ->
     atom.workspace = atom.workspaceView.model
 
     # Ensure package has sensible config values
-    atom.config.set("latex.texPath", "$PATH:/usr/texbin")
+    atom.config.set("latex.texPath", "/usr/texbin")
     atom.config.set("latex.outputDirectory", "output")
     atom.config.set("latex.enableShellEscape", false)
 
