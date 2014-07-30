@@ -1,3 +1,5 @@
+path = require "path"
+
 module.exports =
 class Builder
   run: -> null
@@ -5,4 +7,5 @@ class Builder
 
   constructPath: ->
     texPath = atom.config.get("latex.texPath")
-    texPath?.replace("$PATH", process.env.PATH)
+    texPath += path.delimiter if texPath
+    texPath += process.env.PATH

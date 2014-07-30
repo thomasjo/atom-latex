@@ -6,7 +6,7 @@ ErrorIndicatorView = require "./error-indicator-view"
 
 module.exports =
   configDefaults:
-    texPath: "$PATH:/usr/texbin"
+    texPath: ""
     outputDirectory: ""
     enableShellEscape: false
 
