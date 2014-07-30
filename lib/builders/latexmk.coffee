@@ -1,8 +1,6 @@
 child_process = require "child_process"
 path = require "path"
-
 Builder = require "../builder"
-MasterTexFinder = require "../master-tex-finder"
 
 module.exports =
 class LatexmkBuilder extends Builder
@@ -39,7 +37,5 @@ class LatexmkBuilder extends Builder
       outdir = path.join(dir, outdir)
       args.push("-outdir=\"#{outdir}\"")
 
-    masterTexPath = new MasterTexFinder(filePath).getMasterTexPath()
-    args.push("\"#{masterTexPath}\"")
-
+    args.push("\"#{filePath}\"")
     args

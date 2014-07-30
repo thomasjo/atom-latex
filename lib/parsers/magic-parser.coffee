@@ -1,6 +1,16 @@
 fs = require "fs-plus"
 path = require "path"
 
+magicCommentPattern = ///
+  ^%\s*     # Optional whitespace.
+  !TEX      # Magic marker.
+  \s+       # Semi-optional whitespace.
+  (\w+)     # [1] Captures the magic keyword. E.g. "root".
+  \s*=\s*   # Equal sign wrapped in optional whitespace.
+  (.*)      # [2] Captures everything following the equal sign.
+  $         # EOL.
+  ///
+
 module.exports =
 class MagicParser
   constructor: (filePath) ->
@@ -10,14 +20,7 @@ class MagicParser
     result = {}
     lines = @getLines()
     for line in lines
-      match = line.match ///
-        ^%\s*    # Optional whitespace.
-        !TEX     # Magic marker.
-        \s+      # Semi-optional whitespace.
-        (\w+)    # [1] Captures the magic keyword. E.g. "root".
-        \s*=\s*  # Equal sign wrapped in optional whitespace.
-        (.*)     # [2] Captures everything following the equal sign.
-        $ ///
+      match = line.match(magicCommentPattern)
       break unless match? # Stop parsing unless line is a magic comment.
       result[match[1]] = match[2]
 

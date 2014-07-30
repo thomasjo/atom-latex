@@ -1,6 +1,6 @@
 path = require "path"
-
 LatexmkBuilder = require "./builders/latexmk"
+MasterTexFinder = require "./master-tex-finder"
 ProgressIndicatorView = require "./progress-indicator-view"
 ErrorIndicatorView = require "./error-indicator-view"
 
@@ -14,16 +14,17 @@ module.exports =
     atom.workspaceView.command "latex:build", => @build()
 
   build: ->
-    editor = atom.workspace.activePaneItem
-    file = editor?.buffer.file
-    unless file?
+    editor = atom.workspace.getActivePaneItem()
+    filePath = editor?.getPath()
+    unless filePath?
       # TODO: Show info message that the file has to be saved once?
       return
 
     editor.save() if editor.isModified() # NOTE: Should this be configurable?
 
     builder = @getBuilder()
-    args = builder.constructArgs(file.path)
+    rootFilePath = @resolveRootFilePath(filePath)
+    args = builder.constructArgs(rootFilePath)
 
     @destroyErrorIndicator()
     @showProgressIndicator()
@@ -56,6 +57,10 @@ module.exports =
 
   getBuilder: ->
     new LatexmkBuilder
+
+  resolveRootFilePath: (path) ->
+    finder = new MasterTexFinder(path)
+    finder.getMasterTexPath()
 
   showResult: ->
     # TODO: Display a more visible success message.

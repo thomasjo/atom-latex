@@ -2,11 +2,12 @@ fs = require "fs"
 path = require "path"
 MagicParser = require "./parsers/magic-parser"
 
-# MasterTexFinder is a utility class returning the master tex file
-# in a latex project. The algorithm always returns a result unless
-# the directory does not include any tex file. The result is guaranteed
-# to be the latex master file if the project is correctly structured (i.e.,
-# inclusion graph is a tree).
+masterFilePattern = ///
+  ^\s*              # Optional whitespace.
+  \\documentclass   # Command.
+  (\[.*\])?         # Optional command options.
+  \{.*\}            # Class name.
+  ///
 
 module.exports =
 class MasterTexFinder
@@ -18,25 +19,21 @@ class MasterTexFinder
 
   # Returns the list of tex files in the project directory
   getTexFilesList: ->
-    fs.readdirSync(@projectPath).filter (name) ->
-      name.match /\.tex$/
+    fs.readdirSync(@projectPath).filter (name) -> name.endsWith(".tex")
 
-  # Returns true if fname is not a valid file name, returns false otherwise
-  isInvalidFilePath: ->
-    return !fs.existsSync(@filePath)
+  # Returns true iff path is a master file (contains the documentclass declaration)
+  isMasterFile: (filePath) ->
+    return false unless fs.existsSync(filePath)
 
-  # Returns true iff fname is a master file (contains the documentclass declaration)
-  isMasterFile: (fname) ->
-    fs.readFileSync(fname).toString().match(/(^\s*|\n\s*)\\documentclass(\[.*\])?\{.*\}/) != null
+    rawFile = fs.readFileSync(filePath, {encoding: "utf-8"})
+    masterFilePattern.test(rawFile)
 
   # Returns an array containing the path to the root file indicated by a magic
   # comment in @filePath.
   # Returns null if no magic comment can be found in @filePath.
   getMagicCommentMasterFile: ->
-    {root} = new MagicParser(@filePath).parse()
-    return null unless root?
-
-    path.join(@projectPath, root)
+    magic = new MagicParser(@filePath).parse()
+    magic?.root
 
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
@@ -64,7 +61,8 @@ class MasterTexFinder
   # Otherwise it searches the directory where @filePath is contained for files
   # having a "documentclass" declaration.
   getMasterTexPath: ->
-    @isInvalidFilePath() && @filePath ||
-    @isMasterFile(@filePath) && @filePath ||
-    @getMagicCommentMasterFile() ||
+    masterPath = @getMagicCommentMasterFile()
+    return masterPath if masterPath?
+    return @filePath if @isMasterFile(@filePath)
+
     @getHeuristicSearchMasterFile()
