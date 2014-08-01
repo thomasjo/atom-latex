@@ -6,7 +6,7 @@ module.exports =
 class LatexmkBuilder extends Builder
   run: (args, callback) ->
     command = "latexmk #{args.join(" ")}"
-    options = env: PATH: @constructPath()
+    options = @constructChildProcessOptions()
 
     # TODO: Add support for killing the process.
     proc = child_process.exec(command, options)
