@@ -14,4 +14,4 @@ class LogParser
       throw new Error("No such file: #{@filePath}")
 
     rawFile = fs.readFileSync(@filePath, {encoding: "utf-8"})
-    lines = rawFile.replace(/(\r\n)|\r/g).split("\n")
+    lines = rawFile.replace(/(\r\n)|\r/g, "\n").split("\n")
