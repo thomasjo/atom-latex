@@ -3,6 +3,7 @@ ErrorIndicatorView = require "./error-indicator-view"
 LatexmkBuilder = require "./builders/latexmk"
 MasterTexFinder = require "./master-tex-finder"
 ProgressIndicatorView = require "./progress-indicator-view"
+PdfOpeners = require "./pdf-openers/pdf-openers"
 
 module.exports =
   configDefaults:
@@ -63,7 +64,7 @@ module.exports =
 
   showResult: (result) ->
     # TODO: Display a more visible success message.
-    console.info "Output file path: #{result?.outputFilePath}" unless atom.inSpecMode()
+    PdfOpeners.getOpener()?.open(result.outputFilePath) if result? && !atom.inSpecMode()
     console.info "Success!" unless atom.inSpecMode()
 
   showError: (error) ->
