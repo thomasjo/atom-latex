@@ -3,7 +3,9 @@ _ = require "underscore-plus"
 module.exports =
 class Builder
   constructor: ->
-    @envPathKey = unless process.env.platform == "win32" then "PATH" else "Path"
+    @envPathKey = switch process.env.platform
+      when "win32" then "Path"
+      else "PATH"
 
   run: -> null
   constructArgs: -> null

@@ -2,9 +2,9 @@ fs = require "fs-plus"
 path = require "path"
 temp = require "temp"
 wrench = require "wrench"
-latex = require "../lib/latex"
-
 {View, WorkspaceView} = require "atom"
+latex = require "../lib/latex"
+Builder = require "../lib/builder"
 
 class StatusBarMock extends View
   @content: ->
@@ -14,7 +14,7 @@ class StatusBarMock extends View
   attach: -> atom.workspaceView.appendToTop(this)
   prependRight: (view) -> @rightPanel.append(view)
 
-fakeBuilder =
+class BuilderMock extends Builder
   run: (args, callback) -> callback(0)
   constructArgs: (filePath) -> return []
   constructPath: -> return ""
@@ -32,11 +32,11 @@ describe "Latex", ->
     atom.workspace = atom.workspaceView.model
 
     # Ensure package has sensible config values
-    atom.config.set("latex.texPath", "$PATH:/usr/texbin")
+    atom.config.set("latex.texPath", "")
     atom.config.set("latex.outputDirectory", "output")
     atom.config.set("latex.enableShellEscape", false)
 
-    spyOn(latex, "getBuilder").andReturn(fakeBuilder)
+    spyOn(latex, "getBuilder").andReturn(new BuilderMock)
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->

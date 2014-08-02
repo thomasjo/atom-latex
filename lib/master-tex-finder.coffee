@@ -15,7 +15,8 @@ class MasterTexFinder
   # @param filePath: a file name in the directory to be searched
   constructor: (filePath) ->
     @filePath = filePath
-    @projectPath = path.dirname(@filePath)
+    @fileName = path.basename(filePath)
+    @projectPath = path.dirname(filePath)
 
   # Returns the list of tex files in the project directory
   getTexFilesList: ->
@@ -37,21 +38,22 @@ class MasterTexFinder
 
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
-  getHeuristicSearchMasterFile: ->
+  searchForMasterFile: ->
     files = @getTexFilesList()
-    return @filePath if files.length == 0
+    return unless files?
+    return @fileName if files.length == 0
     return files[0] if files.length == 1
 
-    result = []
-    for masterCandidate in files
-      if @isMasterFile(path.join(@projectPath, masterCandidate))
-        result.push(path.join(@projectPath, masterCandidate))
-
-    if result.length == 1
-      return result[0]
+    # result = []
+    # for masterCandidate in files
+    #   candidatePath = path.join(@projectPath, masterCandidate)
+    #   if @isMasterFile(candidatePath)
+    #     result.push(candidatePath)
+    result = files.filter (name) => @isMasterFile(path.join(@projectPath, name))
+    return result[0] if result.length == 1
 
     console.warn "Cannot find latex master file" unless atom.inSpecMode()
-    @filePath
+    @fileName
 
   # Returns the a latex master file.
   #
@@ -63,6 +65,6 @@ class MasterTexFinder
   getMasterTexPath: ->
     masterPath = @getMagicCommentMasterFile()
     return masterPath if masterPath?
-    return @filePath if @isMasterFile(@filePath)
+    return @fileName if @isMasterFile(@filePath)
 
-    @getHeuristicSearchMasterFile()
+    @searchForMasterFile()
