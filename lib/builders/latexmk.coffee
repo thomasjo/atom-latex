@@ -9,9 +9,7 @@ class LatexmkBuilder extends Builder
   run: (args, callback) ->
     command = "latexmk #{args.join(" ")}"
     options = @constructChildProcessOptions()
-    # options.env["max_print_line"] = 1000  # Max log file line length.
-
-    console.debug options
+    options.env["max_print_line"] = 1000  # Max log file line length.
 
     # TODO: Add support for killing the process.
     proc = child_process.exec(command, options)
@@ -46,7 +44,7 @@ class LatexmkBuilder extends Builder
     args
 
   parseLogFile: (texFilePath) ->
-    logFilePath = texFilePath.replace(/.tex$/, ".log")
+    logFilePath = texFilePath.replace(/\.tex$/, ".log")
     return unless fs.existsSync(logFilePath)
 
     parser = new LogParser(logFilePath)

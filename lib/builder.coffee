@@ -16,11 +16,7 @@ class Builder
     path = @constructPath()
     env[@envPathKey] = path if path?.length
     options = env: env
-    console.debug options
-    options
 
   constructPath: ->
     texPath = atom.config.get("latex.texPath")
-    console.debug texPath?.replace("$PATH", process.env[@envPathKey])
-    # console.debug process.env[@envPathKey]
-    texPath?.replace("$PATH", process.env[@envPathKey]) if texPath?
+    texPath?.replace("$PATH", process.env[@envPathKey])

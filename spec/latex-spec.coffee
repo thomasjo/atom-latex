@@ -16,8 +16,10 @@ class StatusBarMock extends View
 
 class BuilderMock extends Builder
   run: (args, callback) -> callback(0)
-  constructArgs: (filePath) -> return []
-  constructPath: -> return ""
+  constructArgs: (filePath) -> []
+  constructPath: -> ""
+  parseLogFile: (texFilePath) ->
+    result: outputFilePath: texFilePath.replace(/\.tex$/, ".pdf")
 
 describe "Latex", ->
   beforeEach ->

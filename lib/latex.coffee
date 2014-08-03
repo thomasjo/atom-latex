@@ -26,8 +26,6 @@ module.exports =
     rootFilePath = @resolveRootFilePath(filePath)
     args = builder.constructArgs(rootFilePath)
 
-    console.debug args
-
     @destroyErrorIndicator()
     @showProgressIndicator()
     proc = builder.run args, (statusCode) =>
@@ -67,7 +65,7 @@ module.exports =
 
   showResult: (result) ->
     # TODO: Display a more visible success message.
-    console.info result?.outputFilePath
+    console.info "Output file path: #{result?.outputFilePath}" unless atom.inSpecMode()
     console.info "Success!" unless atom.inSpecMode()
 
   showError: (error) ->
