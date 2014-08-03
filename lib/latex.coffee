@@ -26,12 +26,15 @@ module.exports =
     rootFilePath = @resolveRootFilePath(filePath)
     args = builder.constructArgs(rootFilePath)
 
+    console.debug args
+
     @destroyErrorIndicator()
     @showProgressIndicator()
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
+      result = builder.parseLogFile(rootFilePath)
       if statusCode == 0
-        @showResult()
+        @showResult(result)
       else if statusCode == 127
         @showError(
           """
@@ -62,8 +65,9 @@ module.exports =
     finder = new MasterTexFinder(path)
     finder.getMasterTexPath()
 
-  showResult: ->
+  showResult: (result) ->
     # TODO: Display a more visible success message.
+    console.info result?.outputFilePath
     console.info "Success!" unless atom.inSpecMode()
 
   showError: (error) ->
