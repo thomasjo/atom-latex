@@ -12,7 +12,7 @@ describe "MasterTexFinder", ->
       inc2Path = path.join(fixturesPath, "inc2.tex")
       finder = new MasterTexFinder(inc2Path)
 
-      expect(finder.getMasterTexPath()).toEqual("master.tex")
+      expect(finder.getMasterTexPath()).toEqual(path.join(fixturesPath, "master.tex"))
 
     it "immediately return the given file, if itself is a root-file", ->
       masterFile = path.join(fixturesPath, "master.tex")
@@ -20,7 +20,7 @@ describe "MasterTexFinder", ->
 
       spyOn(finder, "getTexFilesList").andCallThrough()
 
-      expect(finder.getMasterTexPath()).toEqual("master.tex")
+      expect(finder.getMasterTexPath()).toEqual(masterFile)
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
 
     it "returns the original file if more than one file is a master file", ->
@@ -30,7 +30,7 @@ describe "MasterTexFinder", ->
       inc1Path = path.join(multiMasterFixturePath, "inc1.tex")
       finder = new MasterTexFinder(inc1Path)
 
-      expect(finder.getMasterTexPath()).toEqual("inc1.tex")
+      expect(finder.getMasterTexPath()).toEqual(inc1Path)
 
     it "immediately returns the file specified by the magic comment when present", ->
       inc1Path = path.join(fixturesPath, "inc1.tex")
@@ -38,7 +38,7 @@ describe "MasterTexFinder", ->
 
       spyOn(finder, "getTexFilesList").andCallThrough()
 
-      expect(finder.getMasterTexPath()).toEqual("master.tex")
+      expect(finder.getMasterTexPath()).toEqual(path.join(fixturesPath, "master.tex"))
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
 
   describe "isMasterFile", ->
@@ -52,6 +52,7 @@ describe "MasterTexFinder", ->
   describe "getTexFilesList", ->
     it "returns the list of tex files in the project directory", ->
       expectedFileList = ["inc1.tex", "inc2.tex", "inc3.tex", "master.tex"]
+      expectedFileList = expectedFileList.map (name) => path.join(fixturesPath, name)
       inc2Path = path.join(fixturesPath, "inc2.tex")
       finder = new MasterTexFinder(inc2Path)
       sortedFileList = finder.getTexFilesList().sort()

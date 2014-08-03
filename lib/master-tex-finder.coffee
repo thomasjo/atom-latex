@@ -1,4 +1,4 @@
-fs = require "fs"
+fs = require "fs-plus"
 path = require "path"
 MagicParser = require "./parsers/magic-parser"
 
@@ -20,7 +20,7 @@ class MasterTexFinder
 
   # Returns the list of tex files in the project directory
   getTexFilesList: ->
-    fs.readdirSync(@projectPath).filter (name) -> name.endsWith(".tex")
+    fs.listSync(@projectPath, [".tex"])
 
   # Returns true iff path is a master file (contains the documentclass declaration)
   isMasterFile: (filePath) ->
@@ -34,26 +34,24 @@ class MasterTexFinder
   # Returns null if no magic comment can be found in @filePath.
   getMagicCommentMasterFile: ->
     magic = new MagicParser(@filePath).parse()
-    magic?.root
+    masterPath = magic?.root
+    return unless masterPath?.length
+
+    masterPath = path.resolve(@projectPath, masterPath)
 
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   searchForMasterFile: ->
     files = @getTexFilesList()
     return unless files?
-    return @fileName if files.length == 0
+    return @filePath if files.length == 0
     return files[0] if files.length == 1
 
-    # result = []
-    # for masterCandidate in files
-    #   candidatePath = path.join(@projectPath, masterCandidate)
-    #   if @isMasterFile(candidatePath)
-    #     result.push(candidatePath)
-    result = files.filter (name) => @isMasterFile(path.join(@projectPath, name))
+    result = files.filter (path) => @isMasterFile(path)
     return result[0] if result.length == 1
 
     console.warn "Cannot find latex master file" unless atom.inSpecMode()
-    @fileName
+    @filePath
 
   # Returns the a latex master file.
   #
@@ -65,6 +63,6 @@ class MasterTexFinder
   getMasterTexPath: ->
     masterPath = @getMagicCommentMasterFile()
     return masterPath if masterPath?
-    return @fileName if @isMasterFile(@filePath)
+    return @filePath if @isMasterFile(@filePath)
 
     @searchForMasterFile()
