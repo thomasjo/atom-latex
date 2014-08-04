@@ -7,8 +7,8 @@ class Builder
       when "win32" then "Path"
       else "PATH"
 
-  run: -> null
-  constructArgs: -> null
+  run: (args, callback) -> null
+  constructArgs: (filePath) -> null
   parseLogFile: (texFilePath) -> null
 
   constructChildProcessOptions: ->
