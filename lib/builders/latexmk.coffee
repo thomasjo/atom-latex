@@ -48,4 +48,4 @@ class LatexmkBuilder extends Builder
     return unless fs.existsSync(logFilePath)
 
     parser = new LogParser(logFilePath)
-    parser.parse()
+    result = parser.parse()
