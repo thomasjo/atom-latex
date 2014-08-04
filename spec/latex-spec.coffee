@@ -30,16 +30,16 @@ describe "Latex", ->
   describe "build", ->
     it "does nothing for new, unsaved files", ->
       editor = atom.workspace.openSync()
-      fakeInvoked = false
-      fake = -> fakeInvoked = true
 
       spyOn(latex, "build").andCallThrough()
-      spyOn(latex, "showResult").andCallFake(fake)
-      spyOn(latex, "showError").andCallFake(fake)
+      spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, "showError").andCallThrough()
       latex.build()
 
       waitsFor -> latex.build.callCount == 1
-      runs -> expect(fakeInvoked).toEqual(false)
+      runs ->
+        expect(latex.showResult).not.toHaveBeenCalled()
+        expect(latex.showError).not.toHaveBeenCalled()
 
     it "runs `latexmk` for existing files", ->
       editor = atom.workspace.openSync("file.tex")
@@ -48,7 +48,7 @@ describe "Latex", ->
       latex.build()
 
       waitsFor -> latex.showResult.callCount == 1
-      runs -> expect(latex.showResult).toHaveBeenCalled();
+      runs -> expect(latex.showResult).toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
       editor = atom.workspace.openSync("file.tex")
