@@ -69,3 +69,16 @@ describe "Latex", ->
 
       waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalled()
+
+    it "invokes `showResult` after a successful build, with expect log parsing result", ->
+      editor = atom.workspace.openSync("file.tex")
+
+      spyOn(latex, "showResult").andCallThrough()
+      latex.build()
+
+      waitsFor -> latex.showResult.callCount == 1
+      runs -> expect(latex.showResult).toHaveBeenCalledWith {
+        outputFilePath: path.join(tempPath, "file.pdf")
+        errors: []
+        warnings: []
+      }
