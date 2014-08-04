@@ -11,6 +11,7 @@ module.exports =
 class LogParser
   constructor: (filePath) ->
     @filePath = filePath
+    @projectPath = path.dirname(filePath)
 
   parse: ->
     result =
@@ -22,7 +23,7 @@ class LogParser
     for line in lines
       # Simplest Thing That Works™ and KISS®
       match = line.match(outputPattern)
-      result.outputFilePath = match[1] if match?
+      result.outputFilePath = path.resolve(@projectPath, match[1]) if match?
 
     result
 
