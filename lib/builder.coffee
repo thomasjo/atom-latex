@@ -4,7 +4,7 @@ path = require "path"
 module.exports =
 class Builder
   constructor: ->
-    @envPathKey = switch process.env.platform
+    @envPathKey = switch process.platform
       when "win32" then "Path"
       else "PATH"
 
