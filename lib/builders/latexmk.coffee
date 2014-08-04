@@ -44,7 +44,10 @@ class LatexmkBuilder extends Builder
     args
 
   parseLogFile: (texFilePath) ->
-    logFilePath = texFilePath.replace(/\.tex$/, ".log")
+    outputDirectory = atom.config.get("latex.outputDirectory") ? ""
+    currentDirectory = path.dirname(texFilePath)
+    fileName = path.basename(texFilePath).replace(/\.tex$/, ".log")
+    logFilePath = path.join(currentDirectory, outputDirectory, fileName)
     return unless fs.existsSync(logFilePath)
 
     parser = new LogParser(logFilePath)
