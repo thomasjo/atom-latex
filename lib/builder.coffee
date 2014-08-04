@@ -1,3 +1,4 @@
+path = require "path"
 _ = require "underscore-plus"
 path = require "path"
 
