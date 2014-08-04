@@ -1,10 +1,9 @@
+{View, WorkspaceView} = require "atom"
 fs = require "fs-plus"
 path = require "path"
 temp = require "temp"
 wrench = require "wrench"
-{View, WorkspaceView} = require "atom"
 latex = require "../lib/latex"
-Builder = require "../lib/builder"
 
 class StatusBarMock extends View
   @content: ->
@@ -14,14 +13,9 @@ class StatusBarMock extends View
   attach: -> atom.workspaceView.appendToTop(this)
   prependRight: (view) -> @rightPanel.append(view)
 
-class BuilderMock extends Builder
-  run: (args, callback) -> callback(0)
-  constructArgs: (filePath) -> []
-  constructPath: -> ""
-  parseLogFile: (texFilePath) ->
-    result: outputFilePath: texFilePath.replace(/\.tex$/, ".pdf")
-
 describe "Latex", ->
+  [tempPath] = []
+
   beforeEach ->
     tempPath = fs.realpathSync(temp.mkdirSync("atom-latex"))
     fixturesPath = atom.project.getPath()
@@ -33,49 +27,45 @@ describe "Latex", ->
     atom.workspaceView.statusBar.attach()
     atom.workspace = atom.workspaceView.model
 
-    # Ensure package has sensible config values
-    atom.config.set("latex.texPath", "")
-    atom.config.set("latex.outputDirectory", "output")
-    atom.config.set("latex.enableShellEscape", false)
-
-    spyOn(latex, "getBuilder").andReturn(new BuilderMock)
-
   describe "build", ->
     it "does nothing for new, unsaved files", ->
       editor = atom.workspace.openSync()
       fakeInvoked = false
       fake = -> fakeInvoked = true
 
+      spyOn(latex, "build").andCallThrough()
       spyOn(latex, "showResult").andCallFake(fake)
       spyOn(latex, "showError").andCallFake(fake)
+      latex.build()
 
-      expect(fakeInvoked).toEqual(false)
+      waitsFor -> latex.build.callCount == 1
+      runs -> expect(fakeInvoked).toEqual(false)
 
     it "runs `latexmk` for existing files", ->
       editor = atom.workspace.openSync("file.tex")
-      [exitCode, done] = []
 
-      spyOn(latex, "showResult").andCallFake -> done = true
+      spyOn(latex, "showResult").andCallThrough()
       latex.build()
 
-      waitsFor -> done
+      waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalled();
 
     it "saves the file before building, if modified", ->
       editor = atom.workspace.openSync("file.tex")
 
+      spyOn(latex, "showResult").andCallThrough()
       editor.moveCursorToBottom()
       editor.insertNewline()
       latex.build()
 
-      expect(editor.isModified()).toEqual(false)
+      waitsFor -> latex.showResult.callCount == 1
+      runs -> expect(editor.isModified()).toEqual(false)
 
     it "supports paths containing spaces", ->
       editor = atom.workspace.openSync("filename with spaces.tex")
-      [exitCode, done] = []
 
-      spyOn(latex, "showResult").andCallFake -> done = true
+      spyOn(latex, "showResult").andCallThrough()
       latex.build()
 
-      waitsFor -> done
-      runs -> expect(latex.showResult).toHaveBeenCalled();
+      waitsFor -> latex.showResult.callCount == 1
+      runs -> expect(latex.showResult).toHaveBeenCalled()

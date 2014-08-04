@@ -1,8 +1,8 @@
 path = require "path"
+ErrorIndicatorView = require "./error-indicator-view"
 LatexmkBuilder = require "./builders/latexmk"
 MasterTexFinder = require "./master-tex-finder"
 ProgressIndicatorView = require "./progress-indicator-view"
-ErrorIndicatorView = require "./error-indicator-view"
 
 module.exports =
   configDefaults:
