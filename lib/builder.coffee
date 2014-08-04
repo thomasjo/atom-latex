@@ -1,4 +1,5 @@
 _ = require "underscore-plus"
+path = require "path"
 
 module.exports =
 class Builder
@@ -13,8 +14,8 @@ class Builder
 
   constructChildProcessOptions: ->
     env = _.clone(process.env)
-    path = @constructPath()
-    env[@envPathKey] = path if path?.length
+    childPath = @constructPath()
+    env[@envPathKey] = childPath if childPath?.length
     options = env: env
 
   constructPath: ->
