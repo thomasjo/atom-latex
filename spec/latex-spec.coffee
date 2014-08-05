@@ -5,6 +5,10 @@ temp = require "temp"
 wrench = require "wrench"
 latex = require "../lib/latex"
 
+texPath = switch process.platform
+  when "win32" then "C:\\texlive\\2014\\bin\\win32"
+  else "/usr/texbin"
+
 class StatusBarMock extends View
   @content: ->
     @div class: "status-bar tool-panel panel-bottom", =>
@@ -21,6 +25,8 @@ describe "Latex", ->
     fixturesPath = atom.project.getPath()
     wrench.copyDirSyncRecursive(fixturesPath, tempPath, forceDelete: true)
     atom.project.setPath(tempPath)
+
+    atom.config.set("latex.texPath", texPath)
 
     atom.workspaceView = new WorkspaceView
     atom.workspaceView.statusBar = new StatusBarMock
