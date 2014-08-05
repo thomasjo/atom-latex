@@ -6,8 +6,8 @@ wrench = require "wrench"
 latex = require "../lib/latex"
 
 texPath = switch process.platform
-  when "win32" then "C:\\texlive\\2014\\bin\\win32"
-  else "/usr/texbin"
+  when "win32" then "C:\\texlive\\2014\\bin\\win32;$PATH"
+  else "/usr/texbin:$PATH"
 
 class StatusBarMock extends View
   @content: ->
