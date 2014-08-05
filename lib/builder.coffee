@@ -18,8 +18,16 @@ class Builder
     options = env: env
 
   constructPath: ->
-    texPath = atom.config.get("latex.texPath")
-    texPath?.replace("$PATH", process.env[@envPathKey])
+    texPath = atom.config.get("latex.texPath")?.trim()
+    texPath = @defaultTexPath() unless texPath?.length
+    texPath = texPath.replace("$PATH", process.env[@envPathKey])
+
+  defaultTexPath: ->
+    switch process.platform
+      when "win32"
+        "$PATH;C:\\texlive\\2014\\bin\\win32"
+      else
+        "$PATH:/usr/texbin"
 
   resolveLogFilePath: (texFilePath) ->
     outputDirectory = atom.config.get("latex.outputDirectory") ? ""

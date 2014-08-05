@@ -6,9 +6,9 @@ ProgressIndicatorView = require "./progress-indicator-view"
 
 module.exports =
   configDefaults:
-    texPath: "$PATH:/usr/texbin"
-    outputDirectory: ""
     enableShellEscape: false
+    outputDirectory: ""
+    texPath: ""
 
   activate: ->
     atom.workspaceView.command "latex:build", => @build()
