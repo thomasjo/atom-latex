@@ -6,7 +6,7 @@ ProgressIndicatorView = require "./progress-indicator-view"
 
 module.exports =
   configDefaults:
-    texPath: "/usr/texbin"
+    texPath: "$PATH:/usr/texbin"
     outputDirectory: ""
     enableShellEscape: false
 
