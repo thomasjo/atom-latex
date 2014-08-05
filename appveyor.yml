@@ -17,7 +17,7 @@ install:
   - cd %TEMP%
   - ps: Start-FileDownload "https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z"
   - 7za x texlive.7z -oC:\texlive -y
-  - set Path="%Path%;C:\texlive\bin\win32"
+  - set Path=%Path%;C:\texlive\bin\win32
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
