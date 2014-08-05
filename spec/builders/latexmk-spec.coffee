@@ -51,5 +51,5 @@ describe "LatexmkBuilder", ->
 
     it "replaces $PATH with process.env.PATH", ->
       expectedPath = "#{process.env.PATH}:/usr/texbin"
-      path = builder.constructPath()
-      expect(path).toEqual(expectedPath)
+      constructedPath = builder.constructPath()
+      expect(constructedPath).toEqual(expectedPath)
