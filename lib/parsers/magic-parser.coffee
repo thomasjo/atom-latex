@@ -18,8 +18,7 @@ class MagicParser
 
   parse: ->
     result = {}
-    lines = @getLines()
-    for line in lines
+    for line in lines = @getLines()
       match = line.match(magicCommentPattern)
       break unless match? # Stop parsing unless line is a magic comment.
       result[match[1]] = match[2]

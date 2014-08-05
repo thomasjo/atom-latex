@@ -19,8 +19,7 @@ class LogParser
       errors: []
       warnings: []
 
-    lines = @getLines()
-    for line in lines
+    for line in lines = @getLines()
       # Simplest Thing That Works™ and KISS®
       match = line.match(outputPattern)
       result.outputFilePath = path.resolve(@projectPath, match[1]) if match?

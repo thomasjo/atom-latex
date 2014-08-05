@@ -14,8 +14,7 @@ class Builder
 
   constructChildProcessOptions: ->
     env = _.clone(process.env)
-    childPath = @constructPath()
-    env[@envPathKey] = childPath if childPath?.length
+    env[@envPathKey] = childPath if childPath = @constructPath()
     options = env: env
 
   constructPath: ->
