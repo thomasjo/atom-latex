@@ -1,31 +1,13 @@
-{View, WorkspaceView} = require "atom"
-fs = require "fs-plus"
 path = require "path"
-temp = require "temp"
-wrench = require "wrench"
+utils = require "./spec-utils"
 latex = require "../lib/latex"
 
-class StatusBarMock extends View
-  @content: ->
-    @div class: "status-bar tool-panel panel-bottom", =>
-      @div outlet: "rightPanel", class: "status-bar-right pull-right"
-
-  attach: -> atom.workspaceView.appendToTop(this)
-  prependRight: (view) -> @rightPanel.append(view)
-
 describe "Latex", ->
-  [tempPath] = []
+  [fixturesPath] = []
 
   beforeEach ->
-    tempPath = fs.realpathSync(temp.mkdirSync("atom-latex"))
-    fixturesPath = atom.project.getPath()
-    wrench.copyDirSyncRecursive(fixturesPath, tempPath, forceDelete: true)
-    atom.project.setPath(tempPath)
-
-    atom.workspaceView = new WorkspaceView
-    atom.workspaceView.statusBar = new StatusBarMock
-    atom.workspaceView.statusBar.attach()
-    atom.workspace = atom.workspaceView.model
+    fixturesPath = utils.cloneFixtures()
+    utils.mockStatusBar()
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->
@@ -78,7 +60,7 @@ describe "Latex", ->
 
       waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalledWith {
-        outputFilePath: path.join(tempPath, "file.pdf")
+        outputFilePath: path.join(fixturesPath, "file.pdf")
         errors: []
         warnings: []
       }
