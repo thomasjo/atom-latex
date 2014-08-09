@@ -1,5 +1,11 @@
-# LaTeX package [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
+# LaTeX package
 A simple package for Atom that compiles LaTeX files by invoking latexmk.
+
+## Build status
+[![Build Status](http://img.shields.io/travis/thomasjo/atom-latex.svg?style=flat)](https://travis-ci.org/thomasjo/atom-latex)
+[![Windows Build Status](http://img.shields.io/appveyor/ci/thomasjo/atom-latex.svg?style=flat)](https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master)
+
+---
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -10,7 +16,7 @@ Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
 a .tex file.
 
 ## Status
-Please note that this package is in an **alpha** state. Right now everything is
+Please note that this package is in a **beta** state. Right now everything is
 very naïve. As an example, there's no real error handling; the package merely
 prints an error message to the console indicating that an error occurred during
 the build, and to check the log file manually...
