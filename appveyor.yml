@@ -9,15 +9,17 @@ init:
   - ps: iex ((New-Object Net.WebClient).DownloadString("https://chocolatey.org/install.ps1"))
 
 install:
+  - cinst 7zip.commandline
+  - cd %TEMP%
+  - echo "Downloading portable TeX Live installation..."
+  - ps: Start-FileDownload "https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z"
+  - 7za x texlive.7z -oC:\ -y
+  - set PATH=C:\texlive\bin\win32;%PATH%
+  # -------
   - cinst atom
   - cd %APPVEYOR_BUILD_FOLDER%
   - apm install
-  # -------
-  - cinst 7zip.commandline
-  - cd %TEMP%
-  - ps: Start-FileDownload "https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z"
-  - 7za x texlive.7z -oC:\ -y
-  - set PATH=%PATH%;C:\texlive\bin\win32
+
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
