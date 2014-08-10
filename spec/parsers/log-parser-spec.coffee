@@ -1,5 +1,5 @@
+helpers = require "../spec-helpers"
 path = require "path"
-utils = require "../spec-utils"
 latex = require "../../lib/latex"
 LogParser = require "../../lib/parsers/log-parser"
 
@@ -11,8 +11,8 @@ describe "LogParser", ->
 
   describe "parse", ->
     it "returns the expected output path", ->
-      fixturesPath = utils.cloneFixtures()
-      utils.mockStatusBar()
+      fixturesPath = helpers.cloneFixtures()
+      helpers.mockStatusBar()
       atom.config.set("latex.outputDirectory", "output")
       editor = atom.workspace.openSync("file.tex")
       expectedFilePath = path.join(fixturesPath, "output", "file.pdf")

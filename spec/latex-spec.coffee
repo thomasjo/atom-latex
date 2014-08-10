@@ -1,13 +1,13 @@
+helpers = require "./spec-helpers"
 path = require "path"
-utils = require "./spec-utils"
 latex = require "../lib/latex"
 
 describe "Latex", ->
   [fixturesPath] = []
 
   beforeEach ->
-    fixturesPath = utils.cloneFixtures()
-    utils.mockStatusBar()
+    fixturesPath = helpers.cloneFixtures()
+    helpers.mockStatusBar()
 
   describe "build", ->
     it "does nothing for new, unsaved files", ->

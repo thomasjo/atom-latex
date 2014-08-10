@@ -1,3 +1,4 @@
+_ = require "underscore-plus"
 {View, WorkspaceView} = require "atom"
 fs = require "fs-plus"
 temp = require "temp"
@@ -20,7 +21,14 @@ module.exports =
     fixturesPath = tempPath
 
   mockStatusBar: ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspaceView.statusBar = new StatusBarMock
+    atom.workspaceView = new WorkspaceView()
+    atom.workspaceView.statusBar = new StatusBarMock()
     atom.workspaceView.statusBar.attach()
     atom.workspace = atom.workspaceView.model
+
+  overridePlatform: (name) ->
+    Object.defineProperty(process, "platform", {__proto__:null, value: name})
+
+  spyOnConfig: (key, value) ->
+    spyOn(atom.config, "get").andCallFake (_key) =>
+      return value if _key is key
