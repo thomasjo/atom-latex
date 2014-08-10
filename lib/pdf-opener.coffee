@@ -1,5 +1,3 @@
-path = require "path"
-
 module.exports =
 class PdfOpener
   # Opens the given pdf file using an external viewer. This method is async.
@@ -9,5 +7,4 @@ class PdfOpener
   #   by child_process#exec) and the stderr of the child process and
   #   handling the error report to the user
   # @param next: (optional) a function that will be called if the opening is successful
-  open: (filePath, errorHandler, next) ->
-    throw "Implement this into subclasses"
+  open: (filePath, callback) ->

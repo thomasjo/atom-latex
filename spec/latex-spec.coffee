@@ -10,6 +10,9 @@ describe "Latex", ->
     helpers.mockStatusBar()
 
   describe "build", ->
+    beforeEach ->
+      spyOn(latex, "getOpener").andReturn()
+
     it "does nothing for new, unsaved files", ->
       editor = atom.workspace.openSync()
 
@@ -64,3 +67,17 @@ describe "Latex", ->
         errors: []
         warnings: []
       }
+
+  describe "getOpener", ->
+    originalPlatform = process.platform
+
+    afterEach ->
+      helpers.overridePlatform(originalPlatform)
+
+    it "supports OS X", ->
+      ExpectedOpener = require "../lib/pdf-openers/preview-app-pdf-opener"
+
+      helpers.overridePlatform("darwin")
+      opener = latex.getOpener()
+
+      expect(opener).toEqual(new ExpectedOpener)

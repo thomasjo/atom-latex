@@ -18,6 +18,7 @@ describe "LogParser", ->
       expectedFilePath = path.join(fixturesPath, "output", "file.pdf")
 
       spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, "getOpener").andReturn()
       latex.build()
       waitsFor -> latex.showResult.callCount == 1
 

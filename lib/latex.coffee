@@ -3,7 +3,6 @@ ErrorIndicatorView = require "./error-indicator-view"
 LatexmkBuilder = require "./builders/latexmk"
 MasterTexFinder = require "./master-tex-finder"
 ProgressIndicatorView = require "./progress-indicator-view"
-PdfOpeners = require "./pdf-openers/pdf-openers"
 
 module.exports =
   configDefaults:
@@ -58,13 +57,21 @@ module.exports =
   getBuilder: ->
     new LatexmkBuilder
 
+  getOpener: ->
+    switch process.platform
+      when "darwin"
+        PreviewAppPdfOpener = require "./pdf-openers/preview-app-pdf-opener"
+        new PreviewAppPdfOpener
+      else
+        console.info "opening pdfs is still not supported on your platform"
+
   resolveRootFilePath: (path) ->
     finder = new MasterTexFinder(path)
     finder.getMasterTexPath()
 
   showResult: (result) ->
     # TODO: Display a more visible success message.
-    PdfOpeners.getOpener()?.open(result.outputFilePath) if result? && !atom.inSpecMode()
+    opener.open(result.outputFilePath) if opener = @getOpener()
     console.info "Success!" unless atom.inSpecMode()
 
   showError: (error) ->

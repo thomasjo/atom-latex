@@ -1,13 +1,9 @@
-PdfOpener = require "./pdf-opener"
-{exec} = require "child_process"
-
+child_process = require "child_process"
+PdfOpener = require "../pdf-opener"
 
 module.exports =
 class PreviewAppPdfOpener extends PdfOpener
-  open: (filePath, errorHandler, next) ->
-    exec "open -a Preview " + filePath, (error, stdout, stderr) ->
-      if error?
-        errorHandler(error, stderr) if errorHandler?
-        return
-
-      next() if next?
+  open: (filePath, callback) ->
+    child_process.exec "open -a Preview.app #{filePath}", (error, stdout, stderr) ->
+      exitCode = error?.code ? 0
+      callback(exitCode) if callback?

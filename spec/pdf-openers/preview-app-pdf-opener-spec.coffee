@@ -2,23 +2,10 @@ PreviewAppPdfOpener = require "../../lib/pdf-openers/preview-app-pdf-opener"
 
 describe "PreviewAppPdfOpener", ->
   describe "open", ->
-    it "calls the given error handler if the file is not found", ->
-      opener = new PreviewAppPdfOpener()
-      error = null
-      stderr = null
+    it "invokes the callback with an exit code equal to `1` because the file is not found", ->
+      exitCode = null
+      opener = new PreviewAppPdfOpener
+      opener.open "dummy-file-name.pdf", (code) -> exitCode = code
 
-      errorHandler = (err, errOutput) ->
-        error = err
-        stderr = errOutput
-
-      runs ->
-        opener.open("dummy-file-name.pdf", errorHandler, () -> return )
-
-      waitsFor (->
-        error != null
-        ), "the error handler was not called", 500
-
-      runs ->
-        expect(error).toNotBe(null)
-        expect(error.code).toNotEqual(0)
-        expect(stderr).toMatch(/dummy-file-name.pdf does not exist\./)
+      waitsFor -> exitCode > 0
+      runs -> expect(exitCode).toEqual(1)
