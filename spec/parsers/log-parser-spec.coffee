@@ -32,9 +32,9 @@ describe "LogParser", ->
       logFile = path.join(fixturesPath, "file.log")
       parser = new LogParser(logFile)
       lines = parser.getLines()
-      expect(lines?.length).toEqual 64
+      expect(lines?.length).toEqual(64)
 
     it "throws an error when passed a filepath that doesn't exist", ->
       logFile = path.join(fixturesPath, "nope.log")
       parser = new LogParser(logFile)
-      expect(parser.getLines).toThrow();
+      expect(parser.getLines).toThrow()

@@ -8,9 +8,9 @@ class Builder
       when "win32" then "Path"
       else "PATH"
 
-  run: (args, callback) -> null
-  constructArgs: (filePath) -> null
-  parseLogFile: (texFilePath) -> null
+  run: (args, callback) ->
+  constructArgs: (filePath) ->
+  parseLogFile: (texFilePath) ->
 
   constructChildProcessOptions: ->
     env = _.clone(process.env)

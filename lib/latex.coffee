@@ -17,10 +17,10 @@ module.exports =
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      # TODO: Show info message that the file has to be saved once?
+      console.info "File needs to be saved to disk before it can be TeXified." unless atom.inSpecMode()
       return
 
-    editor.save() if editor.isModified() # NOTE: Should this be configurable?
+    editor.save() if editor.isModified() # TODO: Make this configurable?
 
     builder = @getBuilder()
     rootFilePath = @resolveRootFilePath(filePath)
@@ -34,7 +34,7 @@ module.exports =
       if statusCode == 0
         @showResult(result)
       else if statusCode == 127
-        @showError(
+        @showError \
           """
           TeXification failed! Builder executable not found.
 
@@ -45,14 +45,12 @@ module.exports =
           Make sure latex.texPath is configured correctly; either adjust it \
           via the settings view, or directly in your config.cson file.
           """
-        )
       else
-        @showError(
+        @showError \
           """
           TeXification failed with status code #{statusCode}! \
           Check the log file for more info...
           """
-        )
 
     return
 
