@@ -1,16 +1,16 @@
-_ = require "underscore-plus"
-path = require "path"
+_ = require 'underscore-plus'
+path = require 'path'
 
 module.exports =
 class Builder
   constructor: ->
     @envPathKey = switch process.platform
-      when "win32" then "Path"
-      else "PATH"
+      when 'win32' then 'Path'
+      else 'PATH'
 
-  run: (args, callback) ->
-  constructArgs: (filePath) ->
-  parseLogFile: (texFilePath) ->
+  run: (args, callback) -> undefined
+  constructArgs: (filePath) -> undefined
+  parseLogFile: (texFilePath) -> undefined
 
   constructChildProcessOptions: ->
     env = _.clone(process.env)
@@ -18,19 +18,19 @@ class Builder
     options = env: env
 
   constructPath: ->
-    texPath = atom.config.get("latex.texPath")?.trim()
+    texPath = atom.config.get('latex.texPath')?.trim()
     texPath = @defaultTexPath() unless texPath?.length
-    texPath = texPath.replace("$PATH", process.env[@envPathKey])
+    texPath = texPath.replace('$PATH', process.env[@envPathKey])
 
   defaultTexPath: ->
     switch process.platform
-      when "win32"
-        "$PATH;C:\\texlive\\2014\\bin\\win32"
+      when 'win32'
+        '$PATH;C:\\texlive\\2014\\bin\\win32'
       else
-        "$PATH:/usr/texbin"
+        '$PATH:/usr/texbin'
 
   resolveLogFilePath: (texFilePath) ->
-    outputDirectory = atom.config.get("latex.outputDirectory") ? ""
+    outputDirectory = atom.config.get('latex.outputDirectory') ? ''
     currentDirectory = path.dirname(texFilePath)
-    fileName = path.basename(texFilePath).replace(/\.tex$/, ".log")
+    fileName = path.basename(texFilePath).replace(/\.tex$/, '.log')
     logFilePath = path.join(currentDirectory, outputDirectory, fileName)

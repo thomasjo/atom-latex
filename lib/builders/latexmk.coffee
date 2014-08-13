@@ -1,15 +1,15 @@
-child_process = require "child_process"
-fs = require "fs-plus"
-path = require "path"
-Builder = require "../builder"
-LogParser = require "../parsers/log-parser"
+child_process = require 'child_process'
+fs = require 'fs-plus'
+path = require 'path'
+Builder = require '../builder'
+LogParser = require '../parsers/log-parser'
 
 module.exports =
 class LatexmkBuilder extends Builder
   run: (args, callback) ->
-    command = "latexmk #{args.join(" ")}"
+    command = "latexmk #{args.join(' ')}"
     options = @constructChildProcessOptions()
-    options.env["max_print_line"] = 1000  # Max log file line length.
+    options.env['max_print_line'] = 1000  # Max log file line length.
 
     # TODO: Add support for killing the process.
     proc = child_process.exec command, options, (error, stdout, stderr) ->
@@ -21,22 +21,22 @@ class LatexmkBuilder extends Builder
 
   constructArgs: (filePath) ->
     args = [
-      "-interaction=nonstopmode"
-      "-f"
-      "-cd"
-      "-pdf"
+      '-interaction=nonstopmode'
+      '-f'
+      '-cd'
+      '-pdf'
     ]
 
     pdfOpts = [
-      "-synctex=1"
-      "-file-line-error"
+      '-synctex=1'
+      '-file-line-error'
     ]
 
-    enableShellEscape = atom.config.get("latex.enableShellEscape")
-    pdfOpts.push("-shell-escape") if enableShellEscape?
-    args.push("-pdflatex=\"pdflatex #{pdfOpts.join(" ")} %O %S\"")
+    enableShellEscape = atom.config.get('latex.enableShellEscape')
+    pdfOpts.push('-shell-escape') if enableShellEscape?
+    args.push("-pdflatex=\"pdflatex #{pdfOpts.join(' ')} %O %S\"")
 
-    if outdir = atom.config.get("latex.outputDirectory")
+    if outdir = atom.config.get('latex.outputDirectory')
       dir = path.dirname(filePath)
       outdir = path.join(dir, outdir)
       args.push("-outdir=\"#{outdir}\"")

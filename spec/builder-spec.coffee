@@ -1,19 +1,19 @@
-helpers = require "./spec-helpers"
-Builder = require "../lib/builder"
+helpers = require './spec-helpers'
+Builder = require '../lib/builder'
 
 describe "Builder", ->
   [builder] = []
 
   beforeEach ->
-    builder = new Builder
+    builder = new Builder()
 
   describe "constructPath", ->
     beforeEach ->
-      helpers.spyOnConfig("latex.texPath", "$PATH:/usr/texbin")
+      helpers.spyOnConfig('latex.texPath', '$PATH:/usr/texbin')
 
     it "reads `latex.texPath` as configured", ->
       builder.constructPath()
-      expect(atom.config.get).toHaveBeenCalledWith("latex.texPath")
+      expect(atom.config.get).toHaveBeenCalledWith('latex.texPath')
 
     it "replaces $PATH with process.env.PATH", ->
       expectedPath = "#{process.env.PATH}:/usr/texbin"

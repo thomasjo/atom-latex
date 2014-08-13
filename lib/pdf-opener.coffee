@@ -7,4 +7,4 @@ class PdfOpener
   #   by child_process#exec) and the stderr of the child process and
   #   handling the error report to the user
   # @param next: (optional) a function that will be called if the opening is successful
-  open: (filePath, callback) ->
+  open: (filePath, callback) -> undefined

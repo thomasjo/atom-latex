@@ -1,6 +1,6 @@
-helpers = require "./spec-helpers"
-path = require "path"
-latex = require "../lib/latex"
+helpers = require './spec-helpers'
+path = require 'path'
+latex = require '../lib/latex'
 
 describe "Latex", ->
   [fixturesPath] = []
@@ -11,14 +11,14 @@ describe "Latex", ->
 
   describe "build", ->
     beforeEach ->
-      spyOn(latex, "getOpener").andReturn()
+      spyOn(latex, 'getOpener').andReturn()
 
     it "does nothing for new, unsaved files", ->
       editor = atom.workspace.openSync()
 
-      spyOn(latex, "build").andCallThrough()
-      spyOn(latex, "showResult").andCallThrough()
-      spyOn(latex, "showError").andCallThrough()
+      spyOn(latex, 'build').andCallThrough()
+      spyOn(latex, 'showResult').andCallThrough()
+      spyOn(latex, 'showError').andCallThrough()
       latex.build()
 
       waitsFor -> latex.build.callCount == 1
@@ -27,18 +27,18 @@ describe "Latex", ->
         expect(latex.showError).not.toHaveBeenCalled()
 
     it "runs `latexmk` for existing files", ->
-      editor = atom.workspace.openSync("file.tex")
+      editor = atom.workspace.openSync('file.tex')
 
-      spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, 'showResult').andCallThrough()
       latex.build()
 
       waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
-      editor = atom.workspace.openSync("file.tex")
+      editor = atom.workspace.openSync('file.tex')
 
-      spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, 'showResult').andCallThrough()
       editor.moveCursorToBottom()
       editor.insertNewline()
       latex.build()
@@ -47,23 +47,23 @@ describe "Latex", ->
       runs -> expect(editor.isModified()).toEqual(false)
 
     it "supports paths containing spaces", ->
-      editor = atom.workspace.openSync("filename with spaces.tex")
+      editor = atom.workspace.openSync('filename with spaces.tex')
 
-      spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, 'showResult').andCallThrough()
       latex.build()
 
       waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalled()
 
     it "invokes `showResult` after a successful build, with expected log parsing result", ->
-      editor = atom.workspace.openSync("file.tex")
+      editor = atom.workspace.openSync('file.tex')
 
-      spyOn(latex, "showResult").andCallThrough()
+      spyOn(latex, 'showResult').andCallThrough()
       latex.build()
 
       waitsFor -> latex.showResult.callCount == 1
       runs -> expect(latex.showResult).toHaveBeenCalledWith {
-        outputFilePath: path.join(fixturesPath, "file.pdf")
+        outputFilePath: path.join(fixturesPath, 'file.pdf')
         errors: []
         warnings: []
       }
@@ -75,9 +75,9 @@ describe "Latex", ->
       helpers.overridePlatform(originalPlatform)
 
     it "supports OS X", ->
-      ExpectedOpener = require "../lib/pdf-openers/preview-app-pdf-opener"
+      ExpectedOpener = require '../lib/pdf-openers/preview-app-pdf-opener'
 
-      helpers.overridePlatform("darwin")
+      helpers.overridePlatform('darwin')
       opener = latex.getOpener()
 
-      expect(opener).toEqual(new ExpectedOpener)
+      expect(opener).toEqual(new ExpectedOpener())

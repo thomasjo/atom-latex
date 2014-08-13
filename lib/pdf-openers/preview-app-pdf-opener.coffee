@@ -1,5 +1,5 @@
-child_process = require "child_process"
-PdfOpener = require "../pdf-opener"
+child_process = require 'child_process'
+PdfOpener = require '../pdf-opener'
 
 module.exports =
 class PreviewAppPdfOpener extends PdfOpener

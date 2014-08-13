@@ -1,6 +1,6 @@
-fs = require "fs-plus"
-path = require "path"
-MagicParser = require "./parsers/magic-parser"
+fs = require 'fs-plus'
+path = require 'path'
+MagicParser = require './parsers/magic-parser'
 
 masterFilePattern = ///
   ^\s*              # Optional whitespace.
@@ -20,13 +20,13 @@ class MasterTexFinder
 
   # Returns the list of tex files in the project directory
   getTexFilesList: ->
-    fs.listSync(@projectPath, [".tex"])
+    fs.listSync(@projectPath, ['.tex'])
 
   # Returns true iff path is a master file (contains the documentclass declaration)
   isMasterFile: (filePath) ->
     return false unless fs.existsSync(filePath)
 
-    rawFile = fs.readFileSync(filePath, {encoding: "utf-8"})
+    rawFile = fs.readFileSync(filePath, {encoding: 'utf-8'})
     masterFilePattern.test(rawFile)
 
   # Returns an array containing the path to the root file indicated by a magic
@@ -50,7 +50,7 @@ class MasterTexFinder
     result = files.filter (path) => @isMasterFile(path)
     return result[0] if result.length == 1
 
-    console.warn "Cannot find latex master file" unless atom.inSpecMode()
+    console.warn 'Cannot find latex master file' unless atom.inSpecMode()
     @filePath
 
   # Returns the a latex master file.

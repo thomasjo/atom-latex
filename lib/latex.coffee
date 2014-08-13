@@ -1,23 +1,24 @@
-path = require "path"
-ErrorIndicatorView = require "./error-indicator-view"
-LatexmkBuilder = require "./builders/latexmk"
-MasterTexFinder = require "./master-tex-finder"
-ProgressIndicatorView = require "./progress-indicator-view"
+path = require 'path'
+ErrorIndicatorView = require './error-indicator-view'
+LatexmkBuilder = require './builders/latexmk'
+MasterTexFinder = require './master-tex-finder'
+ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
   configDefaults:
     enableShellEscape: false
-    outputDirectory: ""
-    texPath: ""
+    outputDirectory: ''
+    texPath: ''
 
   activate: ->
-    atom.workspaceView.command "latex:build", => @build()
+    atom.workspaceView.command 'latex:build', => @build()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      console.info "File needs to be saved to disk before it can be TeXified." unless atom.inSpecMode()
+      unless atom.inSpecMode()
+        console.info 'File needs to be saved to disk before it can be TeXified.'
       return
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
@@ -39,7 +40,7 @@ module.exports =
           TeXification failed! Builder executable not found.
 
             latex.texPath
-              as configured: #{atom.config.get("latex.texPath")}
+              as configured: #{atom.config.get('latex.texPath')}
               when resolved: #{builder.constructPath()}
 
           Make sure latex.texPath is configured correctly; either adjust it \
@@ -55,15 +56,15 @@ module.exports =
     return
 
   getBuilder: ->
-    new LatexmkBuilder
+    new LatexmkBuilder()
 
   getOpener: ->
     switch process.platform
-      when "darwin"
-        PreviewAppPdfOpener = require "./pdf-openers/preview-app-pdf-opener"
-        new PreviewAppPdfOpener
+      when 'darwin'
+        PreviewAppPdfOpener = require './pdf-openers/preview-app-pdf-opener'
+        new PreviewAppPdfOpener()
       else
-        console.info "opening pdfs is still not supported on your platform"
+        console.info 'Opening PDF files is not yet supported on your platform.'
 
   resolveRootFilePath: (path) ->
     finder = new MasterTexFinder(path)
@@ -72,7 +73,7 @@ module.exports =
   showResult: (result) ->
     # TODO: Display a more visible success message.
     opener.open(result.outputFilePath) if opener = @getOpener()
-    console.info "Success!" unless atom.inSpecMode()
+    console.info 'Success!' unless atom.inSpecMode()
 
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
@@ -82,14 +83,14 @@ module.exports =
   showProgressIndicator: ->
     return @indicator if @indicator?
 
-    @indicator = new ProgressIndicatorView
+    @indicator = new ProgressIndicatorView()
     atom.workspaceView.statusBar?.prependRight(@indicator)
     @indicator
 
   showErrorIndicator: ->
     return @errorIndicator if @errorIndicator?
 
-    @errorIndicator = new ErrorIndicatorView
+    @errorIndicator = new ErrorIndicatorView()
     atom.workspaceView.statusBar?.prependRight(@errorIndicator)
     @errorIndicator
 
