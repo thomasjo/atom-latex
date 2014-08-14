@@ -61,8 +61,8 @@ module.exports =
   getOpener: ->
     switch process.platform
       when 'darwin'
-        PreviewAppPdfOpener = require './pdf-openers/preview-app-pdf-opener'
-        new PreviewAppPdfOpener()
+        PreviewOpener = require './openers/preview-opener'
+        new PreviewOpener()
       else
         console.info 'Opening PDF files is not yet supported on your platform.'
 
