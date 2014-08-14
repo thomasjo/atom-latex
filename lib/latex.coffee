@@ -7,6 +7,8 @@ ProgressIndicatorView = require './progress-indicator-view'
 module.exports =
   configDefaults:
     enableShellEscape: false
+    openResultAfterBuild: true
+    openResultInBackground: true
     outputDirectory: ''
     texPath: ''
 
@@ -70,9 +72,14 @@ module.exports =
     finder = new MasterTexFinder(path)
     finder.getMasterTexPath()
 
+  shouldOpenResult: ->
+    atom.config.get('latex.openResultAfterBuild')
+
   showResult: (result) ->
+    if @shouldOpenResult() and opener = @getOpener()
+      opener.open(result.outputFilePath)
+
     # TODO: Display a more visible success message.
-    opener.open(result.outputFilePath) if opener = @getOpener()
     console.info 'Success!' unless atom.inSpecMode()
 
   showError: (error) ->

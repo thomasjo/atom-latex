@@ -4,6 +4,8 @@ Opener = require '../opener'
 module.exports =
 class PreviewOpener extends Opener
   open: (filePath, callback) ->
-    child_process.exec "open -a Preview.app #{filePath}", (error, stdout, stderr) ->
+    command = "open -g -a Preview.app #{filePath}"
+    command = command.replace(/\-g\s/, '') unless @shouldOpenInBackground()
+    child_process.exec command, (error, stdout, stderr) ->
       exitCode = error?.code ? 0
       callback(exitCode) if callback?
