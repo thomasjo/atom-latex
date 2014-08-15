@@ -79,3 +79,21 @@ describe "Latex", ->
       opener = latex.getOpener()
 
       expect(opener.constructor.name).toEqual('PreviewOpener')
+
+    it "does not support GNU/Linux", ->
+      helpers.overridePlatform('linux')
+      opener = latex.getOpener()
+
+      expect(opener).toBeUndefined()
+
+    it "does not support Windows", ->
+      helpers.overridePlatform('win32')
+      opener = latex.getOpener()
+
+      expect(opener).toBeUndefined()
+
+    it "does not support unknown operating system", ->
+      helpers.overridePlatform('foo')
+      opener = latex.getOpener()
+
+      expect(opener).toBeUndefined()
