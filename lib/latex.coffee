@@ -34,10 +34,9 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
-      if statusCode == 0
-        @showResult(result)
-      else if statusCode == 127
-        @showError \
+      switch statusCode
+        when 0 then @showResult(result)
+        when 127 then @showError \
           """
           TeXification failed! Builder executable not found.
 
@@ -48,8 +47,7 @@ module.exports =
           Make sure latex.texPath is configured correctly; either adjust it \
           via the settings view, or directly in your config.cson file.
           """
-      else
-        @showError \
+        else @showError \
           """
           TeXification failed with status code #{statusCode}! \
           Check the log file for more info...
@@ -61,12 +59,12 @@ module.exports =
     new LatexmkBuilder()
 
   getOpener: ->
-    switch process.platform
-      when 'darwin'
-        PreviewOpener = require './openers/preview-opener'
-        new PreviewOpener()
-      else
-        console.info 'Opening PDF files is not yet supported on your platform.'
+    # TODO: Move this to a resolver module? Will get more complex...
+    OpenerImpl = switch process.platform
+      when 'darwin' then require './openers/preview-opener'
+    return new OpenerImpl() if OpenerImpl?
+
+    console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
 
   resolveRootFilePath: (path) ->
     finder = new MasterTexFinder(path)
