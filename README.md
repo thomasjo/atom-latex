@@ -32,8 +32,9 @@ Current wish list, in a semi-prioritized order.
  - [ ] Error handling.
  - [ ] Warnings, and other non-critical messages.
 - [ ] BibTeX autocompletion support.
-- [ ] Open PDF automatically.
- - [ ] Configurable.
+- [x] Open PDF automatically.
+ - [x] Configurable.
+ - [ ] Support for other distributions, besides OS X.
 - [ ] Support for compilers other than latexmk.
  - [ ] Add support for non-PDF typesetting (e.g. dvi).
 - [ ] Project management.
