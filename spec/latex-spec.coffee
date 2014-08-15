@@ -75,9 +75,7 @@ describe "Latex", ->
       helpers.overridePlatform(originalPlatform)
 
     it "supports OS X", ->
-      ExpectedOpener = require '../lib/openers/preview-opener'
-
       helpers.overridePlatform('darwin')
       opener = latex.getOpener()
 
-      expect(opener).toEqual(new ExpectedOpener())
+      expect(opener.constructor.name).toEqual('PreviewOpener')
