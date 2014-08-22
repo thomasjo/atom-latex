@@ -1,4 +1,5 @@
 helpers = require './spec-helpers'
+fs = require 'fs-plus'
 path = require 'path'
 latex = require '../lib/latex'
 
@@ -97,3 +98,16 @@ describe "Latex", ->
       opener = latex.getOpener()
 
       expect(opener).toBeUndefined()
+
+    it "returns SkimOpener when installed on OS X", ->
+      atom.config.set('latex.skimPath', '/Applications/Skim.app')
+      helpers.overridePlatform('darwin')
+
+      existsSync = fs.existsSync
+      spyOn(fs, 'existsSync').andCallFake (filePath) ->
+        return true if filePath is '/Applications/Skim.app'
+        existsSync(filePath)
+
+      opener = latex.getOpener()
+
+      expect(opener.constructor.name).toEqual('SkimOpener')

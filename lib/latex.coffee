@@ -1,3 +1,4 @@
+fs = require 'fs-plus'
 path = require 'path'
 ErrorIndicatorView = require './error-indicator-view'
 LatexmkBuilder = require './builders/latexmk'
@@ -10,6 +11,7 @@ module.exports =
     openResultAfterBuild: true
     openResultInBackground: true
     outputDirectory: ''
+    skimPath: '/Applications/Skim.app'
     texPath: ''
 
   activate: ->
@@ -61,9 +63,13 @@ module.exports =
   getOpener: ->
     # TODO: Move this to a resolver module? Will get more complex...
     OpenerImpl = switch process.platform
-      when 'darwin' then require './openers/preview-opener'
-    return new OpenerImpl() if OpenerImpl?
+      when 'darwin'
+        if fs.existsSync(atom.config.get('latex.skimPath'))
+          require './openers/skim-opener'
+        else
+          require './openers/preview-opener'
 
+    return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
 
   resolveRootFilePath: (path) ->
