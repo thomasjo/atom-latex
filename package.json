@@ -10,10 +10,10 @@
     "latex:build"
   ],
   "engines": {
-    "atom": ">0.90.0"
+    "atom": ">=0.129.0"
   },
   "dependencies": {
-    "fs-plus": "~2.2.0",
+    "fs-plus": "~2.3.0",
     "temp": "~0.8.0",
     "underscore-plus": "~1.5.1",
     "wrench": "~1.5.8"
