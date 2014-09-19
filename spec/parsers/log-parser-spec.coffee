@@ -8,18 +8,18 @@ describe "LogParser", ->
 
   beforeEach ->
     fixturesPath = atom.project.getPath()
+    helpers.mockStatusBar()
 
   describe "parse", ->
     it "returns the expected output path", ->
       fixturesPath = helpers.cloneFixtures()
-      helpers.mockStatusBar()
       atom.config.set('latex.outputDirectory', 'output')
-      editor = atom.workspace.openSync('file.tex')
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
-
       spyOn(latex, 'showResult').andCallThrough()
       spyOn(latex, 'getOpener').andReturn()
-      latex.build()
+
+      waitsForPromise -> atom.workspace.open('file.tex')
+      runs -> latex.build()
       waitsFor -> latex.showResult.callCount == 1
 
       runs ->
