@@ -7,5 +7,8 @@ describe "PreviewOpener", ->
       opener = new PreviewOpener()
       opener.open 'dummy-file-name.pdf', (code) -> exitCode = code
 
-      waitsFor -> exitCode > 0
-      runs -> expect(exitCode).toEqual(1)
+      waitsFor ->
+        exitCode > 0
+
+      runs ->
+        expect(exitCode).toEqual(1)

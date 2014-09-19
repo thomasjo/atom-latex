@@ -19,20 +19,31 @@ describe "Latex", ->
       spyOn(latex, 'build').andCallThrough()
       spyOn(latex, 'showError').andCallThrough()
 
-      waitsForPromise -> atom.workspace.open()
-      runs -> latex.build()
+      waitsForPromise ->
+        atom.workspace.open()
 
-      waitsFor -> latex.build.callCount == 1
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.build.callCount == 1
+
       runs ->
         expect(latex.showResult).not.toHaveBeenCalled()
         expect(latex.showError).not.toHaveBeenCalled()
 
     it "runs `latexmk` for existing files", ->
-      waitsForPromise -> atom.workspace.open('file.tex')
-      runs -> latex.build()
+      waitsForPromise ->
+        atom.workspace.open('file.tex')
 
-      waitsFor -> latex.showResult.callCount == 1
-      runs -> expect(latex.showResult).toHaveBeenCalled()
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.showResult.callCount == 1
+
+      runs ->
+        expect(latex.showResult).toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
       [editor] = []
@@ -44,26 +55,41 @@ describe "Latex", ->
         editor.insertNewline()
         latex.build()
 
-      waitsFor -> latex.showResult.callCount == 1
-      runs -> expect(editor.isModified()).toEqual(false)
+      waitsFor ->
+        latex.showResult.callCount == 1
+
+      runs ->
+        expect(editor.isModified()).toEqual(false)
 
     it "supports paths containing spaces", ->
-      waitsForPromise -> atom.workspace.open('filename with spaces.tex')
-      runs -> latex.build()
+      waitsForPromise ->
+        atom.workspace.open('filename with spaces.tex')
 
-      waitsFor -> latex.showResult.callCount == 1
-      runs -> expect(latex.showResult).toHaveBeenCalled()
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.showResult.callCount == 1
+
+      runs ->
+        expect(latex.showResult).toHaveBeenCalled()
 
     it "invokes `showResult` after a successful build, with expected log parsing result", ->
-      waitsForPromise -> atom.workspace.open('file.tex')
-      runs -> latex.build()
+      waitsForPromise ->
+        atom.workspace.open('file.tex')
 
-      waitsFor -> latex.showResult.callCount == 1
-      runs -> expect(latex.showResult).toHaveBeenCalledWith {
-        outputFilePath: path.join(fixturesPath, 'file.pdf')
-        errors: []
-        warnings: []
-      }
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.showResult.callCount == 1
+
+      runs ->
+        expect(latex.showResult).toHaveBeenCalledWith {
+          outputFilePath: path.join(fixturesPath, 'file.pdf')
+          errors: []
+          warnings: []
+        }
 
   describe "getOpener", ->
     originalPlatform = process.platform

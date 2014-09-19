@@ -13,19 +13,26 @@ describe "LogParser", ->
   describe "parse", ->
     it "returns the expected output path", ->
       fixturesPath = helpers.cloneFixtures()
-      atom.config.set('latex.outputDirectory', 'output')
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
+      atom.config.set('latex.outputDirectory', 'output')
+
       spyOn(latex, 'showResult').andCallThrough()
       spyOn(latex, 'getOpener').andReturn()
 
-      waitsForPromise -> atom.workspace.open('file.tex')
-      runs -> latex.build()
-      waitsFor -> latex.showResult.callCount == 1
+      waitsForPromise ->
+        atom.workspace.open('file.tex')
+
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.showResult.callCount == 1
 
       runs ->
         logFile = path.join(fixturesPath, 'output', 'file.log')
         parser = new LogParser(logFile)
         result = parser.parse()
+
         expect(result.outputFilePath).toEqual(expectedFilePath)
 
   describe "getLines", ->
@@ -33,9 +40,11 @@ describe "LogParser", ->
       logFile = path.join(fixturesPath, 'file.log')
       parser = new LogParser(logFile)
       lines = parser.getLines()
+
       expect(lines?.length).toEqual(64)
 
     it "throws an error when passed a filepath that doesn't exist", ->
       logFile = path.join(fixturesPath, 'nope.log')
       parser = new LogParser(logFile)
+
       expect(parser.getLines).toThrow()
