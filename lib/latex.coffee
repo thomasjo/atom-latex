@@ -36,8 +36,10 @@ module.exports =
       type: 'string'
       default: ''
 
-  activate: ->
+  activate: (state) ->
+    @pdfFile = state.pdfFile if state?
     atom.workspaceView.command 'latex:build', => @build()
+    atom.workspaceView.command 'latex:sync', => @sync()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
@@ -58,6 +60,7 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
+      @pdfFile = result.outputFilePath
       switch statusCode
         when 0
           @moveResult(result, rootFilePath) if @shouldMoveResult()
@@ -80,6 +83,17 @@ module.exports =
           """
 
     return
+
+  sync: ->
+    unless @pdfFile?
+      console.info 'File needs to be TeXified before SyncTeX can work.' unless atom.inSpecMode()
+      return
+    editor = atom.workspace.getActivePaneItem()
+    texFile = editor?.getPath()
+    lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
+
+    opener = @getOpener()
+    opener.sync(@pdfFile, texFile, lineNumber)
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -146,3 +160,6 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
+
+  serialize: ->
+    return { pdfFile: @pdfFile }

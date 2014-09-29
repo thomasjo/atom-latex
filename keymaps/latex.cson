@@ -1,2 +1,3 @@
 '.editor':
   'ctrl-alt-b': 'latex:build'
+  'ctrl-alt-s': 'latex:sync'
