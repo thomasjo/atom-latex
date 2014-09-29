@@ -11,4 +11,4 @@ class PreviewOpener extends Opener
       callback(exitCode) if callback?
 
   sync: (filePath, texPath, lineNumber, callback) ->
-    undefined
+    console.info 'Preview.app does not support SyncTeX.'
