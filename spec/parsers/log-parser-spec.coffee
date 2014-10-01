@@ -7,7 +7,7 @@ describe "LogParser", ->
   [fixturesPath] = []
 
   beforeEach ->
-    fixturesPath = atom.project.getPath()
+    fixturesPath = atom.project.getPaths()[0]
     helpers.mockStatusBar()
 
   describe "parse", ->

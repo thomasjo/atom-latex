@@ -15,9 +15,9 @@ class StatusBarMock extends View
 module.exports =
   cloneFixtures: ->
     tempPath = fs.realpathSync(temp.mkdirSync('latex'))
-    fixturesPath = atom.project.getPath()
+    fixturesPath = atom.project.getPaths()[0]
     wrench.copyDirSyncRecursive(fixturesPath, tempPath, forceDelete: true)
-    atom.project.setPath(tempPath)
+    atom.project.setPaths([tempPath])
     fixturesPath = tempPath
 
   mockStatusBar: ->

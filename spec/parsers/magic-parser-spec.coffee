@@ -5,7 +5,7 @@ describe "MagicParser", ->
   [fixturesPath] = []
 
   beforeEach ->
-    fixturesPath = atom.project.getPath()
+    fixturesPath = atom.project.getPaths()[0]
 
   describe "parse", ->
     it "returns an empty object when file contains no magic comments", ->

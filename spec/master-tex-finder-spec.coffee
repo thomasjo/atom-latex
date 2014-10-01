@@ -2,10 +2,11 @@ path = require 'path'
 MasterTexFinder = require '../lib/master-tex-finder'
 
 describe "MasterTexFinder", ->
-  [fixturesPath] = []
+  [rootPath, fixturesPath] = []
 
   beforeEach ->
-    fixturesPath = path.join(atom.project.getPath(), 'master-tex-finder', 'single-master')
+    rootPath = atom.project.getPaths()[0]
+    fixturesPath = path.join(rootPath, 'master-tex-finder', 'single-master')
 
   describe "getMasterTexPath", ->
     it "returns the master tex file for the current project", ->
@@ -24,7 +25,7 @@ describe "MasterTexFinder", ->
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
 
     it "returns the original file if more than one file is a master file", ->
-      multiMasterFixturePath = path.join(atom.project.getPath(), 'master-tex-finder', 'multiple-masters')
+      multiMasterFixturePath = path.join(rootPath, 'master-tex-finder', 'multiple-masters')
       master1Path = path.join(multiMasterFixturePath, 'master1.tex')
       master2Path = path.join(multiMasterFixturePath, 'master2.tex')
       inc1Path = path.join(multiMasterFixturePath, 'inc1.tex')
