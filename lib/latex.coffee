@@ -129,7 +129,7 @@ module.exports =
     @errorIndicator = null
 
   getConfigFilePath: ->
-    filePath = "#{atom.getConfigDirPath()}/latex.cson"
+    filePath = path.join(atom.getConfigDirPath(), latex.cson)
     unless fs.existsSync(filePath)
       CSON.writeFileSync(filePath, {})
     return filePath
