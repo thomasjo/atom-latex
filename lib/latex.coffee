@@ -6,13 +6,28 @@ MasterTexFinder = require './master-tex-finder'
 ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
-  configDefaults:
-    enableShellEscape: false
-    openResultAfterBuild: true
-    openResultInBackground: true
-    outputDirectory: ''
-    skimPath: '/Applications/Skim.app'
-    texPath: ''
+  config:
+    enableShellEscape:
+      type: 'boolean'
+      default: false
+    openResultAfterBuild:
+      type: 'boolean'
+      default: true
+    openResultInBackground:
+      type: 'boolean'
+      default: true
+    outputDirectory:
+      description: "All files generated during a build will be redirected here"
+      type: 'string'
+      default: ''
+    skimPath:
+      type: 'string'
+      default: '/Applications/Skim.app'
+    texPath:
+      title: 'TeX Path'
+      description: "The path to your TeX distribution's bin directory"
+      type: 'string'
+      default: ''
 
   activate: ->
     atom.workspaceView.command 'latex:build', => @build()
