@@ -1,3 +1,19 @@
+## 0.12.0
+* Merged [Pull Request 12]((https://github.com/thomasjo/atom-latex/pull/12).
+  * Adds an error status indicator to the status bar.
+* Implemented basic support for parsing magic comments.
+* Merged [Pull Request 13]((https://github.com/thomasjo/atom-latex/pull/13).
+  * Adds a master/root TeX file feature which supports both magic comments and a
+    heuristic search algorithm. If building a descendant TeX file, this feature
+    ensures the root file is built instead.
+* Improved platform detection routines, which ultimately improves support for Windows.
+* Merged [Pull Request 24]((https://github.com/thomasjo/atom-latex/pull/24).
+  * Adds support for opening the resulting PDF after a successful build. Behavior is configurable.
+* Added a basic Skim.app opener.
+  * Used by default if Skim.app exists at the configured path (default path: `/Applications/Skim.app`).
+* Migrated configuration to the new JSON schema approach supported by Atom for an improved
+  user experience.
+
 ## 0.11.0
 * Merged [Pull Request 10](https://github.com/thomasjo/atom-latex/pull/10).
   * Improves the error messages to help users debug e.g. bad `PATH`.
