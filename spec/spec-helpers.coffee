@@ -35,6 +35,6 @@ module.exports =
 
   setTimeoutInterval: (interval) ->
     env = jasmine.getEnv()
-    oldInterval = env.defaultTimeoutInterval
+    originalInterval = env.defaultTimeoutInterval
     env.defaultTimeoutInterval = interval
-    oldInterval
+    originalInterval

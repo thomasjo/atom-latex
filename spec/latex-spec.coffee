@@ -11,16 +11,16 @@ describe "Latex", ->
     helpers.mockStatusBar()
 
   describe "build", ->
-    [oldTimeoutInterval] = []
+    [originalTimeoutInterval] = []
 
     beforeEach ->
-      oldTimeoutInterval = helpers.setTimeoutInterval(10000)
+      originalTimeoutInterval = helpers.setTimeoutInterval(10000)
 
       spyOn(latex, 'showResult').andCallThrough()
       spyOn(latex, 'getOpener').andReturn()
 
     afterEach ->
-      helpers.setTimeoutInterval(oldTimeoutInterval)
+      helpers.setTimeoutInterval(originalTimeoutInterval)
 
     it "does nothing for new, unsaved files", ->
       spyOn(latex, 'build').andCallThrough()
