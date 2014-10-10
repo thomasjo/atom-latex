@@ -12,6 +12,7 @@ describe "LogParser", ->
 
   describe "parse", ->
     it "returns the expected output path", ->
+      oldTimeoutInterval = helpers.setTimeoutInterval(10000)
       fixturesPath = helpers.cloneFixtures()
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
       atom.config.set('latex.outputDirectory', 'output')
@@ -29,6 +30,8 @@ describe "LogParser", ->
         latex.showResult.callCount == 1
 
       runs ->
+        helpers.setTimeoutInterval(oldTimeoutInterval)
+
         logFile = path.join(fixturesPath, 'output', 'file.log')
         parser = new LogParser(logFile)
         result = parser.parse()

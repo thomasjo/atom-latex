@@ -32,3 +32,9 @@ module.exports =
   spyOnConfig: (key, value) ->
     spyOn(atom.config, 'get').andCallFake (_key) ->
       return value if _key is key
+
+  setTimeoutInterval: (interval) ->
+    env = jasmine.getEnv()
+    oldInterval = env.defaultTimeoutInterval
+    env.defaultTimeoutInterval = interval
+    oldInterval
