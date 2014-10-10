@@ -140,3 +140,10 @@ describe "Latex", ->
       opener = latex.getOpener()
 
       expect(opener.constructor.name).toEqual('SkimOpener')
+
+    it "returns PreviewOpener when Skim is not installed on OS X", ->
+      atom.config.set('latex.skimPath', '/foo/Skim.app')
+      helpers.overridePlatform('darwin')
+      opener = latex.getOpener()
+
+      expect(opener.constructor.name).toEqual('PreviewOpener')
