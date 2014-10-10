@@ -10,6 +10,9 @@ module.exports =
     enableShellEscape:
       type: 'boolean'
       default: false
+    moveResultToSourceDirectory:
+      type: 'boolean'
+      default: true
     openResultAfterBuild:
       type: 'boolean'
       default: true
@@ -52,7 +55,9 @@ module.exports =
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
       switch statusCode
-        when 0 then @showResult(result)
+        when 0
+          @moveResult(result, rootFilePath) if @shouldMoveResult()
+          @showResult(result)
         when 127 then @showError \
           """
           TeXification failed! Builder executable not found.
@@ -87,9 +92,22 @@ module.exports =
     return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
 
+  moveResult: (result, filePath) ->
+    sourceDir = path.dirname(filePath)
+    outputFilePath = result.outputFilePath
+    result.outputFilePath = path.join(sourceDir, path.basename(outputFilePath))
+    fs.moveSync(outputFilePath, result.outputFilePath)
+
+    syncFilePath = outputFilePath.replace(/.pdf$/, '.synctex.gz')
+    if fs.existsSync(syncFilePath)
+      fs.moveSync(syncFilePath, path.join(sourceDir, path.basename(syncFilePath)))
+
   resolveRootFilePath: (path) ->
     finder = new MasterTexFinder(path)
     finder.getMasterTexPath()
+
+  shouldMoveResult: ->
+    atom.config.get('latex.moveResultToSourceDirectory')
 
   shouldOpenResult: ->
     atom.config.get('latex.openResultAfterBuild')
