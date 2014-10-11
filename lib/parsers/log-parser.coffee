@@ -35,7 +35,11 @@ class LogParser
 
       match = line.match(errorPattern)
       if match?
-        result.errors.push(match[3])
+        error =
+          filePath: match[1]
+          lineNumber: parseInt(match[2], 10)
+          message: match[3]
+        result.errors.push(error)
         continue
 
     result
