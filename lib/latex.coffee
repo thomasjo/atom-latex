@@ -116,9 +116,6 @@ module.exports =
     if @shouldOpenResult() and opener = @getOpener()
       opener.open(result.outputFilePath)
 
-    # TODO: Display a more visible success message.
-    console.info 'Success!' unless atom.inSpecMode()
-
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
     console.error error unless atom.inSpecMode()
