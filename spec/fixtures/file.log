@@ -23,7 +23,7 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-) (/Users/thomasjo/Projects/atom-latex/spec/fixtures/output/file.aux)
+) (/foo/output/file.aux)
 \openout1 = `file.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
@@ -44,7 +44,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 4.
  [1
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (/Users/thomasjo/Projects/atom-latex/spec/fixtures/output/file.aux) )
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (/foo/output/file.aux) )
 Here is how much of TeX's memory you used:
  213 strings out of 493117
  2674 string characters out of 6135433
@@ -54,10 +54,9 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  23i,4n,20p,112b,117s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on /Users/thomasjo/Projects/atom-latex/spec/fixtures/output/file.pdf (1 page, 28094 bytes).
+Output written on /foo/output/file.pdf (1 page, 28094 bytes).
 PDF statistics:
  20 PDF objects out of 1000 (max. 8388607)
  13 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
-

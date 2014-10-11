@@ -11,7 +11,7 @@ describe "LogParser", ->
     helpers.mockStatusBar()
 
   describe "parse", ->
-    it "returns the expected output path", ->
+    it "returns the expected output path after a successful build", ->
       oldTimeoutInterval = helpers.setTimeoutInterval(10000)
       fixturesPath = helpers.cloneFixtures()
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
@@ -63,7 +63,7 @@ describe "LogParser", ->
       parser = new LogParser(logFile)
       lines = parser.getLines()
 
-      expect(lines?.length).toEqual(64)
+      expect(lines.length).toEqual(63)
 
     it "throws an error when passed a filepath that doesn't exist", ->
       logFile = path.join(fixturesPath, 'nope.log')
