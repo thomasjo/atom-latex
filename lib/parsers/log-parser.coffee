@@ -7,6 +7,13 @@ outputPattern = ///
   \s\(.*\)\.$             # Trailing text.
   ///
 
+errorPattern = ///
+  ^(.*):             # File path.
+  (\d+):             # Line number.
+  \sLaTeX\sError:\s  # Marker.
+  (.*)\.$            # Error message.
+  ///
+
 module.exports =
 class LogParser
   constructor: (filePath) ->
@@ -22,7 +29,14 @@ class LogParser
     for line in lines = @getLines()
       # Simplest Thing That Works™ and KISS®
       match = line.match(outputPattern)
-      result.outputFilePath = path.resolve(@projectPath, match[1]) if match?
+      if match?
+        result.outputFilePath = path.resolve(@projectPath, match[1])
+        continue
+
+      match = line.match(errorPattern)
+      if match?
+        result.errors.push(match[3])
+        continue
 
     result
 

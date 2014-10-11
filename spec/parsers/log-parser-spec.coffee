@@ -38,6 +38,13 @@ describe "LogParser", ->
 
         expect(result.outputFilePath).toEqual(expectedFilePath)
 
+    it "parses and returns errors", ->
+      logFile = path.join(fixturesPath, 'errors.log')
+      parser = new LogParser(logFile)
+      result = parser.parse()
+
+      expect(result.errors.length).toEqual(3)
+
   describe "getLines", ->
     it "returns the expected number of lines", ->
       logFile = path.join(fixturesPath, 'file.log')
