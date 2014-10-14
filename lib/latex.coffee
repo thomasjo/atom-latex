@@ -11,6 +11,8 @@ module.exports =
       type: 'boolean'
       default: false
     moveResultToSourceDirectory:
+      description: 'Ensures that the output file produced by a successful build
+        is stored together with the TeX document that produced it.'
       type: 'boolean'
       default: true
     openResultAfterBuild:
@@ -20,7 +22,9 @@ module.exports =
       type: 'boolean'
       default: true
     outputDirectory:
-      description: "All files generated during a build will be redirected here"
+      description: 'All files generated during a build will be redirected here.
+        Leave blank if you want the build output to be stored in the same
+        directory as the TeX document.'
       type: 'string'
       default: ''
     skimPath:
@@ -28,7 +32,7 @@ module.exports =
       default: '/Applications/Skim.app'
     texPath:
       title: 'TeX Path'
-      description: "The path to your TeX distribution's bin directory"
+      description: "The full path to your TeX distribution's bin directory."
       type: 'string'
       default: ''
 
