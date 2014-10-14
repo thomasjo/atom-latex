@@ -1,5 +1,5 @@
 child_process = require 'child_process'
-Opener = require "../opener"
+Opener = require '../opener'
 
 module.exports =
 class SkimOpener extends Opener
