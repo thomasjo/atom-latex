@@ -93,7 +93,7 @@ module.exports =
     lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
 
     opener = @getOpener()
-    opener.sync(@pdfFile, texFile, lineNumber)
+    opener.open(@pdfFile, texFile, lineNumber)
 
   getBuilder: ->
     new LatexmkBuilder()
