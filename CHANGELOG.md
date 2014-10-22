@@ -1,3 +1,13 @@
+## 0.13.0
+* Move output file (including SyncTeX file) to source dir.
+  * By default we now move the output file after a successful build, including
+  the SyncTeX file if it exists. The files are moved to the source directory,
+  i.e. the directory containing the processed root TeX file.
+  * The behavior is configurable via `latex.moveResultToSourceDirectory`.
+* Added some basic error log parsing routines. Only handles the simplest of
+  scenarios, needs to be expanded.
+* Improved configuration descriptions.
+
 ## 0.12.0
 * Merged [Pull Request 12]((https://github.com/thomasjo/atom-latex/pull/12).
   * Adds an error status indicator to the status bar.
