@@ -10,7 +10,7 @@
     "latex:build"
   ],
   "engines": {
-    "atom": ">=0.135.0"
+    "atom": ">=0.138.0"
   },
   "dependencies": {
     "fs-plus": "~2.3.0",
