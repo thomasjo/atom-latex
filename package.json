@@ -13,6 +13,7 @@
     "atom": ">=0.138.0"
   },
   "dependencies": {
+    "season": "1.x",
     "fs-plus": "~2.3.0",
     "temp": "~0.8.0",
     "underscore-plus": "~1.5.1",

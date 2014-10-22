@@ -1,5 +1,6 @@
 fs = require 'fs-plus'
 path = require 'path'
+CSON = require 'season'
 ErrorIndicatorView = require './error-indicator-view'
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
@@ -38,6 +39,7 @@ module.exports =
 
   activate: ->
     atom.workspaceView.command 'latex:build', => @build()
+    atom.workspaceView.command 'latex:sync', => @sync()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
@@ -58,6 +60,7 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
+      @setOutputFilePath(result.outputFilePath)
       switch statusCode
         when 0
           @moveResult(result, rootFilePath) if @shouldMoveResult()
@@ -80,6 +83,18 @@ module.exports =
           """
 
     return
+
+  sync: ->
+    pdfFile = @getOutputFilePath()
+    unless pdfFile?
+      console.info 'File needs to be TeXified before SyncTeX can work.' unless atom.inSpecMode()
+      return
+    editor = atom.workspace.getActivePaneItem()
+    texFile = editor?.getPath()
+    lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
+
+    opener = @getOpener()
+    opener.sync(pdfFile, texFile, lineNumber)
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -146,3 +161,28 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
+
+  getConfigFilePath: ->
+    filePath = path.join(atom.getConfigDirPath(), 'latex.cson')
+    unless fs.existsSync(filePath)
+      CSON.writeFileSync(filePath, {})
+    return filePath
+
+  setOutputFilePath: (filePath) ->
+    configFile = @getConfigFilePath()
+    data = CSON.readFileSync(configFile) || {}
+    data[atom.project.getPath()] = filePath
+    CSON.writeFileSync(configFile, data)
+
+  getOutputFilePath: ->
+    filePath = null
+    configFile = @getConfigFilePath()
+    data = CSON.readFileSync(configFile) || {}
+    filePath = data[atom.project.getPath()]
+
+    return unless filePath?
+    unless fs.existsSync(filePath)
+      setOutputFilePath(null)
+      filePath = null
+
+    return filePath

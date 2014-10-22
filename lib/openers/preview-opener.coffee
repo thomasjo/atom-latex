@@ -9,3 +9,7 @@ class PreviewOpener extends Opener
     child_process.exec command, (error, stdout, stderr) ->
       exitCode = error?.code ? 0
       callback(exitCode) if callback?
+
+  sync: (filePath, texPath, lineNumber, callback) ->
+    console.info 'Preview.app does not support SyncTeX.'
+    callback(1) if callback?
