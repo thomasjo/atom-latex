@@ -88,12 +88,18 @@ module.exports =
     unless @pdfFile?
       console.info 'File needs to be TeXified before SyncTeX can work.' unless atom.inSpecMode()
       return
-    editor = atom.workspace.getActivePaneItem()
-    texFile = editor?.getPath()
-    lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
 
+    {filePath, lineNumber} = @getEditorDetails()
     opener = @getOpener()
-    opener.open(@pdfFile, texFile, lineNumber)
+    opener.open(@pdfFile, filePath, lineNumber)
+
+  getEditorDetails: ->
+    editor = atom.workspace.getActiveTextEditor()
+    return unless editor?
+
+    editorDetails =
+      filePath: editor.getPath()
+      lineNumber: editor.getCursorBufferPosition().toArray()[0] + 1
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -133,10 +139,8 @@ module.exports =
 
   showResult: (result) ->
     if @shouldOpenResult() and opener = @getOpener()
-      editor = atom.workspace.getActivePaneItem()
-      texFile = editor?.getPath()
-      lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
-      opener.open(result.outputFilePath, texFile, lineNumber)
+      {filePath, lineNumber} = @getEditorDetails()
+      opener.open(result.outputFilePath, filePath, lineNumber)
 
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
