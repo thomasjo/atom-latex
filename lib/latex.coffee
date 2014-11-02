@@ -115,6 +115,7 @@ module.exports =
     outputFilePath = result.outputFilePath
     result.outputFilePath = path.join(sourceDir, path.basename(outputFilePath))
     fs.moveSync(outputFilePath, result.outputFilePath)
+    @pdfFile = result.outputFilePath
 
     syncFilePath = outputFilePath.replace(/.pdf$/, '.synctex.gz')
     if fs.existsSync(syncFilePath)
