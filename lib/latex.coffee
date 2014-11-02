@@ -99,7 +99,7 @@ module.exports =
 
     editorDetails =
       filePath: editor.getPath()
-      lineNumber: editor.getCursorBufferPosition().toArray()[0] + 1
+      lineNumber: editor.getCursorScreenRow() + 1
 
   getBuilder: ->
     new LatexmkBuilder()
