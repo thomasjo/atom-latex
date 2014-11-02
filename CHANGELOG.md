@@ -1,3 +1,8 @@
+## 0.14.0
+* Merged [Pull Request 31](https://github.com/thomasjo/atom-latex/pull/31).
+  * Introduces forward-sync support for Skim, and lays the groundwork for other
+    openers with sync support. Default keybind is `ctrl-alt-s`.
+
 ## 0.13.0
 * Move output file (including SyncTeX file) to source dir.
   * By default we now move the output file after a successful build, including
