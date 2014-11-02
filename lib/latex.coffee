@@ -133,7 +133,10 @@ module.exports =
 
   showResult: (result) ->
     if @shouldOpenResult() and opener = @getOpener()
-      opener.open(result.outputFilePath)
+      editor = atom.workspace.getActivePaneItem()
+      texFile = editor?.getPath()
+      lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
+      opener.open(result.outputFilePath, texFile, lineNumber)
 
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
