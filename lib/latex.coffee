@@ -106,6 +106,8 @@ module.exports =
           require './openers/skim-opener'
         else
           require './openers/preview-opener'
+      when 'linux'
+        require './openers/xdg-opener'
 
     return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
