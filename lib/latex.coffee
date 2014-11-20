@@ -1,4 +1,3 @@
-_ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
 ErrorIndicatorView = require './error-indicator-view'
@@ -7,7 +6,35 @@ MasterTexFinder = require './master-tex-finder'
 ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
-  config: _.clone(require('./config-schema'))
+  config:
+    enableShellEscape:
+      type: 'boolean'
+      default: false
+    moveResultToSourceDirectory:
+      description: 'Ensures that the output file produced by a successful build
+        is stored together with the TeX document that produced it.'
+      type: 'boolean'
+      default: true
+    openResultAfterBuild:
+      type: 'boolean'
+      default: true
+    openResultInBackground:
+      type: 'boolean'
+      default: true
+    outputDirectory:
+      description: 'All files generated during a build will be redirected here.
+        Leave blank if you want the build output to be stored in the same
+        directory as the TeX document.'
+      type: 'string'
+      default: ''
+    skimPath:
+      type: 'string'
+      default: '/Applications/Skim.app'
+    texPath:
+      title: 'TeX Path'
+      description: "The full path to your TeX distribution's bin directory."
+      type: 'string'
+      default: ''
 
   activate: (state) ->
     @pdfFile = state.pdfFile if state?
@@ -61,18 +88,12 @@ module.exports =
     unless @pdfFile?
       console.info 'File needs to be TeXified before SyncTeX can work.' unless atom.inSpecMode()
       return
+    editor = atom.workspace.getActivePaneItem()
+    texFile = editor?.getPath()
+    lineNumber = editor?.getCursorBufferPosition().toArray()[0] + 1
 
-    {filePath, lineNumber} = @getEditorDetails()
     opener = @getOpener()
-    opener.open(@pdfFile, filePath, lineNumber)
-
-  getEditorDetails: ->
-    editor = atom.workspace.getActiveTextEditor()
-    return unless editor?
-
-    editorDetails =
-      filePath: editor.getPath()
-      lineNumber: editor.getCursorScreenRow() + 1
+    opener.open(@pdfFile, texFile, lineNumber)
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -85,8 +106,6 @@ module.exports =
           require './openers/skim-opener'
         else
           require './openers/preview-opener'
-      when 'linux'
-        require './openers/preview-opener'
 
     return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
@@ -96,7 +115,6 @@ module.exports =
     outputFilePath = result.outputFilePath
     result.outputFilePath = path.join(sourceDir, path.basename(outputFilePath))
     fs.moveSync(outputFilePath, result.outputFilePath)
-    @pdfFile = result.outputFilePath
 
     syncFilePath = outputFilePath.replace(/.pdf$/, '.synctex.gz')
     if fs.existsSync(syncFilePath)
@@ -114,8 +132,7 @@ module.exports =
 
   showResult: (result) ->
     if @shouldOpenResult() and opener = @getOpener()
-      {filePath, lineNumber} = @getEditorDetails()
-      opener.open(result.outputFilePath, filePath, lineNumber)
+      opener.open(result.outputFilePath)
 
   showError: (error) ->
     # TODO: Introduce proper error and warning handling.
