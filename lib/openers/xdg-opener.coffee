@@ -2,7 +2,7 @@ child_process = require 'child_process'
 Opener = require '../opener'
 
 module.exports =
-class PreviewOpener extends Opener
+class XdgOpener extends Opener
   open: (filePath, texPath, lineNumber, callback) ->
     callback = texPath if typeof texPath is 'function'
 
