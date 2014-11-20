@@ -11,4 +11,4 @@ describe "XdgOpener", ->
         exitCode > 0
 
       runs ->
-        expect(exitCode).toEqual(1)
+        expect(exitCode).toEqual(2)
