@@ -25,16 +25,20 @@ class LatexmkBuilder extends Builder
       '-f'
       '-cd'
       '-pdf'
-    ]
-
-    pdfOpts = [
       '-synctex=1'
       '-file-line-error'
     ]
 
     enableShellEscape = atom.config.get('latex.enableShellEscape')
-    pdfOpts.push('-shell-escape') if enableShellEscape?
-    args.push("-pdflatex=\"pdflatex #{pdfOpts.join(' ')} %O %S\"")
+    customEngine = atom.config.get('latex.customEngine')
+    engine = atom.config.get('latex.engine')
+
+    args.push('-shell-escape') if enableShellEscape?
+
+    if customEngine
+      args.push("-pdflatex=\"#{customEngine}\"")
+    else if engine? and engine isnt 'pdflatex'
+      args.push("-#{engine}")
 
     if outdir = atom.config.get('latex.outputDirectory')
       dir = path.dirname(filePath)

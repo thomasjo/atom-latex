@@ -27,3 +27,12 @@ module.exports =
     description: "The full path to your TeX distribution's bin directory."
     type: 'string'
     default: ''
+  engine:
+    description: 'Select standard LaTeX engine'
+    type: 'string'
+    default: 'pdflatex'
+    enum: ['pdflatex', 'lualatex', 'xelatex']
+  customEngine:
+    description: 'Enter command for custom LaTeX engine. Overrides Engine.'
+    type: 'string'
+    default: ''
