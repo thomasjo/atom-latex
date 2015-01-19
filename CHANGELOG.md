@@ -1,3 +1,9 @@
+## 0.15.0
+* Merged [Pull Request 39](https://github.com/thomasjo/atom-latex/pull/39).
+  * Adds engine customization. Default engine is still `pdflatex`, but users can now use e.g. `xelatex` instead. This is controlled via configuration. See pull request for more [details](https://github.com/thomasjo/atom-latex/commit/42e7c05fd413443d3a2653824d6581bd4601c1b8).
+* Merged [Pull Request 40](https://github.com/thomasjo/atom-latex/pull/40).
+  * Adds support for *Literal Haskell* filetypes.
+
 ## 0.14.0
 * Merged [Pull Request 31](https://github.com/thomasjo/atom-latex/pull/31).
   * Introduces forward-sync support for Skim, and lays the groundwork for other
