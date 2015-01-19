@@ -2,7 +2,6 @@
   "name": "latex",
   "main": "./lib/latex",
   "version": "0.15.1",
-  "private": true,
   "description": "A simple utility package that invokes latexmk.",
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
@@ -10,7 +9,7 @@
     "latex:build"
   ],
   "engines": {
-    "atom": ">=0.138.0"
+    "atom": ">0.170.0"
   },
   "dependencies": {
     "fs-plus": "~2.3.0",
