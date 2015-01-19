@@ -30,7 +30,8 @@ class LogParser
       # Simplest Thing That Works™ and KISS®
       match = line.match(outputPattern)
       if match?
-        result.outputFilePath = path.resolve(@projectPath, match[1])
+        filePath = match[1].replace(/\"/g, '')  # TODO: Fix with improved regex.
+        result.outputFilePath = path.resolve(@projectPath, filePath)
         continue
 
       match = line.match(errorPattern)
