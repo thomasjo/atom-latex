@@ -13,6 +13,7 @@ module.exports =
     @pdfFile = state.pdfFile if state?
     atom.workspaceView.command 'latex:build', => @build()
     atom.workspaceView.command 'latex:sync', => @sync()
+    atom.workspaceView.command 'latex:clean', => @clean()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
@@ -56,6 +57,43 @@ module.exports =
           """
 
     return
+
+  clean: ->
+    editor = atom.workspace.getActivePaneItem()
+    filePath = editor?.getPath()
+    unless filePath?
+      unless atom.inSpecMode()
+        console.info 'File needs to be saved to disk before clean can find the project files.'
+      return
+    rootFilePath = @resolveRootFilePath(filePath)
+    rootFile = path.basename(rootFilePath)
+    rootFilePath = path.dirname(rootFilePath)
+
+    rootFile = rootFile.split('.')
+    rootFile.pop()
+    rootFile = rootFile.join('.')
+
+    cleanExtensions = atom.config.get('latex.cleanExtensions')
+    unless cleanExtensions
+      cleanExtensions = [
+        '.aux'
+        '.bbl'
+        '.blg'
+        '.fdb_latexmk'
+        '.fls'
+        '.log'
+        '.synctex.gz'
+        '.pdf'
+        '.out'
+      ]
+
+    for extension in cleanExtensions
+      fileToRemove = path.join(rootFilePath, rootFile + extension)
+      if fs.existsSync(fileToRemove)
+        fs.removeSync(fileToRemove)
+        console.info 'LaTeX clean removed: ' + fileToRemove
+      else
+        console.info 'LaTeX clean did not find: ' + fileToRemove
 
   sync: ->
     unless @pdfFile?

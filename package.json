@@ -6,7 +6,8 @@
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
   "activationEvents": [
-    "latex:build"
+    "latex:build",
+    "latex:clean"
   ],
   "engines": {
     "atom": ">0.170.0"
