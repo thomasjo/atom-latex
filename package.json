@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "fs-plus": "~2.3.0",
+    "pdf-view": "~0.14.0",
     "temp": "~0.8.0",
     "underscore-plus": "~1.5.1",
     "wrench": "~1.5.8"
