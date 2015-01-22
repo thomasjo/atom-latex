@@ -89,7 +89,11 @@ module.exports =
         if fs.existsSync(atom.config.get('latex.sumatraPath'))
           require './openers/sumatra-opener'
     unless OpenerImpl?
-      OpenerImpl = require './openers/atompdf-opener'
+      if atom.packages.resolvePackagePath('pdf-view')?
+        OpenerImpl = require './openers/atompdf-opener'
+      else
+        console.info 'No PDF opener found.  For cross-platform viewing, install the pdf-view package.' unless atom.inSpecMode()
+        return
     return new OpenerImpl()
 
   moveResult: (result, filePath) ->
