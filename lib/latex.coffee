@@ -88,7 +88,9 @@ module.exports =
             require './openers/skim-opener'
           else
             require './openers/preview-opener'
-
+        when 'win32'
+          if fs.existsSync(atom.config.get('latex.sumatraPath'))
+            require './openers/sumatra-opener'
     return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
 

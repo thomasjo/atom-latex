@@ -34,7 +34,7 @@ Current wish list, in a semi-prioritized order.
 - [ ] BibTeX autocompletion support.
 - [x] Open PDF automatically.
  - [x] Configurable.
- - [ ] Support for other distributions, besides OS X.
+ - [x] Support for other distributions, besides OS X.
 - [ ] Support for compilers other than latexmk.
  - [ ] Add support for non-PDF typesetting (e.g. dvi).
 - [ ] Project management.
