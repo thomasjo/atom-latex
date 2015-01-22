@@ -79,12 +79,15 @@ module.exports =
 
   getOpener: ->
     # TODO: Move this to a resolver module? Will get more complex...
-    OpenerImpl = switch process.platform
-      when 'darwin'
-        if fs.existsSync(atom.config.get('latex.skimPath'))
-          require './openers/skim-opener'
-        else
-          require './openers/preview-opener'
+    if atom.config.get('latex.useAtomPdfViewer')
+      OpenerImpl = require './openers/atompdf-opener'
+    else
+      OpenerImpl = switch process.platform
+        when 'darwin'
+          if fs.existsSync(atom.config.get('latex.skimPath'))
+            require './openers/skim-opener'
+          else
+            require './openers/preview-opener'
 
     return new OpenerImpl() if OpenerImpl?
     console.info 'Opening PDF files is not yet supported on your platform.' unless atom.inSpecMode()
