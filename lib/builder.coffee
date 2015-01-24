@@ -15,6 +15,7 @@ class Builder
   constructChildProcessOptions: ->
     env = _.clone(process.env)
     env[@envPathKey] = childPath if childPath = @constructPath()
+    env["TEXINPUTS"]  = atom.config.get('latex.texInputs')
     options = env: env
 
   constructPath: ->

@@ -6,6 +6,10 @@ LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 ProgressIndicatorView = require './progress-indicator-view'
 
+texInputsPattern = ///
+  (.*[A-Za-z0-9_]\/\/:$) # Ensure last three characters are '//:'
+  ///
+
 module.exports =
   config: _.clone(require('./config-schema'))
 
@@ -24,6 +28,7 @@ module.exports =
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
 
+    @formatTexInputs()
     builder = @getBuilder()
     rootFilePath = @resolveRootFilePath(filePath)
     args = builder.constructArgs(rootFilePath)
@@ -144,3 +149,10 @@ module.exports =
 
   serialize: ->
     return { pdfFile: @pdfFile }
+
+  formatTexInputs: ->
+    @texInputs = atom.config.get('latex.texInputs')
+    if @texInputs?
+      match = @texInputs.match(texInputsPattern)
+      unless match?
+        atom.config.set('latex.texInputs', @texInputs.replace(/(^.*[A-Za-z0-9_])/, "$1\/\/:"))

@@ -27,6 +27,11 @@ module.exports =
     description: "The full path to your TeX distribution's bin directory."
     type: 'string'
     default: ''
+  texInputs:
+    title: 'TeX Inputs'
+    description: "The full path to your custom TeX packages directory."
+    type: 'string'
+    default: ''
   engine:
     description: 'Select standard LaTeX engine'
     type: 'string'
