@@ -1,4 +1,6 @@
 ## 0.16.0
+* Merged [Pull Request 48](https://github.com/thomasjo/atom-latex/pull/48).
+  * Adds support for cross-platform and Windows PDF viewers.
 * Merged [Pull Request 47](https://github.com/thomasjo/atom-latex/pull/47).
   * Adds *Clean* feature that deletes temporary files generated during build.
 
