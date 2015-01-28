@@ -1,4 +1,8 @@
 ## 0.16.0
+* Fixed issue with config schema loading being deferred due to package only
+  being activated on triggering *Build* (or *Clean*). The workaround was to
+  disabled delayed package activation, so this will likely need to be revisited
+  in the future.
 * Merged [Pull Request 44](https://github.com/thomasjo/atom-latex/pull/44).
   * Fixes deprecation warning in `keymaps/latex.cson`.
 * Merged [Pull Request 48](https://github.com/thomasjo/atom-latex/pull/48).
