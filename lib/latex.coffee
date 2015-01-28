@@ -6,8 +6,10 @@ LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 ProgressIndicatorView = require './progress-indicator-view'
 
+ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
+
 module.exports =
-  config: _.clone(require('./config-schema'))
+  config: ConfigSchema
 
   activate: (state) ->
     @pdfFile = state.pdfFile if state?
