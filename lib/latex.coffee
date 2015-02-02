@@ -1,21 +1,24 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
-ErrorIndicatorView = require './error-indicator-view'
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
+
+ErrorIndicatorView = require './error-indicator-view'
 ProgressIndicatorView = require './progress-indicator-view'
 
 ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
-
 module.exports =
   config: ConfigSchema
 
   activate: (state) ->
-    @pdfFile = state.pdfFile if state?
-    atom.workspaceView.command 'latex:build', => @build()
-    atom.workspaceView.command 'latex:sync', => @sync()
-    atom.workspaceView.command 'latex:clean', => @clean()
+    @pdfFile = state.pdfFile if state? # TODO: Nuke serialization?
+    atom.commands.add 'atom-workspace', 'latex:build', => @build()
+    atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
+    atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
+
+    atom.packages.once 'activated', =>
+      @statusBar = document.querySelector('status-bar')
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
@@ -112,7 +115,7 @@ module.exports =
 
     editorDetails =
       filePath: editor.getPath()
-      lineNumber: editor.getCursorScreenRow() + 1
+      lineNumber: editor.getCursorScreenPosition().row + 1
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -171,14 +174,15 @@ module.exports =
     return @indicator if @indicator?
 
     @indicator = new ProgressIndicatorView()
-    atom.workspaceView.statusBar?.prependRight(@indicator)
+    @statusBar?.addRightTile({item: @indicator, priority: 9001})
+
     @indicator
 
   showErrorIndicator: ->
     return @errorIndicator if @errorIndicator?
 
     @errorIndicator = new ErrorIndicatorView()
-    atom.workspaceView.statusBar?.prependRight(@errorIndicator)
+    @statusBar?.addRightTile({item: @errorIndicator, priority: 9001})
     @errorIndicator
 
   destroyProgressIndicator: ->

@@ -6,10 +6,11 @@
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
   "engines": {
-    "atom": ">0.170.0"
+    "atom": ">0.175.0"
   },
   "dependencies": {
     "fs-plus": "~2.3.0",
+    "space-pen": "^5.1.1",
     "temp": "~0.8.0",
     "underscore-plus": "~1.5.1",
     "wrench": "~1.5.8"

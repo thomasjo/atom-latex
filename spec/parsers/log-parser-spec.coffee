@@ -8,7 +8,6 @@ describe "LogParser", ->
 
   beforeEach ->
     fixturesPath = atom.project.getPaths()[0]
-    helpers.mockStatusBar()
 
   describe "parse", ->
     it "returns the expected output path after a successful build", ->

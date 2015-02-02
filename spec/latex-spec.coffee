@@ -8,7 +8,6 @@ describe "Latex", ->
 
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
-    helpers.mockStatusBar()
 
   describe "build", ->
     [originalTimeoutInterval] = []

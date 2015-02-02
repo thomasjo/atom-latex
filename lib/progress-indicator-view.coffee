@@ -1,4 +1,4 @@
-{View} = require 'atom'
+{View} = require 'space-pen'
 
 module.exports =
 class ProgressIndicatorView extends View
