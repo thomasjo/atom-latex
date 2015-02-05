@@ -25,16 +25,38 @@ describe "Latex", ->
       spyOn(latex, 'build').andCallThrough()
       spyOn(latex, 'showError').andCallThrough()
 
+      [result] = []
       waitsForPromise ->
         atom.workspace.open()
 
       runs ->
-        latex.build()
+        result = latex.build()
 
       waitsFor ->
         latex.build.callCount == 1
 
       runs ->
+        expect(result).toBe false
+        expect(latex.showResult).not.toHaveBeenCalled()
+        expect(latex.showError).not.toHaveBeenCalled()
+
+    it "does nothing for unsupported file extensions", ->
+      spyOn(latex, 'build').andCallThrough()
+      spyOn(latex, 'showError').andCallThrough()
+
+      [editor, result] = []
+      waitsForPromise ->
+        atom.workspace.open('file.md').then (ed) -> editor = ed
+
+      runs ->
+        editor.save()
+        result = latex.build()
+
+      waitsFor ->
+        latex.build.callCount == 1
+
+      runs ->
+        expect(result).toBe false
         expect(latex.showResult).not.toHaveBeenCalled()
         expect(latex.showError).not.toHaveBeenCalled()
 

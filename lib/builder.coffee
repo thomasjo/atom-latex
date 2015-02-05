@@ -32,5 +32,5 @@ class Builder
   resolveLogFilePath: (texFilePath) ->
     outputDirectory = atom.config.get('latex.outputDirectory') ? ''
     currentDirectory = path.dirname(texFilePath)
-    fileName = path.basename(texFilePath).replace(/\.tex|\.lhs$/, '.log')
+    fileName = path.basename(texFilePath).replace(/\.\w+$/, '.log')
     logFilePath = path.join(currentDirectory, outputDirectory, fileName)

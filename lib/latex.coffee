@@ -25,7 +25,13 @@ module.exports =
     unless filePath?
       unless atom.inSpecMode()
         console.info 'File needs to be saved to disk before it can be TeXified.'
-      return
+      return false
+
+    unless @isTexFile(filePath)
+      unless atom.inSpecMode()
+        extension = path.extname(filePath)
+        console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'."
+      return false
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
 
@@ -60,7 +66,7 @@ module.exports =
           Check the log file for more info...
           """
 
-    return
+    return true
 
   clean: ->
     editor = atom.workspace.getActivePaneItem()
@@ -107,6 +113,10 @@ module.exports =
     {filePath, lineNumber} = @getEditorDetails()
     opener = @getOpener()
     opener.open(@pdfFile, filePath, lineNumber)
+
+  isTexFile: (filePath) ->
+    # TODO: Improve; will suffice for the time being.
+    return filePath?.search(/\.(tex|lhs)$/) > 0
 
   getEditorDetails: ->
     editor = atom.workspace.getActiveTextEditor()
