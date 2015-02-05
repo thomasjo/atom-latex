@@ -68,6 +68,7 @@ module.exports =
 
     return true
 
+  # TODO: Improve overall code quality within this function.
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
