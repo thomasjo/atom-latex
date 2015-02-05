@@ -1,3 +1,11 @@
+## 0.17.0
+* Fixed bug caused by incorrect assumption of a log file always being generated
+  by a build; moved volatile log parsing result usage to deeper scope.
+* Implemented file extension checking prior to invoking a build.
+  Right now supported file extensions are `.tex` and `.lhs`. These might be
+  configurable in the future unless the entire concept gets re-engineered once
+  support for other builders/compilers besides *Latexmk* get implemented.
+
 ## 0.16.0
 * Fixed issue with config schema loading being deferred due to package only
   being activated on triggering *Build* (or *Clean*). The workaround was to
