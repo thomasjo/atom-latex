@@ -11,8 +11,7 @@ ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
 module.exports =
   config: ConfigSchema
 
-  activate: (state) ->
-    @pdfFile = state.pdfFile if state? # TODO: Nuke serialization?
+  activate: ->
     atom.commands.add 'atom-workspace', 'latex:build', => @build()
     atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
@@ -192,6 +191,3 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
-
-  serialize: ->
-    return { pdfFile: @pdfFile }
