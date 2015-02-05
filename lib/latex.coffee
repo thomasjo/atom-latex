@@ -38,9 +38,9 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
-      @pdfFile = result.outputFilePath
       switch statusCode
         when 0
+          @pdfFile = result.outputFilePath
           @moveResult(result, rootFilePath) if @shouldMoveResult()
           @showResult(result)
         when 127 then @showError \
