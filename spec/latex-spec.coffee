@@ -2,6 +2,7 @@ helpers = require './spec-helpers'
 fs = require 'fs-plus'
 path = require 'path'
 latex = require '../lib/latex'
+LatexmkBuilder = require '../lib/builders/latexmk'
 
 describe "Latex", ->
   [fixturesPath] = []
@@ -118,6 +119,29 @@ describe "Latex", ->
           errors: []
           warnings: []
         }
+
+    it "treats missing output file data in log file as an error", ->
+      class MockBuilder extends LatexmkBuilder
+        parseLogFile: (texFilePath) ->
+          result =
+            outputFilePath: null
+            errors: []
+            warnings: []
+
+      spyOn(latex, 'getBuilder').andReturn(new MockBuilder())
+      spyOn(latex, 'showError').andCallThrough()
+
+      waitsForPromise ->
+        atom.workspace.open('file.tex')
+
+      runs ->
+        latex.build()
+
+      waitsFor ->
+        latex.showError.callCount == 1
+
+      runs ->
+        expect(latex.showError).toHaveBeenCalled()
 
   describe "getOpener", ->
     originalPlatform = process.platform

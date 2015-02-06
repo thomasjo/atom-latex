@@ -44,27 +44,15 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
-      switch statusCode
-        when 0
-          @pdfFile = result.outputFilePath
-          @moveResult(result, rootFilePath) if @shouldMoveResult()
-          @showResult(result)
-        when 127 then @showError \
-          """
-          TeXification failed! Builder executable not found.
 
-            latex.texPath
-              as configured: #{atom.config.get('latex.texPath')}
-              when resolved: #{builder.constructPath()}
+      unless result.outputFilePath?
+        error = @constructError(statusCode, builder)
+        @showError(error)
+        return false
 
-          Make sure latex.texPath is configured correctly; either adjust it \
-          via the settings view, or directly in your config.cson file.
-          """
-        else @showError \
-          """
-          TeXification failed with status code #{statusCode}! \
-          Check the log file for more info...
-          """
+      @pdfFile = result.outputFilePath
+      @moveResult(result, rootFilePath) if @shouldMoveResult()
+      @showResult(result)
 
     return true
 
@@ -202,3 +190,22 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
+
+  constructError: (statusCode, builder) ->
+    switch statusCode
+      when 127
+        """
+        TeXification failed! Builder executable not found.
+
+          latex.texPath
+            as configured: #{atom.config.get('latex.texPath')}
+            when resolved: #{builder.constructPath()}
+
+        Make sure latex.texPath is configured correctly; either adjust it \
+        via the settings view, or directly in your config.cson file.
+        """
+      else
+        """
+        TeXification failed with status code #{statusCode}! \
+        Check the log file for more info...
+        """
