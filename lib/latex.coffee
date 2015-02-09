@@ -101,7 +101,7 @@ module.exports =
 
     {filePath, lineNumber} = @getEditorDetails()
     opener = @getOpener()
-    opener.open(@pdfFile, filePath, lineNumber)
+    opener?.open(@pdfFile, filePath, lineNumber)
 
   isTexFile: (filePath) ->
     # TODO: Improve; will suffice for the time being.
