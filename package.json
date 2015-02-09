@@ -1,7 +1,7 @@
 {
   "name": "latex",
   "main": "./lib/latex",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "A simple utility package that invokes latexmk.",
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
