@@ -8,3 +8,5 @@
   'cmd-shift-u': 'latex:wrap-in-underline'
   'cmd-shift-t': 'latex:wrap-in-texttt'
   'cmd-shift-h': 'latex:wrap-in-environment'
+  'cmd-alt-c': 'latex:insert-command'
+  'cmd-alt-e': 'latex:insert-environment'
