@@ -29,6 +29,8 @@ module.exports =
     atom.commands.add 'atom-workspace', 'latex:wrap-in-underline', => @wrapIn(WrapCommands.underline)
     atom.commands.add 'atom-workspace', 'latex:wrap-in-texttt', => @wrapIn(WrapCommands.texttt)
     atom.commands.add 'atom-workspace', 'latex:wrap-in-environment', => @wrapIn(WrapCommands.environment)
+    atom.commands.add 'atom-workspace', 'latex:insert-command', => @insertCommand()
+    atom.commands.add 'atom-workspace', 'latex:insert-environment', => @insertEnvironment()
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
@@ -88,6 +90,35 @@ module.exports =
           when WrapCommands.underline then @wrapInGivenCommand cursor, "underline"
           when WrapCommands.texttt then @wrapInGivenCommand cursor, "texttt"
           when WrapCommands.environment then @wrapInEnvironment editor, cursor
+
+  insertCommand: ->
+    editor = atom.workspace.getActiveEditor()
+    cursors = editor.getCursors()
+    for cursor in cursors
+      selection = cursor.selection
+      selectionRange = selection.getBufferRange()
+      selection.selectWord()
+      txt = selection.getText()
+      selection.insertText "\\#{txt}{}"
+      cursor.moveLeft 1
+
+  insertEnvironment: ->
+    editor = atom.workspace.getActiveEditor()
+    cursors = editor.getCursors()
+    range = cursors[0].selection.getBufferRange()
+    nLine = editor.buffer.lineEndingForRow(Math.max(range.start.row, range.end.row))
+    unless nLine
+      editor.buffer.lineEndingForRow(0)
+    unless nLine
+      # here we default to \n
+      nLine = '\n'
+    for cursor in cursors
+      selection = cursor.selection
+      selectionRange = selection.getBufferRange()
+      selection.selectWord()
+      txt = selection.getText()
+      selection.insertText "\\begin{#{txt}}#{nLine}#{nLine}\\end{#{txt}}"
+      cursor.moveUp 1
 
   wrapInCommand: (cursor) ->
     selection = cursor.selection
