@@ -68,13 +68,14 @@ module.exports =
         extension = path.extname(filePath)
         console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'"
       return false
-    # we work with cursors here. This might not be the best way of doing this,
-    # but it works.
-    lineCount = editor.getLineCount()
-    lastLineLength = editor.lineTextForBufferRow(lineCount - 1).length
-    editor.backwardsScanInBufferRange /^(.){120,}$/g, [[0,1], [lineCount - 1, lastLineLength - 1]], (match) ->
-      w = wrap 120
-      match.replace w(match.matchText)
+    preferredLineLength = atom.config.get('editor.preferredLineLength')
+    editor.transact () ->
+      lineCount = editor.getLineCount()
+      lastLineLength = editor.lineTextForBufferRow(lineCount - 1).length
+      regexp = RegExp("^(.){" + preferredLineLength + ",}$", "g")
+      editor.backwardsScanInBufferRange regexp, [[0,1], [lineCount - 1, lastLineLength - 1]], (match) ->
+        w = wrap preferredLineLength
+        match.replace w(match.matchText)
 
   # TODO: Improve overall code quality within this function.
   clean: ->
