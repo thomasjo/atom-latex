@@ -11,6 +11,10 @@ ProgressIndicatorView = require './progress-indicator-view'
 WrapCommands =
   command: 1
   environment: 2
+  emph: 3
+  bold: 4
+  texttt: 5
+  underline: 6
 
 ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
 module.exports =
@@ -22,6 +26,11 @@ module.exports =
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
     atom.commands.add 'atom-workspace', 'latex:wrap', => @wrap()
     atom.commands.add 'atom-workspace', 'latex:wrap-in-command', => @wrapIn(WrapCommands.command)
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-emph', => @wrapIn(WrapCommands.emph)
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-bold', => @wrapIn(WrapCommands.bold)
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-underline', => @wrapIn(WrapCommands.underline)
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-texttt', => @wrapIn(WrapCommands.texttt)
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-environment', => @wrapIn(WrapCommands.environment)
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
@@ -82,6 +91,41 @@ module.exports =
         w = wrap preferredLineLength
         match.replace w(match.matchText)
 
+  wrapInCommand: (cursor) ->
+    selection = cursor.selection
+    txt = selection.getText()
+    unless txt.length
+      return
+    newText = "cmd{#{txt}}"
+    selection.insertText "\\#{newText}"
+    cursor.moveLeft newText.length
+    selection.selectRight "cmd".length
+
+  wrapInGivenCommand: (cursor, cmd) ->
+    selection = cursor.selection
+    txt = selection.getText()
+    selection.insertText "\\#{cmd}{#{txt}}"
+    cursor.moveLeft 1
+    selection.selectLeft txt.length
+
+  wrapInEnvironment: (editor, cursor) ->
+    selection = cursor.selection
+    txt = selection.getText()
+    range = selection.getBufferRange()
+    nLine = editor.buffer.lineEndingForRow(Math.max(range.start.row, range.end.row))
+    unless nLine
+      editor.buffer.lineEndingForRow(0)
+    unless nLine
+      # here we default to \n
+      nLine = '\n'
+    selection.insertText "\\begin{env}#{nLine}#{txt}#{nLine}\\end{env}", {autoIndent: true}
+    # the cursor will now be after the Selection
+    cursor.moveLeft "env}".length
+    selection.selectRight "env".length
+    sndCursor = editor.addCursorAtBufferPosition range.start
+    sndCursor.moveRight "\\begin{".length
+    sndCursor.selection.selectRight "env".length
+
   wrapIn: (c) ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
@@ -93,20 +137,15 @@ module.exports =
         console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'"
       return false
     cursors = editor.getCursors()
-    editor.transact () ->
-      wrapFun = (cursor) ->
-        selection = cursor.selection
-        txt = selection.getText()
-        console.log txt
-        insertOptions =
-          select: true
-        newText = "cmd{#{txt}}"
-        selection.insertText "\\#{newText}", insertOptions
-        selection.clear()
-        cursor.moveLeft newText.length
-        selection.selectRight "cmd".length
+    editor.transact () =>
       for cursor in cursors
-        wrapFun cursor
+        switch c
+          when WrapCommands.command then @wrapInCommand cursor
+          when WrapCommands.emph then @wrapInGivenCommand cursor, "emph"
+          when WrapCommands.bold then @wrapInGivenCommand cursor, "textbf"
+          when WrapCommands.underline then @wrapInGivenCommand cursor, "underline"
+          when WrapCommands.texttt then @wrapInGivenCommand cursor, "texttt"
+          when WrapCommands.environment then @wrapInEnvironment editor, cursor
 
   # TODO: Improve overall code quality within this function.
   clean: ->
