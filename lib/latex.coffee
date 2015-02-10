@@ -71,6 +71,7 @@ module.exports =
       return false
     # we work with cursors here. This might not be the best way of doing this,
     # but it works.
+    # TODO: hard coding 120 here is not optimal. We should read this value from the configuration
     lineCount = editor.getLineCount()
     lastLineLength = editor.lineTextForBufferRow(lineCount - 1).length
     editor.backwardsScanInBufferRange /^(.){120,}$/g, [[0,1], [lineCount - 1, lastLineLength - 1]], (match) ->
