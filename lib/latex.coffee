@@ -1,6 +1,7 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
+wrap = require 'wordwrap'
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 
@@ -15,6 +16,7 @@ module.exports =
     atom.commands.add 'atom-workspace', 'latex:build', => @build()
     atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
+    atom.commands.add 'atom-workspace', 'latex:wrap', => @wrap()
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
@@ -55,6 +57,25 @@ module.exports =
       @showResult(result)
 
     return true
+
+  wrap: ->
+    editor = atom.workspace.getActivePaneItem()
+    filePath = editor?.getPath()
+    unless filePath?
+      return false
+    unless @isTexFile(filePath)
+      unless atom.inSpecMode()
+        extension = path.extname(filePath)
+        console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'"
+      return false
+    # we work with cursors here. This might not be the best way of doing this,
+    # but it works.
+    # TODO: hard coding 120 here is not optimal. We should read this value from the configuration
+    lineCount = editor.getLineCount()
+    lastLineLength = editor.lineTextForBufferRow(lineCount - 1).length
+    editor.backwardsScanInBufferRange /^(.){120,}$/g, [[0,1], [lineCount - 1, lastLineLength - 1]], (match) ->
+      w = wrap 120
+      match.replace w(match.matchText)
 
   # TODO: Improve overall code quality within this function.
   clean: ->
