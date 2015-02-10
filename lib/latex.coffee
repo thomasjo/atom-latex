@@ -7,6 +7,10 @@ MasterTexFinder = require './master-tex-finder'
 ErrorIndicatorView = require './error-indicator-view'
 ProgressIndicatorView = require './progress-indicator-view'
 
+WrapCommands =
+  command: 1
+  environment: 2
+
 ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
 module.exports =
   config: ConfigSchema
@@ -15,6 +19,7 @@ module.exports =
     atom.commands.add 'atom-workspace', 'latex:build', => @build()
     atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
+    atom.commands.add 'atom-workspace', 'latex:wrap-in-command', => @wrapIn(WrapCommands.command)
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
@@ -53,6 +58,32 @@ module.exports =
       @showResult(result)
 
     return true
+
+  wrapIn: (c) ->
+    editor = atom.workspace.getActivePaneItem()
+    filePath = editor?.getPath()
+    unless filePath?
+      return false
+    unless @isTexFile(filePath)
+      unless atom.inSpecMode()
+        extension = path.extname(filePath)
+        console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'"
+      return false
+    cursors = editor.getCursors()
+    editor.transact () ->
+      wrapFun = (cursor) ->
+        selection = cursor.selection
+        txt = selection.getText()
+        console.log txt
+        insertOptions =
+          select: true
+        newText = "cmd{#{txt}}"
+        selection.insertText "\\#{newText}", insertOptions
+        selection.clear()
+        cursor.moveLeft newText.length
+        selection.selectRight "cmd".length
+      for cursor in cursors
+        wrapFun cursor
 
   # TODO: Improve overall code quality within this function.
   clean: ->
