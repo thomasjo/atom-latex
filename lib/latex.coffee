@@ -46,6 +46,7 @@ module.exports =
     proc = builder.run args, (statusCode) =>
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
+<<<<<<< HEAD
 
       unless result.outputFilePath?
         error = @constructError(statusCode, builder)
@@ -135,6 +136,21 @@ module.exports =
     editorDetails =
       filePath: editor.getPath()
       lineNumber: editor.getCursorScreenPosition().row + 1
+=======
+      switch statusCode
+        when 0
+          @moveResult(result, rootFilePath) if @shouldMoveResult()
+          @showResult(result)
+        else
+          if result.errors.length
+            @showError(result, statusCode)
+          else
+            @showWarning(result)
+            @moveResult(result, rootFilePath) if @shouldMoveResult()
+            @showResult(result)
+
+    return
+>>>>>>> FETCH_HEAD
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -185,10 +201,44 @@ module.exports =
       {filePath, lineNumber} = @getEditorDetails()
       opener.open(result.outputFilePath, filePath, lineNumber)
 
-  showError: (error) ->
+  showError: (result, statusCode) ->
     # TODO: Introduce proper error and warning handling.
-    console.error error unless atom.inSpecMode()
+    unless atom.inSpecMode()
+      atom.openDevTools()
+      atom.executeJavaScriptInDevTools('InspectorFrontendAPI.showConsole()')
+      console.group('LaTeX')
+
+      switch statusCode
+        when 127
+          console.error \
+            """
+            TeXification failed! Builder executable not found.
+
+              latex.texPath
+                as configured: #{atom.config.get('latex.texPath')}
+                when resolved: #{builder.constructPath()}
+
+            Make sure latex.texPath is configured correctly; either adjust it \
+            via the settings view, or directly in your config.cson file.
+            """
+        else
+          console.group("TeXification failed with status code #{statusCode}")
+          console.error("#{error.filePath}:#{error.lineNumber}:  #{error.message}") for error in result.errors
+          console.groupEnd()
+
+      console.groupEnd()
+
     @showErrorIndicator()
+
+  showWarning: (result) ->
+    unless atom.inSpecMode()
+      atom.openDevTools()
+      atom.executeJavaScriptInDevTools('InspectorFrontendAPI.showConsole()')
+      console.group('LaTeX')
+      console.group('TeXification ended with warnings')
+      # TODO: Display warnings.
+      console.groupEnd()
+      console.groupEnd()
 
   showProgressIndicator: ->
     return @indicator if @indicator?
