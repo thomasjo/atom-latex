@@ -4,7 +4,11 @@ module.exports =
 class ErrorIndicatorView extends View
   @content: ->
     @div class: 'latex-error-indicator inline-block', =>
-      @span 'LaTeX compilation error'
+      @a click: 'openDevConsole', 'LaTeX compilation error'
 
   destroy: ->
     @remove()
+
+  openDevConsole: ->
+    atom.openDevTools()
+    atom.executeJavaScriptInDevTools('InspectorFrontendAPI.showConsole()')

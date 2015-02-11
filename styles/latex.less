@@ -22,7 +22,9 @@
 }
 
 .latex-error-indicator {
-  color: @text-color-error;
+  &, a {
+    color: @text-color-error;
+  }
 }
 
 @-webkit-keyframes dot {
