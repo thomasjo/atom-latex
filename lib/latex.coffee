@@ -54,7 +54,19 @@ module.exports =
 
     return true
 
+  sync: ->
+    {filePath, lineNumber} = @getEditorDetails()
+
+    unless outputFilePath = @resolveOutputFilePath(filePath)
+      unless atom.inSpecMode()
+        console.info 'Could not resolve path to output file associated with the current file.'
+      return
+
+    if opener = @getOpener()
+      opener.open(outputFilePath, filePath, lineNumber)
+
   # TODO: Improve overall code quality within this function.
+  # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
@@ -70,7 +82,9 @@ module.exports =
     rootFile.pop()
     rootFile = rootFile.join('.')
 
+    # TODO: This needs to be added to the config schema.
     cleanExtensions = atom.config.get('latex.cleanExtensions')
+    # NOTE: Use _.extend(..) or something similar here.
     unless cleanExtensions
       cleanExtensions = [
         '.aux'
@@ -84,6 +98,7 @@ module.exports =
         '.out'
       ]
 
+    # NOTE: This needs to be done async, and there's no point in being this noisy.
     for extension in cleanExtensions
       fileToRemove = path.join(rootFilePath, rootFile + extension)
       if fs.existsSync(fileToRemove)
@@ -91,29 +106,6 @@ module.exports =
         console.info 'LaTeX clean removed: ' + fileToRemove
       else
         console.info 'LaTeX clean did not find: ' + fileToRemove
-
-  sync: ->
-    {filePath, lineNumber} = @getEditorDetails()
-
-    unless outputFilePath = @resolveOutputFilePath(filePath)
-      unless atom.inSpecMode()
-        console.info 'Could not resolve path to output file associated with the current file.'
-      return
-
-    if opener = @getOpener()
-      opener.open(outputFilePath, filePath, lineNumber)
-
-  isTexFile: (filePath) ->
-    # TODO: Improve; will suffice for the time being.
-    return filePath?.search(/\.(tex|lhs)$/) > 0
-
-  getEditorDetails: ->
-    editor = atom.workspace.getActiveTextEditor()
-    return unless editor?
-
-    editorDetails =
-      filePath: editor.getPath()
-      lineNumber: editor.getCursorScreenPosition().row + 1
 
   getBuilder: ->
     new LatexmkBuilder()
@@ -165,10 +157,6 @@ module.exports =
 
     outputFilePath = @alterParentPath(rootFilePath, outputFilePath) if @shouldMoveResult()
     outputFilePath
-
-  alterParentPath: (targetPath, originalPath) ->
-    targetDir = path.dirname(targetPath)
-    path.join(targetDir, path.basename(originalPath))
 
   shouldMoveResult: ->
     atom.config.get('latex.moveResultToSourceDirectory')
@@ -227,3 +215,19 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
+
+  isTexFile: (filePath) ->
+    # TODO: Improve; will suffice for the time being.
+    return filePath?.search(/\.(tex|lhs)$/) > 0
+
+  getEditorDetails: ->
+    editor = atom.workspace.getActiveTextEditor()
+    return unless editor?
+
+    editorDetails =
+      filePath: editor.getPath()
+      lineNumber: editor.getCursorScreenPosition().row + 1
+
+  alterParentPath: (targetPath, originalPath) ->
+    targetDir = path.dirname(targetPath)
+    path.join(targetDir, path.basename(originalPath))
