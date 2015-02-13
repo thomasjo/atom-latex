@@ -1,13 +1,13 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
+ConfigSchema = require('./config-schema')
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 
 ErrorIndicatorView = require './error-indicator-view'
 ProgressIndicatorView = require './progress-indicator-view'
 
-ConfigSchema = _.clone(require('./config-schema')) # Is the clone necessary?
 module.exports =
   config: ConfigSchema
 
@@ -158,12 +158,6 @@ module.exports =
     outputFilePath = @alterParentPath(rootFilePath, outputFilePath) if @shouldMoveResult()
     outputFilePath
 
-  shouldMoveResult: ->
-    atom.config.get('latex.moveResultToSourceDirectory')
-
-  shouldOpenResult: ->
-    atom.config.get('latex.openResultAfterBuild')
-
   showResult: (result) ->
     if @shouldOpenResult() and opener = @getOpener()
       {filePath, lineNumber} = @getEditorDetails()
@@ -231,3 +225,6 @@ module.exports =
   alterParentPath: (targetPath, originalPath) ->
     targetDir = path.dirname(targetPath)
     path.join(targetDir, path.basename(originalPath))
+
+  shouldMoveResult: -> atom.config.get('latex.moveResultToSourceDirectory')
+  shouldOpenResult: -> atom.config.get('latex.openResultAfterBuild')
