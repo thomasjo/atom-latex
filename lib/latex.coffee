@@ -23,14 +23,12 @@ module.exports =
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      unless atom.inSpecMode()
-        console.info 'File needs to be saved to disk before it can be TeXified.'
+      @logWarning('File needs to be saved to disk before it can be TeXified.')
       return false
 
     unless @isTexFile(filePath)
-      unless atom.inSpecMode()
-        extension = path.extname(filePath)
-        console.info "File does not seem to be a TeX file; unsupported extension '#{extension}'."
+      @logWarning("File does not seem to be a TeX file;
+        unsupported extension '#{path.extname(filePath)}'.")
       return false
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
@@ -58,8 +56,7 @@ module.exports =
     {filePath, lineNumber} = @getEditorDetails()
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
-      unless atom.inSpecMode()
-        console.info 'Could not resolve path to output file associated with the current file.'
+      @logWarning('Could not resolve path to output file associated with the current file.')
       return
 
     if opener = @getOpener()
@@ -69,11 +66,10 @@ module.exports =
   # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
     editor = atom.workspace.getActivePaneItem()
-    filePath = editor?.getPath()
-    unless filePath?
-      unless atom.inSpecMode()
-        console.info 'File needs to be saved to disk before clean can find the project files.'
+    unless filePath = editor?.getPath()
+      @logWarning('File needs to be saved to disk before clean can find the project files.')
       return
+
     rootFilePath = @resolveRootFilePath(filePath)
     rootFile = path.basename(rootFilePath)
     rootFilePath = path.dirname(rootFilePath)
@@ -125,8 +121,8 @@ module.exports =
       if atom.packages.resolvePackagePath('pdf-view')?
         OpenerImpl = require './openers/atompdf-opener'
       else
-        console.info 'No PDF opener found. For cross-platform viewing,
-          install the pdf-view package.' unless atom.inSpecMode()
+        @logWarning('No PDF opener found. For cross-platform viewing,
+          install the pdf-view package.')
         return
     return new OpenerImpl()
 
@@ -150,7 +146,7 @@ module.exports =
       builder = @getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
-        console.info 'Log file parsing failed!' unless atom.inSpecMode()
+        @logWarning('Log file parsing failed!')
         return
       @outputLookup ?= {}
       @outputLookup[filePath] = outputFilePath
@@ -165,28 +161,7 @@ module.exports =
 
   showError: (statusCode, result, builder) ->
     @showErrorIndicator()
-    return if atom.inSpecMode()
-
-    console.group('LaTeX')
-    switch statusCode
-      when 127
-        console.log(
-          """
-          %cTeXification failed! Builder executable not found.
-
-            latex.texPath
-              as configured: #{atom.config.get('latex.texPath')}
-              when resolved: #{builder.constructPath()}
-
-          Make sure latex.texPath is configured correctly; either adjust it \
-          via the settings view, or directly in your config.cson file.
-          """, 'color: red')
-      else
-        console.group("TeXification failed with status code #{statusCode}")
-        for error in result.errors
-          console.log("%c#{error.filePath}:#{error.lineNumber}: #{error.message}", 'color: red')
-        console.groupEnd()
-    console.groupEnd()
+    @logError(statusCode, result, builder)
 
   showProgressIndicator: ->
     return @indicator if @indicator?
@@ -209,6 +184,37 @@ module.exports =
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
+
+  logError: (statusCode, result, builder) ->
+    return if atom.inSpecMode()
+
+    console.group('LaTeX errors')
+    switch statusCode
+      when 127
+        console.log(
+          """
+          %cTeXification failed! Builder executable not found.
+
+            latex.texPath
+              as configured: #{atom.config.get('latex.texPath')}
+              when resolved: #{builder.constructPath()}
+
+          Make sure latex.texPath is configured correctly; either adjust it \
+          via the settings view, or directly in your config.cson file.
+          """, 'color: red')
+      else
+        console.group("TeXification failed with status code #{statusCode}")
+        for error in result.errors
+          console.log("%c#{error.filePath}:#{error.lineNumber}: #{error.message}", 'color: red')
+        console.groupEnd()
+    console.groupEnd()
+
+  logWarning: (message) ->
+    return if atom.inSpecMode()
+
+    console.group('LaTeX warnings')
+    console.log(message)
+    console.groupEnd()
 
   isTexFile: (filePath) ->
     # TODO: Improve; will suffice for the time being.
