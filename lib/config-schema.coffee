@@ -1,4 +1,20 @@
 module.exports =
+  cleanExtensions:
+    type: 'array'
+    default: [
+        '.aux'
+        '.bbl'
+        '.blg'
+        '.fdb_latexmk'
+        '.fls'
+        '.log'
+        '.out'
+        '.pdf'
+        '.synctex.gz'
+      ]
+    items:
+      type: 'string'
+
   customEngine:
     description: 'Enter command for custom LaTeX engine. Overrides Engine.'
     type: 'string'

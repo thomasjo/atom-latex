@@ -78,22 +78,7 @@ module.exports =
     rootFile.pop()
     rootFile = rootFile.join('.')
 
-    # TODO: This needs to be added to the config schema.
     cleanExtensions = atom.config.get('latex.cleanExtensions')
-    # NOTE: Use _.extend(..) or something similar here.
-    unless cleanExtensions
-      cleanExtensions = [
-        '.aux'
-        '.bbl'
-        '.blg'
-        '.fdb_latexmk'
-        '.fls'
-        '.log'
-        '.synctex.gz'
-        '.pdf'
-        '.out'
-      ]
-
     # NOTE: This needs to be done async, and there's no point in being this noisy.
     for extension in cleanExtensions
       fileToRemove = path.join(rootFilePath, rootFile + extension)
