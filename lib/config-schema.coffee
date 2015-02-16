@@ -31,16 +31,19 @@ module.exports =
     enum: ['pdflatex', 'lualatex', 'xelatex']
 
   moveResultToSourceDirectory:
+    title: 'Move Result to Source Directory'
     description: 'Ensures that the output file produced by a successful build
       is stored together with the TeX document that produced it.'
     type: 'boolean'
     default: true
 
   openResultAfterBuild:
+    title: 'Open Result after Successful Build'
     type: 'boolean'
     default: true
 
   openResultInBackground:
+    title: 'Open Result in Background'
     type: 'boolean'
     default: true
 
@@ -52,8 +55,15 @@ module.exports =
     default: ''
 
   skimPath:
+    description: 'Full application path to Skim (OS X).'
     type: 'string'
     default: '/Applications/Skim.app'
+
+  sumatraPath:
+    title: 'SumatraPDF Path'
+    description: 'Full application path to SumatraPDF (Windows).'
+    type: 'string'
+    default: 'C:\\Program Files\\SumatraPDF\\SumatraPDF.exe'
 
   texPath:
     title: 'TeX Path'
