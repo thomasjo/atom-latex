@@ -1,7 +1,7 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
-ConfigSchema = require('./config-schema')
+ConfigSchema = require './config-schema'
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 
