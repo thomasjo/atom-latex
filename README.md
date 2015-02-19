@@ -2,8 +2,8 @@
 A simple package for Atom that compiles LaTeX files by invoking latexmk.
 
 ## Build status
-[![Build Status](http://img.shields.io/travis/thomasjo/atom-latex.svg?style=flat)](https://travis-ci.org/thomasjo/atom-latex)
-[![Windows Build Status](http://img.shields.io/appveyor/ci/thomasjo/atom-latex.svg?style=flat)](https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master)
+[![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/p1gi7m58320t5frj/branch/master?svg=true)](https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master)
 
 ---
 
@@ -20,9 +20,6 @@ Please note that this package is in a **beta** state. Right now everything is
 very naïve. As an example, there's no real error handling; the package merely
 prints an error message to the console indicating that an error occurred during
 the build, and to check the log file manually...
-
-The package is currently hardcoded to typeset using pdfTeX. This will be
-configurable in a future release.
 
 ## TODO
 Current wish list, in a semi-prioritized order.
