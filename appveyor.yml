@@ -18,9 +18,9 @@ install:
   # -------
   - cinst atom
   - cd %APPVEYOR_BUILD_FOLDER%
-  - apm install
+  - "%LOCALAPPDATA%/atom/bin/apm install"
 
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - apm test
+  - "%LOCALAPPDATA%/atom/bin/apm test --path %LOCALAPPDATA%/atom/bin/atom.cmd"
