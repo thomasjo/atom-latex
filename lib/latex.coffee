@@ -114,7 +114,8 @@ module.exports =
   moveResult: (result, filePath) ->
     originalFilePath = result.outputFilePath
     result.outputFilePath = @alterParentPath(filePath, result.outputFilePath)
-    fs.moveSync(originalFilePath, result.outputFilePath)
+    if fs.existsSync(originalFilePath)
+      fs.moveSync(originalFilePath, result.outputFilePath)
 
     syncFilePath = originalFilePath.replace(/\.pdf$/, '.synctex.gz')
     if fs.existsSync(syncFilePath)
