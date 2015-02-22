@@ -2,6 +2,11 @@ _ = require 'underscore-plus'
 fs = require 'fs-plus'
 temp = require 'temp'
 wrench = require 'wrench'
+Logger = require '../lib/logger'
+
+class NullLogger extends Logger
+  error: ->
+  warning: ->
 
 module.exports =
   cloneFixtures: ->
@@ -23,3 +28,6 @@ module.exports =
     originalInterval = env.defaultTimeoutInterval
     env.defaultTimeoutInterval = interval
     originalInterval
+
+  nullLogger: ->
+    new NullLogger()

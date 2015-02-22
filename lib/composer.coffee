@@ -2,6 +2,7 @@ _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
 ConfigSchema = require './config-schema'
+ConsoleLogger = require './loggers/console-logger'
 LatexmkBuilder = require './builders/latexmk'
 MasterTexFinder = require './master-tex-finder'
 
@@ -10,15 +11,18 @@ ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
 class Composer
+  constructor: (logger)->
+    @log = logger ? new ConsoleLogger()
+
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      @logWarning('File needs to be saved to disk before it can be TeXified.')
+      @log.warning('File needs to be saved to disk before it can be TeXified.')
       return false
 
     unless @isTexFile(filePath)
-      @logWarning("File does not seem to be a TeX file;
+      @log.warning("File does not seem to be a TeX file;
         unsupported extension '#{path.extname(filePath)}'.")
       return false
 
@@ -47,7 +51,7 @@ class Composer
     {filePath, lineNumber} = @getEditorDetails()
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
-      @logWarning('Could not resolve path to output file associated with the current file.')
+      @log.warning('Could not resolve path to output file associated with the current file.')
       return
 
     if opener = @getOpener()
@@ -58,7 +62,7 @@ class Composer
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     unless filePath = editor?.getPath()
-      @logWarning('File needs to be saved to disk before clean can find the project files.')
+      @log.warning('File needs to be saved to disk before clean can find the project files.')
       return
 
     rootFilePath = @resolveRootFilePath(filePath)
@@ -100,7 +104,7 @@ class Composer
       if atom.packages.resolvePackagePath('pdf-view')?
         OpenerImpl = require './openers/atompdf-opener'
       else
-        @logWarning('No PDF opener found. For cross-platform viewing,
+        @log.warning('No PDF opener found. For cross-platform viewing,
           install the pdf-view package.')
         return
     return new OpenerImpl()
@@ -126,7 +130,7 @@ class Composer
       builder = @getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
-        @logWarning('Log file parsing failed!')
+        @log.warning('Log file parsing failed!')
         return
       @outputLookup ?= {}
       @outputLookup[filePath] = outputFilePath
@@ -141,7 +145,7 @@ class Composer
 
   showError: (statusCode, result, builder) ->
     @showErrorIndicator()
-    @logError(statusCode, result, builder)
+    @log.error(statusCode, result, builder)
 
   showProgressIndicator: ->
     return @indicator if @indicator?
@@ -164,38 +168,6 @@ class Composer
   destroyErrorIndicator: ->
     @errorIndicator?.destroy()
     @errorIndicator = null
-
-  logError: (statusCode, result, builder) ->
-    return if atom.inSpecMode()
-
-    console.group('LaTeX errors')
-    switch statusCode
-      when 127
-        executable = 'latexmk' # TODO: Read from Builder::executable in the future.
-        console.log(
-          """
-          %cTeXification failed! Builder executable '#{executable}' not found.
-
-            latex.texPath
-              as configured: #{atom.config.get('latex.texPath')}
-              when resolved: #{builder.constructPath()}
-
-          Make sure latex.texPath is configured correctly; either adjust it \
-          via the settings view, or directly in your config.cson file.
-          """, 'color: red')
-      else
-        console.group("TeXification failed with status code #{statusCode}")
-        for error in result.errors
-          console.log("%c#{error.filePath}:#{error.lineNumber}: #{error.message}", 'color: red')
-        console.groupEnd()
-    console.groupEnd()
-
-  logWarning: (message) ->
-    return if atom.inSpecMode()
-
-    console.group('LaTeX warnings')
-    console.log(message)
-    console.groupEnd()
 
   isTexFile: (filePath) ->
     # TODO: Improve; will suffice for the time being.
