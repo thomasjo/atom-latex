@@ -177,9 +177,10 @@ module.exports =
     console.group('LaTeX errors')
     switch statusCode
       when 127
+        executable = 'latexmk' # TODO: Read from Builder::executable in the future.
         console.log(
           """
-          %cTeXification failed! Builder executable not found.
+          %cTeXification failed! Builder executable '#{executable}' not found.
 
             latex.texPath
               as configured: #{atom.config.get('latex.texPath')}
