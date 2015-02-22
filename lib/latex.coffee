@@ -43,7 +43,7 @@ module.exports =
       @destroyProgressIndicator()
       result = builder.parseLogFile(rootFilePath)
 
-      unless result.outputFilePath?
+      unless result?.outputFilePath?
         @showError(statusCode, result, builder)
         return false
 
