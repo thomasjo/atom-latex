@@ -7,14 +7,17 @@ MasterTexFinder = require './master-tex-finder'
 
 ErrorIndicatorView = require './error-indicator-view'
 ProgressIndicatorView = require './progress-indicator-view'
+CommandWrapper = require './command-wrapper'
 
 module.exports =
   config: ConfigSchema
+  commandWrapper: new CommandWrapper
 
   activate: ->
     atom.commands.add 'atom-workspace', 'latex:build', => @build()
     atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
+    @commandWrapper.activate()
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
