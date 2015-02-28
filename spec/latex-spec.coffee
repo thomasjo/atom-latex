@@ -34,7 +34,7 @@ describe "Latex", ->
         result = latex.build()
 
       waitsFor ->
-        latex.build.callCount == 1
+        latex.build.callCount is 1
 
       runs ->
         expect(result).toBe false
@@ -54,7 +54,7 @@ describe "Latex", ->
         result = latex.build()
 
       waitsFor ->
-        latex.build.callCount == 1
+        latex.build.callCount is 1
 
       runs ->
         expect(result).toBe false
@@ -69,7 +69,7 @@ describe "Latex", ->
         latex.build()
 
       waitsFor ->
-        latex.showResult.callCount == 1
+        latex.showResult.callCount is 1
 
       runs ->
         expect(latex.showResult).toHaveBeenCalled()
@@ -85,7 +85,7 @@ describe "Latex", ->
         latex.build()
 
       waitsFor ->
-        latex.showResult.callCount == 1
+        latex.showResult.callCount is 1
 
       runs ->
         expect(editor.isModified()).toEqual(false)
@@ -98,7 +98,7 @@ describe "Latex", ->
         latex.build()
 
       waitsFor ->
-        latex.showResult.callCount == 1
+        latex.showResult.callCount is 1
 
       runs ->
         expect(latex.showResult).toHaveBeenCalled()
@@ -111,7 +111,7 @@ describe "Latex", ->
         latex.build()
 
       waitsFor ->
-        latex.showResult.callCount == 1
+        latex.showResult.callCount is 1
 
       runs ->
         expect(latex.showResult).toHaveBeenCalledWith {
@@ -138,7 +138,7 @@ describe "Latex", ->
         latex.build()
 
       waitsFor ->
-        latex.showError.callCount == 1
+        latex.showError.callCount is 1
 
       runs ->
         expect(latex.showError).toHaveBeenCalled()

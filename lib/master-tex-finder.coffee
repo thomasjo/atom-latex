@@ -44,11 +44,11 @@ class MasterTexFinder
   searchForMasterFile: ->
     files = @getTexFilesList()
     return unless files?
-    return @filePath if files.length == 0
-    return files[0] if files.length == 1
+    return @filePath if files.length is 0
+    return files[0] if files.length is 1
 
     result = files.filter (path) => @isMasterFile(path)
-    return result[0] if result.length == 1
+    return result[0] if result.length is 1
 
     console.warn 'Cannot find latex master file' unless atom.inSpecMode()
     @filePath

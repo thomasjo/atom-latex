@@ -26,7 +26,7 @@ describe "LogParser", ->
         latex.build()
 
       waitsFor ->
-        latex.showResult.callCount == 1
+        latex.showResult.callCount is 1
 
       runs ->
         helpers.setTimeoutInterval(oldTimeoutInterval)

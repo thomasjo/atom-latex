@@ -6,7 +6,7 @@ class AtomPdfOpener extends Opener
     # Opens PDF in a new pane -- requires pdf-view module
     openPanes = atom.workspace.getPaneItems()
     for pane in openPanes
-      if pane.filePath == filePath
+      if pane.filePath is filePath
         # File is already open in another pane
         return
     pane = atom.workspace.getActivePane()
