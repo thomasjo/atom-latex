@@ -9,16 +9,7 @@ ErrorIndicatorView = require './error-indicator-view'
 ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
-  config: ConfigSchema
-
-  activate: ->
-    atom.commands.add 'atom-workspace', 'latex:build', => @build()
-    atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
-    atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
-
-    atom.packages.once 'activated', =>
-      @statusBar = document.querySelector('status-bar')
-
+class Composer
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
@@ -87,6 +78,9 @@ module.exports =
         console.info 'LaTeX clean removed: ' + fileToRemove
       else
         console.info 'LaTeX clean did not find: ' + fileToRemove
+
+  setStatusBar: (statusBar) ->
+    @statusBar = statusBar
 
   getBuilder: ->
     new LatexmkBuilder()

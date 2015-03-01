@@ -1,13 +1,14 @@
 helpers = require './spec-helpers'
 fs = require 'fs-plus'
 path = require 'path'
-latex = require '../lib/latex'
+Composer = require '../lib/composer'
 LatexmkBuilder = require '../lib/builders/latexmk'
 
-describe "Latex", ->
-  [fixturesPath] = []
+describe "Composer", ->
+  [composer, fixturesPath] = []
 
   beforeEach ->
+    composer = new Composer()
     fixturesPath = helpers.cloneFixtures()
 
   describe "build", ->
@@ -16,34 +17,34 @@ describe "Latex", ->
     beforeEach ->
       originalTimeoutInterval = helpers.setTimeoutInterval(10000)
 
-      spyOn(latex, 'showResult').andCallThrough()
-      spyOn(latex, 'getOpener').andReturn()
+      spyOn(composer, 'showResult').andCallThrough()
+      spyOn(composer, 'getOpener').andReturn()
 
     afterEach ->
       helpers.setTimeoutInterval(originalTimeoutInterval)
 
     it "does nothing for new, unsaved files", ->
-      spyOn(latex, 'build').andCallThrough()
-      spyOn(latex, 'showError').andCallThrough()
+      spyOn(composer, 'build').andCallThrough()
+      spyOn(composer, 'showError').andCallThrough()
 
       [result] = []
       waitsForPromise ->
         atom.workspace.open()
 
       runs ->
-        result = latex.build()
+        result = composer.build()
 
       waitsFor ->
-        latex.build.callCount is 1
+        composer.build.callCount is 1
 
       runs ->
         expect(result).toBe false
-        expect(latex.showResult).not.toHaveBeenCalled()
-        expect(latex.showError).not.toHaveBeenCalled()
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
 
     it "does nothing for unsupported file extensions", ->
-      spyOn(latex, 'build').andCallThrough()
-      spyOn(latex, 'showError').andCallThrough()
+      spyOn(composer, 'build').andCallThrough()
+      spyOn(composer, 'showError').andCallThrough()
 
       [editor, result] = []
       waitsForPromise ->
@@ -51,28 +52,28 @@ describe "Latex", ->
 
       runs ->
         editor.save()
-        result = latex.build()
+        result = composer.build()
 
       waitsFor ->
-        latex.build.callCount is 1
+        composer.build.callCount is 1
 
       runs ->
         expect(result).toBe false
-        expect(latex.showResult).not.toHaveBeenCalled()
-        expect(latex.showError).not.toHaveBeenCalled()
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
 
     it "runs `latexmk` for existing files", ->
       waitsForPromise ->
         atom.workspace.open('file.tex')
 
       runs ->
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showResult.callCount is 1
+        composer.showResult.callCount is 1
 
       runs ->
-        expect(latex.showResult).toHaveBeenCalled()
+        expect(composer.showResult).toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
       [editor] = []
@@ -82,10 +83,10 @@ describe "Latex", ->
       runs ->
         editor.moveToBottom()
         editor.insertNewline()
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showResult.callCount is 1
+        composer.showResult.callCount is 1
 
       runs ->
         expect(editor.isModified()).toEqual(false)
@@ -95,26 +96,26 @@ describe "Latex", ->
         atom.workspace.open('filename with spaces.tex')
 
       runs ->
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showResult.callCount is 1
+        composer.showResult.callCount is 1
 
       runs ->
-        expect(latex.showResult).toHaveBeenCalled()
+        expect(composer.showResult).toHaveBeenCalled()
 
     it "invokes `showResult` after a successful build, with expected log parsing result", ->
       waitsForPromise ->
         atom.workspace.open('file.tex')
 
       runs ->
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showResult.callCount is 1
+        composer.showResult.callCount is 1
 
       runs ->
-        expect(latex.showResult).toHaveBeenCalledWith {
+        expect(composer.showResult).toHaveBeenCalledWith {
           outputFilePath: path.join(fixturesPath, 'file.pdf')
           errors: []
           warnings: []
@@ -128,20 +129,20 @@ describe "Latex", ->
             errors: []
             warnings: []
 
-      spyOn(latex, 'getBuilder').andReturn(new MockBuilder())
-      spyOn(latex, 'showError').andCallThrough()
+      spyOn(composer, 'getBuilder').andReturn(new MockBuilder())
+      spyOn(composer, 'showError').andCallThrough()
 
       waitsForPromise ->
         atom.workspace.open('file.tex')
 
       runs ->
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showError.callCount is 1
+        composer.showError.callCount is 1
 
       runs ->
-        expect(latex.showError).toHaveBeenCalled()
+        expect(composer.showError).toHaveBeenCalled()
 
   describe "getOpener", ->
     originalPlatform = process.platform
@@ -151,25 +152,25 @@ describe "Latex", ->
 
     it "supports OS X", ->
       helpers.overridePlatform('darwin')
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener.constructor.name).toEqual('PreviewOpener')
 
     it "does not support GNU/Linux", ->
       helpers.overridePlatform('linux')
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener).toBeUndefined()
 
     it "does not support Windows", ->
       helpers.overridePlatform('win32')
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener).toBeUndefined()
 
     it "does not support unknown operating system", ->
       helpers.overridePlatform('foo')
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener).toBeUndefined()
 
@@ -182,13 +183,13 @@ describe "Latex", ->
         return true if filePath is '/Applications/Skim.app'
         existsSync(filePath)
 
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener.constructor.name).toEqual('SkimOpener')
 
     it "returns PreviewOpener when Skim is not installed on OS X", ->
       atom.config.set('latex.skimPath', '/foo/Skim.app')
       helpers.overridePlatform('darwin')
-      opener = latex.getOpener()
+      opener = composer.getOpener()
 
       expect(opener.constructor.name).toEqual('PreviewOpener')

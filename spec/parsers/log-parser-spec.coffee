@@ -1,6 +1,6 @@
 helpers = require '../spec-helpers'
 path = require 'path'
-latex = require '../../lib/latex'
+Composer = require '../../lib/composer'
 LogParser = require '../../lib/parsers/log-parser'
 
 describe "LogParser", ->
@@ -16,6 +16,7 @@ describe "LogParser", ->
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
       atom.config.set('latex.outputDirectory', 'output')
 
+      latex = new Composer()
       spyOn(latex, 'showResult').andCallThrough()
       spyOn(latex, 'getOpener').andReturn()
 
