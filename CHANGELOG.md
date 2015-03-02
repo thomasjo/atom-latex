@@ -1,3 +1,14 @@
+## 0.19.0
+* Improved the error logging scheme slightly, including
+  * Better error message reporting for missing builder executable,
+    e.g.`latexmk` caused by incorrect *TeX Path*.
+* Extensions used by *Clean* command are now properly configurable.
+  * **NOTE:** The command still doesn't work properly together with
+    *Output Directory* setting.
+* Fixed bugs related to missing files during move, and missing information in
+  log file during parsing (e.g. partially failed build).
+* Tweaked the config schema descriptions.
+
 ## 0.18.0
 * Fixed bug triggered by the text "Output written on .." missing from log file,
   while at the same time `latexmk` returned status code 0 (i.e. "success").
