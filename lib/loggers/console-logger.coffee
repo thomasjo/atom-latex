@@ -19,10 +19,13 @@ class ConsoleLogger extends Logger
           via the settings view, or directly in your config.cson file.
           """, 'color: red')
       else
-        console.group("TeXification failed with status code #{statusCode}")
-        for error in result.errors
-          console.log("%c#{error.filePath}:#{error.lineNumber}: #{error.message}", 'color: red')
-        console.groupEnd()
+        if result?.errors?
+          console.group("TeXification failed with status code #{statusCode}")
+          for error in result.errors
+            console.log("%c#{error.filePath}:#{error.lineNumber}: #{error.message}", 'color: red')
+          console.groupEnd()
+        else
+          console.log("%cTeXification failed with status code #{statusCode}", 'color: red')
     console.groupEnd()
 
   warning: (message) ->
