@@ -1,18 +1,18 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
+ConsoleLogger = null
 ConfigSchema = require './config-schema'
-ConsoleLogger = require './loggers/console-logger'
 LatexmkBuilder = require './builders/latexmk'
-MasterTexFinder = require './master-tex-finder'
+MasterTexFinder = null
 
-ErrorIndicatorView = require './error-indicator-view'
-ProgressIndicatorView = require './progress-indicator-view'
+ErrorIndicatorView = null
+ProgressIndicatorView = null
 
 module.exports =
 class Composer
   constructor: (logger)->
-    @log = logger ? new ConsoleLogger()
+    @log = logger ? @getDefaultLogger()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
@@ -109,6 +109,10 @@ class Composer
         return
     return new OpenerImpl()
 
+  getDefaultLogger: ->
+    ConsoleLogger ?= require './loggers/console-logger'
+    new ConsoleLogger()
+
   moveResult: (result, filePath) ->
     originalFilePath = result.outputFilePath
     result.outputFilePath = @alterParentPath(filePath, result.outputFilePath)
@@ -120,6 +124,7 @@ class Composer
       fs.moveSync(syncFilePath, @alterParentPath(filePath, syncFilePath))
 
   resolveRootFilePath: (filePath) ->
+    MasterTexFinder ?= require './master-tex-finder'
     finder = new MasterTexFinder(filePath)
     finder.getMasterTexPath()
 
@@ -150,6 +155,7 @@ class Composer
   showProgressIndicator: ->
     return @indicator if @indicator?
 
+    ProgressIndicatorView ?= require './progress-indicator-view'
     @indicator = new ProgressIndicatorView()
     @statusBar?.addRightTile({item: @indicator, priority: 9001})
     @indicator
@@ -157,6 +163,7 @@ class Composer
   showErrorIndicator: ->
     return @errorIndicator if @errorIndicator?
 
+    ErrorIndicatorView ?= require './error-indicator-view'
     @errorIndicator = new ErrorIndicatorView()
     @statusBar?.addRightTile({item: @errorIndicator, priority: 9001})
     @errorIndicator
