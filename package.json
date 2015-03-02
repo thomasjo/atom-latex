@@ -2,7 +2,7 @@
   "name": "latex",
   "main": "./lib/main",
   "version": "0.18.1",
-  "description": "A simple utility package that invokes latexmk.",
+  "description": "Compiles LaTeX files by invoking latexmk.",
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
   "engines": {
