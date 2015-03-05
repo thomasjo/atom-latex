@@ -1,13 +1,7 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
-ConsoleLogger = null
 ConfigSchema = require './config-schema'
-LatexmkBuilder = require './builders/latexmk'
-MasterTexFinder = null
-
-ErrorIndicatorView = null
-ProgressIndicatorView = null
 
 module.exports =
 class Composer
@@ -87,6 +81,7 @@ class Composer
     @statusBar = statusBar
 
   getBuilder: ->
+    LatexmkBuilder = require './builders/latexmk'
     new LatexmkBuilder()
 
   getOpener: ->
@@ -110,7 +105,7 @@ class Composer
     return new OpenerImpl()
 
   getDefaultLogger: ->
-    ConsoleLogger ?= require './loggers/console-logger'
+    ConsoleLogger = require './loggers/console-logger'
     new ConsoleLogger()
 
   moveResult: (result, filePath) ->
@@ -124,7 +119,7 @@ class Composer
       fs.moveSync(syncFilePath, @alterParentPath(filePath, syncFilePath))
 
   resolveRootFilePath: (filePath) ->
-    MasterTexFinder ?= require './master-tex-finder'
+    MasterTexFinder = require './master-tex-finder'
     finder = new MasterTexFinder(filePath)
     finder.getMasterTexPath()
 
@@ -155,7 +150,7 @@ class Composer
   showProgressIndicator: ->
     return @indicator if @indicator?
 
-    ProgressIndicatorView ?= require './progress-indicator-view'
+    ProgressIndicatorView = require './progress-indicator-view'
     @indicator = new ProgressIndicatorView()
     @statusBar?.addRightTile({item: @indicator, priority: 9001})
     @indicator
@@ -163,7 +158,7 @@ class Composer
   showErrorIndicator: ->
     return @errorIndicator if @errorIndicator?
 
-    ErrorIndicatorView ?= require './error-indicator-view'
+    ErrorIndicatorView = require './error-indicator-view'
     @errorIndicator = new ErrorIndicatorView()
     @statusBar?.addRightTile({item: @errorIndicator, priority: 9001})
     @errorIndicator
