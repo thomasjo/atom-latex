@@ -63,7 +63,7 @@ module.exports =
     title: 'SumatraPDF Path'
     description: 'Full application path to SumatraPDF (Windows).'
     type: 'string'
-    default: 'C:\\Program Files\\SumatraPDF\\SumatraPDF.exe'
+    default: 'C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe'
 
   texPath:
     title: 'TeX Path'
