@@ -102,7 +102,7 @@ class Composer
         @log.warning('No PDF opener found. For cross-platform viewing,
           install the pdf-view package.')
         return
-    return new OpenerImpl()
+    new OpenerImpl()
 
   getDefaultLogger: ->
     ConsoleLogger = require './loggers/console-logger'
@@ -173,7 +173,7 @@ class Composer
 
   isTexFile: (filePath) ->
     # TODO: Improve; will suffice for the time being.
-    return filePath?.search(/\.(tex|lhs)$/) > 0
+    filePath?.search(/\.(tex|lhs)$/) > 0
 
   getEditorDetails: ->
     editor = atom.workspace.getActiveTextEditor()
