@@ -1,7 +1,6 @@
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 path = require 'path'
-ConfigSchema = require './config-schema'
 
 module.exports =
 class Composer
