@@ -1,6 +1,7 @@
 module.exports =
   cleanExtensions:
     type: 'array'
+    items: type: 'string'
     default: [
         '.aux'
         '.bbl'
@@ -12,8 +13,6 @@ module.exports =
         '.pdf'
         '.synctex.gz'
       ]
-    items:
-      type: 'string'
 
   customEngine:
     description: 'Enter command for custom LaTeX engine. Overrides Engine.'
@@ -27,8 +26,8 @@ module.exports =
   engine:
     description: 'Select standard LaTeX engine'
     type: 'string'
-    default: 'pdflatex'
     enum: ['pdflatex', 'lualatex', 'xelatex']
+    default: 'pdflatex'
 
   moveResultToSourceDirectory:
     title: 'Move Result to Source Directory'
