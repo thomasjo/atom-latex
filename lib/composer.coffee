@@ -4,7 +4,7 @@ path = require 'path'
 
 module.exports =
 class Composer
-  constructor: (logger)->
+  constructor: (logger) ->
     @log = logger ? @getDefaultLogger()
 
   build: ->
