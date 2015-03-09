@@ -4,24 +4,21 @@ path = require 'path'
 
 module.exports =
 class Composer
-  constructor: (logger) ->
-    @log = logger ? @getDefaultLogger()
-
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      @log.warning('File needs to be saved to disk before it can be TeXified.')
+      latex.log.warning('File needs to be saved to disk before it can be TeXified.')
       return false
 
     unless @isTexFile(filePath)
-      @log.warning("File does not seem to be a TeX file;
+      latex.log.warning("File does not seem to be a TeX file;
         unsupported extension '#{path.extname(filePath)}'.")
       return false
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
 
-    builder = @getBuilder()
+    builder = latex.getBuilder()
     rootFilePath = @resolveRootFilePath(filePath)
     args = builder.constructArgs(rootFilePath)
 
@@ -44,10 +41,10 @@ class Composer
     {filePath, lineNumber} = @getEditorDetails()
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
-      @log.warning('Could not resolve path to output file associated with the current file.')
+      latex.log.warning('Could not resolve path to output file associated with the current file.')
       return
 
-    if opener = @getOpener()
+    if opener = latex.getOpener()
       opener.open(outputFilePath, filePath, lineNumber)
 
   # TODO: Improve overall code quality within this function.
@@ -55,7 +52,7 @@ class Composer
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     unless filePath = editor?.getPath()
-      @log.warning('File needs to be saved to disk before clean can find the project files.')
+      latex.log.warning('File needs to be saved to disk before clean can find the project files.')
       return
 
     rootFilePath = @resolveRootFilePath(filePath)
@@ -79,34 +76,6 @@ class Composer
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
 
-  getBuilder: ->
-    LatexmkBuilder = require './builders/latexmk'
-    new LatexmkBuilder()
-
-  getOpener: ->
-    # TODO: Move this to a resolver module? Will get more complex...
-    OpenerImpl = switch process.platform
-      when 'darwin'
-        if fs.existsSync(atom.config.get('latex.skimPath'))
-          require './openers/skim-opener'
-        else
-          require './openers/preview-opener'
-      when 'win32'
-        if fs.existsSync(atom.config.get('latex.sumatraPath'))
-          require './openers/sumatra-opener'
-    unless OpenerImpl?
-      if atom.packages.resolvePackagePath('pdf-view')?
-        OpenerImpl = require './openers/atompdf-opener'
-      else
-        @log.warning('No PDF opener found. For cross-platform viewing,
-          install the pdf-view package.')
-        return
-    new OpenerImpl()
-
-  getDefaultLogger: ->
-    ConsoleLogger = require './loggers/console-logger'
-    new ConsoleLogger()
-
   moveResult: (result, filePath) ->
     originalFilePath = result.outputFilePath
     result.outputFilePath = @alterParentPath(filePath, result.outputFilePath)
@@ -126,10 +95,10 @@ class Composer
     rootFilePath = @resolveRootFilePath(filePath)
 
     unless outputFilePath = @outputLookup?[filePath]
-      builder = @getBuilder()
+      builder = latex.getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
-        @log.warning('Log file parsing failed!')
+        latex.log.warning('Log file parsing failed!')
         return
       @outputLookup ?= {}
       @outputLookup[filePath] = outputFilePath
@@ -138,13 +107,13 @@ class Composer
     outputFilePath
 
   showResult: (result) ->
-    if @shouldOpenResult() and opener = @getOpener()
+    if @shouldOpenResult() and opener = latex.getOpener()
       {filePath, lineNumber} = @getEditorDetails()
       opener.open(result.outputFilePath, filePath, lineNumber)
 
   showError: (statusCode, result, builder) ->
     @showErrorIndicator()
-    @log.error(statusCode, result, builder)
+    latex.log.error(statusCode, result, builder)
 
   showProgressIndicator: ->
     return @indicator if @indicator?

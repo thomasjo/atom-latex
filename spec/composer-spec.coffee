@@ -9,7 +9,7 @@ describe "Composer", ->
 
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
-    composer = new Composer(helpers.nullLogger())
+    composer = new Composer()
 
   describe "build", ->
     [originalTimeoutInterval] = []
@@ -18,7 +18,7 @@ describe "Composer", ->
       originalTimeoutInterval = helpers.setTimeoutInterval(10000)
 
       spyOn(composer, 'showResult').andCallThrough()
-      spyOn(composer, 'getOpener').andReturn()
+      spyOn(latex, 'getOpener').andReturn()
 
     afterEach ->
       helpers.setTimeoutInterval(originalTimeoutInterval)
@@ -129,7 +129,7 @@ describe "Composer", ->
             errors: []
             warnings: []
 
-      spyOn(composer, 'getBuilder').andReturn(new MockBuilder())
+      spyOn(latex, 'getBuilder').andReturn(new MockBuilder())
       spyOn(composer, 'showError').andCallThrough()
 
       waitsForPromise ->
@@ -143,53 +143,3 @@ describe "Composer", ->
 
       runs ->
         expect(composer.showError).toHaveBeenCalled()
-
-  describe "getOpener", ->
-    originalPlatform = process.platform
-
-    afterEach ->
-      helpers.overridePlatform(originalPlatform)
-
-    it "supports OS X", ->
-      helpers.overridePlatform('darwin')
-      opener = composer.getOpener()
-
-      expect(opener.constructor.name).toEqual('PreviewOpener')
-
-    it "does not support GNU/Linux", ->
-      helpers.overridePlatform('linux')
-      opener = composer.getOpener()
-
-      expect(opener).toBeUndefined()
-
-    it "does not support Windows", ->
-      helpers.overridePlatform('win32')
-      opener = composer.getOpener()
-
-      expect(opener).toBeUndefined()
-
-    it "does not support unknown operating system", ->
-      helpers.overridePlatform('foo')
-      opener = composer.getOpener()
-
-      expect(opener).toBeUndefined()
-
-    it "returns SkimOpener when installed on OS X", ->
-      atom.config.set('latex.skimPath', '/Applications/Skim.app')
-      helpers.overridePlatform('darwin')
-
-      existsSync = fs.existsSync
-      spyOn(fs, 'existsSync').andCallFake (filePath) ->
-        return true if filePath is '/Applications/Skim.app'
-        existsSync(filePath)
-
-      opener = composer.getOpener()
-
-      expect(opener.constructor.name).toEqual('SkimOpener')
-
-    it "returns PreviewOpener when Skim is not installed on OS X", ->
-      atom.config.set('latex.skimPath', '/foo/Skim.app')
-      helpers.overridePlatform('darwin')
-      opener = composer.getOpener()
-
-      expect(opener.constructor.name).toEqual('PreviewOpener')

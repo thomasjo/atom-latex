@@ -16,18 +16,18 @@ describe "LogParser", ->
       expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
       atom.config.set('latex.outputDirectory', 'output')
 
-      latex = new Composer()
-      spyOn(latex, 'showResult').andCallThrough()
+      composer = new Composer()
+      spyOn(composer, 'showResult').andCallThrough()
       spyOn(latex, 'getOpener').andReturn()
 
       waitsForPromise ->
         atom.workspace.open('file.tex')
 
       runs ->
-        latex.build()
+        composer.build()
 
       waitsFor ->
-        latex.showResult.callCount is 1
+        composer.showResult.callCount is 1
 
       runs ->
         helpers.setTimeoutInterval(oldTimeoutInterval)

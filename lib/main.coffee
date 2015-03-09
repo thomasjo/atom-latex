@@ -5,6 +5,8 @@ module.exports =
   config: ConfigSchema
 
   activate: ->
+    require './bootstrap'
+
     @composer = new Composer()
 
     atom.commands.add 'atom-workspace', 'latex:build', => @composer.build()

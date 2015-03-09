@@ -1,12 +1,12 @@
+require './spec-bootstrap'
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 temp = require 'temp'
 wrench = require 'wrench'
-Logger = require '../lib/logger'
+Opener = require '../lib/opener'
 
-class NullLogger extends Logger
-  error: ->
-  warning: ->
+class NullOpener extends Opener
+  open: (filePath, texPath, lineNumber, callback) ->
 
 module.exports =
   cloneFixtures: ->
@@ -29,5 +29,4 @@ module.exports =
     env.defaultTimeoutInterval = interval
     originalInterval
 
-  nullLogger: ->
-    new NullLogger()
+  nullOpener: -> new NullOpener()
