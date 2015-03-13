@@ -9,6 +9,8 @@ describe "Latex", ->
 
   describe "initialize", ->
     it "initializes all properties", ->
+      opener = helpers.nullOpener()
+      spyOn(latex, 'resolveOpenerImplementation').andReturn(opener.constructor)
       latex.initialize()
 
       expect(latex.builder).toBeDefined()
@@ -84,7 +86,6 @@ describe "Latex", ->
 
     it "returns PreviewOpener when Skim is not installed, and running on OS X", ->
       atom.config.set('latex.skimPath', '/foo/Skim.app')
-      helpers.overridePlatform('darwin')
       opener = latex.resolveOpenerImplementation('darwin')
 
       expect(opener.name).toBe 'PreviewOpener'
