@@ -30,7 +30,11 @@ class Builder
   defaultTexPath: ->
     switch process.platform
       when 'win32'
-        'C:\\texlive\\2014\\bin\\win32'
+        [
+          'C:\\texlive\\2014\\bin\\win32'
+          'C:\\Program Files\\MiKTeX 2.9\\miktex\\bin\\x64'
+          'C:\\Program Files (x86)\\MiKTeX 2.9\\miktex\\bin'
+        ].join(';')
       else
         '/usr/texbin'
 
