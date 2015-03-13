@@ -2,7 +2,7 @@ helpers = require './spec-helpers'
 path = require 'path'
 Builder = require '../lib/builder'
 
-fdescribe "Builder", ->
+describe "Builder", ->
   [builder] = []
 
   beforeEach ->
