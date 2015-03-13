@@ -66,6 +66,7 @@ module.exports =
 
   texPath:
     title: 'TeX Path'
-    description: "The full path to your TeX distribution's bin directory."
+    description: "The full path to your TeX distribution's bin directory.
+      Supports $PATH substitution."
     type: 'string'
     default: ''
