@@ -24,10 +24,10 @@ class Latex
     if OpenerImpl = @resolveOpenerImplementation(process.platform)
       @opener = new OpenerImpl()
     else if @logger? and @log?
-      @log.warning """
+      @log.warning '''
         No PDF opener found.
         For cross-platform viewing, consider install the pdf-view package.
-        """
+        '''
 
   createLogProxy: ->
     @log =

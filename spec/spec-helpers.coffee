@@ -1,12 +1,12 @@
 require './spec-bootstrap'
-_ = require 'underscore-plus'
 fs = require 'fs-plus'
 temp = require 'temp'
 wrench = require 'wrench'
 Opener = require '../lib/opener'
 
 class NullOpener extends Opener
-  open: (filePath, texPath, lineNumber, callback) ->
+  open: (filePath, texPath, lineNumber, callback) -> null
+
 
 module.exports =
   cloneFixtures: ->
