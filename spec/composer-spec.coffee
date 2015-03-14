@@ -3,34 +3,34 @@ fs = require 'fs-plus'
 path = require 'path'
 Composer = require '../lib/composer'
 
-fdescribe "Composer", ->
-  [fixturesPath, composer, mockBuilder, fakeStatusCode] = []
+describe "Composer", ->
+  [composer] = []
 
   beforeEach ->
-    fixturesPath = helpers.cloneFixtures()
     composer = new Composer()
 
-    fakeStatusCode = 0
-    mockBuilder = jasmine.createSpyObj('MockBuilder', ['constructArgs', 'run', 'parseLogFile'])
-    mockBuilder.constructArgs.andReturn([])
-    mockBuilder.run.andCallFake (args, callback) -> callback(fakeStatusCode)
-
   describe "build", ->
-    [originalTimeoutInterval] = []
+    [editor, builder] = []
+
+    initializeSpies = ({filePath, statusCode}) ->
+      statusCode ?= 0
+
+      editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'getEditorDetails').andReturn
+        editor: editor
+        filePath: filePath
+
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
+      builder.run.andCallFake (args, callback) -> callback(statusCode)
+      spyOn(latex, 'getBuilder').andReturn(builder)
 
     beforeEach ->
-      originalTimeoutInterval = helpers.setTimeoutInterval(10000)
-
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
 
-    afterEach ->
-      helpers.setTimeoutInterval(originalTimeoutInterval)
-
     it "does nothing for new, unsaved files", ->
-      spyOn(composer, 'getEditorDetails').andReturn
-        editor: jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-        filePath: null
+      initializeSpies({filePath: null})
 
       result = composer.build()
 
@@ -39,92 +39,47 @@ fdescribe "Composer", ->
       expect(composer.showError).not.toHaveBeenCalled()
 
     it "does nothing for unsupported file extensions", ->
-      spyOn(composer, 'build').andCallThrough()
+      initializeSpies({filePath: 'foo.bar'})
 
-      [editor, result] = []
-      waitsForPromise ->
-        atom.workspace.open('file.md').then (ed) -> editor = ed
+      result = composer.build()
 
-      runs ->
-        editor.save()
-        result = composer.build()
-
-      waitsFor ->
-        composer.build.callCount is 1
-
-      runs ->
-        expect(result).toBe false
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
-
-    it "runs `latexmk` for existing files", ->
-      waitsForPromise ->
-        atom.workspace.open('file.tex')
-
-      runs ->
-        composer.build()
-
-      waitsFor ->
-        composer.showResult.callCount is 1
-
-      runs ->
-        expect(composer.showResult).toHaveBeenCalled()
+      expect(result).toBe false
+      expect(composer.showResult).not.toHaveBeenCalled()
+      expect(composer.showError).not.toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
-      [editor] = []
-      waitsForPromise ->
-        atom.workspace.open('file.tex').then (ed) -> editor = ed
+      initializeSpies({filePath: 'file.tex'})
 
-      runs ->
-        editor.moveToBottom()
-        editor.insertNewline()
-        composer.build()
+      editor.isModified.andReturn(true)
+      composer.build()
 
-      waitsFor ->
-        composer.showResult.callCount is 1
-
-      runs ->
-        expect(editor.isModified()).toEqual(false)
-
-    it "supports paths containing spaces", ->
-      waitsForPromise ->
-        atom.workspace.open('filename with spaces.tex')
-
-      runs ->
-        composer.build()
-
-      waitsFor ->
-        composer.showResult.callCount is 1
-
-      runs ->
-        expect(composer.showResult).toHaveBeenCalled()
+      expect(editor.isModified).toHaveBeenCalled()
+      expect(editor.save).toHaveBeenCalled()
 
     it "invokes `showResult` after a successful build, with expected log parsing result", ->
-      waitsForPromise ->
-        atom.workspace.open('file.tex')
+      initializeSpies({filePath: 'file.tex'})
 
-      runs ->
-        composer.build()
-
-      waitsFor ->
-        composer.showResult.callCount is 1
-
-      runs ->
-        expect(composer.showResult).toHaveBeenCalledWith {
-          outputFilePath: path.join(fixturesPath, 'file.pdf')
-          errors: []
-          warnings: []
-        }
-
-    it "treats missing output file data in log file as an error", ->
-      spyOn(latex, 'getBuilder').andReturn(mockBuilder)
-      mockBuilder.parseLogFile.andReturn
-        outputFilePath: null
+      builder.parseLogFile.andReturn result =
+        outputFilePath: 'file.pdf'
         errors: []
         warnings: []
 
-      waitsForPromise ->
-        atom.workspace.open('file.tex')
+      runs ->
+        composer.build()
+
+      waitsFor ->
+        composer.showResult.callCount is 1
+
+      runs ->
+        expect(composer.showResult).toHaveBeenCalledWith(result)
+
+    it "treats missing output file data in log file as an error", ->
+      initializeSpies({filePath: 'file.tex'})
+
+      builder.parseLogFile.andReturn
+        outputFilePath: null
+        errors: []
+        warnings: []
 
       runs ->
         composer.build()
@@ -136,12 +91,9 @@ fdescribe "Composer", ->
         expect(composer.showError).toHaveBeenCalled()
 
     it "treats missing result from parser as an error", ->
-      spyOn(latex, 'getBuilder').andReturn(mockBuilder)
+      initializeSpies({filePath: 'file.tex'})
 
-      mockBuilder.parseLogFile.andReturn(null)
-
-      waitsForPromise ->
-        atom.workspace.open('file.tex')
+      builder.parseLogFile.andReturn(null)
 
       runs ->
         composer.build()
