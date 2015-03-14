@@ -8,8 +8,8 @@ class Composer
     @destroyErrorIndicator()
 
   build: ->
-    editor = atom.workspace.getActivePaneItem()
-    filePath = editor?.getPath()
+    {editor, filePath} = @getEditorDetails()
+
     unless filePath?
       latex.log.warning('File needs to be saved to disk before it can be TeXified.')
       return false
@@ -53,8 +53,9 @@ class Composer
   # TODO: Improve overall code quality within this function.
   # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
-    editor = atom.workspace.getActivePaneItem()
-    unless filePath = editor?.getPath()
+    {filePath} = @getEditorDetails()
+
+    unless filePath?
       latex.log.warning('File needs to be saved to disk before clean can find the project files.')
       return
 
@@ -151,6 +152,7 @@ class Composer
     return unless editor?
 
     editorDetails =
+      editor: editor
       filePath: editor.getPath()
       lineNumber: editor.getCursorBufferPosition().row + 1
 
