@@ -4,17 +4,16 @@ path = require 'path'
 Composer = require '../lib/composer'
 
 fdescribe "Composer", ->
-  [fixturesPath, composer, mockBuilder, statusCode] = []
+  [fixturesPath, composer, mockBuilder, fakeStatusCode] = []
 
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
     composer = new Composer()
 
+    fakeStatusCode = 0
     mockBuilder = jasmine.createSpyObj('MockBuilder', ['constructArgs', 'run', 'parseLogFile'])
     mockBuilder.constructArgs.andReturn([])
-
-    statusCode = 0
-    mockBuilder.run.andCallFake (args, callback) -> callback(statusCode)
+    mockBuilder.run.andCallFake (args, callback) -> callback(fakeStatusCode)
 
   describe "build", ->
     [originalTimeoutInterval] = []
@@ -29,22 +28,15 @@ fdescribe "Composer", ->
       helpers.setTimeoutInterval(originalTimeoutInterval)
 
     it "does nothing for new, unsaved files", ->
-      spyOn(composer, 'build').andCallThrough()
+      spyOn(composer, 'getEditorDetails').andReturn
+        editor: jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
+        filePath: null
 
-      [result] = []
-      waitsForPromise ->
-        atom.workspace.open()
+      result = composer.build()
 
-      runs ->
-        result = composer.build()
-
-      waitsFor ->
-        composer.build.callCount is 1
-
-      runs ->
-        expect(result).toBe false
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
+      expect(result).toBe false
+      expect(composer.showResult).not.toHaveBeenCalled()
+      expect(composer.showError).not.toHaveBeenCalled()
 
     it "does nothing for unsupported file extensions", ->
       spyOn(composer, 'build').andCallThrough()
