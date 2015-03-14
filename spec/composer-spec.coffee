@@ -2,14 +2,19 @@ helpers = require './spec-helpers'
 fs = require 'fs-plus'
 path = require 'path'
 Composer = require '../lib/composer'
-LatexmkBuilder = require '../lib/builders/latexmk'
 
-describe "Composer", ->
-  [composer, fixturesPath] = []
+fdescribe "Composer", ->
+  [fixturesPath, composer, mockBuilder, statusCode] = []
 
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
     composer = new Composer()
+
+    mockBuilder = jasmine.createSpyObj('MockBuilder', ['constructArgs', 'run', 'parseLogFile'])
+    mockBuilder.constructArgs.andReturn([])
+
+    statusCode = 0
+    mockBuilder.run.andCallFake (args, callback) -> callback(statusCode)
 
   describe "build", ->
     [originalTimeoutInterval] = []
@@ -17,15 +22,14 @@ describe "Composer", ->
     beforeEach ->
       originalTimeoutInterval = helpers.setTimeoutInterval(10000)
 
-      spyOn(composer, 'showResult').andCallThrough()
-      spyOn(latex, 'getOpener').andReturn()
+      spyOn(composer, 'showResult').andReturn()
+      spyOn(composer, 'showError').andReturn()
 
     afterEach ->
       helpers.setTimeoutInterval(originalTimeoutInterval)
 
     it "does nothing for new, unsaved files", ->
       spyOn(composer, 'build').andCallThrough()
-      spyOn(composer, 'showError').andCallThrough()
 
       [result] = []
       waitsForPromise ->
@@ -44,7 +48,6 @@ describe "Composer", ->
 
     it "does nothing for unsupported file extensions", ->
       spyOn(composer, 'build').andCallThrough()
-      spyOn(composer, 'showError').andCallThrough()
 
       [editor, result] = []
       waitsForPromise ->
@@ -122,15 +125,28 @@ describe "Composer", ->
         }
 
     it "treats missing output file data in log file as an error", ->
-      class MockBuilder extends LatexmkBuilder
-        parseLogFile: (texFilePath) ->
-          result =
-            outputFilePath: null
-            errors: []
-            warnings: []
+      spyOn(latex, 'getBuilder').andReturn(mockBuilder)
+      mockBuilder.parseLogFile.andReturn
+        outputFilePath: null
+        errors: []
+        warnings: []
 
-      spyOn(latex, 'getBuilder').andReturn(new MockBuilder())
-      spyOn(composer, 'showError').andCallThrough()
+      waitsForPromise ->
+        atom.workspace.open('file.tex')
+
+      runs ->
+        composer.build()
+
+      waitsFor ->
+        composer.showError.callCount is 1
+
+      runs ->
+        expect(composer.showError).toHaveBeenCalled()
+
+    it "treats missing result from parser as an error", ->
+      spyOn(latex, 'getBuilder').andReturn(mockBuilder)
+
+      mockBuilder.parseLogFile.andReturn(null)
 
       waitsForPromise ->
         atom.workspace.open('file.tex')
