@@ -52,5 +52,8 @@ class LatexmkBuilder extends Builder
     logFilePath = @resolveLogFilePath(texFilePath)
     return unless fs.existsSync(logFilePath)
 
-    parser = new LogParser(logFilePath)
+    parser = @getLogParser(logFilePath)
     result = parser.parse()
+
+  getLogParser: (logFilePath) ->
+    new LogParser(logFilePath)
