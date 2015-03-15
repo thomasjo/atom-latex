@@ -3,7 +3,6 @@ A simple package for Atom that compiles LaTeX files by invoking latexmk.
 
 ## Build status
 [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/p1gi7m58320t5frj/branch/master?svg=true)](https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master)
 
 ---
 
