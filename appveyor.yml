@@ -1,26 +1,165 @@
-version: "{build}"
+version: '{build}'
 os: Windows Server 2012 R2
 
 test: off
 deploy: off
 
-init:
-  - cmd: rd /s /q %CHOCOLATEYINSTALL%
-  - ps: iex ((New-Object Net.WebClient).DownloadString("https://chocolatey.org/install.ps1"))
-
 install:
-  - cinst 7zip.commandline -y
-  - cd %TEMP%
-  - echo "Downloading portable TeX Live installation..."
-  - ps: Start-FileDownload "https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z"
-  - 7za x texlive.7z -oC:\ -y
-  - set PATH=C:\texlive\bin\win32;%PATH%
-  # -------
-  - cinst atom -y
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - "%LOCALAPPDATA%\\atom\\bin\\apm.cmd install"
+- ps: >-
+    $webclient = New-Object Net.WebClient
 
+    $7zapath = Join-Path -Path $env:TEMP -ChildPath 7za.exe
+
+    $x = 0
+
+    while (!(Test-Path $7zapath) -and $x -lt 5) {
+
+        Write-Host Download 7za.exe: Try $x
+
+        $webclient.DownloadFile('https://chocolatey.org/7za.exe', $7zapath)
+
+        Start-Sleep -s 3
+
+        $x++
+    }
+
+    if (!(Test-Path $7zapath)) {
+
+        Write-Error 'Unable to download 7za.exe'
+
+        exit 1
+
+    }
+
+    $texpath = Join-Path -Path $env:TEMP -ChildPath texlive.7z
+
+    $x = 0
+
+    while (!(Test-Path $texpath) -and $x -lt 5) {
+
+        Write-Host Download texlive.7z: Try $x
+
+        $webclient.DownloadFile('https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z', $texpath)
+
+        Start-Sleep -s 3
+
+        $x++
+    }
+
+
+    if (!(Test-Path $texpath)) {
+
+        Write-Error 'Unable to download texlive.7z'
+
+        exit 1
+
+    }
+
+    # Unpack tex
+
+    Write-Host Unpacking texlive.7z...
+
+    $7zaargs = 'x', $texpath, '-oC:\', '-y'
+
+    Start-Process $7zapath -argumentlist $7zaargs -wait -redirectstandardoutput 7zastdout.txt -redirectstandarderror 7zastderr.txt
+
+    if (Test-Path '7zastdout.txt') {
+
+      Write-Host 7ZA STDOUT
+
+      Get-Content 7zastdout.txt | Write-Host
+
+    }
+
+    if (Test-Path '7zastderr.txt') {
+
+      Write-Host 7ZA STDERR
+
+      Get-Content 7zastderr.txt | Write-Host
+
+    }
+
+    $env:Path = 'C:\texlive\bin\win32;' + $env:Path
+
+    if (!(Test-Path 'c:\texlive\bin\win32')) {
+
+      Write-Error 'Unpacking failed.'
+
+      exit 1
+
+    }
+
+    # -------
+
+    $atompath = Join-Path -Path $env:TEMP -ChildPath AtomSetup.exe
+
+    $x = 0
+
+    while (!(Test-Path $atompath) -and $x -lt 5) {
+
+        Write-Host Download AtomSetup.exe: Try $x
+
+        $webclient.DownloadFile('https://atom.io/download/windows', $atompath)
+
+        Start-Sleep -s 3
+
+        $x++
+
+    }
+
+    if (!(Test-Path $atompath)) {
+
+        Write-Error 'Unable to download AtomSetup.exe'
+
+        exit 1
+
+    }
+
+    Write-Host Starting Atom Install...
+
+    $apmcmd = Join-Path -Path $env:LOCALAPPDATA -ChildPath \atom\bin\apm.cmd
+
+    $x = 0
+
+    while (!(Test-Path $apmcmd) -and $x -lt 5) {
+
+        Write-Host Starting Atom Install: Try $x
+
+        Start-Process $atompath -argumentlist '--silent' -wait
+
+        $x++
+
+    }
+
+    # Wait 10 seconds if apm does not exist
+
+    if(!(Test-Path $apmcmd)) {
+
+        Write-Error 'Atom install failed'
+
+        exit 1
+    }
+
+    cd $env:APPVEYOR_BUILD_FOLDER
+
+    Start-Process $apmcmd -argumentlist 'install' -wait -redirectstandardoutput apmstdout.txt -redirectstandarderror apmstderr.txt
+
+    if (Test-Path 'apmstdout.txt') {
+
+      Write-Host APM INSTALL STDOUT
+
+      Get-Content apmstdout.txt | Write-Host
+
+    }
+
+    if (Test-Path 'apmstderr.txt') {
+
+      Write-Host APM INSTALL STDERR
+
+      Get-Content apmstderr.txt | Write-Host
+
+    }
 
 build_script:
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - "%LOCALAPPDATA%\\atom\\bin\\apm.cmd test --path %LOCALAPPDATA%\\atom\\bin\\atom.cmd"
+- cd %APPVEYOR_BUILD_FOLDER%
+- '%LOCALAPPDATA%\\atom\\bin\\apm.cmd test --path %LOCALAPPDATA%\\atom\\bin\\atom.cmd'
