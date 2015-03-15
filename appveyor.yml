@@ -153,4 +153,3 @@ install:
 build_script:
 - cd %APPVEYOR_BUILD_FOLDER%
 - '%LOCALAPPDATA%\\atom\\bin\\apm.cmd test --path %LOCALAPPDATA%\\atom\\bin\\atom.cmd'
-
