@@ -127,6 +127,8 @@ install:
 
         Start-Process $atompath -argumentlist '--silent' -wait
 
+        $x++
+
     }
 
     # Wait 10 seconds if apm does not exist
