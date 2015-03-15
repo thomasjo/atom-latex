@@ -117,17 +117,25 @@ install:
 
     Write-Host Starting Atom Install...
 
-    Start-Process $atompath -argumentlist '--silent' -wait
+    $apmcmd = Join-Path -Path $env:LOCALAPPDATA -ChildPath \atom\bin\apm.cmd
+
+    $x = 0
+
+    while (!(Test-Path $apmcmd) -and $x -lt 5) {
+
+        Write-Host Starting Atom Install: Try $x
+
+        Start-Process $atompath -argumentlist '--silent' -wait
+
+    }
 
     # Wait 10 seconds if apm does not exist
 
-    $apmcmd = Join-Path -Path $env:LOCALAPPDATA -ChildPath \atom\bin\apm.cmd
-
     if(!(Test-Path $apmcmd)) {
 
-        Write-Host 'Waiting for APM to appear...'
+        Write-Error 'Atom install failed'
 
-        Start-Sleep -s 10
+        exit 1
     }
 
     cd $env:APPVEYOR_BUILD_FOLDER
