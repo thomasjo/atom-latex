@@ -1,3 +1,20 @@
+## 0.20.0
+* Improved TeX path resolution by changing the old behavior of only using the
+  `PATH` environment variable in the *Latexmk* child process' `PATH` environment
+  variable if the resolved TeX path contains the `$PATH` substitution marker.
+  Substitutions are still supported, but the new default is to not use it,
+  and when it's not present, the inherited `PATH` environment variable is
+  appended to the configured TeX path instead.
+* Fixes soft wrap bug caused by incorrect usage of getCursorScreenPosition()
+  * See [Pull Request 68](https://github.com/thomasjo/atom-latex/pull/68)
+    for more details.
+* Changes the default *SumatraPDF* path to
+  `C:\Program Files (x86)\SumatraPDF\SumatraPDF.exe`.
+* Adds (experimental) out-of-the-box support for MiKTeX 2.9 by adding default
+  MiKTeX paths to the default TeX paths on Windows;
+  * `C:\Program Files\MiKTeX 2.9\miktex\bin\x64`,
+  * `C:\Program Files (x86)\MiKTeX 2.9\miktex\bin`.
+
 ## 0.19.0
 * Improved the error logging scheme slightly, including
   * Better error message reporting for missing builder executable,
@@ -38,7 +55,9 @@
 
 ## 0.15.0
 * Merged [Pull Request 39](https://github.com/thomasjo/atom-latex/pull/39).
-  * Adds engine customization. Default engine is still `pdflatex`, but users can now use e.g. `xelatex` instead. This is controlled via configuration. See pull request for more [details](https://github.com/thomasjo/atom-latex/commit/42e7c05fd413443d3a2653824d6581bd4601c1b8).
+  * Adds engine customization. Default engine is still `pdflatex`, but users can
+    now use e.g. `xelatex` instead. This is controlled via configuration.
+    See pull request for more [details](https://github.com/thomasjo/atom-latex/commit/42e7c05fd413443d3a2653824d6581bd4601c1b8).
 * Merged [Pull Request 40](https://github.com/thomasjo/atom-latex/pull/40).
   * Adds support for *Literal Haskell* filetypes.
 
@@ -50,8 +69,8 @@
 ## 0.13.0
 * Move output file (including SyncTeX file) to source dir.
   * By default we now move the output file after a successful build, including
-  the SyncTeX file if it exists. The files are moved to the source directory,
-  i.e. the directory containing the processed root TeX file.
+    the SyncTeX file if it exists. The files are moved to the source directory,
+    i.e. the directory containing the processed root TeX file.
   * The behavior is configurable via `latex.moveResultToSourceDirectory`.
 * Added some basic error log parsing routines. Only handles the simplest of
   scenarios, needs to be expanded.
@@ -65,13 +84,16 @@
   * Adds a master/root TeX file feature which supports both magic comments and a
     heuristic search algorithm. If building a descendant TeX file, this feature
     ensures the root file is built instead.
-* Improved platform detection routines, which ultimately improves support for Windows.
+* Improved platform detection routines, which ultimately improves support for
+  Windows.
 * Merged [Pull Request 24]((https://github.com/thomasjo/atom-latex/pull/24).
-  * Adds support for opening the resulting PDF after a successful build. Behavior is configurable.
+  * Adds support for opening the resulting PDF after a successful build.
+    Behavior is configurable.
 * Added a basic Skim.app opener.
-  * Used by default if Skim.app exists at the configured path (default path: `/Applications/Skim.app`).
-* Migrated configuration to the new JSON schema approach supported by Atom for an improved
-  user experience.
+  * Used by default if Skim.app exists at the configured path (default path:
+    `/Applications/Skim.app`).
+* Migrated configuration to the new JSON schema approach supported by Atom for
+  an improved user experience.
 
 ## 0.11.0
 * Merged [Pull Request 10](https://github.com/thomasjo/atom-latex/pull/10).
