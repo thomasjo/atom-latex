@@ -148,7 +148,7 @@ class Composer
 
     editorDetails =
       filePath: editor.getPath()
-      lineNumber: editor.getCursorScreenPosition().row + 1
+      lineNumber: editor.getCursorBufferPosition().row + 1
 
   alterParentPath: (targetPath, originalPath) ->
     targetDir = path.dirname(targetPath)
