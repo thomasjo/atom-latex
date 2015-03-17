@@ -1,7 +1,7 @@
 {
   "name": "latex",
   "main": "./lib/main",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "Compiles LaTeX files by invoking latexmk.",
   "repository": "https://github.com/thomasjo/atom-latex",
   "license": "MIT",
