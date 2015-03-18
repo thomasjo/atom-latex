@@ -3,6 +3,10 @@ path = require 'path'
 
 module.exports =
 class Composer
+  destroy: ->
+    @destroyProgressIndicator()
+    @destroyErrorIndicator()
+
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
