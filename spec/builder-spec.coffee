@@ -21,32 +21,32 @@ describe "Builder", ->
       expectedPath = [defaultTexPath, process.env.PATH].join(path.delimiter)
       constructedPath = builder.constructPath()
 
-      expect(constructedPath).toEqual(expectedPath)
+      expect(constructedPath).toBe expectedPath
 
     it "replaces surrounded $PATH with process.env.PATH", ->
       helpers.spyOnConfig('latex.texPath', texPath = '/foo:$PATH:/bar')
       expectedPath = texPath.replace('$PATH', process.env.PATH)
       constructedPath = builder.constructPath()
 
-      expect(constructedPath).toEqual(expectedPath)
+      expect(constructedPath).toBe expectedPath
 
     it "replaces leading $PATH with process.env.PATH", ->
       helpers.spyOnConfig('latex.texPath', texPath = '$PATH:/bar')
       expectedPath = texPath.replace('$PATH', process.env.PATH)
       constructedPath = builder.constructPath()
 
-      expect(constructedPath).toEqual(expectedPath)
+      expect(constructedPath).toBe expectedPath
 
     it "replaces trailing $PATH with process.env.PATH", ->
       helpers.spyOnConfig('latex.texPath', texPath = '/foo:$PATH')
       expectedPath = texPath.replace('$PATH', process.env.PATH)
       constructedPath = builder.constructPath()
 
-      expect(constructedPath).toEqual(expectedPath)
+      expect(constructedPath).toBe expectedPath
 
     it "prepends process.env.PATH with texPath", ->
       helpers.spyOnConfig('latex.texPath', texPath = '/foo')
       expectedPath = [texPath, process.env.PATH].join(path.delimiter)
       constructedPath = builder.constructPath()
 
-      expect(constructedPath).toEqual(expectedPath)
+      expect(constructedPath).toBe expectedPath

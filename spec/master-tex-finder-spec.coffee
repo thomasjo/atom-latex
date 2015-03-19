@@ -13,7 +13,7 @@ describe "MasterTexFinder", ->
       inc2Path = path.join(fixturesPath, 'inc2.tex')
       finder = new MasterTexFinder(inc2Path)
 
-      expect(finder.getMasterTexPath()).toEqual(path.join(fixturesPath, 'master.tex'))
+      expect(finder.getMasterTexPath()).toBe path.join(fixturesPath, 'master.tex')
 
     it "immediately return the given file, if itself is a root-file", ->
       masterFile = path.join(fixturesPath, 'master.tex')
@@ -21,7 +21,7 @@ describe "MasterTexFinder", ->
 
       spyOn(finder, 'getTexFilesList').andCallThrough()
 
-      expect(finder.getMasterTexPath()).toEqual(masterFile)
+      expect(finder.getMasterTexPath()).toBe masterFile
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
 
     it "returns the original file if more than one file is a master file", ->
@@ -31,7 +31,7 @@ describe "MasterTexFinder", ->
       inc1Path = path.join(multiMasterFixturePath, 'inc1.tex')
       finder = new MasterTexFinder(inc1Path)
 
-      expect(finder.getMasterTexPath()).toEqual(inc1Path)
+      expect(finder.getMasterTexPath()).toBe inc1Path
 
     it "immediately returns the file specified by the magic comment when present", ->
       inc1Path = path.join(fixturesPath, 'inc1.tex')
@@ -39,7 +39,7 @@ describe "MasterTexFinder", ->
 
       spyOn(finder, 'getTexFilesList').andCallThrough()
 
-      expect(finder.getMasterTexPath()).toEqual(path.join(fixturesPath, 'master.tex'))
+      expect(finder.getMasterTexPath()).toBe path.join(fixturesPath, 'master.tex')
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
 
   describe "isMasterFile", ->
@@ -48,7 +48,7 @@ describe "MasterTexFinder", ->
       inc2Path = path.join(fixturesPath, 'inc2.tex')
       finder = new MasterTexFinder(inc2Path)
 
-      expect(finder.isMasterFile(masterFilePath)).toEqual(true)
+      expect(finder.isMasterFile(masterFilePath)).toBe true
 
   describe "getTexFilesList", ->
     it "returns the list of tex files in the project directory", ->
@@ -58,4 +58,4 @@ describe "MasterTexFinder", ->
       finder = new MasterTexFinder(inc2Path)
       sortedFileList = finder.getTexFilesList().sort()
 
-      expect(sortedFileList).toEqual(expectedFileList)
+      expect(sortedFileList).toEqual expectedFileList

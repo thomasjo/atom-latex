@@ -41,7 +41,7 @@ describe "Latex", ->
       latex.setDefaultOpener()
 
       expect(origin).toBeUndefined()
-      expect(latex.opener.constructor.name).toEqual(opener.constructor.name)
+      expect(latex.opener.constructor.name).toBe opener.constructor.name
 
   describe "Logger proxy", ->
     [logger] = []
@@ -82,7 +82,7 @@ describe "Latex", ->
 
       opener = latex.resolveOpenerImplementation('darwin')
 
-      expect(opener.name).toEqual('SkimOpener')
+      expect(opener.name).toBe 'SkimOpener'
 
     it "returns PreviewOpener when Skim is not installed, and running on OS X", ->
       atom.config.set('latex.skimPath', '/foo/Skim.app')

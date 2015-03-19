@@ -25,7 +25,7 @@ describe "LatexmkBuilder", ->
       ]
       args = builder.constructArgs(filePath)
 
-      expect(args).toEqual(expectedArgs)
+      expect(args).toEqual expectedArgs
 
     it "adds -shell-escape flag when package config value is set", ->
       helpers.spyOnConfig('latex.enableShellEscape', true)
