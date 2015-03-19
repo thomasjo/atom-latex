@@ -10,33 +10,13 @@ describe "LogParser", ->
     fixturesPath = atom.project.getPaths()[0]
 
   describe "parse", ->
-    it "returns the expected output path after a successful build", ->
-      oldTimeoutInterval = helpers.setTimeoutInterval(10000)
-      fixturesPath = helpers.cloneFixtures()
-      expectedFilePath = path.join(fixturesPath, 'output', 'file.pdf')
-      atom.config.set('latex.outputDirectory', 'output')
+    it "returns the expected output path", ->
+      logFile = path.join(fixturesPath, 'file.log')
+      parser = new LogParser(logFile)
+      result = parser.parse()
+      outputFilePath = path.posix.resolve(result.outputFilePath)
 
-      composer = new Composer()
-      spyOn(composer, 'showResult').andCallThrough()
-      spyOn(latex, 'getOpener').andReturn()
-
-      waitsForPromise ->
-        atom.workspace.open('file.tex')
-
-      runs ->
-        composer.build()
-
-      waitsFor ->
-        composer.showResult.callCount is 1
-
-      runs ->
-        helpers.setTimeoutInterval(oldTimeoutInterval)
-
-        logFile = path.join(fixturesPath, 'output', 'file.log')
-        parser = new LogParser(logFile)
-        result = parser.parse()
-
-        expect(result.outputFilePath).toEqual(expectedFilePath)
+      expect(outputFilePath).toBe '/foo/output/file.pdf'
 
     it "parses and returns all errors", ->
       logFile = path.join(fixturesPath, 'errors.log')
