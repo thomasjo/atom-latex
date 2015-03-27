@@ -12,12 +12,12 @@ class Composer
 
     unless filePath?
       latex.log.warning('File needs to be saved to disk before it can be TeXified.')
-      return false
+      return Promise.reject(false)
 
     unless @isTexFile(filePath)
       latex.log.warning("File does not seem to be a TeX file;
         unsupported extension '#{path.extname(filePath)}'.")
-      return false
+      return Promise.reject(false)
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
 
@@ -27,18 +27,19 @@ class Composer
 
     @destroyErrorIndicator()
     @showProgressIndicator()
-    proc = builder.run args, (statusCode) =>
-      @destroyProgressIndicator()
-      result = builder.parseLogFile(rootFilePath)
 
-      unless result?.outputFilePath?
-        @showError(statusCode, result, builder)
-        return false
+    promise = new Promise (resolve, reject) =>
+      proc = builder.run args, (statusCode) =>
+        @destroyProgressIndicator()
+        result = builder.parseLogFile(rootFilePath)
 
-      @moveResult(result, rootFilePath) if @shouldMoveResult()
-      @showResult(result)
+        unless result?.outputFilePath?
+          @showError(statusCode, result, builder)
+          reject(statusCode)
 
-    return true
+        @moveResult(result, rootFilePath) if @shouldMoveResult()
+        @showResult(result)
+        resolve(statusCode)
 
   sync: ->
     {filePath, lineNumber} = @getEditorDetails()

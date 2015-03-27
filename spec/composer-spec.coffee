@@ -32,29 +32,42 @@ describe "Composer", ->
     it "does nothing for new, unsaved files", ->
       initializeSpies({filePath: null})
 
-      result = composer.build()
+      result = undefined
+      waitsForPromise ->
+        composer.build().catch (r) -> result = r
 
-      expect(result).toBe false
-      expect(composer.showResult).not.toHaveBeenCalled()
-      expect(composer.showError).not.toHaveBeenCalled()
+      runs ->
+        expect(result).toBe false
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
 
     it "does nothing for unsupported file extensions", ->
       initializeSpies({filePath: 'foo.bar'})
 
-      result = composer.build()
+      result = undefined
+      waitsForPromise ->
+        composer.build().catch (r) -> result = r
 
-      expect(result).toBe false
-      expect(composer.showResult).not.toHaveBeenCalled()
-      expect(composer.showError).not.toHaveBeenCalled()
+      runs ->
+        expect(result).toBe false
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
 
     it "saves the file before building, if modified", ->
       initializeSpies({filePath: 'file.tex'})
-
       editor.isModified.andReturn(true)
-      composer.build()
 
-      expect(editor.isModified).toHaveBeenCalled()
-      expect(editor.save).toHaveBeenCalled()
+      builder.parseLogFile.andReturn result =
+        outputFilePath: 'file.pdf'
+        errors: []
+        warnings: []
+
+      waitsForPromise ->
+        composer.build()
+
+      runs ->
+        expect(editor.isModified).toHaveBeenCalled()
+        expect(editor.save).toHaveBeenCalled()
 
     it "invokes `showResult` after a successful build, with expected log parsing result", ->
       initializeSpies({filePath: 'file.tex'})
@@ -64,11 +77,8 @@ describe "Composer", ->
         errors: []
         warnings: []
 
-      runs ->
+      waitsForPromise ->
         composer.build()
-
-      waitsFor ->
-        composer.showResult.callCount is 1
 
       runs ->
         expect(composer.showResult).toHaveBeenCalledWith(result)
@@ -81,11 +91,8 @@ describe "Composer", ->
         errors: []
         warnings: []
 
-      runs ->
+      waitsForPromise shouldReject: true, ->
         composer.build()
-
-      waitsFor ->
-        composer.showError.callCount is 1
 
       runs ->
         expect(composer.showError).toHaveBeenCalled()
@@ -95,11 +102,8 @@ describe "Composer", ->
 
       builder.parseLogFile.andReturn(null)
 
-      runs ->
+      waitsForPromise shouldReject: true, ->
         composer.build()
-
-      waitsFor ->
-        composer.showError.callCount is 1
 
       runs ->
         expect(composer.showError).toHaveBeenCalled()
