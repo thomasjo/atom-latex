@@ -22,7 +22,10 @@ describe "Composer", ->
         filePath: filePath
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
-      builder.run.andCallFake (args, callback) -> callback(statusCode)
+      builder.run.andCallFake (args) ->
+        switch statusCode
+          when 0 then Promise.resolve(statusCode)
+          else Promise.reject(statusCode)
       spyOn(latex, 'getBuilder').andReturn(builder)
 
     beforeEach ->

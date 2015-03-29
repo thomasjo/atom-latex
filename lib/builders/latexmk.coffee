@@ -6,18 +6,19 @@ LogParser = require '../parsers/log-parser'
 
 module.exports =
 class LatexmkBuilder extends Builder
-  run: (args, callback) ->
+  run: (args) ->
     command = "latexmk #{args.join(' ')}"
     options = @constructChildProcessOptions()
     options.env['max_print_line'] = 1000  # Max log file line length.
 
-    # TODO: Add support for killing the process.
-    proc = child_process.exec command, options, (error, stdout, stderr) ->
-      if error?
-        callback(error.code)
-      else
-        callback(0)
-    proc
+    promise = new Promise (resolve, reject) ->
+      # TODO: Add support for killing the process.
+      proc = child_process.exec command, options, (error, stdout, stderr) ->
+        if error?
+          console.log error.code
+          reject(error.code)
+        else
+          resolve(0)
 
   constructArgs: (filePath) ->
     args = [

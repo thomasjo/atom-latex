@@ -73,12 +73,13 @@ describe "LatexmkBuilder", ->
       expect(logParser.parse).toHaveBeenCalled()
 
   describe "run", ->
+    [exitCode] = []
+
     it "successfully executes latexmk when given a valid TeX file", ->
-      exitCode = undefined
       args = builder.constructArgs(filePath)
 
-      builder.run args, (code) -> exitCode = code
-      waitsFor -> exitCode isnt undefined
+      waitsForPromise ->
+        builder.run(args).then (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 0
@@ -87,9 +88,8 @@ describe "LatexmkBuilder", ->
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
       args = builder.constructArgs(filePath)
 
-      exitCode = undefined
-      builder.run args, (code) -> exitCode = code
-      waitsFor -> exitCode isnt undefined
+      waitsForPromise ->
+        builder.run(args).then (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 0
@@ -97,9 +97,8 @@ describe "LatexmkBuilder", ->
     it "fails to execute latexmk when given invalid arguments", ->
       args = ['-invalid-argument']
 
-      exitCode = undefined
-      builder.run args, (code) -> exitCode = code
-      waitsFor -> exitCode isnt undefined
+      waitsForPromise ->
+        builder.run(args).catch (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 10
@@ -111,9 +110,8 @@ describe "LatexmkBuilder", ->
 
       expect(removed).toEqual ['-f']
 
-      exitCode = undefined
-      builder.run args, (code) -> exitCode = code
-      waitsFor -> exitCode isnt undefined
+      waitsForPromise ->
+        builder.run(args).catch (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 11

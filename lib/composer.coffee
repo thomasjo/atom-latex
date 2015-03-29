@@ -29,17 +29,26 @@ class Composer
     @showProgressIndicator()
 
     promise = new Promise (resolve, reject) =>
-      proc = builder.run args, (statusCode) =>
-        @destroyProgressIndicator()
+      processBuildResult = (statusCode) =>
         result = builder.parseLogFile(rootFilePath)
-
         unless result?.outputFilePath?
-          @showError(statusCode, result, builder)
-          reject(statusCode)
+          throw { statusCode, result, builder }
 
         @moveResult(result, rootFilePath) if @shouldMoveResult()
         @showResult(result)
         resolve(statusCode)
+
+      showBuildError = (error) =>
+        statusCode = error
+        {statusCode, result, builder} = error if error.statusCode?
+
+        @showError(statusCode, result, builder)
+        reject(statusCode)
+
+      builder.run(args)
+        .then(processBuildResult)
+        .catch(showBuildError)
+        .then => @destroyProgressIndicator()
 
   sync: ->
     {filePath, lineNumber} = @getEditorDetails()
