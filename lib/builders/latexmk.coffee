@@ -14,11 +14,7 @@ class LatexmkBuilder extends Builder
     promise = new Promise (resolve, reject) ->
       # TODO: Add support for killing the process.
       proc = child_process.exec command, options, (error, stdout, stderr) ->
-        if error?
-          console.log error.code
-          reject(error.code)
-        else
-          resolve(0)
+        resolve(error?.code ? 0)
 
   constructArgs: (filePath) ->
     args = [

@@ -98,7 +98,7 @@ describe "LatexmkBuilder", ->
       args = ['-invalid-argument']
 
       waitsForPromise ->
-        builder.run(args).catch (code) -> exitCode = code
+        builder.run(args).then (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 10
@@ -111,7 +111,7 @@ describe "LatexmkBuilder", ->
       expect(removed).toEqual ['-f']
 
       waitsForPromise ->
-        builder.run(args).catch (code) -> exitCode = code
+        builder.run(args).then (code) -> exitCode = code
 
       runs ->
         expect(exitCode).toBe 11
