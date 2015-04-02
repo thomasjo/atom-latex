@@ -28,7 +28,7 @@ class Composer
     @destroyErrorIndicator()
     @showProgressIndicator()
 
-    promise = new Promise (resolve, reject) =>
+    promise = new Promise((resolve, reject) =>
       showBuildError = (statusCode, result, builder) =>
         @showError(statusCode, result, builder)
         reject(statusCode)
@@ -45,6 +45,7 @@ class Composer
         .then(processBuildResult)
         .catch(showBuildError)
         .then => @destroyProgressIndicator()
+    )
 
   sync: ->
     {filePath, lineNumber} = @getEditorDetails()
