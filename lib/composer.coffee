@@ -129,7 +129,7 @@ class Composer
   showProgressIndicator: ->
     return @indicator if @indicator?
 
-    ProgressIndicatorView = require './progress-indicator-view'
+    ProgressIndicatorView = require './views/progress-indicator-view'
     @indicator = new ProgressIndicatorView()
     @statusBar?.addRightTile({item: @indicator, priority: 9001})
     @indicator
@@ -137,7 +137,7 @@ class Composer
   showErrorIndicator: ->
     return @errorIndicator if @errorIndicator?
 
-    ErrorIndicatorView = require './error-indicator-view'
+    ErrorIndicatorView = require './views/error-indicator-view'
     @errorIndicator = new ErrorIndicatorView()
     @statusBar?.addRightTile({item: @errorIndicator, priority: 9001})
     @errorIndicator
