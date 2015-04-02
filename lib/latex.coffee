@@ -26,7 +26,7 @@ class Latex
     else if @logger? and @log?
       @log.warning '''
         No PDF opener found.
-        For cross-platform viewing, consider install the pdf-view package.
+        For cross-platform viewing, consider installing the pdf-view package.
         '''
 
   createLogProxy: ->
