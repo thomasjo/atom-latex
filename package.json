@@ -15,6 +15,9 @@
     "underscore-plus": "^1.6.6",
     "wrench": "^1.5.8"
   },
+  "devDependencies": {
+    "coffeelint": "^1.9.3"
+  },
   "consumedServices": {
     "status-bar": {
       "versions": {
