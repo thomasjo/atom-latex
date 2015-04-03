@@ -2,6 +2,10 @@
   "arrow_spacing": {
     "level": "error"
   },
+  "braces_spacing": {
+    "level": "error",
+    "spaces": 0
+  },
   "coffeescript_error": {
     "level": "error"
   },
@@ -30,7 +34,7 @@
     "level": "ignore"
   },
   "newlines_after_classes": {
-    "level": "warn",
+    "level": "error",
     "value": 2
   },
   "no_backticks": {
@@ -40,7 +44,7 @@
     "level": "error"
   },
   "no_empty_functions": {
-    "level": "warn"
+    "level": "error"
   },
   "no_empty_param_list": {
     "level": "error"
@@ -49,7 +53,7 @@
     "level": "error"
   },
   "no_plusplus": {
-    "level": "warn"
+    "level": "error"
   },
   "no_stand_alone_at": {
     "level": "error"
@@ -66,9 +70,12 @@
     "level": "error"
   },
   "non_empty_constructor_needs_parens": {
-    "level": "warn"
+    "level": "error"
+  },
+  "prefer_english_operator": {
+    "level": "error"
   },
   "space_operators": {
-    "level": "warn"
+    "level": "error"
   }
 }
