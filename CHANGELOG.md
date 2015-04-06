@@ -1,3 +1,12 @@
+## 0.21.0
+* Adds feature flag for the (naive) master file search feature. The feature
+  attempts to search for a master file if we determine that the current file
+  is not a master file. And this is determined naively by presence, or lack
+  thereof, a `\documentclass` declaration. This does not work well in all
+  scenarios, so for the time being the feature can be disabled via the new
+  feature flag *Use Master File Search* (`atom.useMasterFileSearch`).
+  NOTE: This does not affect the *Magic Comments* feature.
+
 ## 0.20.0
 * Improved TeX path resolution by changing the old behavior of only using the
   `PATH` environment variable in the *Latexmk* child process' `PATH` environment
