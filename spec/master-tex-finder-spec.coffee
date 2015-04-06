@@ -1,3 +1,4 @@
+helpers = require './spec-helpers'
 path = require 'path'
 MasterTexFinder = require '../lib/master-tex-finder'
 
@@ -7,6 +8,8 @@ describe "MasterTexFinder", ->
   beforeEach ->
     rootPath = atom.project.getPaths()[0]
     fixturesPath = path.join(rootPath, 'master-tex-finder', 'single-master')
+
+    atom.config.set('latex.useMasterFileSearch', true)
 
   describe "getMasterTexPath", ->
     it "returns the master tex file for the current project", ->
@@ -41,6 +44,18 @@ describe "MasterTexFinder", ->
 
       expect(finder.getMasterTexPath()).toBe path.join(fixturesPath, 'master.tex')
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
+
+    it "returns the original file if the heuristic search feature is disabled", ->
+      inc2Path = path.join(fixturesPath, 'inc2.tex')
+      finder = new MasterTexFinder(inc2Path)
+
+      helpers.spyOnConfig('latex.useMasterFileSearch', false)
+      spyOn(finder, 'isMasterFile').andCallThrough()
+      spyOn(finder, 'searchForMasterFile').andCallThrough()
+
+      expect(finder.getMasterTexPath()).toBe inc2Path
+      expect(finder.isMasterFile).not.toHaveBeenCalled()
+      expect(finder.searchForMasterFile).not.toHaveBeenCalled()
 
   describe "isMasterFile", ->
     it "returns true if the given file is the master file", ->

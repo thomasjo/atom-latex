@@ -55,14 +55,16 @@ class MasterTexFinder
 
   # Returns the a latex master file.
   #
-  # If no latex master file can be found or if @filePath is an invalid file name returns @filePath
-  # If the @filePath is itself a master file, it returns immediately
-  # If @filePath contains a magic comment uses that comment to find determine the master file
-  # Otherwise it searches the directory where @filePath is contained for files
-  # having a "documentclass" declaration.
+  # If @filePath contains a magic comment uses that comment to determine the master file.
+  # Else if master file search is disabled, returns @filePath.
+  # Else if the @filePath is itself a master file, returns @filePath.
+  # Otherwise it searches the directory where @filePath is contained for files having a
+  #   "documentclass" declaration.
   getMasterTexPath: ->
-    masterPath = @getMagicCommentMasterFile()
-    return masterPath if masterPath?
+    return masterPath if masterPath = @getMagicCommentMasterFile()
+    return @filePath unless @isMasterFileSearchEnabled()
     return @filePath if @isMasterFile(@filePath)
 
     @searchForMasterFile()
+
+  isMasterFileSearchEnabled: -> atom.config.get('latex.useMasterFileSearch')

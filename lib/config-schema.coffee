@@ -70,3 +70,9 @@ module.exports =
       Supports $PATH substitution."
     type: 'string'
     default: ''
+
+  useMasterFileSearch:
+    description: 'Enables naive search for master/root file when building distributed documents.
+      Does not affect "Magic Comments" functionality.'
+    type: 'boolean'
+    default: true
