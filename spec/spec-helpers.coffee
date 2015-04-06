@@ -20,8 +20,10 @@ module.exports =
     Object.defineProperty(process, 'platform', {__proto__: null, value: name})
 
   spyOnConfig: (key, value) ->
+    get = atom.config.get
     spyOn(atom.config, 'get').andCallFake (_key) ->
       return value if _key is key
+      get.call(atom.config, key)
 
   setTimeoutInterval: (interval) ->
     env = jasmine.getEnv()
