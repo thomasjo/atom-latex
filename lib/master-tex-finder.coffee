@@ -42,14 +42,14 @@ class MasterTexFinder
   # Returns the list of tex files in the directory where @filePath lives that
   # contain a documentclass declaration.
   searchForMasterFile: ->
-    files = @getTexFilesList()
-    return unless files?
+    return unless files = @getTexFilesList()
     return @filePath if files.length is 0
     return files[0] if files.length is 1
 
     result = files.filter (path) => @isMasterFile(path)
     return result[0] if result.length is 1
 
+    # TODO: Nuke warning?
     console.warn 'Cannot find latex master file' unless atom.inSpecMode()
     @filePath
 
