@@ -1,6 +1,7 @@
 helpers = require './spec-helpers'
 fs = require 'fs-plus'
 path = require 'path'
+_ = require 'underscore-plus'
 Composer = require '../lib/composer'
 
 describe "Composer", ->
@@ -110,3 +111,42 @@ describe "Composer", ->
 
       runs ->
         expect(composer.showError).toHaveBeenCalled()
+
+  describe "clean", ->
+    extensions = ['.bar', '.baz', '.quux']
+    fakeFilePaths = (filePath) ->
+      filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
+      filePathSansExtension + ext for ext in extensions
+
+    initializeSpies = (filePath, filesToDelete) ->
+      existsSync = fs.existsSync
+      spyOn(fs, 'existsSync').andCallFake (filePath) ->
+        return _.contains(filesToDelete, filePath)
+        existsSync(filePath)
+
+      spyOn(composer, 'getEditorDetails').andReturn({filePath})
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+
+    beforeEach ->
+      spyOn(fs, 'removeSync').andReturn()
+      helpers.spyOnConfig('latex.cleanExtensions', extensions)
+
+    it "deletes all files for the current tex document when output has not been redirected", ->
+      filePath = '/a/foo.tex'
+      filesToDelete = fakeFilePaths(filePath)
+      initializeSpies(filePath, filesToDelete)
+
+      composer.clean()
+
+      expect(fs.removeSync.callCount).toBe 3
+      expect(fs.removeSync).toHaveBeenCalledWith(expectedPath) for expectedPath in filesToDelete
+
+    it "only deletes file that exist", ->
+      filePath = '/a/foo.tex'
+      fileToDelete = '/a/foo.bar'
+      initializeSpies(filePath, [fileToDelete])
+
+      composer.clean()
+
+      expect(fs.removeSync.callCount).toBe 1
+      expect(fs.removeSync).toHaveBeenCalledWith(fileToDelete)
