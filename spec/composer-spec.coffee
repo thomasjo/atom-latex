@@ -150,3 +150,12 @@ describe "Composer", ->
 
       expect(fs.removeSync.callCount).toBe 1
       expect(fs.removeSync).toHaveBeenCalledWith(fileToDelete)
+
+    it "stops immidiately if the file is not a TeX document", ->
+      filePath = 'foo.bar'
+      initializeSpies(filePath, [])
+
+      composer.clean()
+
+      expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
+      expect(fs.removeSync).not.toHaveBeenCalled()

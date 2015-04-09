@@ -61,21 +61,18 @@ class Composer
   # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
     {filePath} = @getEditorDetails()
-    return unless filePath?
+    return unless filePath? and @isTexFile(filePath)
 
     rootFilePath = @resolveRootFilePath(filePath)
+    rootPath = path.dirname(rootFilePath)
     rootFile = path.basename(rootFilePath)
-    rootFilePath = path.dirname(rootFilePath)
-
-    rootFile = rootFile.split('.')
-    rootFile.pop()
-    rootFile = rootFile.join('.')
+    rootFile = rootFile.substring(0, rootFile.lastIndexOf('.'))
 
     cleanExtensions = atom.config.get('latex.cleanExtensions')
     # NOTE: This needs to be done async.
     for extension in cleanExtensions
-      fileToRemove = path.join(rootFilePath, rootFile + extension)
-      fs.removeSync(fileToRemove) if fs.existsSync(fileToRemove)
+      candidatePath = path.join(rootPath, rootFile + extension)
+      fs.removeSync(candidatePath) if fs.existsSync(candidatePath)
 
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
