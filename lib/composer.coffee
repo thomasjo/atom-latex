@@ -28,7 +28,7 @@ class Composer
     @destroyErrorIndicator()
     @showProgressIndicator()
 
-    promise = new Promise((resolve, reject) =>
+    new Promise((resolve, reject) =>
       showBuildError = (statusCode, result, builder) =>
         @showError(statusCode, result, builder)
         reject(statusCode)
