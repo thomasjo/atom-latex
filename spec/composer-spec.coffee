@@ -119,16 +119,11 @@ describe "Composer", ->
       filePathSansExtension + ext for ext in extensions
 
     initializeSpies = (filePath, filesToDelete) ->
-      existsSync = fs.existsSync
-      spyOn(fs, 'existsSync').andCallFake (filePath) ->
-        return _.contains(filesToDelete, filePath)
-        existsSync(filePath)
-
       spyOn(composer, 'getEditorDetails').andReturn({filePath})
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
 
     beforeEach ->
-      spyOn(fs, 'removeSync').andReturn()
+      spyOn(fs, 'remove').andCallThrough()
       helpers.spyOnConfig('latex.cleanExtensions', extensions)
 
     it "deletes all files for the current tex document when output has not been redirected", ->
@@ -136,26 +131,21 @@ describe "Composer", ->
       filesToDelete = fakeFilePaths(filePath)
       initializeSpies(filePath, filesToDelete)
 
-      composer.clean()
+      candidatePaths = []
+      waitsForPromise ->
+        composer.clean().then (resolutions) ->
+          candidatePaths = _.pluck(resolutions, 'filePath')
 
-      expect(fs.removeSync.callCount).toBe 3
-      expect(fs.removeSync).toHaveBeenCalledWith(expectedPath) for expectedPath in filesToDelete
-
-    it "only deletes file that exist", ->
-      filePath = '/a/foo.tex'
-      fileToDelete = '/a/foo.bar'
-      initializeSpies(filePath, [fileToDelete])
-
-      composer.clean()
-
-      expect(fs.removeSync.callCount).toBe 1
-      expect(fs.removeSync).toHaveBeenCalledWith(fileToDelete)
+      runs ->
+        expect(candidatePaths).toEqual filesToDelete
 
     it "stops immidiately if the file is not a TeX document", ->
       filePath = 'foo.bar'
       initializeSpies(filePath, [])
 
-      composer.clean()
+      waitsForPromise shouldReject: true, ->
+        composer.clean()
 
-      expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
-      expect(fs.removeSync).not.toHaveBeenCalled()
+      runs ->
+        expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
+        expect(fs.remove).not.toHaveBeenCalled()
