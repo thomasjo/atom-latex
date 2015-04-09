@@ -49,6 +49,7 @@ class Composer
 
   sync: ->
     {filePath, lineNumber} = @getEditorDetails()
+    return unless filePath? and @isTexFile(filePath)
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
       latex.log.warning('Could not resolve path to output file associated with the current file.')
@@ -57,7 +58,6 @@ class Composer
     if opener = latex.getOpener()
       opener.open(outputFilePath, filePath, lineNumber)
 
-  # TODO: Improve overall code quality within this function.
   # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
     {filePath} = @getEditorDetails()
@@ -69,7 +69,7 @@ class Composer
     rootFile = rootFile.substring(0, rootFile.lastIndexOf('.'))
 
     cleanExtensions = atom.config.get('latex.cleanExtensions')
-    # NOTE: This needs to be done async.
+    # NOTE: This needs to be made async.
     for extension in cleanExtensions
       candidatePath = path.join(rootPath, rootFile + extension)
       fs.removeSync(candidatePath) if fs.existsSync(candidatePath)
