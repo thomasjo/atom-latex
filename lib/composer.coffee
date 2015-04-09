@@ -61,10 +61,7 @@ class Composer
   # NOTE: Does not support `latex.outputDirectory` setting!
   clean: ->
     {filePath} = @getEditorDetails()
-
-    unless filePath?
-      latex.log.warning('File needs to be saved to disk before clean can find the project files.')
-      return
+    return unless filePath?
 
     rootFilePath = @resolveRootFilePath(filePath)
     rootFile = path.basename(rootFilePath)
@@ -75,14 +72,10 @@ class Composer
     rootFile = rootFile.join('.')
 
     cleanExtensions = atom.config.get('latex.cleanExtensions')
-    # NOTE: This needs to be done async, and there's no point in being this noisy.
+    # NOTE: This needs to be done async.
     for extension in cleanExtensions
       fileToRemove = path.join(rootFilePath, rootFile + extension)
-      if fs.existsSync(fileToRemove)
-        fs.removeSync(fileToRemove)
-        console.info 'LaTeX clean removed: ' + fileToRemove
-      else
-        console.info 'LaTeX clean did not find: ' + fileToRemove
+      fs.removeSync(fileToRemove) if fs.existsSync(fileToRemove)
 
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
