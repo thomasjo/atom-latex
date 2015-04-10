@@ -1,10 +1,19 @@
 module.exports =
 class Latex
   initialize: ->
-    @setDefaultLogger()
     @createLogProxy()
-    @setDefaultBuilder()
-    @setDefaultOpener()
+
+    Object.defineProperty this, 'builder',
+      get: -> @__builder ?= @setDefaultBuilder()
+      set: (builder) -> @__builder = builder
+
+    Object.defineProperty this, 'logger',
+      get: -> @__logger ?= @setDefaultLogger()
+      set: (logger) -> @__logger = logger
+
+    Object.defineProperty this, 'opener',
+      get: -> @__opener ?= @setDefaultOpener()
+      set: (opener) -> @__opener = opener
 
   getBuilder: -> @builder
   getLogger: -> @logger
@@ -14,16 +23,16 @@ class Latex
 
   setDefaultBuilder: ->
     LatexmkBuilder = require './builders/latexmk'
-    @builder = new LatexmkBuilder()
+    @__builder = new LatexmkBuilder()
 
   setDefaultLogger: ->
     ConsoleLogger = require './loggers/console-logger'
-    @logger = new ConsoleLogger()
+    @__logger = new ConsoleLogger()
 
   setDefaultOpener: ->
     if OpenerImpl = @resolveOpenerImplementation(process.platform)
-      @opener = new OpenerImpl()
-    else if @logger? and @log?
+      @__opener = new OpenerImpl()
+    else if @__logger? and @log?
       @log.warning '''
         No PDF opener found.
         For cross-platform viewing, consider installing the pdf-view package.
