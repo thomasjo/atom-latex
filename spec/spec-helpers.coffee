@@ -1,12 +1,8 @@
 require './spec-bootstrap'
+
 fs = require 'fs-plus'
 temp = require 'temp'
 wrench = require 'wrench'
-Opener = require '../lib/opener'
-
-class NullOpener extends Opener
-  open: (filePath, texPath, lineNumber, callback) -> null
-
 
 module.exports =
   cloneFixtures: ->
@@ -30,5 +26,3 @@ module.exports =
     originalInterval = env.defaultTimeoutInterval
     env.defaultTimeoutInterval = interval
     originalInterval
-
-  nullOpener: -> new NullOpener()

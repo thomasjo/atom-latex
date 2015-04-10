@@ -1,11 +1,6 @@
 Latex = require '../lib/latex'
-Logger = require '../lib/logger'
-
-class NullLogger extends Logger
-  error: -> null
-  warning: -> null
-  info: -> null
+{Logger} = require './stubs'
 
 window.latex = new Latex()
 latex.initialize()
-latex.setLogger(new NullLogger())
+latex.setLogger(new Logger())
