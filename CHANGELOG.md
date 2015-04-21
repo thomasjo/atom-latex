@@ -1,3 +1,8 @@
+## 0.22.0
+* `Composer:getEditorDetails` now always returns an object.
+  Fixes [\#74](https://github.com/thomasjo/atom-latex/issues/74).
+* ... and enough, various, mostly internal changes to warrant a minor release instead of just a patch release.
+
 ## 0.21.0
 * Adds feature flag for the (naive) master file search feature. The feature
   attempts to search for a master file if we determine that the current file
