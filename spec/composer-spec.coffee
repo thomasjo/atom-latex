@@ -112,6 +112,16 @@ describe "Composer", ->
       runs ->
         expect(composer.showError).toHaveBeenCalled()
 
+    it "handles active item not being a text editor", ->
+      spyOn(atom.workspace, 'getActiveTextEditor').andReturn()
+      spyOn(composer, 'getEditorDetails').andCallThrough()
+
+      waitsForPromise shouldReject: true, ->
+        composer.build()
+
+      runs ->
+        expect(composer.getEditorDetails).toHaveBeenCalled()
+
   describe "clean", ->
     extensions = ['.bar', '.baz', '.quux']
     fakeFilePaths = (filePath) ->

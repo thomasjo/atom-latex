@@ -9,6 +9,7 @@ class Composer
 
   build: ->
     {editor, filePath} = @getEditorDetails()
+    return Promise.reject(false) unless editor?
 
     unless filePath?
       latex.log.warning('File needs to be saved to disk before it can be TeXified.')
@@ -150,12 +151,10 @@ class Composer
 
   getEditorDetails: ->
     editor = atom.workspace.getActiveTextEditor()
-    return unless editor?
-
     editorDetails =
       editor: editor
-      filePath: editor.getPath()
-      lineNumber: editor.getCursorBufferPosition().row + 1
+      filePath: editor?.getPath()
+      lineNumber: editor?.getCursorBufferPosition()?.row + 1
 
   alterParentPath: (targetPath, originalPath) ->
     targetDir = path.dirname(targetPath)
