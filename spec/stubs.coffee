@@ -13,4 +13,4 @@ class NullOpener extends Opener
 
 module.exports =
   Logger: NullLogger
-  Opener: NullOpener
+  NullOpener: NullOpener

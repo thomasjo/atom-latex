@@ -1,7 +1,7 @@
 helpers = require './spec-helpers'
 fs = require 'fs-plus'
 Latex = require '../lib/latex'
-{Opener} = require './stubs'
+{NullOpener} = require './stubs'
 
 describe "Latex", ->
   [latex, globalLatex] = []
@@ -16,7 +16,7 @@ describe "Latex", ->
 
   describe "initialize", ->
     it "initializes all properties", ->
-      spyOn(latex, 'resolveOpenerImplementation').andReturn(Opener)
+      spyOn(latex, 'resolveOpenerImplementation').andReturn(NullOpener)
 
       expect(latex.builder).toBeDefined()
       expect(latex.logger).toBeDefined()
@@ -24,28 +24,22 @@ describe "Latex", ->
 
   describe "getDefaultBuilder", ->
     it "returns an instance of LatexmkBuilder", ->
-      origin = latex.__builder
-      builder = latex.getDefaultBuilder()
+      defaultBuilder = latex.getDefaultBuilder()
 
-      expect(origin).toBeUndefined()
-      expect(builder.constructor.name).toBe 'LatexmkBuilder'
+      expect(defaultBuilder.constructor.name).toBe 'LatexmkBuilder'
 
   describe "getDefaultLogger", ->
     it "returns an instance of ConsoleLogger", ->
-      origin = latex.__logger
-      logger = latex.getDefaultLogger()
+      defaultLogger = latex.getDefaultLogger()
 
-      expect(origin).toBeUndefined()
-      expect(logger.constructor.name).toBe 'ConsoleLogger'
+      expect(defaultLogger.constructor.name).toBe 'ConsoleLogger'
 
   describe "getDefaultOpener", ->
     it "returns an instance of a resolved implementation of Opener", ->
-      origin = latex.__opener
-      spyOn(latex, 'resolveOpenerImplementation').andReturn(Opener)
-      opener = latex.getDefaultOpener()
+      spyOn(latex, 'resolveOpenerImplementation').andReturn(NullOpener)
+      defaultOpener = latex.getDefaultOpener()
 
-      expect(origin).toBeUndefined()
-      expect(opener.constructor.name).toBe Opener.name
+      expect(defaultOpener.constructor.name).toBe NullOpener.name
 
   describe "Logger proxy", ->
     [logger] = []
