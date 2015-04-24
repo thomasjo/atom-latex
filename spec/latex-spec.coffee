@@ -1,4 +1,5 @@
 helpers = require './spec-helpers'
+fs = require 'fs-plus'
 Latex = require '../lib/latex'
 {Opener} = require './stubs'
 
