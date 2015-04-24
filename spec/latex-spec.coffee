@@ -9,9 +9,7 @@ describe "Latex", ->
   beforeEach ->
     globalLatex = window.latex
     delete window.latex
-
     latex = new Latex()
-    latex.initialize()
 
   afterEach ->
     window.latex = globalLatex

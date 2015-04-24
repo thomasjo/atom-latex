@@ -29,8 +29,8 @@ module.exports =
 
     Latex = require './latex'
     window.latex = new Latex()
-    latex.initialize()
 
     Composer = require './composer'
     @composer = new Composer()
+
     @bootstrapped = true
