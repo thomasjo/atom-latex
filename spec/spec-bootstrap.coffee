@@ -1,5 +1,5 @@
 Latex = require '../lib/latex'
-{Logger} = require './stubs'
+{NullLogger} = require './stubs'
 
 window.latex = new Latex()
-latex.setLogger(new Logger())
+latex.setLogger(new NullLogger())
