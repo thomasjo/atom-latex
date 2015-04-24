@@ -7,12 +7,12 @@ describe "Latex", ->
   [latex, globalLatex] = []
 
   beforeEach ->
-    globalLatex = window.latex
-    delete window.latex
+    globalLatex = global.latex
+    delete global.latex
     latex = new Latex()
 
   afterEach ->
-    window.latex = globalLatex
+    global.latex = globalLatex
 
   describe "initialize", ->
     it "initializes all properties", ->
