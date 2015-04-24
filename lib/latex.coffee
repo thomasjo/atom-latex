@@ -15,6 +15,10 @@ class Latex
       get: -> @__opener ?= @setDefaultOpener()
       set: (opener) -> @__opener = opener
 
+    atom.config.onDidChange 'latex.useNotificationsLogger', (useNotificationsLogger) =>
+      NotificationsLogger = require './loggers/notifications-logger'
+      @__logger = new NotificationsLogger()
+
   getBuilder: -> @builder
   getLogger: -> @logger
   getOpener: -> @opener
@@ -26,6 +30,10 @@ class Latex
     @__builder = new LatexmkBuilder()
 
   setDefaultLogger: ->
+    if atom.config.get('latex.useNotificationsLogger')
+      NotificationsLogger = require './loggers/notifications-logger'
+      return @__logger = new NotificationsLogger()
+
     ConsoleLogger = require './loggers/console-logger'
     @__logger = new ConsoleLogger()
 

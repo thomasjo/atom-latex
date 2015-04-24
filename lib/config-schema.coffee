@@ -76,3 +76,9 @@ module.exports =
       Does not affect "Magic Comments" functionality.'
     type: 'boolean'
     default: true
+
+  useNotificationsLogger:
+    title: 'Use Notifications Logger (Experimental)'
+    description: "Log errors, warnings, etc. using Atom's notification system."
+    type: 'boolean'
+    default: false
