@@ -22,30 +22,30 @@ describe "Latex", ->
       expect(latex.logger).toBeDefined()
       expect(latex.opener).toBeDefined()
 
-  describe "setDefaultBuilder", ->
-    it "sets the default builder to LatexmkBuilder", ->
+  describe "getDefaultBuilder", ->
+    it "returns an instance of LatexmkBuilder", ->
       origin = latex.__builder
-      latex.setDefaultBuilder()
+      builder = latex.getDefaultBuilder()
 
       expect(origin).toBeUndefined()
-      expect(latex.builder.constructor.name).toBe 'LatexmkBuilder'
+      expect(builder.constructor.name).toBe 'LatexmkBuilder'
 
-  describe "setDefaultLogger", ->
-    it "sets the default logger to ConsoleLogger", ->
+  describe "getDefaultLogger", ->
+    it "returns an instance of ConsoleLogger", ->
       origin = latex.__logger
-      latex.setDefaultLogger()
+      logger = latex.getDefaultLogger()
 
       expect(origin).toBeUndefined()
-      expect(latex.logger.constructor.name).toBe 'ConsoleLogger'
+      expect(logger.constructor.name).toBe 'ConsoleLogger'
 
-  describe "setDefaultOpener", ->
-    it "sets the default logger as resolved", ->
+  describe "getDefaultOpener", ->
+    it "returns an instance of a resolved implementation of Opener", ->
       origin = latex.__opener
       spyOn(latex, 'resolveOpenerImplementation').andReturn(Opener)
-      latex.setDefaultOpener()
+      opener = latex.getDefaultOpener()
 
       expect(origin).toBeUndefined()
-      expect(latex.opener.constructor.name).toBe Opener.name
+      expect(opener.constructor.name).toBe Opener.name
 
   describe "Logger proxy", ->
     [logger] = []
