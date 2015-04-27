@@ -59,11 +59,11 @@ describe "LatexmkBuilder", ->
 
       expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath)
 
-    it "returns undefined if passed a file path that does not exist", ->
+    it "returns null if passed a file path that does not exist", ->
       filePath = "/foo/bar/quux.tex"
       result = builder.parseLogFile(filePath)
 
-      expect(result).toBeUndefined()
+      expect(result).toBeNull()
       expect(logParser.parse).not.toHaveBeenCalled()
 
     it "attempts to parse the resolved log file", ->

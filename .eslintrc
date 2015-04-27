@@ -12,10 +12,12 @@
     "strict": 0,
 
     "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
+    "camelcase": 0,
     "comma-dangle": [2, "always-multiline"],
     "consistent-this": [2, "self"],
     "curly": 2,
     "dot-notation": [2, {"allowPattern": "^__\\w+$"}],
+    "eqeqeq": 2,
     "indent": [2, 2],
     "new-cap": 2,
     "new-parens": 2,
