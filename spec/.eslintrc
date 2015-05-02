@@ -1,0 +1,12 @@
+{
+  "globals": {
+    "atom": true,
+    "jasmine": true,
+    "it": true,
+    "describe": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "expect": true,
+    "spyOn": true,
+  }
+}
