@@ -8,5 +8,7 @@
     "afterEach": true,
     "expect": true,
     "spyOn": true,
+    "waitsForPromise": true,
+    "runs": true,
   }
 }
