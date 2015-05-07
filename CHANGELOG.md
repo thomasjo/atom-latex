@@ -1,3 +1,11 @@
+## 0.23.0
+* Migrate from CoffeeScript to Babel.
+
+Ideally this should have been a major release since we're migrating away
+from CoffeeScript to ES6/ES7 via the Babel transpiler (built into Atom). But
+since we're not yet ready for v1.0.0, this major release is tagged as a
+minor release.
+
 ## 0.22.0
 * `Composer:getEditorDetails` now always returns an object.
   Fixes [\#74](https://github.com/thomasjo/atom-latex/issues/74).
