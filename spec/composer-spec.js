@@ -2,7 +2,7 @@
 
 import helpers from "./spec-helpers";
 import fs from "fs-plus";
-import _ from "underscore-plus";
+import _ from "lodash";
 import Composer from "../lib/composer";
 
 describe("Composer", function() {
@@ -158,7 +158,7 @@ describe("Composer", function() {
 
     function fakeFilePaths(filePath) {
       const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf("."));
-      return _.map(extensions, ext => filePathSansExtension + ext);
+      return extensions.map(ext => filePathSansExtension + ext);
     }
 
     function initializeSpies(filePath) {
