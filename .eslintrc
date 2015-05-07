@@ -1,0 +1,32 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+  },
+  "globals": {
+    "atom": true,
+    "latex": true,
+  },
+  "rules": {
+    "strict": 0,
+
+    "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
+    "camelcase": 0,
+    "comma-dangle": [2, "always-multiline"],
+    "consistent-this": [2, "self"],
+    "curly": 2,
+    "dot-notation": [2, {"allowPattern": "^__\\w+$"}],
+    "eqeqeq": 2,
+    "indent": [2, 2],
+    "new-cap": 2,
+    "new-parens": 2,
+    "no-multiple-empty-lines": 2,
+    "no-spaced-func": 2,
+    "no-var": 2,
+    "space-in-brackets": [2, "never"],
+    "space-in-parens": [2, "never"],
+    "quotes": [2, "double"],
+  },
+}
