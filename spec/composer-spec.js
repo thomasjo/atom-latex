@@ -202,4 +202,34 @@ describe("Composer", function() {
       });
     });
   });
+
+  describe("shouldMoveResult", function() {
+    it("should return false when using neither an output directory, nor the move option", function() {
+      helpers.spyOnConfig("latex.outputDirectory", "");
+      helpers.spyOnConfig("latex.moveResultToSourceDirectory", false);
+
+      expect(composer.shouldMoveResult()).toBe(false);
+    });
+
+    it("should return false when not using an output directory, but using the move option", function() {
+      helpers.spyOnConfig("latex.outputDirectory", "");
+      helpers.spyOnConfig("latex.moveResultToSourceDirectory", true);
+
+      expect(composer.shouldMoveResult()).toBe(false);
+    });
+
+    it("should return false when not using the move option, but using an output directory", function() {
+      helpers.spyOnConfig("latex.outputDirectory", "baz");
+      helpers.spyOnConfig("latex.moveResultToSourceDirectory", false);
+
+      expect(composer.shouldMoveResult()).toBe(false);
+    });
+
+    it("should return true when using both an output directory and the move option", function() {
+      helpers.spyOnConfig("latex.outputDirectory", "baz");
+      helpers.spyOnConfig("latex.moveResultToSourceDirectory", true);
+
+      expect(composer.shouldMoveResult()).toBe(true);
+    });
+  });
 });
