@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "version": "0.23.3",
+  "version": "0.23.4",
   "description": "Compiles LaTeX files by invoking latexmk.",
   "keywords": [
     "tex",
