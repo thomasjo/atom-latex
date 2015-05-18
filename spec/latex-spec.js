@@ -135,13 +135,15 @@ describe("Latex", function() {
     });
 
     it("does not support GNU/Linux", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(false);
       const opener = latex.resolveOpenerImplementation("linux");
-      expect(opener).toBeUndefined();
+      expect(opener).toBeNull();
     });
 
     it("does not support unknown operating systems", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(false);
       const opener = latex.resolveOpenerImplementation("foo");
-      expect(opener).toBeUndefined();
+      expect(opener).toBeNull();
     });
   });
 });
