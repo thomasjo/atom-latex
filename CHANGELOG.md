@@ -1,3 +1,8 @@
+# 0.24.0
+* Clicking the error indicator in the status bar now opens the associated log
+  file instead of opening the developer console, and in addition attempts to
+  scroll to the first error.
+
 ## 0.23.0
 * Migrate from CoffeeScript to Babel.
 
