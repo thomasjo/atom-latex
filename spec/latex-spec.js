@@ -1,7 +1,6 @@
 "use babel";
 
 import "./spec-helpers";
-import fs from "fs-plus";
 import Latex from "../lib/latex";
 import {NullOpener} from "./stubs";
 
