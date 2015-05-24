@@ -123,15 +123,21 @@ describe("Latex", function() {
     });
 
     it("returns AtomPdfOpener as a fallback, if the pdf-view package is installed", function() {
-      const resolvePackagePath = atom.packages.resolvePackagePath;
-      atom.packages.resolvePackagePath.andCallFake(name => {
-        if (name === "pdf-view") { return true; }
-        return resolvePackagePath(name);
-      });
-
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
       const opener = latex.resolveOpenerImplementation("foo");
 
       expect(opener.name).toBe("AtomPdfOpener");
+    });
+
+    it("always returns AtomPdfOpener if alwaysOpenResultInAtom is enabled and pdf-view is installed", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
+      spyOn(latex, "shouldOpenResultInAtom").andReturn(true);
+      spyOn(fs, "existsSync").andCallThrough();
+
+      const opener = latex.resolveOpenerImplementation("darwin");
+
+      expect(opener.name).toBe("AtomPdfOpener");
+      expect(fs.existsSync).not.toHaveBeenCalled();
     });
 
     it("does not support GNU/Linux", function() {
