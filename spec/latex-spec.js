@@ -88,60 +88,73 @@ describe("Latex", function() {
 
   describe("resolveOpenerImplementation", function() {
     it("returns SkimOpener when installed, and running on OS X", function() {
-      atom.config.set("latex.skimPath", "/Applications/Skim.app");
-
-      const existsSync = fs.existsSync;
-      spyOn(fs, "existsSync").andCallFake(filePath => {
-        if (filePath === "/Applications/Skim.app") { return true; }
-        return existsSync(filePath);
-      });
-
+      spyOn(latex, "skimExecutableExists").andReturn(true);
       const opener = latex.resolveOpenerImplementation("darwin");
 
       expect(opener.name).toBe("SkimOpener");
     });
 
     it("returns PreviewOpener when Skim is not installed, and running on OS X", function() {
-      atom.config.set("latex.skimPath", "/foo/Skim.app");
+      spyOn(latex, "skimExecutableExists").andReturn(false);
       const opener = latex.resolveOpenerImplementation("darwin");
 
       expect(opener.name).toBe("PreviewOpener");
     });
 
     it("returns SumatraOpener when installed, and running on Windows", function() {
-      atom.config.set("latex.sumatraPath", "c:\\foo.exe");
-
-      const existsSync = fs.existsSync;
-      spyOn(fs, "existsSync").andCallFake(filePath => {
-        if (filePath === "c:\\foo.exe") { return true; }
-        return existsSync(filePath);
-      });
-
+      spyOn(latex, "sumatraExecutableExists").andReturn(true);
       const opener = latex.resolveOpenerImplementation("win32");
 
       expect(opener.name).toBe("SumatraOpener");
     });
 
     it("returns AtomPdfOpener as a fallback, if the pdf-view package is installed", function() {
-      const resolvePackagePath = atom.packages.resolvePackagePath;
-      atom.packages.resolvePackagePath.andCallFake(name => {
-        if (name === "pdf-view") { return true; }
-        return resolvePackagePath(name);
-      });
-
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
       const opener = latex.resolveOpenerImplementation("foo");
 
       expect(opener.name).toBe("AtomPdfOpener");
     });
 
-    it("does not support GNU/Linux", function() {
-      const opener = latex.resolveOpenerImplementation("linux");
-      expect(opener).toBeUndefined();
+    it("always returns AtomPdfOpener if alwaysOpenResultInAtom is enabled and pdf-view is installed", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
+      spyOn(latex, "shouldOpenResultInAtom").andReturn(true);
+      spyOn(latex, "skimExecutableExists").andCallThrough();
+
+      const opener = latex.resolveOpenerImplementation("darwin");
+
+      expect(opener.name).toBe("AtomPdfOpener");
+      expect(latex.skimExecutableExists).not.toHaveBeenCalled();
     });
 
-    it("does not support unknown operating systems", function() {
+    it("responds to changes in configuration", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
+      spyOn(latex, "shouldOpenResultInAtom").andReturn(false);
+      spyOn(latex, "skimExecutableExists").andReturn(true);
+
+      let opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("SkimOpener");
+
+      latex.shouldOpenResultInAtom.andReturn(true);
+      opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("AtomPdfOpener");
+
+      latex.shouldOpenResultInAtom.andReturn(false);
+      opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("SkimOpener");
+    });
+
+    it("does not support GNU/Linux", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(false);
+      const opener = latex.resolveOpenerImplementation("linux");
+
+      expect(opener).toBeNull();
+    });
+
+    it("does not support unknown operating systems without pdf-view package", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(false);
       const opener = latex.resolveOpenerImplementation("foo");
-      expect(opener).toBeUndefined();
+
+      expect(opener).toBeNull();
     });
   });
 });
