@@ -126,6 +126,23 @@ describe("Latex", function() {
       expect(latex.skimExecutableExists).not.toHaveBeenCalled();
     });
 
+    it("responds to changes in configuration", function() {
+      spyOn(latex, "hasPdfViewerPackage").andReturn(true);
+      spyOn(latex, "shouldOpenResultInAtom").andReturn(false);
+      spyOn(latex, "skimExecutableExists").andReturn(true);
+
+      let opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("SkimOpener");
+
+      latex.shouldOpenResultInAtom.andReturn(true);
+      opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("AtomPdfOpener");
+
+      latex.shouldOpenResultInAtom.andReturn(false);
+      opener = latex.resolveOpenerImplementation("darwin");
+      expect(opener.name).toBe("SkimOpener");
+    });
+
     it("does not support GNU/Linux", function() {
       spyOn(latex, "hasPdfViewerPackage").andReturn(false);
       const opener = latex.resolveOpenerImplementation("linux");
