@@ -5,12 +5,13 @@ import path from "path";
 import LatexmkBuilder from "../../lib/builders/latexmk";
 
 describe("LatexmkBuilder", function() {
-  let builder, fixturesPath, filePath, logFilePath;
+  let builder, fixturesPath, filePath, projectPath, logFilePath;
 
   beforeEach(function() {
     builder = new LatexmkBuilder();
     fixturesPath = helpers.cloneFixtures();
     filePath = path.join(fixturesPath, "file.tex");
+    projectPath = path.dirname(filePath);
     logFilePath = path.join(fixturesPath, "file.log");
   });
 
@@ -90,7 +91,7 @@ describe("LatexmkBuilder", function() {
 
     it("successfully executes latexmk when given a valid TeX file", function() {
       waitsForPromise(function() {
-        return builder.run(filePath).then(code => exitCode = code);
+        return builder.run(filePath, projectPath).then(code => exitCode = code);
       });
 
       runs(function() {
@@ -100,9 +101,10 @@ describe("LatexmkBuilder", function() {
 
     it("successfully executes latexmk when given a file path containing spaces", function() {
       filePath = path.join(fixturesPath, "filename with spaces.tex");
+      projectPath = path.dirname(filePath);
 
       waitsForPromise(function() {
-        return builder.run(filePath).then(code => exitCode = code);
+        return builder.run(filePath, projectPath).then(code => exitCode = code);
       });
 
       runs(function() {
@@ -114,7 +116,7 @@ describe("LatexmkBuilder", function() {
       spyOn(builder, "constructArgs").andReturn(["-invalid-argument"]);
 
       waitsForPromise(function() {
-        return builder.run(filePath).then(code => exitCode = code);
+        return builder.run(filePath, projectPath).then(code => exitCode = code);
       });
 
       runs(function() {
@@ -124,6 +126,7 @@ describe("LatexmkBuilder", function() {
 
     it("fails to execute latexmk when given invalid file path", function() {
       filePath = path.join(fixturesPath, "foo.tex");
+      projectPath = path.dirname(filePath);
       const args = builder.constructArgs(filePath);
 
       // Need to remove the "force" flag to trigger the desired failure.
@@ -133,7 +136,7 @@ describe("LatexmkBuilder", function() {
       spyOn(builder, "constructArgs").andReturn(args);
 
       waitsForPromise(function() {
-        return builder.run(filePath).then(code => exitCode = code);
+        return builder.run(filePath, projectPath).then(code => exitCode = code);
       });
 
       runs(function() {
