@@ -1,8 +1,10 @@
 "use babel";
 
 import helpers from "./spec-helpers";
-import fs from "fs-plus";
 import _ from "lodash";
+import {Directory} from "atom";
+import fs from "fs-plus";
+import path from "path";
 import Composer from "../lib/composer";
 
 describe("Composer", function() {
@@ -230,6 +232,96 @@ describe("Composer", function() {
       helpers.spyOnConfig("latex.moveResultToSourceDirectory", true);
 
       expect(composer.shouldMoveResult()).toBe(true);
+    });
+  });
+
+  describe("resolveWorkingDirectory", function() {
+    it("return null when passed a falsy string", function() {
+      const resolvedPath = composer.resolveWorkingDirectory();
+      expect(resolvedPath).toBeFalsy();
+    });
+
+    it("returns parent directory when in 'file' mode", function() {
+      const filePath = "/foo/bar/quux.tex";
+      const expectedPath = "/foo/bar";
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveWorkingDirectory(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+
+    it("returns project directory when in 'project' mode", function() {
+      const filePath = "/foo/bar/quux.tex";
+      const expectedPath = "/foo";
+
+      helpers.spyOnConfig("latex.workingDirectoryMode", "project");
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveWorkingDirectory(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+  });
+
+  describe("resolveProjectPath", function() {
+    it("returns the parent directory path for a roaming file", function() {
+      const filePath = "/bar/quux.tex";
+      const expectedPath = path.dirname(filePath);
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveProjectPath(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+
+    it("returns the project path for a file belonging to a simple project", function() {
+      const filePath = "/foo/quux.tex";
+      const expectedPath = path.dirname(filePath);
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveProjectPath(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+
+    it("returns the project path for a file belonging to a project with multiple directories", function() {
+      const filePath = "/foo/quux.tex";
+      const expectedPath = path.dirname(filePath);
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+        new Directory("/bar"),
+      ]);
+
+      const resolvedPath = composer.resolveProjectPath(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+
+    it("returns the longest project path for a file belonging to a multiple directories", function() {
+      const filePath = "/foo/bar/quux.tex";
+      const expectedPath = path.dirname(filePath);
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+        new Directory("/foo/bar"),
+      ]);
+
+      const resolvedPath = composer.resolveProjectPath(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
     });
   });
 });
