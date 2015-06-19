@@ -235,6 +235,40 @@ describe("Composer", function() {
     });
   });
 
+  describe("resolveWorkingDirectory", function() {
+    it("return null when passed a falsy string", function() {
+      const resolvedPath = composer.resolveWorkingDirectory();
+      expect(resolvedPath).toBeFalsy();
+    });
+
+    it("returns parent directory when in 'file' mode", function() {
+      const filePath = "/foo/bar/quux.tex";
+      const expectedPath = "/foo/bar";
+
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveWorkingDirectory(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+
+    it("returns project directory when in 'project' mode", function() {
+      const filePath = "/foo/bar/quux.tex";
+      const expectedPath = "/foo";
+
+      helpers.spyOnConfig("latex.workingDirectoryMode", "project");
+      spyOn(composer, "getProjectDirectories").andReturn([
+        new Directory("/foo"),
+      ]);
+
+      const resolvedPath = composer.resolveWorkingDirectory(filePath);
+
+      expect(resolvedPath).toBe(expectedPath);
+    });
+  });
+
   describe("resolveProjectPath", function() {
     it("returns the parent directory path for a roaming file", function() {
       const filePath = "/bar/quux.tex";
