@@ -5,11 +5,4 @@ notifications:
     on_success: never
     on_failure: change
 
-before_install:
-  - echo "Downloading portable TeX Live installation..."
-  - curl -L https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz | tar xJC ~
-
-install:
-  - PATH=$HOME/texlive/bin/x86_64-darwin:$PATH
-
-script: curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh
+script: sh build/travis-ci

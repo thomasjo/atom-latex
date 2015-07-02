@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+echo "Downloading portable TeX Live installation..."
+curl -L https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz | tar xJC ~
+PATH=$HOME/texlive/bin/x86_64-darwin:$PATH
+
+# Grab and execute standard Atom package CI build script.
+curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh
+
+echo "Linting package..."
+$(npm bin)/eslint lib
+
+echo "Linting package specs..."
+$(npm bin)/eslint spec
