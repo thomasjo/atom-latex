@@ -1,6 +1,7 @@
 {
   "atom-text-editor": {
     "ctrl-alt-b": "latex:build",
-    "ctrl-alt-s": "latex:sync"
+    "ctrl-alt-s": "latex:sync",
+    "ctrl-alt-c": "latex:clean"
   }
 }
