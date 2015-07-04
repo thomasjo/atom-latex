@@ -28,10 +28,16 @@ describe("Latex", function() {
   });
 
   describe("getDefaultBuilder", function() {
-    it("returns an instance of LatexmkBuilder", function() {
+    it("returns an instance of LatexmkBuilder by default", function() {
+      spyOn(latex, "useLatexmk").andReturn(true);
       const defaultBuilder = latex.getDefaultBuilder();
-
       expect(defaultBuilder.constructor.name).toBe("LatexmkBuilder");
+    });
+    
+    it("returns an instance of TexifyBuilder when chosen", function() {
+      spyOn(latex, "useLatexmk").andReturn(false);
+      const defaultBuilder = latex.getDefaultBuilder();
+      expect(defaultBuilder.constructor.name).toBe("TexifyBuilder");
     });
   });
 
