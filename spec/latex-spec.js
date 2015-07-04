@@ -33,7 +33,7 @@ describe("Latex", function() {
       const defaultBuilder = latex.getDefaultBuilder();
       expect(defaultBuilder.constructor.name).toBe("LatexmkBuilder");
     });
-    
+
     it("returns an instance of TexifyBuilder when chosen", function() {
       spyOn(latex, "useLatexmk").andReturn(false);
       const defaultBuilder = latex.getDefaultBuilder();
@@ -160,6 +160,14 @@ describe("Latex", function() {
       const opener = latex.resolveOpenerImplementation("foo");
 
       expect(opener).toBeNull();
+    });
+
+    it("returns CustomOpener when custom viewer exists and alwaysOpenResultInAtom is disabled", function() {
+      spyOn(latex, "viewerExecutableExists").andReturn(true);
+      spyOn(latex, "shouldOpenResultInAtom").andReturn(false);
+      const opener = latex.resolveOpenerImplementation("foo");
+
+      expect(opener.name).toBe("CustomOpener");
     });
   });
 });
