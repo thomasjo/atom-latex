@@ -1,3 +1,8 @@
+# 0.25.0
+* Introduces a new builder for MiKTeX's `texify`.
+* Adds support for specifying a customer opener.
+* *Clean* command now has default shortcut `ctrl-alt-c`.
+
 # 0.24.0
 * Clicking the error indicator in the status bar now opens the associated log
   file instead of opening the developer console, and in addition attempts to
