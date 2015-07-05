@@ -38,9 +38,11 @@ Current wish list, in a semi-prioritized order.
 - [x] Open PDF automatically.
   - [x] Configurable.
   - [x] Support for other distributions, besides OS X.
+  - [x] Support for custom PDF viewer.
 - [ ] Support for compilers other than latexmk.
   - [x] Partially supported via the "Builder" concept, but no alternative
     implementations have been created.
+  - [x] Support for texify compiler (MiKTeX).
   - [ ] Add support for non-PDF typesetting (e.g. dvi).
 - [ ] Project management.
   - [ ] Setting to override the output directory.

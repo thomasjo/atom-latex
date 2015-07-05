@@ -172,7 +172,8 @@ describe("Composer", function() {
     });
 
     it("deletes all files for the current tex document when output has not been redirected", function() {
-      const filePath = "/a/foo.tex";
+      const path = require('path')
+      const filePath = path.normalize("/a/foo.tex");
       const filesToDelete = fakeFilePaths(filePath);
       initializeSpies(filePath);
 
