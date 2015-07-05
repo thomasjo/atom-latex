@@ -3,6 +3,7 @@
 import helpers from "./spec-helpers";
 import fs from "fs-plus";
 import _ from "lodash";
+import path from "path";
 import Composer from "../lib/composer";
 
 describe("Composer", function() {
@@ -172,7 +173,6 @@ describe("Composer", function() {
     });
 
     it("deletes all files for the current tex document when output has not been redirected", function() {
-      const path = require('path')
       const filePath = path.normalize("/a/foo.tex");
       const filesToDelete = fakeFilePaths(filePath);
       initializeSpies(filePath);
