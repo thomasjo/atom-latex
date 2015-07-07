@@ -5,13 +5,12 @@ import path from "path";
 import LatexmkBuilder from "../../lib/builders/latexmk";
 
 describe("LatexmkBuilder", function() {
-  let builder, fixturesPath, filePath, logFilePath;
+  let builder, fixturesPath, filePath;
 
   beforeEach(function() {
     builder = new LatexmkBuilder();
     fixturesPath = helpers.cloneFixtures();
     filePath = path.join(fixturesPath, "file.tex");
-    logFilePath = path.join(fixturesPath, "file.log");
   });
 
   describe("constructArgs", function() {
@@ -51,37 +50,6 @@ describe("LatexmkBuilder", function() {
     it("adds a custom engine string according to package config", function() {
       helpers.spyOnConfig("latex.customEngine", "pdflatex %O %S");
       expect(builder.constructArgs(filePath)).toContain("-pdflatex=\"pdflatex %O %S\"");
-    });
-  });
-
-  describe("parseLogFile", function() {
-    let logParser;
-
-    beforeEach(function() {
-      logParser = jasmine.createSpyObj("MockLogParser", ["parse"]);
-      spyOn(builder, "getLogParser").andReturn(logParser);
-    });
-
-    it("resolves the associated log file path by invoking @resolveLogFilePath", function() {
-      spyOn(builder, "resolveLogFilePath").andReturn("foo.log");
-      builder.parseLogFile(filePath);
-
-      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath);
-    });
-
-    it("returns null if passed a file path that does not exist", function() {
-      filePath = "/foo/bar/quux.tex";
-      const result = builder.parseLogFile(filePath);
-
-      expect(result).toBeNull();
-      expect(logParser.parse).not.toHaveBeenCalled();
-    });
-
-    it("attempts to parse the resolved log file", function() {
-      builder.parseLogFile(filePath);
-
-      expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath);
-      expect(logParser.parse).toHaveBeenCalled();
     });
   });
 
