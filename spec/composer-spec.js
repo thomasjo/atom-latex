@@ -118,9 +118,8 @@ describe("Composer", function() {
         warnings: [],
       });
 
-      let result;
       waitsForPromise(function() {
-        return composer.build().catch(r => result = r);
+        return composer.build().catch(r => r);
       });
 
       runs(function() {
@@ -132,9 +131,8 @@ describe("Composer", function() {
       initializeSpies("file.tex");
       builder.parseLogFile.andReturn(null);
 
-      let result;
       waitsForPromise(function() {
-        return composer.build().catch(r => result = r);
+        return composer.build().catch(r => r);
       });
 
       runs(function() {
@@ -146,9 +144,8 @@ describe("Composer", function() {
       spyOn(atom.workspace, "getActiveTextEditor").andReturn();
       spyOn(composer, "getEditorDetails").andCallThrough();
 
-      let result;
       waitsForPromise(function() {
-        return composer.build().catch(r => result = r);
+        return composer.build().catch(r => r);
       });
 
       runs(function() {
@@ -196,9 +193,8 @@ describe("Composer", function() {
       const filePath = "foo.bar";
       initializeSpies(filePath, []);
 
-      let result;
       waitsForPromise(function() {
-        return composer.clean().catch(r => result = r);
+        return composer.clean().catch(r => r);
       });
 
       runs(function() {
