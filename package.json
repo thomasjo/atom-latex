@@ -19,8 +19,8 @@
     "wrench": "^1.5.8"
   },
   "devDependencies": {
-    "eslint": "^0.19.0",
-    "babel-eslint": "^3.0.1"
+    "eslint": "^1.0.0",
+    "babel-eslint": "^4.0.5"
   },
   "engines": {
     "atom": ">=0.186.0 <2.0.0"
