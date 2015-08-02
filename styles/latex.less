@@ -1,29 +1,31 @@
 @import "ui-variables";
 
-latex-progress-indicator {
-  color: @text-color-info;
+status-bar{
+  latex-progress-indicator {
+    color: @text-color-info;
 
-  .dot {
-    opacity: 0;
-    -webkit-animation: dot 1.0s infinite;
+    .dot {
+      opacity: 0;
+      -webkit-animation: dot 1.0s infinite;
 
-    &.one {
-      -webkit-animation-delay: 0.0s;
-    }
+      &.one {
+        -webkit-animation-delay: 0.0s;
+      }
 
-    &.two {
-      -webkit-animation-delay: 0.2s;
-    }
+      &.two {
+        -webkit-animation-delay: 0.2s;
+      }
 
-    &.three {
-      -webkit-animation-delay: 0.3s;
+      &.three {
+        -webkit-animation-delay: 0.3s;
+      }
     }
   }
-}
 
-latex-error-indicator {
-  &, a {
-    color: @text-color-error;
+  latex-error-indicator {
+    &, a, a:hover {
+      color: @text-color-error;
+    }
   }
 }
 
