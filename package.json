@@ -24,7 +24,7 @@
     "babel-eslint": "^4.0.5"
   },
   "engines": {
-    "atom": ">=0.186.0 <2.0.0"
+    "atom": ">=1.0.0 <2.0.0"
   },
   "consumedServices": {
     "status-bar": {
