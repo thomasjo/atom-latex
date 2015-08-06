@@ -48,11 +48,25 @@ latex-getting-started-guide {
     }
   }
 
-  atom-panel {
-    margin: -@component-padding;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.2em;
 
-    > .padded + .padded {
-      padding-top: 0;
+    tr {
+      background-color: @inset-panel-background-color;
+
+      &:nth-child(even) {
+        background-color: @tool-panel-background-color;
+      }
+
+      td {
+        padding: @component-padding;
+
+        &:nth-child(1) {
+          width: 25%;
+        }
+      }
     }
   }
 }
