@@ -1,4 +1,5 @@
 @import "ui-variables";
+@import "octicon-mixins";
 
 status-bar{
   .latex-progress-indicator {
@@ -37,6 +38,7 @@ status-bar{
 
 latex-getting-started-guide {
   overflow: scroll;
+  background-color: @base-background-color;
 
   h1 {
     font-size: 1.6em;
@@ -50,21 +52,45 @@ latex-getting-started-guide {
 
   table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 1.2em;
 
     tr {
-      background-color: @inset-panel-background-color;
+      // background-color: @inset-panel-background-color;
 
-      &:nth-child(even) {
-        background-color: @tool-panel-background-color;
+      & + tr > td {
+        border-top: 1px solid @base-background-color;
+      }
+
+      .status(@bg; @ico: "hourglass"; @txt: #fff) {
+        background-color: desaturate(@bg, 10%);
+        color: @txt;
+
+        & > td:first-child {
+          .octicon(@ico);
+        }
+      }
+
+      &.success {
+        .status(@background-color-success, "check");
+      }
+
+      &.error {
+        .status(@background-color-error, "x");
       }
 
       td {
         padding: @component-padding;
+        height: 16px;
 
         &:nth-child(1) {
           width: 25%;
+        }
+
+        &.success {
+          color: @text-color-success;
+        }
+
+        &.error {
+          color: @text-color-error;
         }
       }
     }
