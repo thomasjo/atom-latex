@@ -12,22 +12,29 @@
   "rules": {
     "strict": 0,
 
-    "array-bracket-spacing": [2, "never"],
-    "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
-    "camelcase": 0,
+    // Possible Errors
     "comma-dangle": [2, "always-multiline"],
-    "consistent-this": [2, "self"],
+
+    // Best Practices
     "curly": 2,
     "dot-notation": [2, {"allowPattern": "^__\\w+$"}],
     "eqeqeq": 2,
+
+    // Stylistic Issues
+    "array-bracket-spacing": [2, "never"],
+    "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
+    "camelcase": 0,
+    "consistent-this": [2, "self"],
     "indent": [2, 2, {"SwitchCase": 1}],
     "new-cap": 2,
     "new-parens": 2,
     "no-multiple-empty-lines": 2,
     "no-spaced-func": 2,
-    "no-var": 2,
     "object-curly-spacing": [2, "never"],
-    "space-in-parens": [2, "never"],
     "quotes": [2, "double"],
+    "space-in-parens": [2, "never"],
+
+    // ECMAScript 6
+    "no-var": 2,
   },
 }
