@@ -40,58 +40,64 @@ status-bar{
   overflow: scroll;
   background-color: @base-background-color;
 
-  h1 {
-    font-size: 1.6em;
-    font-weight: bold;
-
-    &:first-child {
-      margin-top: 0;
-      color: @text-color-highlight;
-    }
+  h1:first-child {
+    margin-top: 0;
+    color: @text-color-highlight;
   }
 
   table {
     width: 100%;
 
     tr {
-      // background-color: @inset-panel-background-color;
+      td {
+        box-sizing: border-box;
+        padding: @component-padding;
+        padding-right: 0;
+
+        &:nth-child(2) {
+          white-space: nowrap;
+        }
+
+        &:last-child {
+          width: 100%;
+          padding-right: @component-padding;
+        }
+      }
 
       & + tr > td {
         border-top: 1px solid @base-background-color;
       }
 
-      .status(@bg; @ico: "hourglass"; @txt: #fff) {
-        background-color: desaturate(@bg, 10%);
-        color: @txt;
+      .status(@txt; @bg; @ico) {
+        td {
+          background-color: @bg;
+          color: #fff;
+
+          &.icon {
+            color: lighten(@bg, 25%);
+
+            &:before {
+              margin-right: 0;
+              text-align: center;
+            }
+          }
+        }
 
         & > td:first-child {
           .octicon(@ico);
         }
       }
 
+      &.info {
+        .status(#fff, @background-color-info, "primitive-dot");
+      }
+
       &.success {
-        .status(@background-color-success, "check");
+        .status(#fff, @background-color-success, "check");
       }
 
       &.error {
-        .status(@background-color-error, "x");
-      }
-
-      td {
-        padding: @component-padding;
-        height: 16px;
-
-        &:nth-child(1) {
-          width: 25%;
-        }
-
-        &.success {
-          color: @text-color-success;
-        }
-
-        &.error {
-          color: @text-color-error;
-        }
+        .status(#fff, @background-color-error, "x");
       }
     }
   }
