@@ -74,6 +74,7 @@ status-bar{
           color: #fff;
 
           &.icon {
+            .octicon(@ico);
             color: lighten(@bg, 25%);
 
             &:before {
@@ -81,10 +82,6 @@ status-bar{
               text-align: center;
             }
           }
-        }
-
-        & > td:first-child {
-          .octicon(@ico);
         }
       }
 
