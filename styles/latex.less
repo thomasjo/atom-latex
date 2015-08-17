@@ -70,7 +70,7 @@ status-bar{
 
       .status(@txt; @bg; @ico) {
         td {
-          background-color: @bg;
+          background-color: lighten(desaturate(@bg, 20%), 10%);
           color: #fff;
 
           &.icon {
