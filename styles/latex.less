@@ -1,4 +1,5 @@
 @import "ui-variables";
+@import "octicon-mixins";
 
 status-bar{
   .latex-progress-indicator {
@@ -33,4 +34,68 @@ status-bar{
   0% { opacity: 0; }
   50% { opacity: 0.1; }
   100% { opacity: 1; }
+}
+
+.latex-getting-started-guide {
+  overflow: scroll;
+  background-color: @base-background-color;
+
+  h1:first-child {
+    margin-top: 0;
+    color: @text-color-highlight;
+  }
+
+  table {
+    width: 100%;
+
+    tr {
+      td {
+        box-sizing: border-box;
+        padding: @component-padding;
+        padding-right: 0;
+
+        &:nth-child(2) {
+          white-space: nowrap;
+        }
+
+        &:last-child {
+          width: 100%;
+          padding-right: @component-padding;
+        }
+      }
+
+      & + tr > td {
+        border-top: 1px solid @base-background-color;
+      }
+
+      .status(@txt; @bg; @ico) {
+        td {
+          background-color: lighten(desaturate(@bg, 20%), 10%);
+          color: #fff;
+
+          &.icon {
+            .octicon(@ico);
+            color: lighten(@bg, 25%);
+
+            &:before {
+              margin-right: 0;
+              text-align: center;
+            }
+          }
+        }
+      }
+
+      &.info {
+        .status(#fff, @background-color-info, "primitive-dot");
+      }
+
+      &.success {
+        .status(#fff, @background-color-success, "check");
+      }
+
+      &.error {
+        .status(#fff, @background-color-error, "x");
+      }
+    }
+  }
 }
