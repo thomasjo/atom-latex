@@ -1,7 +1,7 @@
 @import "ui-variables";
 @import "octicon-mixins";
 
-status-bar{
+status-bar {
   .latex-progress-indicator {
     color: @text-color-info;
 
@@ -43,6 +43,15 @@ status-bar{
   h1:first-child {
     margin-top: 0;
     color: @text-color-highlight;
+  }
+
+  a {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+
+    &:hover {
+      border-bottom-style: solid;
+    }
   }
 
   table {
