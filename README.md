@@ -37,7 +37,7 @@ Current wish list, in a semi-prioritized order.
 - [ ] BibTeX autocompletion support.
 - [x] Open PDF automatically.
   - [x] Configurable.
-  - [x] Support for other distributions, besides OS X.
+  - [x] Support for other distributions (linux via Okular and OSX via Skim).
   - [x] Support for custom PDF viewer.
 - [ ] Support for compilers other than latexmk.
   - [x] Partially supported via the "Builder" concept, but no alternative
