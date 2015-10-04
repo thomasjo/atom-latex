@@ -1,14 +1,14 @@
-"use babel";
+'use babel'
 
-import Logger from "../lib/logger";
-import Opener from "../lib/opener";
+import Logger from '../lib/logger'
+import Opener from '../lib/opener'
 
 export class NullLogger extends Logger {
-  error() {}
-  warning() {}
-  info() {}
+  error () {}
+  warning () {}
+  info () {}
 }
 
 export class NullOpener extends Opener {
-  open() {}
+  open () {}
 }

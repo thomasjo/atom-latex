@@ -20,8 +20,26 @@
     "wrench": "^1.5.8"
   },
   "devDependencies": {
-    "eslint": "^1.0.0",
-    "babel-eslint": "^4.0.5"
+    "babel-eslint": "^4.1.3",
+    "standard": "^5.3.1"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "globals": [
+      "atom",
+      "latex",
+
+      "afterEach",
+      "beforeEach",
+      "describe",
+      "expect",
+      "it",
+      "jasmine",
+      "runs",
+      "spyOn",
+      "waitsFor",
+      "waitsForPromise"
+    ]
   },
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

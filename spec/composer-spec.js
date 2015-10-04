@@ -1,236 +1,236 @@
-"use babel";
+'use babel'
 
-import helpers from "./spec-helpers";
-import fs from "fs-plus";
-import _ from "lodash";
-import path from "path";
-import Composer from "../lib/composer";
+import helpers from './spec-helpers'
+import fs from 'fs-plus'
+import _ from 'lodash'
+import path from 'path'
+import Composer from '../lib/composer'
 
-describe("Composer", function() {
-  let composer;
+describe('Composer', () => {
+  let composer
 
-  beforeEach(function() {
-    composer = new Composer();
-  });
+  beforeEach(() => {
+    composer = new Composer()
+  })
 
-  describe("build", function() {
-    let editor, builder;
+  describe('build', () => {
+    let editor, builder
 
-    function initializeSpies(filePath, statusCode = 0) {
-      editor = jasmine.createSpyObj("MockEditor", ["save", "isModified"]);
-      spyOn(composer, "resolveRootFilePath").andReturn(filePath);
-      spyOn(composer, "getEditorDetails").andReturn({
+    function initializeSpies (filePath, statusCode = 0) {
+      editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'getEditorDetails').andReturn({
         editor: editor,
-        filePath: filePath,
-      });
+        filePath: filePath
+      })
 
-      builder = jasmine.createSpyObj("MockBuilder", ["run", "constructArgs", "parseLogFile"]);
-      builder.run.andCallFake(function() {
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
+      builder.run.andCallFake(() => {
         switch (statusCode) {
-          case 0: { return Promise.resolve(statusCode); }
+          case 0: { return Promise.resolve(statusCode) }
         }
 
-        return Promise.reject(statusCode);
-      });
-      spyOn(latex, "getBuilder").andReturn(builder);
+        return Promise.reject(statusCode)
+      })
+      spyOn(latex, 'getBuilder').andReturn(builder)
     }
 
-    beforeEach(function() {
-      spyOn(composer, "showResult").andReturn();
-      spyOn(composer, "showError").andReturn();
-    });
+    beforeEach(() => {
+      spyOn(composer, 'showResult').andReturn()
+      spyOn(composer, 'showError').andReturn()
+    })
 
-    it("does nothing for new, unsaved files", function() {
-      initializeSpies(null);
+    it('does nothing for new, unsaved files', () => {
+      initializeSpies(null)
 
-      let result = "aaaaaaaaaaaa";
-      waitsForPromise(function() {
-        return composer.build().catch(r => result = r);
-      });
+      let result = 'aaaaaaaaaaaa'
+      waitsForPromise(() => {
+        return composer.build().catch(r => result = r)
+      })
 
-      runs(function() {
-        expect(result).toBe(false);
-        expect(composer.showResult).not.toHaveBeenCalled();
-        expect(composer.showError).not.toHaveBeenCalled();
-      });
-    });
+      runs(() => {
+        expect(result).toBe(false)
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
+      })
+    })
 
-    it("does nothing for unsupported file extensions", function() {
-      initializeSpies("foo.bar");
+    it('does nothing for unsupported file extensions', () => {
+      initializeSpies('foo.bar')
 
-      let result;
-      waitsForPromise(function() {
-        return composer.build().catch(r => result = r);
-      });
+      let result
+      waitsForPromise(() => {
+        return composer.build().catch(r => result = r)
+      })
 
-      runs(function() {
-        expect(result).toBe(false);
-        expect(composer.showResult).not.toHaveBeenCalled();
-        expect(composer.showError).not.toHaveBeenCalled();
-      });
-    });
+      runs(() => {
+        expect(result).toBe(false)
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
+      })
+    })
 
-    it("saves the file before building, if modified", function() {
-      initializeSpies("file.tex");
-      editor.isModified.andReturn(true);
+    it('saves the file before building, if modified', () => {
+      initializeSpies('file.tex')
+      editor.isModified.andReturn(true)
 
       builder.parseLogFile.andReturn({
-        outputFilePath: "file.pdf",
+        outputFilePath: 'file.pdf',
         errors: [],
-        warnings: [],
-      });
+        warnings: []
+      })
 
-      waitsForPromise(function() {
-        return composer.build();
-      });
+      waitsForPromise(() => {
+        return composer.build()
+      })
 
-      runs(function() {
-        expect(editor.isModified).toHaveBeenCalled();
-        expect(editor.save).toHaveBeenCalled();
-      });
-    });
+      runs(() => {
+        expect(editor.isModified).toHaveBeenCalled()
+        expect(editor.save).toHaveBeenCalled()
+      })
+    })
 
-    it("invokes `showResult` after a successful build, with expected log parsing result", function() {
+    it('invokes `showResult` after a successful build, with expected log parsing result', () => {
       const result = {
-        outputFilePath: "file.pdf",
+        outputFilePath: 'file.pdf',
         errors: [],
-        warnings: [],
-      };
+        warnings: []
+      }
 
-      initializeSpies("file.tex");
-      builder.parseLogFile.andReturn(result);
+      initializeSpies('file.tex')
+      builder.parseLogFile.andReturn(result)
 
-      waitsForPromise(function() {
-        return composer.build();
-      });
+      waitsForPromise(() => {
+        return composer.build()
+      })
 
-      runs(function() {
-        expect(composer.showResult).toHaveBeenCalledWith(result);
-      });
-    });
+      runs(() => {
+        expect(composer.showResult).toHaveBeenCalledWith(result)
+      })
+    })
 
-    it("treats missing output file data in log file as an error", function() {
-      initializeSpies("file.tex");
+    it('treats missing output file data in log file as an error', () => {
+      initializeSpies('file.tex')
 
       builder.parseLogFile.andReturn({
         outputFilePath: null,
         errors: [],
-        warnings: [],
-      });
+        warnings: []
+      })
 
-      waitsForPromise(function() {
-        return composer.build().catch(r => r);
-      });
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
 
-      runs(function() {
-        expect(composer.showError).toHaveBeenCalled();
-      });
-    });
+      runs(() => {
+        expect(composer.showError).toHaveBeenCalled()
+      })
+    })
 
-    it("treats missing result from parser as an error", function() {
-      initializeSpies("file.tex");
-      builder.parseLogFile.andReturn(null);
+    it('treats missing result from parser as an error', () => {
+      initializeSpies('file.tex')
+      builder.parseLogFile.andReturn(null)
 
-      waitsForPromise(function() {
-        return composer.build().catch(r => r);
-      });
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
 
-      runs(function() {
-        expect(composer.showError).toHaveBeenCalled();
-      });
-    });
+      runs(() => {
+        expect(composer.showError).toHaveBeenCalled()
+      })
+    })
 
-    it("handles active item not being a text editor", function() {
-      spyOn(atom.workspace, "getActiveTextEditor").andReturn();
-      spyOn(composer, "getEditorDetails").andCallThrough();
+    it('handles active item not being a text editor', () => {
+      spyOn(atom.workspace, 'getActiveTextEditor').andReturn()
+      spyOn(composer, 'getEditorDetails').andCallThrough()
 
-      waitsForPromise(function() {
-        return composer.build().catch(r => r);
-      });
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
 
-      runs(function() {
-        expect(composer.getEditorDetails).toHaveBeenCalled();
-      });
-    });
-  });
+      runs(() => {
+        expect(composer.getEditorDetails).toHaveBeenCalled()
+      })
+    })
+  })
 
-  describe("clean", function() {
-    const extensions = [".bar", ".baz", ".quux"];
+  describe('clean', () => {
+    const extensions = ['.bar', '.baz', '.quux']
 
-    function fakeFilePaths(filePath) {
-      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf("."));
-      return extensions.map(ext => filePathSansExtension + ext);
+    function fakeFilePaths (filePath) {
+      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
+      return extensions.map(ext => filePathSansExtension + ext)
     }
 
-    function initializeSpies(filePath) {
-      spyOn(composer, "getEditorDetails").andReturn({filePath});
-      spyOn(composer, "resolveRootFilePath").andReturn(filePath);
+    function initializeSpies (filePath) {
+      spyOn(composer, 'getEditorDetails').andReturn({filePath})
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
     }
 
-    beforeEach(function() {
-      spyOn(fs, "remove").andCallThrough();
-      helpers.spyOnConfig("latex.cleanExtensions", extensions);
-    });
+    beforeEach(() => {
+      spyOn(fs, 'remove').andCallThrough()
+      helpers.spyOnConfig('latex.cleanExtensions', extensions)
+    })
 
-    it("deletes all files for the current tex document when output has not been redirected", function() {
-      const filePath = path.normalize("/a/foo.tex");
-      const filesToDelete = fakeFilePaths(filePath);
-      initializeSpies(filePath);
+    it('deletes all files for the current tex document when output has not been redirected', () => {
+      const filePath = path.normalize('/a/foo.tex')
+      const filesToDelete = fakeFilePaths(filePath)
+      initializeSpies(filePath)
 
-      let candidatePaths;
-      waitsForPromise(function() {
+      let candidatePaths
+      waitsForPromise(() => {
         return composer.clean().then(resolutions => {
-          candidatePaths = _.pluck(resolutions, "filePath");
-        });
-      });
+          candidatePaths = _.pluck(resolutions, 'filePath')
+        })
+      })
 
-      runs(function() {
-        expect(candidatePaths).toEqual(filesToDelete);
-      });
-    });
+      runs(() => {
+        expect(candidatePaths).toEqual(filesToDelete)
+      })
+    })
 
-    it("stops immidiately if the file is not a TeX document", function() {
-      const filePath = "foo.bar";
-      initializeSpies(filePath, []);
+    it('stops immidiately if the file is not a TeX document', () => {
+      const filePath = 'foo.bar'
+      initializeSpies(filePath, [])
 
-      waitsForPromise(function() {
-        return composer.clean().catch(r => r);
-      });
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
 
-      runs(function() {
-        expect(composer.resolveRootFilePath).not.toHaveBeenCalled();
-        expect(fs.remove).not.toHaveBeenCalled();
-      });
-    });
-  });
+      runs(() => {
+        expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
+        expect(fs.remove).not.toHaveBeenCalled()
+      })
+    })
+  })
 
-  describe("shouldMoveResult", function() {
-    it("should return false when using neither an output directory, nor the move option", function() {
-      helpers.spyOnConfig("latex.outputDirectory", "");
-      helpers.spyOnConfig("latex.moveResultToSourceDirectory", false);
+  describe('shouldMoveResult', () => {
+    it('should return false when using neither an output directory, nor the move option', () => {
+      helpers.spyOnConfig('latex.outputDirectory', '')
+      helpers.spyOnConfig('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult()).toBe(false);
-    });
+      expect(composer.shouldMoveResult()).toBe(false)
+    })
 
-    it("should return false when not using an output directory, but using the move option", function() {
-      helpers.spyOnConfig("latex.outputDirectory", "");
-      helpers.spyOnConfig("latex.moveResultToSourceDirectory", true);
+    it('should return false when not using an output directory, but using the move option', () => {
+      helpers.spyOnConfig('latex.outputDirectory', '')
+      helpers.spyOnConfig('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult()).toBe(false);
-    });
+      expect(composer.shouldMoveResult()).toBe(false)
+    })
 
-    it("should return false when not using the move option, but using an output directory", function() {
-      helpers.spyOnConfig("latex.outputDirectory", "baz");
-      helpers.spyOnConfig("latex.moveResultToSourceDirectory", false);
+    it('should return false when not using the move option, but using an output directory', () => {
+      helpers.spyOnConfig('latex.outputDirectory', 'baz')
+      helpers.spyOnConfig('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult()).toBe(false);
-    });
+      expect(composer.shouldMoveResult()).toBe(false)
+    })
 
-    it("should return true when using both an output directory and the move option", function() {
-      helpers.spyOnConfig("latex.outputDirectory", "baz");
-      helpers.spyOnConfig("latex.moveResultToSourceDirectory", true);
+    it('should return true when using both an output directory and the move option', () => {
+      helpers.spyOnConfig('latex.outputDirectory', 'baz')
+      helpers.spyOnConfig('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult()).toBe(true);
-    });
-  });
-});
+      expect(composer.shouldMoveResult()).toBe(true)
+    })
+  })
+})
