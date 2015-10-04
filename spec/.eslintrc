@@ -1,9 +1,0 @@
-{
-  "env": {
-    "jasmine": true,
-  },
-  "globals": {
-    "atom": true,
-    "waitsForPromise": true,
-  }
-}

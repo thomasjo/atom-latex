@@ -27,7 +27,18 @@
     "parser": "babel-eslint",
     "globals": [
       "atom",
-      "latex"
+      "latex",
+
+      "afterEach",
+      "beforeEach",
+      "describe",
+      "expect",
+      "it",
+      "jasmine",
+      "runs",
+      "spyOn",
+      "waitsFor",
+      "waitsForPromise"
     ]
   },
   "engines": {
