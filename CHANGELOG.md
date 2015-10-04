@@ -1,3 +1,9 @@
+# 0.26.0
+* Adds more default extensions to the clean extensions.
+  - See [#117](https://github.com/thomasjo/atom-latex/pull/117) for more details.
+* Adds support for Okular as the default PDF application on Linux.
+  - See [#124](https://github.com/thomasjo/atom-latex/pull/124) for more details.
+
 # 0.25.0
 * Introduces a new builder for MiKTeX's `texify`.
 * Adds support for specifying a customer opener.
