@@ -1,5 +1,5 @@
 # LaTeX package [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
-Compile TeX documents from within Atom.
+Compile LaTeX documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
