@@ -35,7 +35,7 @@ describe('MagicParser', () => {
       const result = parser.parse()
 
       expect(result).toEqual({
-          'root': '../file.tex'
+        'root': '../file.tex'
       })
     })
 
@@ -52,8 +52,8 @@ describe('MagicParser', () => {
       const result = parser.parse()
 
       expect(result).toEqual({
-          'root': '../file.tex',
-          'program': 'pdflatex',
+        'root': '../file.tex',
+        'program': 'pdflatex'
       })
     })
   })
