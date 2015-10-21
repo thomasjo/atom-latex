@@ -26,8 +26,8 @@ a `.tex` file.
 
 ### Magic comments
 The package has support for the following Tex Magic comments
-- `% !TEX root = ../file.tex` -> Select root file
-- `% !TEX program = pdflatex` -> Select Latex Engine (pdflatex,lualatex,xetex)
+- `% !TEX root = ../file.tex` Select root file
+- `% !TEX program = pdflatex` Select Latex Engine (pdflatex,lualatex,xelatex)
 
 ## Status
 Please note that this package is in a **beta** state. Right now everything is
