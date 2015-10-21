@@ -104,4 +104,13 @@ describe('Builder', () => {
       expect(logParser.parse).toHaveBeenCalled()
     })
   })
+
+  describe('getLatexEngineFromMagic', () => {
+
+      it('detects program magic and outputs correct engine', () => {
+          const filePath = path.join(fixturesPath, 'magic-comments', 'latex-engine.tex')
+          expect(builder.getLatexEngineFromMagic(filePath)).toEqual("pdflatex")
+
+      })
+  })
 })
