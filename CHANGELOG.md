@@ -1,3 +1,7 @@
+# 0.28.0
+* Adds "engine magic" support to the texify builder.
+  - See [#133](https://github.com/thomasjo/atom-latex/pull/133) for more details.
+
 # 0.27.0
 * Adds support for specifying the engine to build a specific file with via
   a "magic comment" at the beginning of the file.
