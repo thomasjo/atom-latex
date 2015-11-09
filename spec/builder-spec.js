@@ -111,4 +111,16 @@ describe('Builder', () => {
       expect(builder.getLatexEngineFromMagic(filePath)).toEqual('pdflatex')
     })
   })
+
+  describe('::getBuilder', () => {
+    it('returns an empty list when no builders are associated with the given file', () => {
+      const filePath = path.join('foo', 'quux.txt')
+      expect(Builder.getBuilder(filePath)).toEqual([])
+    })
+
+    it('returns a non-empty list when there are builders associated with the given file', () => {
+      const filePath = path.join('foo', 'bar.tex')
+      expect(Builder.getBuilder(filePath)).not.toEqual([])
+    })
+  })
 })
