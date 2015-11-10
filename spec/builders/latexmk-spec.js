@@ -51,6 +51,15 @@ describe('LatexmkBuilder', () => {
       helpers.spyOnConfig('latex.customEngine', 'pdflatex %O %S')
       expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
     })
+
+    it('adds -ps or -dvi and removes -pdf arguments according to package config', () => {
+      helpers.spyOnConfig('latex.outputFormat', 'ps')
+      expect(builder.constructArgs(filePath)).toContain('-ps')
+      expect(builder.constructArgs(filePath)).not.toContain('-pdf')
+      helpers.spyOnConfig('latex.outputFormat', 'dvi')
+      expect(builder.constructArgs(filePath)).toContain('-dvi')
+      expect(builder.constructArgs(filePath)).not.toContain('-pdf')
+    })
   })
 
   describe('run', () => {
