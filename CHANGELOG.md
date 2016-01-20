@@ -1,3 +1,7 @@
+# Unreleased
+* The *Clean* command now supports the *Output Directory* configuration setting.
+  - See [#156](https://github.com/thomasjo/atom-latex/pull/156) for more details.
+
 # 0.28.0
 * Adds "engine magic" support to the texify builder.
   - See [#133](https://github.com/thomasjo/atom-latex/pull/133) for more details.
