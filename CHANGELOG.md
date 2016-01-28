@@ -1,6 +1,12 @@
-# Unreleased
+# 0.29.0
 * The *Clean* command now supports the *Output Directory* configuration setting.
   - See [#156](https://github.com/thomasjo/atom-latex/pull/156) for more details.
+* Adds support for specifying output format (PDF, PS, DVI). Note that this currently only works when using the latexmk builder.
+  - See [#143](https://github.com/thomasjo/atom-latex/pull/143) for more details.
+* Fixes problems with the SumatraPDF opener on Windows.
+  - See [#140](https://github.com/thomasjo/atom-latex/pull/140) and [#141](https://github.com/thomasjo/atom-latex/pull/141) for more details.
+* The default keybinds now only trigger on LaTeX documents (technically this means that the grammar scope must contain the substring `latex`). Hence the [language-latex](https://atom.io/packages/language-latex) package is now a requirement for the default keybinds to work.
+  - See [#148](https://github.com/thomasjo/atom-latex/pull/148) for more details.
 
 # 0.28.0
 * Adds "engine magic" support to the texify builder.
