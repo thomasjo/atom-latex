@@ -3,42 +3,54 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v0.29.0 (2015-01-28)
-* The *Clean* command now supports the *Output Directory* configuration setting.
-  - See [#156](https://github.com/thomasjo/atom-latex/pull/156) for more details.
+### Added
 * Adds support for specifying output format (PDF, PS, DVI). Note that this currently only works when using the latexmk builder.
   - See [#143](https://github.com/thomasjo/atom-latex/pull/143) for more details.
-* Fixes problems with the SumatraPDF opener on Windows.
-  - See [#140](https://github.com/thomasjo/atom-latex/pull/140) and [#141](https://github.com/thomasjo/atom-latex/pull/141) for more details.
+
+### Changed
+* The *Clean* command now supports the *Output Directory* configuration setting.
+  - See [#156](https://github.com/thomasjo/atom-latex/pull/156) for more details.
 * The default keybinds now only trigger on LaTeX documents (technically this means that the grammar scope must contain the substring `latex`). Hence the [language-latex](https://atom.io/packages/language-latex) package is now a requirement for the default keybinds to work.
   - See [#148](https://github.com/thomasjo/atom-latex/pull/148) for more details.
 
+### Fixed
+* Problems with the SumatraPDF opener on Windows.
+  - See [#140](https://github.com/thomasjo/atom-latex/pull/140) and [#141](https://github.com/thomasjo/atom-latex/pull/141) for more details.
+
 ## v0.28.0 (2015-10-26)
-* Adds "engine magic" support to the texify builder.
+### Added
+* "engine magic" support to the texify builder.
   - See [#133](https://github.com/thomasjo/atom-latex/pull/133) for more details.
 
 ## v0.27.0 (2015-10-21)
-* Adds support for specifying the engine to build a specific file with via
-  a "magic comment" at the beginning of the file.
+### Added
+* Support for specifying the engine to build a specific file with via a "magic
+  comment" at the beginning of the file.
   - See [#131](https://github.com/thomasjo/atom-latex/pull/131) for more details.
 
 ## v0.26.0 (2015-10-04)
-* Adds more default extensions to the clean extensions.
+### Added
+* More default extensions to the clean extensions.
   - See [#117](https://github.com/thomasjo/atom-latex/pull/117) for more details.
-* Adds support for Okular as the default PDF application on Linux.
+* Support for Okular as the default PDF application on Linux.
   - See [#124](https://github.com/thomasjo/atom-latex/pull/124) for more details.
 
 ## v0.25.0 (2015-07-05)
+### Added
 * Introduces a new builder for MiKTeX's `texify`.
-* Adds support for specifying a customer opener.
+* Support for specifying a customer opener.
+
+### Changed
 * *Clean* command now has default shortcut `ctrl-alt-c`.
 
 ## v0.24.0 (2015-05-23)
+### Changed
 * Clicking the error indicator in the status bar now opens the associated log
   file instead of opening the developer console, and in addition attempts to
   scroll to the first error.
 
 ## v0.23.0 (2015-05-07)
-* Migrate from CoffeeScript to Babel.
+Migration from CoffeeScript to Babel.
 
 Ideally this should have been a major release since we're migrating away
 from CoffeeScript to ES6/ES7 via the Babel transpiler (built into Atom). But
@@ -46,12 +58,13 @@ since we're not yet ready for v1.0.0, this major release is tagged as a
 minor release.
 
 ## v0.22.0 (2015-04-21)
+### Fixed
 * `Composer:getEditorDetails` now always returns an object.
   Fixes [\#74](https://github.com/thomasjo/atom-latex/issues/74).
-* ... and enough, various, mostly internal changes to warrant a minor release instead of just a patch release.
 
 ## v0.21.0 (2015-04-06)
-* Adds feature flag for the (naive) master file search feature. The feature
+### Added
+* Feature flag for the (naive) master file search feature. The feature
   attempts to search for a master file if we determine that the current file
   is not a master file. And this is determined naively by presence, or lack
   thereof, a `\documentclass` declaration. This does not work well in all
@@ -60,39 +73,47 @@ minor release.
   NOTE: This does not affect the *Magic Comments* feature.
 
 ## v0.20.0 (2015-03-17)
+### Added
+* Experimental, out-of-the-box support for MiKTeX 2.9 by adding default
+  MiKTeX paths to the default TeX paths on Windows;
+  * `C:\Program Files\MiKTeX 2.9\miktex\bin\x64`,
+  * `C:\Program Files (x86)\MiKTeX 2.9\miktex\bin`.
+
+### Changed
 * Improved TeX path resolution by changing the old behavior of only using the
   `PATH` environment variable in the *Latexmk* child process' `PATH` environment
   variable if the resolved TeX path contains the `$PATH` substitution marker.
   Substitutions are still supported, but the new default is to not use it,
   and when it's not present, the inherited `PATH` environment variable is
   appended to the configured TeX path instead.
-* Fixes soft wrap bug caused by incorrect usage of getCursorScreenPosition()
-  * See [Pull Request 68](https://github.com/thomasjo/atom-latex/pull/68)
-    for more details.
-* Changes the default *SumatraPDF* path to
+* Default *SumatraPDF* path changed to  
   `C:\Program Files (x86)\SumatraPDF\SumatraPDF.exe`.
-* Adds (experimental) out-of-the-box support for MiKTeX 2.9 by adding default
-  MiKTeX paths to the default TeX paths on Windows;
-  * `C:\Program Files\MiKTeX 2.9\miktex\bin\x64`,
-  * `C:\Program Files (x86)\MiKTeX 2.9\miktex\bin`.
+
+### Fixed
+* Soft wrap bug caused by incorrect usage of getCursorScreenPosition()
+  * See [Pull Request 68](https://github.com/thomasjo/atom-latex/pull/68) for
+    more details.
 
 ## v0.19.0 (2015-03-02)
-* Improved the error logging scheme slightly, including
-  * Better error message reporting for missing builder executable,
-    e.g.`latexmk` caused by incorrect *TeX Path*.
-* Extensions used by *Clean* command are now properly configurable.
-  * **NOTE:** The command still doesn't work properly together with
-    *Output Directory* setting.
-* Fixed bugs related to missing files during move, and missing information in
-  log file during parsing (e.g. partially failed build).
+### Changed
+* Improved the error logging scheme slightly, including better error messages
+  for missing builder executables, e.g.`latexmk` caused by an incorrectly
+  configured *TeX Path*.
+* Extensions used by the *Clean* command are now properly configurable.
+  **NOTE:** The command doesn't yet work properly together with *Output
+  Directory* setting.
 * Tweaked the config schema descriptions.
 
+### Fixed
+* Bugs related to missing files during move, and missing information in log
+  file during parsing (e.g. partially failed build).
+
 ## v0.18.0 (2015-02-06)
-* Fixed bug triggered by the text "Output written on .." missing from log file,
-  while at the same time `latexmk` returned status code 0 (i.e. "success").
-  This caused the `outputFilePath` key on the log parsing result to equal 'null'
-  and this value thus incorrectly ended up in paths etc. Missing output file
-  info is now **always** treated as an error.
+### Fixed
+* Bug triggered by the text "Output written on .." missing from log file, while at the same time `latexmk` returned status code 0 (i.e. "success"). This
+  caused the `outputFilePath` key on the log parsing result to equal 'null' and
+  this value thus incorrectly ended up in paths etc. Missing output file info
+  is now **always** treated as an error.
 
 ## v0.17.0 (2015-02-05)
 ### Changed
