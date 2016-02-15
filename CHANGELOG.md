@@ -4,36 +4,45 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.29.0] / 2015-01-28
 ### Added
-- Adds support for specifying output format (PDF, PS, DVI). Note that this currently only works when using the latexmk builder.
-  - See [#143](https://github.com/thomasjo/atom-latex/pull/143) for more details.
+- Adds support for specifying output format (PDF, PS, DVI). Note that this currently only works when using the latexmk builder.  
+    ~ [#143](https://github.com/thomasjo/atom-latex/pull/143)
+    / [@sometea](https://github.com/sometea)
 
 ### Changed
-- The *Clean* command now supports the *Output Directory* configuration setting.
-  - See [#156](https://github.com/thomasjo/atom-latex/pull/156) for more details.
-- The default keybinds now only trigger on LaTeX documents (technically this means that the grammar scope must contain the substring `latex`). Hence the [language-latex](https://atom.io/packages/language-latex) package is now a requirement for the default keybinds to work.
-  - See [#148](https://github.com/thomasjo/atom-latex/pull/148) for more details.
+- The *Clean* command now supports the *Output Directory* configuration setting.  
+    ~ [#156](https://github.com/thomasjo/atom-latex/pull/156)
+    / [@Poeschl](https://github.com/Poeschl)
+- The default keybinds now only trigger on LaTeX documents (technically this means that the grammar scope must contain the substring `latex`). Hence the [language-latex](https://atom.io/packages/language-latex) package is now a requirement for the default keybinds to work.  
+    ~ [#148](https://github.com/thomasjo/atom-latex/pull/148)
+    / [@pgbross](https://github.com/pgbross)
 
 ### Fixed
-- Problems with the SumatraPDF opener on Windows.
-  - See [#140](https://github.com/thomasjo/atom-latex/pull/140) and [#141](https://github.com/thomasjo/atom-latex/pull/141) for more details.
+- Problems with the SumatraPDF opener on Windows.  
+    ~ [#140](https://github.com/thomasjo/atom-latex/pull/140)
+    & [#141](https://github.com/thomasjo/atom-latex/pull/141)
+    / [@m0nhawk](https://github.com/m0nhawk)
 
 ## [0.28.0] / 2015-10-26
 ### Added
-- "engine magic" support to the texify builder.
-  - See [#133](https://github.com/thomasjo/atom-latex/pull/133) for more details.
+- "engine magic" support to the texify builder.  
+    ~ [#133](https://github.com/thomasjo/atom-latex/pull/133)
+    / [@m0nhawk](https://github.com/m0nhawk)
 
 ## [0.27.0] / 2015-10-21
 ### Added
 - Support for specifying the engine to build a specific file with via a "magic
-  comment" at the beginning of the file.
-  - See [#131](https://github.com/thomasjo/atom-latex/pull/131) for more details.
+  comment" at the beginning of the file.  
+    ~ [#131](https://github.com/thomasjo/atom-latex/pull/131)
+    / [@redw0lf](https://github.com/redw0lf)
 
 ## [0.26.0] / 2015-10-04
 ### Added
-- More default extensions to the clean extensions.
-  - See [#117](https://github.com/thomasjo/atom-latex/pull/117) for more details.
-- Support for Okular as the default PDF application on Linux.
-  - See [#124](https://github.com/thomasjo/atom-latex/pull/124) for more details.
+- More default extensions to the clean extensions.  
+    ~ [#117](https://github.com/thomasjo/atom-latex/pull/117)
+    / [@EdJoPaTo](https://github.com/EdJoPaTo)
+- Support for Okular as the default PDF application on Linux.  
+    ~ [#124](https://github.com/thomasjo/atom-latex/pull/124)
+    / [@WoodyWoodsta](https://github.com/WoodyWoodsta)
 
 ## [0.25.0] / 2015-07-05
 ### Added
@@ -59,7 +68,7 @@ minor release.
 
 ## [0.22.0] / 2015-04-21
 ### Fixed
-- `Composer:getEditorDetails` now always returns an object.
+- `Composer:getEditorDetails` now always returns an object.  
   Fixes [#74](https://github.com/thomasjo/atom-latex/issues/74).
 
 ## [0.21.0] / 2015-04-06
@@ -90,9 +99,9 @@ minor release.
   `C:\Program Files (x86)\SumatraPDF\SumatraPDF.exe`.
 
 ### Fixed
-- Soft wrap bug caused by incorrect usage of getCursorScreenPosition()
-  - See [Pull Request 68](https://github.com/thomasjo/atom-latex/pull/68) for
-    more details.
+- Soft wrap bug caused by incorrect usage of `getCursorScreenPosition()`.  
+    ~ [#68](https://github.com/thomasjo/atom-latex/pull/68)
+    / [@jacoblchapman](https://github.com/jacoblchapman)
 
 ## [0.19.0] / 2015-03-02
 ### Changed
@@ -128,32 +137,38 @@ minor release.
 
 ## [0.16.0] / 2015-01-28
 ### Added
-- Support for cross-platform and Windows PDF viewers.
-  - Merged [Pull Request 48](https://github.com/thomasjo/atom-latex/pull/48).
-- *Clean* feature that deletes temporary files generated during build.
-  - Merged [Pull Request 47](https://github.com/thomasjo/atom-latex/pull/47).
+- Support for cross-platform and Windows PDF viewers.  
+    ~ [#48](https://github.com/thomasjo/atom-latex/pull/48)
+    / [@nscaife](https://github.com/nscaife)
+- *Clean* feature that deletes temporary files generated during build.  
+    ~ [#47](https://github.com/thomasjo/atom-latex/pull/47)
+    / [@nscaife](https://github.com/nscaife)
 
 ### Fixed
 - Issue with config schema loading being deferred due to package only being
   activated on triggering *Build* (or *Clean*). The workaround was to disable
   delayed package activation, so this will likely need to be revisited in the
   future.
-- Deprecation warning in `keymaps/latex.cson`.
-  - Merged [Pull Request 44](https://github.com/thomasjo/atom-latex/pull/44).
+- Deprecation warning in `keymaps/latex.cson`.  
+    ~ [#44](https://github.com/thomasjo/atom-latex/pull/44)
+    / [@evandromr](https://github.com/evandromr)
 
 ## [0.15.0] / 2015-01-19
 ### Added
 - Engine customization. Default engine is still `pdflatex`, but users can now
-  use e.g. `xelatex` instead. This is controlled via configuration.
-  - Merged [Pull Request 39](https://github.com/thomasjo/atom-latex/pull/39).
-- Support for *Literal Haskell* filetypes.
-  - Merged [Pull Request 40](https://github.com/thomasjo/atom-latex/pull/40).
+  use e.g. `xelatex` instead. This is controlled via configuration.  
+    ~ [#39](https://github.com/thomasjo/atom-latex/pull/39)
+    / [@maxxk](https://github.com/maxxk)
+- Support for *Literal Haskell* filetypes.  
+    ~ [#40](https://github.com/thomasjo/atom-latex/pull/40)
+    / [@aclemen1](https://github.com/aclemen1)
 
 ## [0.14.0] / 2014-11-02
 ### Added
 - Forward-sync support for Skim. Also lays the groundwork for other openers with
-  sync support. Default keybind is `ctrl-alt-s`.
-  - Merged [Pull Request 31](https://github.com/thomasjo/atom-latex/pull/31).
+  sync support. Default keybind is `ctrl-alt-s`.  
+    ~ [#31](https://github.com/thomasjo/atom-latex/pull/31)
+    / [@urdh](https://github.com/urdh)
 
 ## [0.13.0] / 2014-10-22
 ### Added
@@ -169,16 +184,19 @@ minor release.
 
 ## [0.12.0] / 2014-10-06
 ### Added
-- Error status indicator to the status bar.
-  - Merged [Pull Request 12]((https://github.com/thomasjo/atom-latex/pull/12).
+- Error status indicator to the status bar.  
+    ~ [#12](https://github.com/thomasjo/atom-latex/pull/12)
+    / [@boborbt](https://github.com/boborbt)
 - Basic support for parsing magic comments.
 - Master/root TeX file feature which supports both magic comments and a
   heuristic search algorithm. If building a descendant TeX file, this feature
-  ensures the root file is built instead.
-  - Merged [Pull Request 13]((https://github.com/thomasjo/atom-latex/pull/13).
+  ensures the root file is built instead.  
+    ~ [#13](https://github.com/thomasjo/atom-latex/pull/13)
+    / [@boborbt](https://github.com/boborbt)
 - Support for opening the resulting PDF after a successful build. Behavior is
-  configurable.
-  - Merged [Pull Request 24]((https://github.com/thomasjo/atom-latex/pull/24).
+  configurable.  
+    ~ [#24](https://github.com/thomasjo/atom-latex/pull/24)
+    / [@boborbt](https://github.com/boborbt)
 - Added a basic Skim.app opener.  
   Used by default if Skim.app exists at the configured path which defaults to
   `/Applications/Skim.app`.
@@ -191,8 +209,9 @@ minor release.
 
 ## [0.11.0] / 2014-07-01
 ### Changed
-- Improved the error messages to help users debug e.g. bad `PATH`.
-  [#10](https://github.com/thomasjo/atom-latex/pull/10)
+- Improved the error messages to help users debug e.g. bad `PATH`.  
+    ~ [#10](https://github.com/thomasjo/atom-latex/pull/10)
+    / [@thedataking](https://github.com/thedataking)
 
 ## [0.10.0] / 2014-06-25
 ### Changed
@@ -232,8 +251,9 @@ minor release.
 
 ## [0.4.0] / 2014-03-17
 ### Changed
-- The `latexmk` executable is now run asynchronously.
-  [#1](https://github.com/thomasjo/atom-latex/pull/1)
+- The `latexmk` executable is now run asynchronously.  
+    ~ [#1](https://github.com/thomasjo/atom-latex/pull/1)
+    / [@lucas-clemente](https://github.com/lucas-clemente)
 
 ## [0.3.0] / 2014-03-14
 ### Added
