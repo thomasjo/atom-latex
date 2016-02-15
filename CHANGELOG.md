@@ -4,22 +4,34 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.29.0] / 2015-01-28
 ### Added
-- Adds support for specifying output format (PDF, PS, DVI). Note that this currently only works when using the latexmk builder.  
+- Adds support for specifying output format (PDF, PS, DVI). Note that this
+  currently only works when using the latexmk builder.  
     ~ [#143](https://github.com/thomasjo/atom-latex/pull/143)
     / [@sometea](https://github.com/sometea)
 
 ### Changed
-- The *Clean* command now supports the *Output Directory* configuration setting.  
+- The *Clean* command now behaves as expected together with the *Output
+  Directory* configuration setting.  
     ~ [#156](https://github.com/thomasjo/atom-latex/pull/156)
     / [@Poeschl](https://github.com/Poeschl)
-- The default keybinds now only trigger on LaTeX documents (technically this means that the grammar scope must contain the substring `latex`). Hence the [language-latex](https://atom.io/packages/language-latex) package is now a requirement for the default keybinds to work.  
+- The default keybinds now only trigger on LaTeX documents (technically this
+  means that the grammar scope must contain the substring `latex`). Hence the
+  [language-latex](https://atom.io/packages/language-latex) package is now a
+  requirement for the default keybinds to work.  
     ~ [#148](https://github.com/thomasjo/atom-latex/pull/148)
     / [@pgbross](https://github.com/pgbross)
 
+## [0.28.2] / 2015-10-26
+### Fixed
+- Reuse SumatraPDF instances by passing `-reuse-instance` argument.  
+    ~ [#141](https://github.com/thomasjo/atom-latex/pull/141)
+    / [@m0nhawk](https://github.com/m0nhawk)
+
+
+## [0.28.1] / 2015-10-26
 ### Fixed
 - Problems with the SumatraPDF opener on Windows.  
     ~ [#140](https://github.com/thomasjo/atom-latex/pull/140)
-    & [#141](https://github.com/thomasjo/atom-latex/pull/141)
     / [@m0nhawk](https://github.com/m0nhawk)
 
 ## [0.28.0] / 2015-10-26
@@ -27,6 +39,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - "engine magic" support to the texify builder.  
     ~ [#133](https://github.com/thomasjo/atom-latex/pull/133)
     / [@m0nhawk](https://github.com/m0nhawk)
+
+## [0.27.1] / 2015-10-21
+### Fixed
+- Missing semicolon in path join argument.
+- Incorrect single qoute in regexp replaced with double quote.
 
 ## [0.27.0] / 2015-10-21
 ### Added
@@ -44,6 +61,26 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     ~ [#124](https://github.com/thomasjo/atom-latex/pull/124)
     / [@WoodyWoodsta](https://github.com/WoodyWoodsta)
 
+## [0.25.1] / 2015-08-21
+### Added
+- Additional default (platform dependent) TeX paths;  
+    `%SystemDrive%\\texlive\\2015\\bin\\win32`
+    `/Library/TeX/texbin`
+
+### Changed
+- The `texify` default command arguments now matches the `latexmk` builder.
+- Improved notification messages specific to `TexifyBuilder`.
+- Use `%SystemDrive%`, `%ProgramFiles`, and `%ProgramFiles(x86)%` environment
+  variables on Windows systems.  
+    ~ [#103](https://github.com/thomasjo/atom-latex/pull/103)
+    / [@idleberg](https://github.com/idleberg)
+
+### Fixed
+- Typo in `TexifyBuilder` related to notifications.
+- Wrap `CustomOpener` path in quotes to support paths containing spaces.  
+    ~ [#114](https://github.com/thomasjo/atom-latex/pull/114)
+    / [@ahoereth](https://github.com/ahoereth)
+
 ## [0.25.0] / 2015-07-05
 ### Added
 - Introduces a new builder for MiKTeX's `texify`.
@@ -52,11 +89,46 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - *Clean* command now has default shortcut `ctrl-alt-c`.
 
+## [0.24.2] / 2015-06-19
+### Fixed
+- Explicitly set the current working directory.
+  Fixes [#87](https://github.com/thomasjo/atom-latex/issues/87).
+
+## [0.24.1] / 2015-05-31
+### Added
+- New option `alwaysOpenResultInAtom` which allows specifying that results
+  should always be opened in Atom, using the pdf-viewer package.
+
+### Changed
+- Improved how we determine opener executable existence.
+
+### Fixed
+- Increased process' max buffer size to 50 MB.
+  Fixes [#88](https://github.com/thomasjo/atom-latex/issues/88).
+
 ## [0.24.0] / 2015-05-23
 ### Changed
 - Clicking the error indicator in the status bar now opens the associated log
   file instead of opening the developer console, and in addition attempts to
   scroll to the first error.
+
+## [0.23.4] / 2015-05-12
+### Fixed
+- Ensure `Composer::shouldMoveResult` behaves as expected.  
+  Fixes [#80](https://github.com/thomasjo/atom-latex/issues/80).
+
+## [0.23.3] / 2015-05-11
+- Bug caused by breaking change in fs-plus.  
+  Fixes [#78](https://github.com/thomasjo/atom-latex/issues/78).
+
+## [0.23.2] / 2015-05-07
+### Fixed
+- Ensure we always bootstrap properly.
+
+## [0.23.1] / 2015-05-07
+### Fixed
+- Launch SumatraPDF with `execFile` instead of `exec`.  
+  Fixes [#77](https://github.com/thomasjo/atom-latex/issues/77).
 
 ## [0.23.0] / 2015-05-07
 Migration from CoffeeScript to Babel.
@@ -103,6 +175,10 @@ minor release.
     ~ [#68](https://github.com/thomasjo/atom-latex/pull/68)
     / [@jacoblchapman](https://github.com/jacoblchapman)
 
+## [0.19.1] / 2015-03-02
+### Fixed
+- Properly handle undefined results from parser.
+
 ## [0.19.0] / 2015-03-02
 ### Changed
 - Improved the error logging scheme slightly, including better error messages
@@ -116,6 +192,11 @@ minor release.
 ### Fixed
 - Bugs related to missing files during move, and missing information in log
   file during parsing (e.g. partially failed build).
+
+## [0.18.1] / 2015-02-09
+### Fixed
+- Resolved `NullReferenceException` bug.  
+  Fixes [#53](https://github.com/thomasjo/atom-latex/issues/53).
 
 ## [0.18.0] / 2015-02-06
 ### Fixed
@@ -135,6 +216,10 @@ minor release.
 - Bug caused by incorrect assumption of a log file always being generated by a
   build; moved volatile log parsing result usage to deeper scope.
 
+## [0.16.1] / 2015-02-02
+### Fixed
+- Resolve deprecated Atom API usage.
+
 ## [0.16.0] / 2015-01-28
 ### Added
 - Support for cross-platform and Windows PDF viewers.  
@@ -152,6 +237,15 @@ minor release.
 - Deprecation warning in `keymaps/latex.cson`.  
     ~ [#44](https://github.com/thomasjo/atom-latex/pull/44)
     / [@evandromr](https://github.com/evandromr)
+
+## [0.15.2] / 2015-01-20
+### Changed
+- Update required Atom version to `>0.170.0`.
+
+## [0.15.1] / 2015-01-20
+### Fixed
+- Bug related to paths containing spaces.  
+  Fixes [#42](https://github.com/thomasjo/atom-latex/issues/42).
 
 ## [0.15.0] / 2015-01-19
 ### Added
