@@ -30,33 +30,33 @@ describe('LatexmkBuilder', () => {
     })
 
     it('adds -shell-escape flag when package config value is set', () => {
-      helpers.spyOnConfig('latex.enableShellEscape', true)
+      atom.config.set('latex.enableShellEscape', true)
       expect(builder.constructArgs(filePath)).toContain('-shell-escape')
     })
 
     it('adds -outdir=<path> argument according to package config', () => {
       const outdir = 'bar'
       const expectedArg = `-outdir="${path.join(fixturesPath, outdir)}"`
-      helpers.spyOnConfig('latex.outputDirectory', outdir)
+      atom.config.set('latex.outputDirectory', outdir)
 
       expect(builder.constructArgs(filePath)).toContain(expectedArg)
     })
 
     it('adds engine argument according to package config', () => {
-      helpers.spyOnConfig('latex.engine', 'lualatex')
+      atom.config.set('latex.engine', 'lualatex')
       expect(builder.constructArgs(filePath)).toContain('-lualatex')
     })
 
     it('adds a custom engine string according to package config', () => {
-      helpers.spyOnConfig('latex.customEngine', 'pdflatex %O %S')
+      atom.config.set('latex.customEngine', 'pdflatex %O %S')
       expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
     })
 
     it('adds -ps or -dvi and removes -pdf arguments according to package config', () => {
-      helpers.spyOnConfig('latex.outputFormat', 'ps')
+      atom.config.set('latex.outputFormat', 'ps')
       expect(builder.constructArgs(filePath)).toContain('-ps')
       expect(builder.constructArgs(filePath)).not.toContain('-pdf')
-      helpers.spyOnConfig('latex.outputFormat', 'dvi')
+      atom.config.set('latex.outputFormat', 'dvi')
       expect(builder.constructArgs(filePath)).toContain('-dvi')
       expect(builder.constructArgs(filePath)).not.toContain('-pdf')
     })

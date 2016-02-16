@@ -1,6 +1,6 @@
 'use babel'
 
-import helpers from './spec-helpers'
+import './spec-bootstrap'
 import path from 'path'
 import MasterTexFinder from '../lib/master-tex-finder'
 
@@ -53,7 +53,7 @@ describe('MasterTexFinder', () => {
       const inc2Path = path.join(fixturesPath, 'inc2.tex')
       const finder = new MasterTexFinder(inc2Path)
 
-      helpers.spyOnConfig('latex.useMasterFileSearch', false)
+      atom.config.set('latex.useMasterFileSearch', false)
       spyOn(finder, 'isMasterFile').andCallThrough()
       spyOn(finder, 'searchForMasterFile').andCallThrough()
 

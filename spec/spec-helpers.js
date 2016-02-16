@@ -2,7 +2,6 @@
 
 import './spec-bootstrap'
 
-import _ from 'lodash'
 import fs from 'fs-plus'
 import temp from 'temp'
 import wrench from 'wrench'
@@ -20,21 +19,6 @@ export default {
 
   overridePlatform (name) {
     Object.defineProperty(process, 'platform', {__proto__: null, value: name})
-  },
-
-  spyOnConfig (key, value) {
-    const get = atom.config.get
-    if (!jasmine.isSpy(get)) {
-      spyOn(atom.config, 'get').andCallFake(requestedKey => {
-        const fakeValue = _.get(atom.config.get.values, requestedKey, null)
-        if (fakeValue !== null) { return fakeValue }
-        return get.call(atom.config, requestedKey)
-      })
-
-      atom.config.get.values = {}
-    }
-
-    atom.config.get.values[key] = value
   },
 
   setTimeoutInterval (interval) {

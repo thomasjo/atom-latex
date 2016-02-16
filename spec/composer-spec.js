@@ -1,6 +1,6 @@
 'use babel'
 
-import helpers from './spec-helpers'
+import './spec-bootstrap'
 import fs from 'fs-plus'
 import _ from 'lodash'
 import path from 'path'
@@ -171,7 +171,7 @@ describe('Composer', () => {
 
     beforeEach(() => {
       spyOn(fs, 'remove').andCallThrough()
-      helpers.spyOnConfig('latex.cleanExtensions', extensions)
+      atom.config.set('latex.cleanExtensions', extensions)
     })
 
     it('deletes all files for the current tex document when output has not been redirected', () => {
@@ -208,29 +208,29 @@ describe('Composer', () => {
 
   describe('shouldMoveResult', () => {
     it('should return false when using neither an output directory, nor the move option', () => {
-      helpers.spyOnConfig('latex.outputDirectory', '')
-      helpers.spyOnConfig('latex.moveResultToSourceDirectory', false)
+      atom.config.set('latex.outputDirectory', '')
+      atom.config.set('latex.moveResultToSourceDirectory', false)
 
       expect(composer.shouldMoveResult()).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
-      helpers.spyOnConfig('latex.outputDirectory', '')
-      helpers.spyOnConfig('latex.moveResultToSourceDirectory', true)
+      atom.config.set('latex.outputDirectory', '')
+      atom.config.set('latex.moveResultToSourceDirectory', true)
 
       expect(composer.shouldMoveResult()).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
-      helpers.spyOnConfig('latex.outputDirectory', 'baz')
-      helpers.spyOnConfig('latex.moveResultToSourceDirectory', false)
+      atom.config.set('latex.outputDirectory', 'baz')
+      atom.config.set('latex.moveResultToSourceDirectory', false)
 
       expect(composer.shouldMoveResult()).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
-      helpers.spyOnConfig('latex.outputDirectory', 'baz')
-      helpers.spyOnConfig('latex.moveResultToSourceDirectory', true)
+      atom.config.set('latex.outputDirectory', 'baz')
+      atom.config.set('latex.moveResultToSourceDirectory', true)
 
       expect(composer.shouldMoveResult()).toBe(true)
     })

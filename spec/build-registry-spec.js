@@ -16,7 +16,7 @@ describe('BuilderRegistry', () => {
 
   describe('getBuilder', () => {
     beforeEach(() => {
-      helpers.spyOnConfig('latex.builder', 'latexmk')
+      atom.config.set('latex.builder', 'latexmk')
     })
 
     it('returns null when no builders are associated with the given file', () => {
@@ -28,7 +28,7 @@ describe('BuilderRegistry', () => {
       const filePath = path.join('foo', 'bar.tex')
       expect(registry.getBuilder(filePath).name).toEqual('LatexmkBuilder')
 
-      helpers.spyOnConfig('latex.builder', 'texify')
+      atom.config.set('latex.builder', 'texify')
       expect(registry.getBuilder(filePath).name).toEqual('TexifyBuilder')
     })
 

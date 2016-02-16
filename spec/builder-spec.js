@@ -25,51 +25,46 @@ describe('Builder', () => {
     it('uses platform default when `latex.texPath` is not configured', () => {
       const defaultTexPath = '/foo/bar'
       const expectedPath = [defaultTexPath, process.env.PATH].join(path.delimiter)
-      helpers.spyOnConfig('latex.texPath', '')
+      atom.config.set('latex.texPath', '')
       spyOn(builder, 'defaultTexPath').andReturn(defaultTexPath)
 
       const constructedPath = builder.constructPath()
-
       expect(constructedPath).toBe(expectedPath)
     })
 
     it('replaces surrounded $PATH with process.env.PATH', () => {
       const texPath = '/foo:$PATH:/bar'
       const expectedPath = texPath.replace('$PATH', process.env.PATH)
-      helpers.spyOnConfig('latex.texPath', texPath)
+      atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
-
       expect(constructedPath).toBe(expectedPath)
     })
 
     it('replaces leading $PATH with process.env.PATH', () => {
       const texPath = '$PATH:/bar'
       const expectedPath = texPath.replace('$PATH', process.env.PATH)
-      helpers.spyOnConfig('latex.texPath', texPath)
+      atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
-
       expect(constructedPath).toBe(expectedPath)
     })
 
     it('replaces trailing $PATH with process.env.PATH', () => {
       const texPath = '/foo:$PATH'
       const expectedPath = texPath.replace('$PATH', process.env.PATH)
-      helpers.spyOnConfig('latex.texPath', texPath)
+      atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
-
       expect(constructedPath).toBe(expectedPath)
     })
 
     it('prepends process.env.PATH with texPath', () => {
       const texPath = '/foo'
       const expectedPath = [texPath, process.env.PATH].join(path.delimiter)
-      helpers.spyOnConfig('latex.texPath', texPath)
+      atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
-
       expect(constructedPath).toBe(expectedPath)
     })
   })
@@ -84,8 +79,8 @@ describe('Builder', () => {
 
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
       spyOn(builder, 'resolveLogFilePath').andReturn('foo.log')
-      builder.parseLogFile(filePath)
 
+      builder.parseLogFile(filePath)
       expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath)
     })
 
