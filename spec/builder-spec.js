@@ -111,28 +111,4 @@ describe('Builder', () => {
       expect(builder.getLatexEngineFromMagic(filePath)).toEqual('pdflatex')
     })
   })
-
-  describe('::getBuilder', () => {
-    beforeEach(() => {
-      helpers.spyOnConfig('latex.builder', 'latexmk')
-    })
-
-    it('returns null when no builders are associated with the given file', () => {
-      const filePath = path.join('foo', 'quux.txt')
-      expect(Builder.getBuilder(filePath)).toBeNull()
-    })
-
-    it('returns the configured builder when given a regular .tex file', () => {
-      const filePath = path.join('foo', 'bar.tex')
-      expect(Builder.getBuilder(filePath).name).toEqual('LatexmkBuilder')
-
-      helpers.spyOnConfig('latex.builder', 'texify')
-      expect(Builder.getBuilder(filePath).name).toEqual('TexifyBuilder')
-    })
-
-    it('throws an error when unable to resolve ambigous builder registration', () => {
-      helpers.spyOnConfig('latex.builder', 'foo')
-      expect(() => { Builder.getBuilder(filePath) }).toThrow()
-    })
-  })
 })

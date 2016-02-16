@@ -21,23 +21,8 @@ describe('Latex', () => {
     it('initializes all properties', () => {
       spyOn(latex, 'resolveOpenerImplementation').andReturn(NullOpener)
 
-      expect(latex.builder).toBeDefined()
       expect(latex.logger).toBeDefined()
       expect(latex.opener).toBeDefined()
-    })
-  })
-
-  describe('getDefaultBuilder', () => {
-    it('returns an instance of LatexmkBuilder by default', () => {
-      spyOn(latex, 'useLatexmk').andReturn(true)
-      const defaultBuilder = latex.getDefaultBuilder()
-      expect(defaultBuilder.constructor.name).toBe('LatexmkBuilder')
-    })
-
-    it('returns an instance of TexifyBuilder when chosen', () => {
-      spyOn(latex, 'useLatexmk').andReturn(false)
-      const defaultBuilder = latex.getDefaultBuilder()
-      expect(defaultBuilder.constructor.name).toBe('TexifyBuilder')
     })
   })
 
