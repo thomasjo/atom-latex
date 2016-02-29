@@ -43,6 +43,16 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
+  "activationCommands": {
+    "atom-workspace": [
+      "latex:build",
+      "latex:clean",
+      "latex:sync"
+    ]
+  },
+  "activationHooks": [
+    "language-latex:grammar-used"
+  ],
   "consumedServices": {
     "status-bar": {
       "versions": {
