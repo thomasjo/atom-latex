@@ -51,16 +51,37 @@
     }
   },
   "configSchema": {
-    "alwaysOpenResultInAtom": {
-      "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
-      "type": "boolean",
-      "default": false
+    "texPath": {
+      "title": "TeX Path",
+      "description": "The full path to your TeX distribution's bin directory. Supports $PATH substitution.",
+      "type": "string",
+      "default": "",
+      "order": 1
     },
     "builder": {
       "description": "Select LaTeX builder. MiKTeX distribution is required for texify.",
       "type": "string",
       "enum": ["latexmk", "texify"],
-      "default": "latexmk"
+      "default": "latexmk",
+      "order": 2
+    },
+    "engine": {
+      "description": "Select standard LaTeX engine",
+      "type": "string",
+      "enum": ["pdflatex", "lualatex", "xelatex"],
+      "default": "pdflatex",
+      "order": 3
+    },
+    "customEngine": {
+      "description": "Enter command for custom LaTeX engine. Overrides Engine.",
+      "type": "string",
+      "default": "",
+      "order": 4
+    },
+    "enableShellEscape": {
+      "type": "boolean",
+      "default": false,
+      "order": 5
     },
     "cleanExtensions": {
       "type": "array",
@@ -81,83 +102,79 @@
         ".snm",
         ".synctex.gz",
         ".toc"
-      ]
-    },
-    "customEngine": {
-      "description": "Enter command for custom LaTeX engine. Overrides Engine.",
-      "type": "string",
-      "default": ""
-    },
-    "enableShellEscape": {
-      "type": "boolean",
-      "default": false
-    },
-    "engine": {
-      "description": "Select standard LaTeX engine",
-      "type": "string",
-      "enum": ["pdflatex", "lualatex", "xelatex"],
-      "default": "pdflatex"
-    },
-    "moveResultToSourceDirectory": {
-      "title": "Move Result to Source Directory",
-      "description": "Ensures that the output file produced by a successful build is stored together with the TeX document that produced it.",
-      "type": "boolean",
-      "default": true
-    },
-    "okularPath": {
-      "title": "Okular viewer Path",
-      "description": "Full application path to Okular (*nix).",
-      "type": "string",
-      "default": "/usr/bin/okular"
-    },
-    "openResultAfterBuild": {
-      "title": "Open Result after Successful Build",
-      "type": "boolean",
-      "default": true
-    },
-    "openResultInBackground": {
-      "title": "Open Result in Background",
-      "type": "boolean",
-      "default": true
+      ],
+      "order": 6
     },
     "outputDirectory": {
       "description": "All files generated during a build will be redirected here. Leave blank if you want the build output to be stored in the same directory as the TeX document.",
       "type": "string",
-      "default": ""
+      "default": "",
+      "order": 7
     },
     "outputFormat": {
       "description": "Output file format. DVI and PS currently only supported for latexmk.",
       "type": "string",
       "enum": ["pdf", "dvi", "ps"],
-      "default": "pdf"
+      "default": "pdf",
+      "order": 8
+    },
+    "moveResultToSourceDirectory": {
+      "title": "Move Result to Source Directory",
+      "description": "Ensures that the output file produced by a successful build is stored together with the TeX document that produced it.",
+      "type": "boolean",
+      "default": true,
+      "order": 9
+    },
+    "openResultAfterBuild": {
+      "title": "Open Result after Successful Build",
+      "type": "boolean",
+      "default": true,
+      "order": 10
+    },
+    "openResultInBackground": {
+      "title": "Open Result in Background",
+      "type": "boolean",
+      "default": true,
+      "order": 11
+    },
+    "alwaysOpenResultInAtom": {
+      "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
+      "type": "boolean",
+      "default": false,
+      "order": 12
     },
     "skimPath": {
       "description": "Full application path to Skim (OS X).",
       "type": "string",
-      "default": "/Applications/Skim.app"
+      "default": "/Applications/Skim.app",
+      "order": 13
     },
     "sumatraPath": {
       "title": "SumatraPDF Path",
       "description": "Full application path to SumatraPDF (Windows).",
       "type": "string",
-      "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe"
+      "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe",
+      "order": 14
     },
-    "texPath": {
-      "title": "TeX Path",
-      "description": "The full path to your TeX distribution's bin directory. Supports $PATH substitution.",
+    "okularPath": {
+      "title": "Okular viewer Path",
+      "description": "Full application path to Okular (*nix).",
       "type": "string",
-      "default": ""
-    },
-    "useMasterFileSearch": {
-      "description": "Enables naive search for master/root file when building distributed documents. Does not affect 'Magic Comments' functionality.",
-      "type": "boolean",
-      "default": true
+      "default": "/usr/bin/okular",
+      "order": 15
     },
     "viewerPath": {
       "title": "Custom PDF viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
-      "default": ""
+      "default": "",
+      "order": 16
+    },
+    "useMasterFileSearch": {
+      "description": "Enables naive search for master/root file when building distributed documents. Does not affect 'Magic Comments' functionality.",
+      "type": "boolean",
+      "default": true,
+      "order": 17
     }
   }
 }
