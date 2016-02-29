@@ -157,7 +157,6 @@
       "order": 14
     },
     "okularPath": {
-      "title": "Okular viewer Path",
       "description": "Full application path to Okular (*nix).",
       "type": "string",
       "default": "/usr/bin/okular",
