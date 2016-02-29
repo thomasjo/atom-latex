@@ -163,7 +163,7 @@
       "order": 15
     },
     "viewerPath": {
-      "title": "Custom PDF viewer Path",
+      "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
