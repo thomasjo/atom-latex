@@ -53,7 +53,7 @@
   "configSchema": {
     "texPath": {
       "title": "TeX Path",
-      "description": "The full path to your TeX distribution's bin directory. Supports $PATH substitution.",
+      "description": "The full path to your TeX distribution's bin directory. Supports `$PATH` substitution.",
       "type": "string",
       "default": "",
       "order": 1
@@ -138,6 +138,7 @@
       "order": 11
     },
     "alwaysOpenResultInAtom": {
+      "title": "Always Open Result in Atom",
       "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
       "type": "boolean",
       "default": false,
