@@ -171,7 +171,7 @@
       "order": 16
     },
     "useMasterFileSearch": {
-      "description": "Enables naive search for master/root file when building distributed documents. Does not affect 'Magic Comments' functionality.",
+      "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": true,
       "order": 17
