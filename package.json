@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "description": "Compile LaTeX documents from within Atom.",
   "keywords": [
     "tex",
@@ -71,14 +71,21 @@
     "builder": {
       "description": "Select LaTeX builder. MiKTeX distribution is required for texify.",
       "type": "string",
-      "enum": ["latexmk", "texify"],
+      "enum": [
+        "latexmk",
+        "texify"
+      ],
       "default": "latexmk",
       "order": 2
     },
     "engine": {
       "description": "Select standard LaTeX engine",
       "type": "string",
-      "enum": ["pdflatex", "lualatex", "xelatex"],
+      "enum": [
+        "pdflatex",
+        "lualatex",
+        "xelatex"
+      ],
       "default": "pdflatex",
       "order": 3
     },
@@ -95,7 +102,9 @@
     },
     "cleanExtensions": {
       "type": "array",
-      "items": {"type": "string"},
+      "items": {
+        "type": "string"
+      },
       "default": [
         ".aux",
         ".bbl",
@@ -124,7 +133,11 @@
     "outputFormat": {
       "description": "Output file format. DVI and PS currently only supported for latexmk.",
       "type": "string",
-      "enum": ["pdf", "dvi", "ps"],
+      "enum": [
+        "pdf",
+        "dvi",
+        "ps"
+      ],
       "default": "pdf",
       "order": 8
     },
