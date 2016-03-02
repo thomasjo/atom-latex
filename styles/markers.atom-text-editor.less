@@ -1,0 +1,12 @@
+@import "ui-variables";
+
+:host(:host) .gutter .line-number {
+  &.latex-error {
+    background-color: fade(@background-color-error, 50%);
+    color: @text-color-error;
+  }
+  &.latex-warning {
+    background-color: fade(@background-color-warning, 50%);
+    color: @text-color-warning;
+  }
+}
