@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Line number markers to help indicate which lines contain errors and warnings.
+    ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
+    / [@Focus](https://github.com/Focus)
+- The pdf-view opener now supports forward-sync.
+    ~ [#70](https://github.com/thomasjo/atom-latex/pull/170)
+    / [@nsaje](https://github.com/nsaje)
+
+### Changed
+- Improved the package settings; better descriptions, explicit and more logical
+  option ordering, etc.
+
+### Fixed
+- Bug related to undefined `editor.getPath()` for new editor instances.
+    ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
+    / [@Focus](https://github.com/Focus)
+
 ## [0.29.0] / 2015-01-28
 ### Added
 - Adds support for specifying output format (PDF, PS, DVI). Note that this
