@@ -2,9 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.30.0] / 2016-03-02
 ### Added
-- Line number markers to help indicate which lines contain errors and warnings.
+- After a LaTeX file has been built it gets decorated with line number markers
+  to indicate which lines contain errors and warnings.
     ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
     / [@Focus](https://github.com/Focus)
 - The pdf-view opener now supports forward-sync.
@@ -386,7 +387,8 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.29.0...HEAD
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.30.0...HEAD
+[0.30.0]: https://github.com/thomasjo/atom-latex/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/thomasjo/atom-latex/compare/v0.28.2...v0.29.0
 [0.28.2]: https://github.com/thomasjo/atom-latex/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/thomasjo/atom-latex/compare/v0.28.0...v0.28.1
