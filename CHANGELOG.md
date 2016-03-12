@@ -219,7 +219,8 @@ minor release.
 
 ## [0.18.0] / 2015-02-06
 ### Fixed
-- Bug triggered by the text "Output written on .." missing from log file, while at the same time `latexmk` returned status code 0 (i.e. "success"). This
+- Bug triggered by the text "Output written on .." missing from log file, while
+  at the same time `latexmk` returned status code 0 (i.e. "success"). This
   caused the `outputFilePath` key on the log parsing result to equal 'null' and
   this value thus incorrectly ended up in paths etc. Missing output file info
   is now **always** treated as an error.
