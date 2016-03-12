@@ -27,7 +27,6 @@ If you're using MikTeX and have installed to the default location then all you
 should need to do is change the *Builder* to `texify`. This can be done either
 in the settings view, or directly in your `config.cson` file.
 
-
 ## Usage
 Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
 a `.tex` file.
@@ -38,8 +37,8 @@ The package has support for the following Tex Magic comments
 - `% !TEX program = pdflatex` Select Latex Engine (pdflatex,lualatex,xelatex)
 
 ## Status
-Please note that this package is in a **beta** state. Right now everything is
-very naïve. As an example, there's no proper error and warning handling.
+Please note that this package is in a **beta** state. As an example, there's no
+proper error and warning handling. Any and all help is greatly appreciated.
 
 ## TODO
 Current wish list, in a semi-prioritized order.
@@ -47,8 +46,6 @@ Current wish list, in a semi-prioritized order.
 - [ ] Build output.
   - [x] Error handling.
   - [ ] Warnings, and other non-critical messages.
-- [ ] BibTeX autocompletion support.
-- [ ] Add support for non-PDF typesetting (e.g. dvi).
 - [ ] Project management.
   - [ ] Setting to override the output directory.
   - [ ] Setting to override the builder.
