@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.32.0] / 2016-03-12
 ### Added
 - The SumatraPDF opener now has full sync support.
     ~ [#163](https://github.com/thomasjo/atom-latex/pull/163)
@@ -407,7 +407,8 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.31.0...HEAD
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.32.0...HEAD
+[0.32.0]: https://github.com/thomasjo/atom-latex/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/thomasjo/atom-latex/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/thomasjo/atom-latex/compare/v0.29.0...v0.30.0
 [0.29.0]: https://github.com/thomasjo/atom-latex/compare/v0.28.2...v0.29.0
