@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
     / [@Focus](https://github.com/Focus)
 - The pdf-view opener now supports forward-sync.
-    ~ [#70](https://github.com/thomasjo/atom-latex/pull/170)
+    ~ [#170](https://github.com/thomasjo/atom-latex/pull/170)
     / [@nsaje](https://github.com/nsaje)
 
 ### Changed
