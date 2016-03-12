@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- The SumatraPDF opener now has full sync support.
+    ~ [#163](https://github.com/thomasjo/atom-latex/pull/163)
+    / [@avonmoll](https://github.com/avonmoll)
+
 ### Changed
 - The heuristic-based master file search is now disabled by default.
   If you want this functionality, simply go to the package settings and enable
