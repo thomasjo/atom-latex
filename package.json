@@ -203,7 +203,7 @@
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
-      "default": true,
+      "default": false,
       "order": 18
     }
   }
