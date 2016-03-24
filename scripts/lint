@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+$(npm bin)/standard lib/**/*.js spec/**/*.js
