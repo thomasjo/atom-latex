@@ -9,4 +9,4 @@ notifications:
     on_success: never
     on_failure: change
 
-script: sh build/travis-ci
+script: ./scripts/cibuild
