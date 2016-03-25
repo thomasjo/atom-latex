@@ -9,4 +9,4 @@ notifications:
     on_success: never
     on_failure: change
 
-script: ./scripts/cibuild
+script: ./script/cibuild
