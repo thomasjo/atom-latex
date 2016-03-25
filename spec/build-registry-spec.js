@@ -30,7 +30,7 @@ describe('BuilderRegistry', () => {
       expect(BuilderRegistry.getBuilder(filePath).name).toEqual('TexifyBuilder')
     })
 
-    it('throws an error when unable to resolve ambigous builder registration', () => {
+    it('throws an error when unable to resolve ambigious builder registration', () => {
       helpers.spyOnConfig('latex.builder', 'foo')
       expect(() => { BuilderRegistry.getBuilder(filePath) }).toThrow()
     })
