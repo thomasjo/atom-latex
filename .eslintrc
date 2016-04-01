@@ -1,0 +1,23 @@
+{
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "plugins": [
+    "babel"
+  ],
+  "globals": {
+    "atom": true,
+    "latex": true
+  },
+  "rules": {
+    "babel/array-bracket-spacing": 2,
+    "babel/arrow-parens": 0,
+    "babel/generator-star-spacing": 2,
+    "babel/new-cap": 2,
+    "babel/no-await-in-loop": 2,
+    "babel/object-curly-spacing": 2,
+    "babel/object-shorthand": 0,
+
+    "arrow-parens": 0,
+    "no-return-assign": 0
+  }
+}
