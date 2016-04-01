@@ -18,8 +18,9 @@ describe('MasterTexFinder', () => {
     it('returns the master tex file for the current project', () => {
       const inc2Path = path.join(fixturesPath, 'inc2.tex')
       const finder = new MasterTexFinder(inc2Path)
+      const masterTexPath = path.join(fixturesPath, 'master.tex')
 
-      expect(finder.getMasterTexPath()).toBe(path.join(fixturesPath, 'master.tex'))
+      expect(finder.getMasterTexPath()).toBe(masterTexPath)
     })
 
     it('immediately return the given file, if itself is a root-file', () => {
@@ -32,7 +33,8 @@ describe('MasterTexFinder', () => {
     })
 
     it('returns the original file if more than one file is a master file', () => {
-      const multiMasterFixturePath = path.join(rootPath, 'master-tex-finder', 'multiple-masters')
+      const multiMasterFixturePath = path.join(
+        rootPath, 'master-tex-finder', 'multiple-masters')
       const inc1Path = path.join(multiMasterFixturePath, 'inc1.tex')
       const finder = new MasterTexFinder(inc1Path)
 
@@ -42,10 +44,11 @@ describe('MasterTexFinder', () => {
     it('immediately returns the file specified by the magic comment when present', () => {
       const inc1Path = path.join(fixturesPath, 'inc1.tex')
       const finder = new MasterTexFinder(inc1Path)
+      const masterTexPath = path.join(fixturesPath, 'master.tex')
 
       spyOn(finder, 'getTexFilesList').andCallThrough()
 
-      expect(finder.getMasterTexPath()).toBe(path.join(fixturesPath, 'master.tex'))
+      expect(finder.getMasterTexPath()).toBe(masterTexPath)
       expect(finder.getTexFilesList).not.toHaveBeenCalled()
     })
 
@@ -75,7 +78,8 @@ describe('MasterTexFinder', () => {
 
   describe('getTexFilesList', () => {
     it('returns the list of tex files in the project directory', () => {
-      const expectedFileList = [ 'inc1.tex', 'inc2.tex', 'inc3.tex', 'master.tex' ]
+      const expectedFileList = [
+        'inc1.tex', 'inc2.tex', 'inc3.tex', 'master.tex' ]
         .map(name => path.join(fixturesPath, name))
       const inc2Path = path.join(fixturesPath, 'inc2.tex')
       const finder = new MasterTexFinder(inc2Path)

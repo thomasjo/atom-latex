@@ -18,5 +18,6 @@
     "babel/object-shorthand": 2,
 
     "arrow-parens": 0,
+    "max-len": [2, {"code": 80, "ignoreTrailingComments": true}]
   }
 }

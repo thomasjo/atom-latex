@@ -49,7 +49,8 @@ describe('LatexmkBuilder', () => {
 
     it('adds a custom engine string according to package config', () => {
       helpers.spyOnConfig('latex.customEngine', 'pdflatex %O %S')
-      expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
+      expect(builder.constructArgs(filePath)).toContain(
+        '-pdflatex="pdflatex %O %S"')
     })
 
     it('adds -ps or -dvi and removes -pdf arguments according to package config', () => {

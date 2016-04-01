@@ -22,7 +22,8 @@ describe('Composer', () => {
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'getEditorDetails').andReturn({ editor, filePath })
 
-      builder = jasmine.createSpyObj('MockBuilder', [ 'run', 'constructArgs', 'parseLogFile' ])
+      builder = jasmine.createSpyObj(
+        'MockBuilder', [ 'run', 'constructArgs', 'parseLogFile' ])
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -157,7 +158,8 @@ describe('Composer', () => {
     const extensions = [ '.bar', '.baz', '.quux' ]
 
     function fakeFilePaths (filePath) {
-      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
+      const filePathSansExtension = filePath.substring(
+        0, filePath.lastIndexOf('.'))
       return extensions.map(ext => filePathSansExtension + ext)
     }
 
@@ -241,10 +243,12 @@ describe('Composer', () => {
     it('returns a builder instance as configured for regular .tex files', () => {
       const filePath = 'foo.tex'
 
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
+      let builderName = composer.getBuilder(filePath).constructor.name
+      expect(builderName).toEqual('LatexmkBuilder')
 
       atom.config.set('latex.builder', 'texify')
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
+      builderName = composer.getBuilder(filePath).constructor.name
+      expect(builderName).toEqual('TexifyBuilder')
     })
 
     it('returns null when passed an unhandled file type', () => {

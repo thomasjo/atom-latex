@@ -47,7 +47,8 @@ describe('Latex', () => {
     let logger
 
     beforeEach(() => {
-      logger = jasmine.createSpyObj('MockLogger', [ 'error', 'warning', 'info' ])
+      logger = jasmine.createSpyObj(
+        'MockLogger', [ 'error', 'warning', 'info' ])
       latex.setLogger(logger)
       latex.createLogProxy()
     })

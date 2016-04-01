@@ -24,7 +24,8 @@ describe('Builder', () => {
 
     it('uses platform default when `latex.texPath` is not configured', () => {
       const defaultTexPath = '/foo/bar'
-      const expectedPath = [ defaultTexPath, process.env.PATH ].join(path.delimiter)
+      const expectedPath = [ defaultTexPath, process.env.PATH ]
+        .join(path.delimiter)
       helpers.spyOnConfig('latex.texPath', '')
       spyOn(builder, 'defaultTexPath').andReturn(defaultTexPath)
 
@@ -107,7 +108,8 @@ describe('Builder', () => {
 
   describe('getLatexEngineFromMagic', () => {
     it('detects program magic and outputs correct engine', () => {
-      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-engine.tex')
+      const filePath = path.join(
+        fixturesPath, 'magic-comments', 'latex-engine.tex')
       expect(builder.getLatexEngineFromMagic(filePath)).toEqual('pdflatex')
     })
   })

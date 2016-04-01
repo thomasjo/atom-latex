@@ -4,5 +4,12 @@
   },
   "globals": {
     "waitsForPromise": true
+  },
+  "rules": {
+    "max-len": [2, {
+      "code": 80,
+      "ignoreTrailingComments": true,
+      "ignorePattern": "^\\s*describe|it\\("
+    }]
   }
 }
