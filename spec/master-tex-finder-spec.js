@@ -75,7 +75,7 @@ describe('MasterTexFinder', () => {
 
   describe('getTexFilesList', () => {
     it('returns the list of tex files in the project directory', () => {
-      const expectedFileList = ['inc1.tex', 'inc2.tex', 'inc3.tex', 'master.tex']
+      const expectedFileList = [ 'inc1.tex', 'inc2.tex', 'inc3.tex', 'master.tex' ]
         .map(name => path.join(fixturesPath, name))
       const inc2Path = path.join(fixturesPath, 'inc2.tex')
       const finder = new MasterTexFinder(inc2Path)

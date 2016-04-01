@@ -88,7 +88,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('fails to execute latexmk when given invalid arguments', () => {
-      spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
+      spyOn(builder, 'constructArgs').andReturn([ '-invalid-argument' ])
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => exitCode = code)
@@ -105,7 +105,7 @@ describe('LatexmkBuilder', () => {
 
       // Need to remove the 'force' flag to trigger the desired failure.
       const removed = args.splice(1, 1)
-      expect(removed).toEqual(['-f'])
+      expect(removed).toEqual([ '-f' ])
 
       spyOn(builder, 'constructArgs').andReturn(args)
 

@@ -9,7 +9,7 @@
     "latex": true
   },
   "rules": {
-    "babel/array-bracket-spacing": 2,
+    "babel/array-bracket-spacing": [2, "always"],
     "babel/arrow-parens": [2, "as-needed"],
     "babel/generator-star-spacing": 2,
     "babel/new-cap": 2,

@@ -24,7 +24,7 @@ describe('Builder', () => {
 
     it('uses platform default when `latex.texPath` is not configured', () => {
       const defaultTexPath = '/foo/bar'
-      const expectedPath = [defaultTexPath, process.env.PATH].join(path.delimiter)
+      const expectedPath = [ defaultTexPath, process.env.PATH ].join(path.delimiter)
       helpers.spyOnConfig('latex.texPath', '')
       spyOn(builder, 'defaultTexPath').andReturn(defaultTexPath)
 
@@ -65,7 +65,7 @@ describe('Builder', () => {
 
     it('prepends process.env.PATH with texPath', () => {
       const texPath = '/foo'
-      const expectedPath = [texPath, process.env.PATH].join(path.delimiter)
+      const expectedPath = [ texPath, process.env.PATH ].join(path.delimiter)
       helpers.spyOnConfig('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
@@ -78,7 +78,7 @@ describe('Builder', () => {
     let logParser
 
     beforeEach(() => {
-      logParser = jasmine.createSpyObj('MockLogParser', ['parse'])
+      logParser = jasmine.createSpyObj('MockLogParser', [ 'parse' ])
       spyOn(builder, 'getLogParser').andReturn(logParser)
     })
 

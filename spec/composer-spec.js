@@ -18,11 +18,11 @@ describe('Composer', () => {
     let editor, builder
 
     function initializeSpies (filePath, statusCode = 0) {
-      editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
+      editor = jasmine.createSpyObj('MockEditor', [ 'save', 'isModified' ])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'getEditorDetails').andReturn({ editor, filePath })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
+      builder = jasmine.createSpyObj('MockBuilder', [ 'run', 'constructArgs', 'parseLogFile' ])
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -154,7 +154,7 @@ describe('Composer', () => {
   })
 
   describe('clean', () => {
-    const extensions = ['.bar', '.baz', '.quux']
+    const extensions = [ '.bar', '.baz', '.quux' ]
 
     function fakeFilePaths (filePath) {
       const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))

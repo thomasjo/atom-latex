@@ -12,7 +12,7 @@ export default {
     const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
     let fixturesPath = atom.project.getPaths()[0]
     wrench.copyDirSyncRecursive(fixturesPath, tempPath, { forceDelete: true })
-    atom.project.setPaths([tempPath])
+    atom.project.setPaths([ tempPath ])
     fixturesPath = tempPath
 
     return fixturesPath
