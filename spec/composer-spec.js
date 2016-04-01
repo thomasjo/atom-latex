@@ -20,10 +20,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(composer, 'getEditorDetails').andReturn({
-        editor: editor,
-        filePath: filePath
-      })
+      spyOn(composer, 'getEditorDetails').andReturn({editor, filePath})
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
       builder.run.andCallFake(() => {

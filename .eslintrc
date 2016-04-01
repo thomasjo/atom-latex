@@ -15,7 +15,7 @@
     "babel/new-cap": 2,
     "babel/no-await-in-loop": 2,
     "babel/object-curly-spacing": 2,
-    "babel/object-shorthand": 0,
+    "babel/object-shorthand": 2,
 
     "arrow-parens": 0,
     "no-return-assign": 0
