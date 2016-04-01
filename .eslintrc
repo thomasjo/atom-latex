@@ -10,7 +10,7 @@
   },
   "rules": {
     "babel/array-bracket-spacing": 2,
-    "babel/arrow-parens": 0,
+    "babel/arrow-parens": [2, "as-needed"],
     "babel/generator-star-spacing": 2,
     "babel/new-cap": 2,
     "babel/no-await-in-loop": 2,
