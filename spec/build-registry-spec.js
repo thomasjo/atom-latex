@@ -3,6 +3,7 @@
 import helpers from './spec-helpers'
 import path from 'path'
 import BuilderRegistry from '../lib/builder-registry'
+import {NullBuilder} from './stubs'
 
 describe('BuilderRegistry', () => {
   let registry, fixturesPath, filePath
@@ -32,7 +33,8 @@ describe('BuilderRegistry', () => {
     })
 
     it('throws an error when unable to resolve ambigious builder registration', () => {
-      helpers.spyOnConfig('latex.builder', 'foo')
+      const allBuilders = registry.getAllBuilders().push(NullBuilder)
+      spyOn(registry, 'getAllBuilders').andReturn(allBuilders)
       expect(() => { registry.getBuilder(filePath) }).toThrow()
     })
   })
