@@ -67,7 +67,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -79,7 +79,7 @@ describe('LatexmkBuilder', () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -91,7 +91,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn([ '-invalid-argument' ])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -110,7 +110,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn(args)
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {

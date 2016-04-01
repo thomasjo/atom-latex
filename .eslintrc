@@ -18,6 +18,5 @@
     "babel/object-shorthand": 2,
 
     "arrow-parens": 0,
-    "no-return-assign": 0
   }
 }

@@ -43,7 +43,7 @@ describe('Composer', () => {
 
       let result = 'aaaaaaaaaaaa'
       waitsForPromise(() => {
-        return composer.build().catch(r => result = r)
+        return composer.build().catch(r => { result = r })
       })
 
       runs(() => {
@@ -59,7 +59,7 @@ describe('Composer', () => {
 
       let result
       waitsForPromise(() => {
-        return composer.build().catch(r => result = r)
+        return composer.build().catch(r => { result = r })
       })
 
       runs(() => {
