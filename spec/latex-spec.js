@@ -2,7 +2,7 @@
 
 import './spec-helpers'
 import Latex from '../lib/latex'
-import {NullOpener} from './stubs'
+import { NullOpener } from './stubs'
 
 describe('Latex', () => {
   let latex, globalLatex
@@ -54,8 +54,8 @@ describe('Latex', () => {
 
     it('correctly proxies error to error', () => {
       const statusCode = 0
-      const result = {foo: 'bar'}
-      const builder = {run () { return '' }}
+      const result = { foo: 'bar' }
+      const builder = { run () { return '' } }
       latex.log.error(statusCode, result, builder)
 
       expect(logger.error).toHaveBeenCalledWith(statusCode, result, builder)
