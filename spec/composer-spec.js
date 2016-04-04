@@ -10,6 +10,7 @@ describe('Composer', () => {
   let composer
 
   beforeEach(() => {
+    atom.config.set('latex.builder', 'latexmk')
     composer = new Composer()
   })
 
@@ -32,7 +33,7 @@ describe('Composer', () => {
 
         return Promise.reject(statusCode)
       })
-      spyOn(latex, 'getBuilder').andReturn(builder)
+      spyOn(composer, 'getBuilder').andReturn(builder)
     }
 
     beforeEach(() => {
@@ -57,6 +58,7 @@ describe('Composer', () => {
 
     it('does nothing for unsupported file extensions', () => {
       initializeSpies('foo.bar')
+      composer.getBuilder.andReturn(null)
 
       let result
       waitsForPromise(() => {
@@ -231,6 +233,26 @@ describe('Composer', () => {
       helpers.spyOnConfig('latex.moveResultToSourceDirectory', true)
 
       expect(composer.shouldMoveResult()).toBe(true)
+    })
+  })
+
+  describe('getBuilder', () => {
+    beforeEach(() => {
+      atom.config.set('latex.builder', 'latexmk')
+    })
+
+    it('returns a builder instance as configured for regular .tex files', () => {
+      const filePath = 'foo.tex'
+
+      expect(composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
+
+      atom.config.set('latex.builder', 'texify')
+      expect(composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
+    })
+
+    it('returns null when passed an unhandled file type', () => {
+      const filePath = 'quux.txt'
+      expect(composer.getBuilder(filePath)).toBeNull()
     })
   })
 })
