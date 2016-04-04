@@ -11,15 +11,15 @@ export default {
   cloneFixtures () {
     const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
     let fixturesPath = atom.project.getPaths()[0]
-    wrench.copyDirSyncRecursive(fixturesPath, tempPath, {forceDelete: true})
-    atom.project.setPaths([tempPath])
+    wrench.copyDirSyncRecursive(fixturesPath, tempPath, { forceDelete: true })
+    atom.project.setPaths([ tempPath ])
     fixturesPath = tempPath
 
     return fixturesPath
   },
 
   overridePlatform (name) {
-    Object.defineProperty(process, 'platform', {__proto__: null, value: name})
+    Object.defineProperty(process, 'platform', { __proto__: null, value: name })
   },
 
   spyOnConfig (key, value) {

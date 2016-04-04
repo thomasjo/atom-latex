@@ -2,7 +2,7 @@
 
 import './spec-helpers'
 import Latex from '../lib/latex'
-import {NullOpener} from './stubs'
+import { NullOpener } from './stubs'
 
 describe('Latex', () => {
   let latex, globalLatex
@@ -47,7 +47,8 @@ describe('Latex', () => {
     let logger
 
     beforeEach(() => {
-      logger = jasmine.createSpyObj('MockLogger', ['error', 'warning', 'info'])
+      logger = jasmine.createSpyObj(
+        'MockLogger', [ 'error', 'warning', 'info' ])
       latex.setLogger(logger)
       latex.createLogProxy()
     })

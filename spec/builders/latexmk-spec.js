@@ -49,7 +49,8 @@ describe('LatexmkBuilder', () => {
 
     it('adds a custom engine string according to package config', () => {
       helpers.spyOnConfig('latex.customEngine', 'pdflatex %O %S')
-      expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
+      expect(builder.constructArgs(filePath)).toContain(
+        '-pdflatex="pdflatex %O %S"')
     })
 
     it('adds -ps or -dvi and removes -pdf arguments according to package config', () => {
@@ -67,7 +68,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -79,7 +80,7 @@ describe('LatexmkBuilder', () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -88,10 +89,10 @@ describe('LatexmkBuilder', () => {
     })
 
     it('fails to execute latexmk when given invalid arguments', () => {
-      spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
+      spyOn(builder, 'constructArgs').andReturn([ '-invalid-argument' ])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -105,12 +106,12 @@ describe('LatexmkBuilder', () => {
 
       // Need to remove the 'force' flag to trigger the desired failure.
       const removed = args.splice(1, 1)
-      expect(removed).toEqual(['-f'])
+      expect(removed).toEqual([ '-f' ])
 
       spyOn(builder, 'constructArgs').andReturn(args)
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {

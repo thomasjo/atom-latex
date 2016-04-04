@@ -1,0 +1,23 @@
+{
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "plugins": [
+    "babel"
+  ],
+  "globals": {
+    "atom": true,
+    "latex": true
+  },
+  "rules": {
+    "babel/array-bracket-spacing": [2, "always"],
+    "babel/arrow-parens": [2, "as-needed"],
+    "babel/generator-star-spacing": 2,
+    "babel/new-cap": 2,
+    "babel/no-await-in-loop": 2,
+    "babel/object-curly-spacing": [2, "always"],
+    "babel/object-shorthand": 2,
+
+    "arrow-parens": 0,
+    "max-len": [2, {"code": 80, "ignoreTrailingComments": true}]
+  }
+}

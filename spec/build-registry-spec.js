@@ -3,7 +3,7 @@
 import helpers from './spec-helpers'
 import path from 'path'
 import BuilderRegistry from '../lib/builder-registry'
-import {NullBuilder} from './stubs'
+import { NullBuilder } from './stubs'
 
 describe('BuilderRegistry', () => {
   let registry, fixturesPath, filePath
