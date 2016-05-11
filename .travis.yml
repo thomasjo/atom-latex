@@ -2,7 +2,30 @@ branches:
   only:
     - master
 
-language: objective-c
+git:
+  depth: 10
+
+sudo: false
+
+os:
+  - linux
+  - osx
+
+addons:
+  apt:
+    packages:
+    - build-essential
+    - git
+    - libgnome-keyring-dev
+    - fakeroot
+
+env:
+  global:
+    - APM_TEST_PACKAGES="language-latex pdf-view"
+
+  matrix:
+    - ATOM_CHANNEL=stable
+    - ATOM_CHANNEL=beta
 
 notifications:
   email:
