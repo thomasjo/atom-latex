@@ -182,7 +182,7 @@ describe('Composer', () => {
       let candidatePaths
       waitsForPromise(() => {
         return composer.clean().then(resolutions => {
-          candidatePaths = _.pluck(resolutions, 'filePath')
+          candidatePaths = _.map(resolutions, 'filePath')
         })
       })
 

@@ -15,7 +15,7 @@
   "dependencies": {
     "etch": "^0.1.0",
     "fs-plus": "^2.5.0",
-    "lodash": "^3.7.0",
+    "lodash": "^4.13.1",
     "temp": "^0.8.1",
     "wrench": "^1.5.8"
   },
