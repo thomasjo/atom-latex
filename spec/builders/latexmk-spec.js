@@ -34,6 +34,11 @@ describe('LatexmkBuilder', () => {
       expect(builder.constructArgs(filePath)).toContain('-shell-escape')
     })
 
+    it('disables synctex according to package config', () => {
+      atom.config.set('latex.enableSynctex', false)
+      expect(builder.constructArgs(filePath)).toContain('-synctex=0')
+    })
+
     it('adds -outdir=<path> argument according to package config', () => {
       const outdir = 'bar'
       const expectedArg = `-outdir="${path.join(fixturesPath, outdir)}"`
