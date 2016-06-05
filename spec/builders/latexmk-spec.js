@@ -20,8 +20,8 @@ describe('LatexmkBuilder', () => {
         '-f',
         '-cd',
         '-pdf',
-        '-synctex=1',
         '-file-line-error',
+        '-synctex=1',
         `"${filePath}"`
       ]
       const args = builder.constructArgs(filePath)
@@ -36,7 +36,7 @@ describe('LatexmkBuilder', () => {
 
     it('disables synctex according to package config', () => {
       atom.config.set('latex.enableSynctex', false)
-      expect(builder.constructArgs(filePath)).toContain('-synctex=0')
+      expect(builder.constructArgs(filePath)).not.toContain('-synctex=1')
     })
 
     it('adds -outdir=<path> argument according to package config', () => {
