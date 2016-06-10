@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.33.0] / 2016-06-10
+### Added
+- SyncTeX support can be toggled via configuration.
+    ~ [#183](https://github.com/thomasjo/atom-latex/pull/183)
+    / [@alexandrecormier](https://github.com/alexandrecormier)
+
 ## [0.32.0] / 2016-03-12
 ### Added
 - The SumatraPDF opener now has full sync support.
