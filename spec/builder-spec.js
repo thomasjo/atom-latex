@@ -106,4 +106,11 @@ describe('Builder', () => {
       expect(builder.getLatexEngineFromMagic(filePath)).toEqual('pdflatex')
     })
   })
+
+  describe('getJobNamesFromMagic', () => {
+    it('detects program magic and outputs jobnames', () => {
+      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-jobnames.tex')
+      expect(builder.getJobNamesFromMagic(filePath)).toEqual(['foo', 'bar'])
+    })
+  })
 })
