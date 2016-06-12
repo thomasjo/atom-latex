@@ -20,8 +20,8 @@ describe('LatexmkBuilder', () => {
         '-f',
         '-cd',
         '-pdf',
-        '-synctex=1',
         '-file-line-error',
+        '-synctex=1',
         `"${filePath}"`
       ]
       const args = builder.constructArgs(filePath)
@@ -32,6 +32,11 @@ describe('LatexmkBuilder', () => {
     it('adds -shell-escape flag when package config value is set', () => {
       atom.config.set('latex.enableShellEscape', true)
       expect(builder.constructArgs(filePath)).toContain('-shell-escape')
+    })
+
+    it('disables synctex according to package config', () => {
+      atom.config.set('latex.enableSynctex', false)
+      expect(builder.constructArgs(filePath)).not.toContain('-synctex=1')
     })
 
     it('adds -outdir=<path> argument according to package config', () => {
@@ -67,7 +72,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -79,7 +84,7 @@ describe('LatexmkBuilder', () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -91,7 +96,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -110,7 +115,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn(args)
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => exitCode = code)
+        return builder.run(filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
