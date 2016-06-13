@@ -25,7 +25,8 @@ describe('Composer', () => {
         filePath: filePath
       })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile'])
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile', 'getJobNamesFromMagic'])
+      builder.getJobNamesFromMagic.andReturn([null])
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }

@@ -80,13 +80,13 @@ describe('Builder', () => {
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
       spyOn(builder, 'resolveLogFilePath').andReturn('foo.log')
 
-      builder.parseLogFile(filePath)
-      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath)
+      builder.parseLogFile(filePath, null)
+      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath, null)
     })
 
     it('returns null if passed a file path that does not exist', () => {
       filePath = '/foo/bar/quux.tex'
-      const result = builder.parseLogFile(filePath)
+      const result = builder.parseLogFile(filePath, null)
 
       expect(result).toBeNull()
       expect(logParser.parse).not.toHaveBeenCalled()
