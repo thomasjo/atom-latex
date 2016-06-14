@@ -17,7 +17,7 @@ describe('Composer', () => {
   describe('build', () => {
     let editor, builder
 
-    function initializeSpies (filePath, statusCode = 0) {
+    function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'getEditorDetails').andReturn({
@@ -26,7 +26,7 @@ describe('Composer', () => {
       })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile', 'getJobNamesFromMagic'])
-      builder.getJobNamesFromMagic.andReturn([null])
+      builder.getJobNamesFromMagic.andReturn(jobnames)
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -90,6 +90,24 @@ describe('Composer', () => {
       runs(() => {
         expect(editor.isModified).toHaveBeenCalled()
         expect(editor.save).toHaveBeenCalled()
+      })
+    })
+
+    it('runs the build two times with multiple job names', () => {
+      initializeSpies('file.tex', ['foo', 'bar'])
+
+      builder.parseLogFile.andReturn({
+        outputFilePath: 'file.pdf',
+        errors: [],
+        warnings: []
+      })
+
+      waitsForPromise(() => {
+        return composer.build()
+      })
+
+      runs(() => {
+        expect(builder.run.callCount).toBe(2)
       })
     })
 
