@@ -59,6 +59,11 @@
       "versions": {
         "^1.0.0": "consumeStatusBar"
       }
+    },
+    "linter": {
+      "versions": {
+        "1.0.0": "provideLinter"
+      }
     }
   },
   "configSchema": {
