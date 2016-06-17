@@ -77,14 +77,14 @@ describe('Latex', () => {
   })
 
   describe('resolveOpenerImplementation', () => {
-    it('returns SkimOpener when installed, and running on OS X', () => {
+    it('returns SkimOpener when installed, and running on macOS', () => {
       spyOn(latex, 'skimExecutableExists').andReturn(true)
       const opener = latex.resolveOpenerImplementation('darwin')
 
       expect(opener.name).toBe('SkimOpener')
     })
 
-    it('returns PreviewOpener when Skim is not installed, and running on OS X', () => {
+    it('returns PreviewOpener when Skim is not installed, and running on macOS', () => {
       spyOn(latex, 'skimExecutableExists').andReturn(false)
       const opener = latex.resolveOpenerImplementation('darwin')
 

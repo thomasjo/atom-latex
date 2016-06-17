@@ -182,7 +182,7 @@
       "order": 14
     },
     "skimPath": {
-      "description": "Full application path to Skim (OS X).",
+      "description": "Full application path to Skim (macOS).",
       "type": "string",
       "default": "/Applications/Skim.app",
       "order": 15
