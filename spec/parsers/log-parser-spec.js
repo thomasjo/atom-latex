@@ -2,6 +2,7 @@
 
 import '../spec-helpers'
 
+import _ from 'lodash'
 import path from 'path'
 import LogParser from '../../lib/parsers/log-parser'
 
@@ -36,16 +37,17 @@ describe('LogParser', () => {
       const parser = new LogParser(logFile)
       const result = parser.parse()
 
-      expect(result.errors.length).toBe(3)
+      expect(_.countBy(result.messages, 'type').Error).toBe(3)
     })
 
     it('associates an error with a file path, line number, and message', () => {
       const logFile = path.join(fixturesPath, 'errors.log')
       const parser = new LogParser(logFile)
       const result = parser.parse()
-      const error = result.errors[0]
+      const error = _.find(result.messages, (message) => { return message.type === 'Error' })
 
       expect(error).toEqual({
+        type: 'Error',
         logPosition: [196, 0],
         filePath: 'errors.tex',
         lineNumber: 10,

@@ -113,11 +113,13 @@
       "order": 6
     },
     "showBuildWarning": {
+      "title": "Show Build Warning Messages",
       "type": "boolean",
       "default": true,
       "order": 7
     },
     "showBuildInfo": {
+      "title": "Show Build Info Messages",
       "type": "boolean",
       "default": false,
       "order": 8
