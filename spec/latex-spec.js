@@ -27,10 +27,10 @@ describe('Latex', () => {
   })
 
   describe('getDefaultLogger', () => {
-    it('returns an instance of ConsoleLogger', () => {
+    it('returns an instance of DefaultLogger', () => {
       const defaultLogger = latex.getDefaultLogger()
 
-      expect(defaultLogger.constructor.name).toBe('ConsoleLogger')
+      expect(defaultLogger.constructor.name).toBe('DefaultLogger')
     })
   })
 
