@@ -48,10 +48,11 @@ describe('LogParser', () => {
 
       expect(error).toEqual({
         type: 'Error',
-        logPosition: [196, 0],
+        logRange: [[195, 0], [195, 65536]],
         filePath: 'errors.tex',
-        lineNumber: 10,
-        message: '\\begin{gather*} on input line 8 ended by \\end{gather}'
+        range: [[9, 0], [9, 65536]],
+        logPath: logFile,
+        text: '\\begin{gather*} on input line 8 ended by \\end{gather}'
       })
     })
   })
