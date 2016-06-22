@@ -48,7 +48,7 @@ describe('LogParser', () => {
 
       expect(error).toEqual({
         type: 'Error',
-        logRange: [[195, 0], [195, 65536]],
+        logRange: [[196, 0], [196, 84]],
         filePath: 'errors.tex',
         range: [[9, 0], [9, 65536]],
         logPath: logFile,
