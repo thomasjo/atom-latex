@@ -17,7 +17,7 @@
     "fs-plus": "^2.9.1",
     "lodash": "^4.13.1",
     "temp": "^0.8.3",
-    "wrench": "^1.5.8"
+    "wrench": "^1.5.9"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
