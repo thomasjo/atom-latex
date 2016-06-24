@@ -1,0 +1,39 @@
+% !TEX jobnames = foo bar
+\documentclass{article}
+
+\usepackage{lipsum}
+
+\begin{document}
+
+  \begin{center}
+    % Error: There's no line here to end
+    \lipsum[1] \\
+  \end{center}
+
+  % Error: Argument of \@sect has an extra }.
+  % Error: Paragraph ended before \@sect was complete.
+  \section{Foo\footnote{Bar}}
+
+  \lipsum[2]
+
+  \begin{tabular}{ll}
+    % Extra alignment tab has bee changed to \cr
+    Foo & Bar & Snafu \\
+  \end{tabular}
+
+  % Undefined references
+  \ref{tab:snafu}
+
+  % Class errors, warnings, etc.
+  \ClassError{foo}{Significant class issue}{RTFM!}
+  \ClassWarning{foo}{Class issue}
+  \ClassWarningNoLine{foo}{Nebulous class issue}
+  \ClassInfo{foo}{Insignificant class issue}
+
+  % Package errors, warnings, etc.
+  \PackageError{bar}{Significant package issue}{RTFM!}
+  \PackageWarning{bar}{Package issue}
+  \PackageWarningNoLine{bar}{Nebulous package issue}
+  \PackageInfo{bar}{Insignificant package issue}
+
+\end{document}
