@@ -20,7 +20,7 @@
     "wrench": "^1.5.9"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
+    "babel-eslint": "^6.1.0",
     "snazzy": "^4.0.0",
     "standard": "^7.1.0"
   },
