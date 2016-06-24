@@ -14,7 +14,7 @@
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
     "etch": "^0.6.0",
-    "fs-plus": "^2.5.0",
+    "fs-plus": "^2.9.1",
     "lodash": "^4.13.1",
     "temp": "^0.8.1",
     "wrench": "^1.5.8"
