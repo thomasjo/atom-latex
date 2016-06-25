@@ -3,6 +3,7 @@
 import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
+import * as _ from 'lodash'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
@@ -68,7 +69,7 @@ describe('LatexmkBuilder', () => {
   })
 
   describe('run', () => {
-    let exitCode
+    let exitCode, parsedLog
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
@@ -89,6 +90,43 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+      })
+    })
+
+    it('fails with code 12 and various errors, warnings and info messages are produced in log file', () => {
+      filePath = path.join(fixturesPath, 'error-warning.tex')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => {
+          exitCode = code
+          parsedLog = builder.parseLogFile(filePath)
+        })
+      })
+
+      runs(() => {
+        const messages = [
+          { type: 'Error', text: 'There\'s no line here to end' },
+          { type: 'Error', text: 'Argument of \\@sect has an extra }' },
+          { type: 'Error', text: 'Paragraph ended before \\@sect was complete' },
+          { type: 'Error', text: 'Extra alignment tab has been changed to \\cr' },
+          { type: 'Warning', text: 'Reference `tab:snafu\' on page 1 undefined' },
+          { type: 'Error', text: 'Class foo: Significant class issue' },
+          { type: 'Warning', text: 'Class foo: Class issue' },
+          { type: 'Warning', text: 'Class foo: Nebulous class issue' },
+          { type: 'Info', text: 'Class foo: Insignificant class issue' },
+          { type: 'Error', text: 'Package bar: Significant package issue' },
+          { type: 'Warning', text: 'Package bar: Package issue' },
+          { type: 'Warning', text: 'Package bar: Nebulous package issue' },
+          { type: 'Info', text: 'Package bar: Insignificant package issue' },
+          { type: 'Warning', text: 'There were undefined references' }
+        ]
+
+        for (const message of messages) {
+          expect(_.some(parsedLog.messages,
+            logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
+        }
+
+        expect(exitCode).toBe(12)
       })
     })
 
