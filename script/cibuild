@@ -8,7 +8,7 @@ shopt -s nocasematch
 
 import_dependencies() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
-  local scripts=(install-texlive)
+  local scripts=(install-texlive install-knitr)
 
   source "${script_dir}/${scripts[*]}"
 }

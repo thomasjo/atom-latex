@@ -13,11 +13,14 @@ os:
 
 addons:
   apt:
+    sources:
+      - r-packages-precise
     packages:
     - build-essential
+    - fakeroot
     - git
     - libgnome-keyring-dev
-    - fakeroot
+    - r-recommended
 
 env:
   global:

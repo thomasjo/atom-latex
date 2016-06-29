@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+# Ensure R is installed.
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  echo "Installing R..."
+  brew update
+  brew tap homebrew/science
+  brew install r
+fi
+
+# Set R_LIBS_USER to a path that is user-writable to avoid the need for sudo.
+export R_LIBS_USER="$HOME/R/library"
+mkdir -m 777 -p $R_LIBS_USER
+
+echo "Installing Knitr..."
+Rscript -e "install.packages('knitr', '$R_LIBS_USER', 'http://cran.us.r-project.org')"
