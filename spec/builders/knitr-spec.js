@@ -10,7 +10,7 @@ function getRawFile (filePath) {
 }
 
 describe('KnitrBuilder', () => {
-  let builder, fixturesPath, filePath
+  let builder, fixturesPath, filePath, outputFilePath
 
   beforeEach(() => {
     builder = new KnitrBuilder()
