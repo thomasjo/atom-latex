@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
+ensure_r_installed() {
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    echo "Installing R..."
+    choco install R.Project --ia="/DIR=\"${R_HOME}\""
+
+    export PATH="${R_HOME}/bin:${PATH}"
+  elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
+    echo "Installing R..."
+    brew update
+    brew tap homebrew/science
+    brew install r
+  fi
+}
+
+install_knitr() {
+  ensure_r_installed
+
+  # Check if we need to install Knitr.
+  if ! Rscript -e "library(knitr)" &> /dev/null; then
+    # Make sure the R_LIBS_USER directory exists to make R happy.
+    [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
+
+    echo "Installing knitr..."
+    Rscript -e "install.packages('knitr', repos = 'http://cran.us.r-project.org')"
+  else
+    echo "Using cached installation of knitr"
+  fi
+}

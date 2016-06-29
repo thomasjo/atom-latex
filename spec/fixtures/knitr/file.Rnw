@@ -1,0 +1,10 @@
+\documentclass{article}
+
+\begin{document}
+\section{\LaTeX + knitr}
+<<foo, cache=FALSE>>=
+tau = 2 * pi
+@
+
+$\tau \approx \Sexpr{round(tau, 10)}$
+\end{document}
