@@ -16,13 +16,14 @@ describe('KnitrBuilder', () => {
     builder = new KnitrBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+    outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
   })
 
   describe('constructArgs', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
         '--default-packages=knitr',
-        `-e "knit('${filePath}')"`
+        `-e "knit('${filePath}', '${outputFilePath}')"`
       ]
 
       const args = builder.constructArgs(filePath)
@@ -40,9 +41,7 @@ describe('KnitrBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
-
-        const rawFile = getRawFile(filePath.replace('.Rnw', '.tex'))
-        expect(rawFile).toContain('$\\tau \\approx 6.2831853$')
+        expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
       })
     })
 
