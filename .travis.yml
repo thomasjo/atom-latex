@@ -25,7 +25,7 @@ addons:
 env:
   global:
     - APM_TEST_PACKAGES="language-latex pdf-view"
-
+    - R_LIBS_USER=$HOME/R/library
   matrix:
     - ATOM_CHANNEL=stable
     - ATOM_CHANNEL=beta
