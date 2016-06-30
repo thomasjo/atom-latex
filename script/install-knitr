@@ -11,5 +11,10 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
   brew install r
 fi
 
-echo "Installing Knitr..."
-Rscript -e "install.packages('knitr', '$R_LIBS_USER', 'http://cran.us.r-project.org')"
+# Check if we need to install Knitr.
+if [[ ! -d "$R_LIBS_USER" ]]; then
+  echo "Installing Knitr..."
+  Rscript -e "install.packages('knitr', '$R_LIBS_USER', 'http://cran.us.r-project.org')"
+else
+  echo "Using cached installation of Knitr"
+fi
