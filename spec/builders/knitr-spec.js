@@ -34,6 +34,10 @@ describe('KnitrBuilder', () => {
   describe('run', () => {
     let exitCode
 
+    beforeEach(() => {
+      atom.config.set('latex.builder', 'latexmk')
+    })
+
     it('successfully executes Knitr when given a valid R Sweave file', () => {
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
