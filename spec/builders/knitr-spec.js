@@ -1,6 +1,7 @@
 'use babel'
 
 import helpers from '../spec-helpers'
+import _ from 'lodash'
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
@@ -58,6 +59,22 @@ describe('KnitrBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(1)
+      })
+    })
+
+    it('detects missing knitr library and logs an error', () => {
+      const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
+      const options = _.merge(builder.constructChildProcessOptions(filePath), { env })
+      spyOn(builder, 'constructChildProcessOptions').andReturn(options)
+      spyOn(latex.log, 'error').andCallThrough()
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(-1)
+        expect(latex.log.error).toHaveBeenCalled()
       })
     })
   })
