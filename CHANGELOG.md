@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.33.1] / 2016-07-04
+### Changed
+- Renamed OS X to macOS.
+
+### Fixed
+- Bug caused by API changes in Etch v0.6.0.
+
 ## [0.33.0] / 2016-06-10
 ### Added
 - SyncTeX support can be toggled via configuration.
