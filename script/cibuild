@@ -9,4 +9,4 @@ export PATH="${script_dir}:${PATH}"
 source install-texlive
 
 # Grab and execute standard Atom package CI build script.
-curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh
+curl -s https://raw.githubusercontent.com/Arcanemagus/ci/193a5b3f4aed66e14ab57093fcd7e85ff5fee014/build-package.sh | sh
