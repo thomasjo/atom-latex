@@ -11,20 +11,19 @@ function getRawFile (filePath) {
 }
 
 describe('KnitrBuilder', () => {
-  let builder, fixturesPath, filePath, outputFilePath
+  let builder, fixturesPath, filePath
 
   beforeEach(() => {
     builder = new KnitrBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
-    outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
   })
 
   describe('constructArgs', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
         '--default-packages=knitr',
-        `-e "knit('${filePath}', '${outputFilePath}')"`
+        `-e "knit('${filePath}')"`
       ]
 
       const args = builder.constructArgs(filePath)
@@ -45,6 +44,8 @@ describe('KnitrBuilder', () => {
       })
 
       runs(() => {
+        const outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
+
         expect(exitCode).toBe(0)
         expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
       })
