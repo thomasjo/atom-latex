@@ -79,4 +79,27 @@ describe('KnitrBuilder', () => {
       })
     })
   })
+
+  describe('resolveOutputPath', () => {
+    let sourcePath, resultPath
+
+    beforeEach(() => {
+      sourcePath = '/var/foo.Rnw'
+      resultPath = '/var/foo.tex'
+    })
+
+    it('detects an absolute path and returns it unchanged', () => {
+      const stdout = `foo\nbar\n\n[1] "${resultPath}"`
+      const resolvedPath = builder.resolveOutputPath(sourcePath, stdout)
+
+      expect(resolvedPath).toBe(resultPath)
+    })
+
+    it('detects a relative path and makes it absolute with respect to the source file', () => {
+      const stdout = `foo\nbar\n\n[1] "${path.basename(resultPath)}"`
+      const resolvedPath = builder.resolveOutputPath(sourcePath, stdout)
+
+      expect(resolvedPath).toBe(resultPath)
+    })
+  })
 })
