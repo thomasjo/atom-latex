@@ -34,10 +34,7 @@ commit message best practises.
 
 This project follows the [JavaScript Standard Style][2]. Compliance with the
 rules is automatically checked during CI builds. If you want to check if your
-changes are adhering to the rules, simply execute something like
-```bash
-$(npm bin)/standard lib/**/*.js spec/**/*.js
-```
+changes are adhering to the rules, simply execute `script/lint`.
 
 
 <!--- refs --->
