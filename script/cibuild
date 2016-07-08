@@ -3,15 +3,10 @@
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
-echo "Downloading portable TeX Live installation..."
-curl -L https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz | tar xJC ~
+script_dir=$( cd $(dirname $0); pwd -P )
+export PATH="${script_dir}:${PATH}"
 
-# Ensure PATH points to the platform-specific binaries.
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  PATH=$HOME/texlive/bin/x86_64-linux:$PATH
-else
-  PATH=$HOME/texlive/bin/x86_64-darwin:$PATH
-fi
+source install-texlive
 
 # Grab and execute standard Atom package CI build script.
 curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh
