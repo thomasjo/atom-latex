@@ -1,4 +1,8 @@
-# LaTeX package [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
+# LaTeX package
+[![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
+[![Dependency Status](https://david-dm.org/thomasjo/atom-latex.svg)](https://david-dm.org/thomasjo/atom-latex)
+[![devDependency Status](https://david-dm.org/thomasjo/atom-latex/dev-status.svg)](https://david-dm.org/thomasjo/atom-latex#info=devDependencies)
+
 Compile LaTeX documents from within Atom.
 
 ## Installing
@@ -32,25 +36,30 @@ Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
 a `.tex` file.
 
 ### Magic comments
-The package has support for the following Tex Magic comments
-- `% !TEX root = ../file.tex` Select root file
-- `% !TEX program = pdflatex` Select Latex Engine (pdflatex,lualatex,xelatex)
+The package has support for the following "magic" TeX comments
+- `% !TEX root = ../file.tex` Specify the root file that should be built.
+- `% !TEX program = pdflatex` Override the LaTeX engine (pdflatex, lualatex,
+  xelatex) to use for build.
+- `% !TEX jobnames = foo bar` Control the number and names of build jobs.
 
-## Status
-Please note that this package is in a **beta** state. As an example, there's no
-proper error and warning handling. Any and all help is greatly appreciated.
+## Development status
+Please note that this package is in a **beta** state. It is stable, but lacks
+some important features. As an example, there's no proper error and warning
+handling.
 
-## TODO
+Any and all help is greatly appreciated!
+
+### TODO
 Current wish list, in a semi-prioritized order.
 
-- [ ] Build output.
+- [ ] Improved build output parsing;
   - [x] Error handling.
   - [ ] Warnings, and other non-critical messages.
-- [ ] Project management.
+- [ ] Project-specific settings;
   - [ ] Setting to override the output directory.
   - [ ] Setting to override the builder.
 
 If you see something that's missing, or disagree with the prioritization,
 consider submitting a [feature request](https://github.com/thomasjo/atom-latex/issues?labels=feature&state=open),
-and if you're feeling super helpful, submit a pull request with an updated
-TODO list :sparkling_heart:
+and if you're feeling super helpful, submit a pull request with an updated TODO
+list :sparkling_heart:
