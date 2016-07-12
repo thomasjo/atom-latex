@@ -25,4 +25,6 @@ environment:
     - ATOM_CHANNEL: beta
 
 build_script:
+  - echo %cd%
+  - dir
   - bash .\script\build
