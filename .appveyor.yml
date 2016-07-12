@@ -25,4 +25,4 @@ environment:
     - ATOM_CHANNEL: beta
 
 build_script:
-  - sh ./script/build
+  - bash .\script\build
