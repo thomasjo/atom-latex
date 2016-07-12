@@ -25,5 +25,6 @@ environment:
     - ATOM_CHANNEL: beta
 
 build_script:
-  - dir C:\msys64
-  - C:\msys64\bash .\script\build
+  - dir C:\msys64\usr
+  - dir C:\msys64\usr\bin
+  - C:\msys64\usr\bin\bash .\script\build
