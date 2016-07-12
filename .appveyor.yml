@@ -25,5 +25,5 @@ environment:
     - ATOM_CHANNEL: beta
 
 build_script:
-  - C:\msys64\usr\bin\bash -c "printenv"
-  - C:\msys64\usr\bin\bash ./script/build
+  - bash -c "printenv"
+  - bash ./script/cibuild
