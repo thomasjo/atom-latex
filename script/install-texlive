@@ -3,6 +3,9 @@
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
 _get_download_url() {
   echo "https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz"
 }
