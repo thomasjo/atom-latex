@@ -9,10 +9,16 @@ _get_download_url() {
 
 install_texlive() {
   echo "Downloading portable TeX Live installation..."
-  curl -sL $( _get_download_url ) | tar xJC "$HOME"
+  if [[ "$APPVEYOR" == true ]]; then
+    curl -L https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z | 7z e ~
+  else
+    curl -sL $( _get_download_url ) | tar xJC "$HOME"
+  fi
 
   # Ensure PATH points to the platform-specific binaries.
-  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  if [[ "$APPVEYOR" == true ]]; then
+    PATH=$HOME/texlive/bin/win32:$PATH
+  elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
   else
     PATH="$HOME/texlive/bin/x86_64-darwin:$PATH"
