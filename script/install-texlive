@@ -14,7 +14,7 @@ install_texlive() {
   echo $APPVEYOR
   echo "Downloading portable TeX Live installation..."
   if [[ "$APPVEYOR" == true ]]; then
-    curl -L https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z | 7z e -si -o$HOME
+    curl -L https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.7z | 7z e -si -an -t7z -o$HOME
   else
     curl -sL $( _get_download_url ) | tar xJC "$HOME"
   fi
