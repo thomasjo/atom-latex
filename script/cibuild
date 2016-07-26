@@ -1,12 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
-script_dir=$( cd $(dirname $0); pwd -P )
-export PATH="${script_dir}:${PATH}"
+import_dependencies() {
+  local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+  local scripts=(install-texlive)
 
-source install-texlive
+  source "$script_dir/${scripts[*]}"
+}
 
-# Grab and execute standard Atom package CI build script.
-curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh
+exec_ci() {
+  # Grab and execute standard Atom package CI build script.
+  curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
+}
+
+main() {
+  import_dependencies
+  install_texlive
+  exec_ci
+}
+
+main "$@"

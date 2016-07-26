@@ -1,15 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
-# Download and extract prebuilt TeX Live distribution.
-echo "Downloading portable TeX Live installation..."
-curl -L https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz | tar xJC ~
+_get_download_url() {
+  echo "https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz"
+}
 
-# Ensure PATH points to the platform-specific binaries.
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  PATH=$HOME/texlive/bin/x86_64-linux:$PATH
-else
-  PATH=$HOME/texlive/bin/x86_64-darwin:$PATH
-fi
+install_texlive() {
+  echo "Downloading portable TeX Live installation..."
+  curl -sL $( _get_download_url ) | tar xJC "$HOME"
+
+  # Ensure PATH points to the platform-specific binaries.
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
+  else
+    PATH="$HOME/texlive/bin/x86_64-darwin:$PATH"
+  fi
+}
