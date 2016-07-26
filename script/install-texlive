@@ -6,22 +6,36 @@ set -eu
 # Enable case-insensitive pattern matching.
 shopt -s nocasematch
 
-_get_download_url() {
-  echo "https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz"
+ensure_xz_installed() {
+  if ! which xz > /dev/null; then
+    echo "Installing XZ..."
+    if [[ "$APPVEYOR" == true ]]; then
+      local archive_path=/tmp/xz.7z
+      curl -o $archive_path "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+
+      local xz_root="$HOME/xz"
+      7z x -o"$xz_root" "$archive_path"
+
+      export PATH="$xz_root/bin_x86-64:$PATH"
+    fi
+  fi
+}
+
+get_download_url() {
+  local platform = "travis"
+  if [[ "$APPVEYOR" == true ]]; then platform = "appveyor"; fi
+  echo "https://raw.githubusercontent.com/thomasjo/${platform}-texlive/master/texlive.tar.xz"
 }
 
 install_texlive() {
-  echo $APPVEYOR
+  ensure_xz_installed
+
   echo "Downloading portable TeX Live installation..."
-  if [[ "$APPVEYOR" == true ]]; then
-    curl -L https://raw.githubusercontent.com/thomasjo/appveyor-texlive/master/texlive.tar.xz | tar xJC $HOME
-  else
-    curl -sL $( _get_download_url ) | tar xJC "$HOME"
-  fi
+  curl -sL $( get_download_url ) | tar xJC "$HOME"
 
   # Ensure PATH points to the platform-specific binaries.
   if [[ "$APPVEYOR" == true ]]; then
-    PATH=$HOME/texlive/bin/win32:$PATH
+    PATH="$HOME/texlive/bin/win32:$PATH"
   elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
   else
