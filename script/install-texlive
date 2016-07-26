@@ -35,10 +35,10 @@ install_texlive() {
 
   # Ensure PATH points to the platform-specific binaries.
   if [[ "$APPVEYOR" == true ]]; then
-    PATH="$HOME/texlive/bin/win32:$PATH"
+    export PATH="$HOME/texlive/bin/win32:$PATH"
   elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
+    export PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
   else
-    PATH="$HOME/texlive/bin/x86_64-darwin:$PATH"
+    export PATH="$HOME/texlive/bin/x86_64-darwin:$PATH"
   fi
 }
