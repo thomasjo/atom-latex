@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
 [![Dependency Status](https://david-dm.org/thomasjo/atom-latex.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![devDependency Status](https://david-dm.org/thomasjo/atom-latex/dev-status.svg)](https://david-dm.org/thomasjo/atom-latex#info=devDependencies)
+[![Codewake](https://www.codewake.com/badges/codewake.svg)](https://www.codewake.com/p/atom-latex)
 
 Compile LaTeX documents from within Atom.
 
