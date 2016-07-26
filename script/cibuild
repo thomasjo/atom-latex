@@ -3,6 +3,9 @@
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
 import_dependencies() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
   local scripts=(install-texlive)
@@ -11,8 +14,14 @@ import_dependencies() {
 }
 
 exec_ci() {
-  # Grab and execute standard Atom package CI build script.
-  curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
+  if [[ "$APPVEYOR" == true ]]; then
+    local url="https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
+    local cmd="iex ((new-object net.webclient).DownloadString('$url'))"
+
+    powershell -NoProfile -Command "$cmd"
+  else
+    curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
+  fi
 }
 
 main() {
