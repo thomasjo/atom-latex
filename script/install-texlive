@@ -7,7 +7,7 @@ set -eu
 shopt -s nocasematch
 
 ensure_xz_installed() {
-  if ! which xz > /dev/null; then
+  if ! which xz &> /dev/null; then
     echo "Installing XZ..."
     if [[ "$APPVEYOR" == true ]]; then
       local archive_path=/tmp/xz.7z
