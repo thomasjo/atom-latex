@@ -22,8 +22,8 @@ ensure_xz_installed() {
 }
 
 get_download_url() {
-  local platform = "travis"
-  if [[ "$APPVEYOR" == true ]]; then platform = "appveyor"; fi
+  local platform="travis"
+  if [[ "$APPVEYOR" == true ]]; then platform="appveyor"; fi
   echo "https://raw.githubusercontent.com/thomasjo/${platform}-texlive/master/texlive.tar.xz"
 }
 
