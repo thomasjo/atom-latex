@@ -18,7 +18,7 @@ install:
   - ps: Install-Product node "5"
   - choco install R.Project --ia="/DIR=C:\R"
   - set PATH=C:\R\bin;%PATH%
-  - set R_LIBS_USER=C:\projects\atom-latex\R\library
+  - set R_LIBS_USER=C:/projects/atom-latex/R/library
 
 environment:
   global:
