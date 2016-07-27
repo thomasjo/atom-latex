@@ -3,18 +3,21 @@
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
-# Ensure R is installed.
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-  echo "Installing R..."
-  brew update
-  brew tap homebrew/science
-  brew install r
-fi
+ensure_r_installed() {
+  if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+    echo "Installing R..."
+    brew update
+    brew tap homebrew/science
+    brew install r
+  fi
+}
 
-# Check if we need to install Knitr.
-if ! Rscript -e "library(knitr)" &> /dev/null; then
-  echo "Installing Knitr..."
-  Rscript -e "install.packages('knitr', '$R_LIBS_USER', 'http://cran.us.r-project.org')"
-else
-  echo "Using cached installation of Knitr"
-fi
+install_knitr() {
+  # Check if we need to install Knitr.
+  if ! Rscript -e "library(knitr)" &> /dev/null; then
+    echo "Installing Knitr..."
+    Rscript -e "install.packages('knitr', '${R_LIBS_USER}', 'http://cran.us.r-project.org')"
+  else
+    echo "Using cached installation of Knitr"
+  fi
+}

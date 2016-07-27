@@ -26,6 +26,7 @@ exec_ci() {
 main() {
   import_dependencies
   install_texlive
+  install_knitr
   exec_ci
 }
 
