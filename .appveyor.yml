@@ -16,7 +16,7 @@ deploy: off
 
 install:
   - ps: Install-Product node "5"
-  - choco install R.project --ia="/DIR='C:\R'" -n --verbose
+  - choco install R.project --ia="/DIR='C:\R'" --verbose
   - dir "C:\R"
   - dir "C:\Program Files\R"
   - set PATH=C:\R\bin;%PATH%
