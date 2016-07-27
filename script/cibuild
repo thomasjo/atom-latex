@@ -15,10 +15,9 @@ import_dependencies() {
 
 exec_ci() {
   if [[ "$APPVEYOR" == true ]]; then
-    local url="https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
-    local cmd="iex ((new-object net.webclient).DownloadString('$url'))"
-
-    powershell -NonInteractive -NoProfile -Command "& { $cmd; exit \$LastExitCode }"
+    local script_path=/tmp/build-package.ps1
+    curl -o $script_path "https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
+    powershell -NonInteractive -NoProfile -Command "$script_path"
   else
     curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
   fi
