@@ -10,17 +10,19 @@ version: "{build}"
 os: Visual Studio 2015
 platform: x64
 
+build: off
 test: off
 deploy: off
 
 install:
-  - ps: Install-Product node ""
-  - choco install R.project
+  - ps: Install-Product node "5"
+  - choco install R.project --params="/DIR='C:\R'"
+  - set PATH="C:\R\bin;%PATH%"
 
 environment:
-  R_LIBS_USER: "$HOME/R/library"
-  APM_TEST_PACKAGES: "language-latex pdf-view"
-
+  global:
+    R_LIBS_USER: "$HOME/R/library"
+    APM_TEST_PACKAGES: "language-latex pdf-view"
   matrix:
     - ATOM_CHANNEL: stable
     - ATOM_CHANNEL: beta
