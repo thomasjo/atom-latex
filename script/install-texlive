@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
@@ -9,36 +9,38 @@ shopt -s nocasematch
 ensure_xz_installed() {
   if ! which xz &> /dev/null; then
     echo "Installing XZ..."
-    if [[ "$APPVEYOR" == true ]]; then
-      local archive_path=/tmp/xz.7z
-      curl -so $archive_path "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+    if [[ "${APPVEYOR:-}" == true ]]; then
+      local archive_path="/tmp/xz.7z"
+      curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
 
-      local xz_root="$HOME/xz"
-      7z x -o"$xz_root" "$archive_path" > /dev/null
+      local xz_root="${HOME}/xz"
+      7z x -o"${xz_root}" "${archive_path}" > /dev/null
 
-      export PATH="$xz_root/bin_x86-64:$PATH"
+      export PATH="${xz_root}/bin_x86-64:${PATH}"
     fi
   fi
 }
 
 get_download_url() {
   local platform="travis"
-  if [[ "$APPVEYOR" == true ]]; then platform="appveyor"; fi
+  [[ "${APPVEYOR:-}" == true ]] && platform="appveyor"
   echo "https://raw.githubusercontent.com/thomasjo/${platform}-texlive/master/texlive.tar.xz"
 }
 
 install_texlive() {
   ensure_xz_installed
+  echo $( get_download_url )
+  exit
 
   echo "Downloading portable TeX Live installation..."
-  curl -s $( get_download_url ) | tar -xJC "$HOME"
+  curl -s $( get_download_url ) | tar -xJC "${HOME}"
 
   # Ensure PATH points to the platform-specific binaries.
-  if [[ "$APPVEYOR" == true ]]; then
-    export PATH="$HOME/texlive/bin/win32:$PATH"
-  elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    export PATH="$HOME/texlive/bin/x86_64-linux:$PATH"
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    export PATH="${HOME}/texlive/bin/win32:${PATH}"
+  elif [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then
+    export PATH="${HOME}/texlive/bin/x86_64-linux:${PATH}"
   else
-    export PATH="$HOME/texlive/bin/x86_64-darwin:$PATH"
+    export PATH="${HOME}/texlive/bin/x86_64-darwin:${PATH}"
   fi
 }
