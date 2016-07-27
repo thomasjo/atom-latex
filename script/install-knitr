@@ -13,6 +13,8 @@ ensure_r_installed() {
 }
 
 install_knitr() {
+  ensure_r_installed
+
   # Check if we need to install Knitr.
   if ! Rscript -e "library(knitr)" &> /dev/null; then
     echo "Installing Knitr..."
