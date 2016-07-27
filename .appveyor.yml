@@ -16,8 +16,8 @@ deploy: off
 
 install:
   - ps: Install-Product node "5"
-  - choco install R.project --ia="/DIR='C:\projects\atom-latex\R'" -y
-  - dir "C:\projects\atom-latex\R"
+  - choco install R.Project --ia="/DIR=C:\R" -y
+  - dir "C:\R"
   - dir "C:\Program Files\R"
   - set PATH=C:\R\bin;%PATH%
 
