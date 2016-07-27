@@ -18,10 +18,11 @@ install:
   - ps: Install-Product node "5"
   - choco install R.Project --ia="/DIR=C:\R"
   - set PATH=C:\R\bin;%PATH%
+  - set R_LIBS_USER=C:\projects\atom-latex\R\library
 
 environment:
   global:
-    R_LIBS_USER: "$HOME/R/library"
+    # R_LIBS_USER: "$HOME/R/library"
     APM_TEST_PACKAGES: "language-latex pdf-view"
   matrix:
     - ATOM_CHANNEL: stable
