@@ -7,17 +7,15 @@ set -eu
 shopt -s nocasematch
 
 ensure_xz_installed() {
-  if ! which xz &> /dev/null; then
+  if [[ "${APPVEYOR:-}" == true ]]; then
     echo "Installing XZ..."
-    if [[ "${APPVEYOR:-}" == true ]]; then
-      local archive_path="/tmp/xz.7z"
-      curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+    local archive_path="/tmp/xz.7z"
+    curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
 
-      local xz_root="${HOME}/xz"
-      7z x -o"${xz_root}" "${archive_path}" > /dev/null
+    local xz_root="${HOME}/xz"
+    7z x -o"${xz_root}" "${archive_path}" > /dev/null
 
-      export PATH="${xz_root}/bin_x86-64:${PATH}"
-    fi
+    export PATH="${xz_root}/bin_x86-64:${PATH}"
   fi
 }
 
