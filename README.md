@@ -1,5 +1,6 @@
 # LaTeX package
 [![Build Status](https://travis-ci.org/thomasjo/atom-latex.svg?branch=master)](https://travis-ci.org/thomasjo/atom-latex)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/oc2v06stfwgd3bkn/branch/master?svg=true)](https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master)
 [![Dependency Status](https://david-dm.org/thomasjo/atom-latex.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![devDependency Status](https://david-dm.org/thomasjo/atom-latex/dev-status.svg)](https://david-dm.org/thomasjo/atom-latex#info=devDependencies)
 
