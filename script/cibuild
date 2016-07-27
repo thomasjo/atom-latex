@@ -18,7 +18,7 @@ exec_ci() {
     local url="https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
     local cmd="iex ((new-object net.webclient).DownloadString('$url'))"
 
-    powershell -NoProfile -Command "$cmd"
+    powershell -NonInteractive -NoProfile -Command "& { $cmd; exit \$LastExitCode }"
   else
     curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
   fi
