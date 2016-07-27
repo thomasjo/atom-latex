@@ -11,10 +11,10 @@ ensure_xz_installed() {
     echo "Installing XZ..."
     if [[ "$APPVEYOR" == true ]]; then
       local archive_path=/tmp/xz.7z
-      curl -o $archive_path "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+      curl -so $archive_path "http://tukaani.org/xz/xz-5.2.1-windows.7z"
 
       local xz_root="$HOME/xz"
-      7z x -o"$xz_root" "$archive_path"
+      7z x -o"$xz_root" "$archive_path" > /dev/null
 
       export PATH="$xz_root/bin_x86-64:$PATH"
     fi
@@ -31,7 +31,7 @@ install_texlive() {
   ensure_xz_installed
 
   echo "Downloading portable TeX Live installation..."
-  curl -sL $( get_download_url ) | tar xJC "$HOME"
+  curl -s $( get_download_url ) | tar -xJC "$HOME"
 
   # Ensure PATH points to the platform-specific binaries.
   if [[ "$APPVEYOR" == true ]]; then
