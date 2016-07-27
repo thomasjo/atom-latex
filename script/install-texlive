@@ -29,8 +29,6 @@ get_download_url() {
 
 install_texlive() {
   ensure_xz_installed
-  echo $( get_download_url )
-  exit
 
   echo "Downloading portable TeX Live installation..."
   curl -s $( get_download_url ) | tar -xJC "${HOME}"
