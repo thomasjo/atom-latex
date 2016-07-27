@@ -14,19 +14,21 @@ describe('LogParser', () => {
 
   describe('parse', () => {
     it('returns the expected output path', () => {
+      const expectedPath = path.resolve('/foo/output/file.pdf')
       const logFile = path.join(fixturesPath, 'file.log')
       const parser = new LogParser(logFile)
       const result = parser.parse()
 
-      expect(result.outputFilePath).toBe('/foo/output/file.pdf')
+      expect(result.outputFilePath).toBe(expectedPath)
     })
 
     it('returns the expected output path when the compiled file contained spaces', () => {
+      const expectedPath = path.resolve('/foo/output/filename with spaces.pdf')
       const logFile = path.join(fixturesPath, 'filename with spaces.log')
       const parser = new LogParser(logFile)
       const result = parser.parse()
 
-      expect(result.outputFilePath).toBe('/foo/output/filename with spaces.pdf')
+      expect(result.outputFilePath).toBe(expectedPath)
     })
 
     it('parses and returns all errors', () => {
