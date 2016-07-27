@@ -18,6 +18,7 @@ install:
   - choco install R.project
 
 environment:
+  R_LIBS_USER: "$HOME/R/library"
   APM_TEST_PACKAGES: "language-latex pdf-view"
 
   matrix:
