@@ -18,6 +18,7 @@ install_knitr() {
   # Check if we need to install Knitr.
   if ! Rscript -e "library(knitr)" &> /dev/null; then
     echo "Installing Knitr..."
+    [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
     Rscript -e "install.packages('knitr', '${R_LIBS_USER}', 'http://cran.us.r-project.org')"
   else
     echo "Using cached installation of Knitr"
