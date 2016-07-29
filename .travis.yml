@@ -18,7 +18,6 @@ os:
 
 env:
   global:
-    - R_LIBS_USER=$HOME/R/library
     - APM_TEST_PACKAGES="language-latex pdf-view"
   matrix:
     - ATOM_CHANNEL=stable
