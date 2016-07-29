@@ -15,7 +15,7 @@ test: off
 deploy: off
 
 install:
-  - ps: Install-Product node "5"
+  - ps: Install-Product node 5
 
 environment:
   global:
@@ -25,6 +25,9 @@ environment:
   matrix:
     - ATOM_CHANNEL: stable
     - ATOM_CHANNEL: beta
+
+cache:
+  - '%USERPROFILE%\R\library'
 
 build_script:
   - sh ./script/cibuild
