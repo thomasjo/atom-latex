@@ -19,6 +19,7 @@ install:
 
 environment:
   global:
+    R_LIBS_USER: C:/R/library"
     APM_TEST_PACKAGES: "language-latex pdf-view"
   matrix:
     - ATOM_CHANNEL: stable
