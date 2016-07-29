@@ -9,10 +9,9 @@ shopt -s nocasematch
 ensure_r_installed() {
   if [[ "${APPVEYOR}" == true ]]; then
     echo "Installing R..."
-    local r_root="C:\\R"
-    choco install R.Project --ia="/DIR=${r_root}"
+    choco install R.Project --ia="/DIR=${R_HOME}"
 
-    export PATH="${r_root}/bin:${PATH}"
+    export PATH="${R_HOME}/bin:${PATH}"
   elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing R..."
     brew update
@@ -26,9 +25,11 @@ install_knitr() {
 
   # Check if we need to install Knitr.
   if ! Rscript -e "library(knitr)" &> /dev/null; then
-    echo "Installing Knitr..."
+    # Make sure the R_LIBS_USER directory exists to make R happy.
     [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
-    Rscript -e "install.packages('knitr', '${R_LIBS_USER}', 'http://cran.us.r-project.org')"
+
+    echo "Installing Knitr..."
+    Rscript -e "install.packages('knitr', repos = 'http://cran.us.r-project.org')"
   else
     echo "Using cached installation of Knitr"
   fi
