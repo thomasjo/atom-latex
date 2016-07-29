@@ -10,7 +10,7 @@ ensure_r_installed() {
   if [[ "${APPVEYOR:-}" == true ]]; then
     echo ${R_HOME}
     echo "Installing R..."
-    choco install R.Project --ia="/DIR=${R_HOME}"
+    choco install R.Project --ia="/DIR=\"${R_HOME}\""
     ls "${R_HOME}"
 
     export PATH="${R_HOME}/bin:${PATH}"
