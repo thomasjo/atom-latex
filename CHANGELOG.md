@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.34.0] / 2016-07-31
+### Added
+- Support the concept of "build jobs" via `jobnames` magic comment.
+    ~ [#184](https://github.com/thomasjo/atom-latex/pull/184)
+    / [@yitzchak](https://github.com/yitzchak)
+
+### Changed
+- Magic comments can be denoted by both `TEX` and `TeX`.
+    ~ [#191](https://github.com/thomasjo/atom-latex/pull/191)
+    / [@yagop](https://github.com/yagop)
+
+### Fixed
+- Update invalid `getBuilder` reference.
+    ~ [#196](https://github.com/thomasjo/atom-latex/pull/196)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.33.1] / 2016-07-04
 ### Changed
 - Renamed OS X to macOS.
