@@ -1,20 +1,15 @@
-notifications:
-  email:
-    on_success: never
-    on_failure: change
-
 branches:
   only:
     - master
 
 git:
-  depth: 10
-
-sudo: false
+  depth: 1
 
 os:
   - linux
   - osx
+
+sudo: false
 
 env:
   global:
@@ -29,10 +24,6 @@ addons:
     sources:
       - r-packages-precise
     packages:
-      - build-essential
-      - fakeroot
-      - git
-      - libgnome-keyring-dev
       - r-recommended
 
 cache:
@@ -40,3 +31,8 @@ cache:
     - ${R_LIBS_USER}
 
 script: ./script/cibuild
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
