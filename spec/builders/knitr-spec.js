@@ -23,7 +23,7 @@ describe('KnitrBuilder', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
         '--default-packages=knitr',
-        `-e "knit('${filePath}')"`
+        `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
       const args = builder.constructArgs(filePath)
@@ -52,7 +52,7 @@ describe('KnitrBuilder', () => {
     })
 
     it('fails to execute Knitr when given an invalid file path', () => {
-      filePath = path.join(fixturesPath, 'foo.tex')
+      filePath = path.join(fixturesPath, 'foo.Rnw')
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
@@ -84,8 +84,8 @@ describe('KnitrBuilder', () => {
     let sourcePath, resultPath
 
     beforeEach(() => {
-      sourcePath = '/var/foo.Rnw'
-      resultPath = '/var/foo.tex'
+      sourcePath = path.resolve('/var/foo.Rnw')
+      resultPath = path.resolve('/var/foo.tex')
     })
 
     it('detects an absolute path and returns it unchanged', () => {
