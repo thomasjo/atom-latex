@@ -22,7 +22,7 @@ describe('KnitrBuilder', () => {
   describe('constructArgs', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
-        '--default-packages=knitr',
+        '-e "library(knitr)"',
         `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
