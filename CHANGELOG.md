@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.34.1] / 2016-08-02
+### Fixed
+- Add missing `getBuilder` argument.
+    ~ [#198](https://github.com/thomasjo/atom-latex/pull/198)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.34.0] / 2016-07-31
 ### Added
 - Support the concept of "build jobs" via `jobnames` magic comment.
