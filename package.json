@@ -52,7 +52,9 @@
     ]
   },
   "activationHooks": [
-    "language-latex:grammar-used"
+    "language-latex:grammar-used",
+    "language-tex:grammar-used",
+    "language-latexsimple:grammar-used"
   ],
   "consumedServices": {
     "status-bar": {
