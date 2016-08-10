@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.35.0] / 2016-08-10
+### Added
+- Grammar activation hooks for
+  [language-tex](https://atom.io/packages/language-tex) and
+  [language-latexsimple](https://atom.io/packages/language-latexsimple).  
+    ~ [#201](https://github.com/thomasjo/atom-latex/pull/201)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.34.1] / 2016-08-02
 ### Fixed
 - Add missing `getBuilder` argument.
@@ -442,7 +450,12 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.32.0...HEAD
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...HEAD
+[0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
+[0.34.1]: https://github.com/thomasjo/atom-latex/compare/v0.34.0...v0.34.1
+[0.34.0]: https://github.com/thomasjo/atom-latex/compare/v0.33.1...v0.34.0
+[0.33.1]: https://github.com/thomasjo/atom-latex/compare/v0.33.0...v0.33.1
+[0.33.0]: https://github.com/thomasjo/atom-latex/compare/v0.32.0...v0.33.0
 [0.32.0]: https://github.com/thomasjo/atom-latex/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/thomasjo/atom-latex/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/thomasjo/atom-latex/compare/v0.29.0...v0.30.0
