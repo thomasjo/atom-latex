@@ -126,7 +126,7 @@ describe('LatexmkBuilder', () => {
         // since there will likely be font messages which may be dependent on
         // which TeX distribution is being used or which fonts are currently
         // installed.
-        for (const message of message) {
+        for (const message of messages) {
           expect(_.some(parsedLog.messages,
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
