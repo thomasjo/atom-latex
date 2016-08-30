@@ -3,7 +3,7 @@
 import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
@@ -121,7 +121,12 @@ describe('LatexmkBuilder', () => {
           { type: 'Warning', text: 'There were undefined references' }
         ]
 
-        for (const message of messages) {
+        // Loop through the required messages and make sure that each one appears
+        // in the parsed log output. We do not do a direct one-to-one comparison
+        // since there will likely be font messages which may be dependent on
+        // which TeX distribution is being used or which fonts are currently
+        // installed.
+        for (const message of message) {
           expect(_.some(parsedLog.messages,
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
