@@ -112,17 +112,15 @@
       "default": true,
       "order": 6
     },
-    "showBuildWarning": {
-      "title": "Show Build Warning Messages",
-      "type": "boolean",
-      "default": true,
+    "loggingLevel": {
+      "type": "string",
+      "enum": [
+        "info",
+        "warning",
+        "error"
+      ],
+      "default": "warning",
       "order": 7
-    },
-    "showBuildInfo": {
-      "title": "Show Build Info Messages",
-      "type": "boolean",
-      "default": false,
-      "order": 8
     },
     "cleanExtensions": {
       "type": "array",
@@ -146,13 +144,13 @@
         ".synctex.gz",
         ".toc"
       ],
-      "order": 9
+      "order": 8
     },
     "outputDirectory": {
       "description": "All files generated during a build will be redirected here. Leave blank if you want the build output to be stored in the same directory as the TeX document.",
       "type": "string",
       "default": "",
-      "order": 10
+      "order": 9
     },
     "outputFormat": {
       "description": "Output file format. DVI and PS currently only supported for latexmk.",
@@ -163,72 +161,72 @@
         "ps"
       ],
       "default": "pdf",
-      "order": 11
+      "order": 10
     },
     "moveResultToSourceDirectory": {
       "title": "Move Result to Source Directory",
       "description": "Ensures that the output file produced by a successful build is stored together with the TeX document that produced it.",
       "type": "boolean",
       "default": true,
-      "order": 12
+      "order": 11
     },
     "buildOnSave": {
       "title": "Build on Save",
       "description": "Automatically run builds when files are saved.",
       "type": "boolean",
       "default": false,
-      "order": 13
+      "order": 12
     },
     "openResultAfterBuild": {
       "title": "Open Result after Successful Build",
       "type": "boolean",
       "default": true,
-      "order": 14
+      "order": 13
     },
     "openResultInBackground": {
       "title": "Open Result in Background",
       "type": "boolean",
       "default": true,
-      "order": 15
+      "order": 14
     },
     "alwaysOpenResultInAtom": {
       "title": "Always Open Result in Atom",
       "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
       "type": "boolean",
       "default": false,
-      "order": 16
+      "order": 15
     },
     "skimPath": {
       "description": "Full application path to Skim (macOS).",
       "type": "string",
       "default": "/Applications/Skim.app",
-      "order": 17
+      "order": 16
     },
     "sumatraPath": {
       "title": "SumatraPDF Path",
       "description": "Full application path to SumatraPDF (Windows).",
       "type": "string",
       "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe",
-      "order": 18
+      "order": 17
     },
     "okularPath": {
       "description": "Full application path to Okular (*nix).",
       "type": "string",
       "default": "/usr/bin/okular",
-      "order": 19
+      "order": 18
     },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 20
+      "order": 19
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 21
+      "order": 20
     }
   }
 }
