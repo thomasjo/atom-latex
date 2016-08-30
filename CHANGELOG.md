@@ -2,6 +2,42 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.35.1] / 2016-08-30
+### Fixed
+- Add support for TeX Live 2016 on Windows.  
+    ~ [#202](https://github.com/thomasjo/atom-latex/pull/202)
+    / [@yitzchak](https://github.com/yitzchak)
+
+## [0.35.0] / 2016-08-10
+### Added
+- Grammar activation hooks for
+  [language-tex](https://atom.io/packages/language-tex) and
+  [language-latexsimple](https://atom.io/packages/language-latexsimple).  
+    ~ [#201](https://github.com/thomasjo/atom-latex/pull/201)
+    / [@yitzchak](https://github.com/yitzchak)
+
+## [0.34.1] / 2016-08-02
+### Fixed
+- Add missing `getBuilder` argument.  
+    ~ [#198](https://github.com/thomasjo/atom-latex/pull/198)
+    / [@yitzchak](https://github.com/yitzchak)
+
+## [0.34.0] / 2016-07-31
+### Added
+- Support the concept of "build jobs" via `jobnames` magic comment.  
+    ~ [#184](https://github.com/thomasjo/atom-latex/pull/184)
+    / [@yitzchak](https://github.com/yitzchak)
+
+### Changed
+- Magic comments can be denoted by both `TEX` and `TeX`.  
+    ~ [#191](https://github.com/thomasjo/atom-latex/pull/191)
+    / [@yagop](https://github.com/yagop)
+
+### Fixed
+- Update invalid `getBuilder` reference.  
+    ~ [#196](https://github.com/thomasjo/atom-latex/pull/196)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.33.1] / 2016-07-04
 ### Changed
 - Renamed OS X to macOS.
@@ -11,13 +47,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.33.0] / 2016-06-10
 ### Added
-- SyncTeX support can be toggled via configuration.
+- SyncTeX support can be toggled via configuration.  
     ~ [#183](https://github.com/thomasjo/atom-latex/pull/183)
     / [@alexandrecormier](https://github.com/alexandrecormier)
 
 ## [0.32.0] / 2016-03-12
 ### Added
-- The SumatraPDF opener now has full sync support.
+- The SumatraPDF opener now has full sync support.  
     ~ [#163](https://github.com/thomasjo/atom-latex/pull/163)
     / [@avonmoll](https://github.com/avonmoll)
 
@@ -30,17 +66,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Optional functionality for automatically building a file after is has been
   saved. To avoid possible race conditions that could potentially be triggered
-  by *Save All*, automatic builds are only triggered on the active file.
+  by *Save All*, automatic builds are only triggered on the active file.  
     ~ [#152](https://github.com/thomasjo/atom-latex/pull/152)
     / [@ravinrabbid](https://github.com/ravinrabbid)
 
 ## [0.30.0] / 2016-03-02
 ### Added
 - After a LaTeX file has been built it gets decorated with line number markers
-  to indicate which lines contain errors and warnings.
+  to indicate which lines contain errors and warnings.  
     ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
     / [@Focus](https://github.com/Focus)
-- The pdf-view opener now supports forward-sync.
+- The pdf-view opener now supports forward-sync.  
     ~ [#170](https://github.com/thomasjo/atom-latex/pull/170)
     / [@nsaje](https://github.com/nsaje)
 
@@ -49,7 +85,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   option ordering, etc.
 
 ### Fixed
-- Bug related to undefined `editor.getPath()` for new editor instances.
+- Bug related to undefined `editor.getPath()` for new editor instances.  
     ~ [#167](https://github.com/thomasjo/atom-latex/pull/167)
     / [@Focus](https://github.com/Focus)
 
@@ -420,7 +456,13 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.32.0...HEAD
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...HEAD
+[0.35.1]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...v0.35.1
+[0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
+[0.34.1]: https://github.com/thomasjo/atom-latex/compare/v0.34.0...v0.34.1
+[0.34.0]: https://github.com/thomasjo/atom-latex/compare/v0.33.1...v0.34.0
+[0.33.1]: https://github.com/thomasjo/atom-latex/compare/v0.33.0...v0.33.1
+[0.33.0]: https://github.com/thomasjo/atom-latex/compare/v0.32.0...v0.33.0
 [0.32.0]: https://github.com/thomasjo/atom-latex/compare/v0.31.0...v0.32.0
 [0.31.0]: https://github.com/thomasjo/atom-latex/compare/v0.30.0...v0.31.0
 [0.30.0]: https://github.com/thomasjo/atom-latex/compare/v0.29.0...v0.30.0

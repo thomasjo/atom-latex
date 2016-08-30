@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "version": "0.33.1",
+  "version": "0.35.1",
   "description": "Compile LaTeX documents from within Atom.",
   "keywords": [
     "tex",
@@ -13,7 +13,7 @@
   "main": "./lib/main",
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
-    "etch": "0.6.0",
+    "etch": "0.6.3",
     "fs-plus": "^2.9.1",
     "lodash": "^4.13.1",
     "temp": "^0.8.3",
@@ -52,7 +52,9 @@
     ]
   },
   "activationHooks": [
-    "language-latex:grammar-used"
+    "language-latex:grammar-used",
+    "language-tex:grammar-used",
+    "language-latexsimple:grammar-used"
   ],
   "consumedServices": {
     "status-bar": {
