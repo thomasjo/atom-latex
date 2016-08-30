@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.35.1] / 2016-08-30
+### Fixed
+- Add support for TeX Live 2016 on Windows.  
+    ~ [#202](https://github.com/thomasjo/atom-latex/pull/202)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.35.0] / 2016-08-10
 ### Added
 - Grammar activation hooks for
@@ -450,7 +456,8 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...HEAD
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...HEAD
+[0.35.1]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...v0.35.1
 [0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
 [0.34.1]: https://github.com/thomasjo/atom-latex/compare/v0.34.0...v0.34.1
 [0.34.0]: https://github.com/thomasjo/atom-latex/compare/v0.33.1...v0.34.0
