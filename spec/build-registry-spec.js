@@ -32,10 +32,22 @@ describe('BuilderRegistry', () => {
       expect(registry.getBuilder(filePath).name).toEqual('TexifyBuilder')
     })
 
-    it('throws an error when unable to resolve ambigious builder registration', () => {
+    it('throws an error when unable to resolve ambiguous builder registration', () => {
       const allBuilders = registry.getAllBuilders().push(NullBuilder)
       spyOn(registry, 'getAllBuilders').andReturn(allBuilders)
       expect(() => { registry.getBuilder(filePath) }).toThrow()
+    })
+
+    describe('getBuilderFromMagic', () => {
+      it('detects builder magic and outputs builder', () => {
+        const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
+        expect(registry.getBuilderFromMagic(filePath)).toEqual('texify')
+      })
+    })
+
+    it('returns the overridden builder when given a .tex file with a magic comment', () => {
+      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
+      expect(registry.getBuilder(filePath).name).toEqual('TexifyBuilder')
     })
   })
 })
