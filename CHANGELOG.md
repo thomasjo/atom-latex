@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Use escaped double quotes in keymaps.
+    ~ [#205](https://github.com/thomasjo/atom-latex/pull/205)
+    / [@yitzchak](https://github.com/yitzchak)
+- Assign `outputFilePath` in `resolveOutputFilePath`.
+    ~ [#206](https://github.com/thomasjo/atom-latex/pull/206)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ## [0.35.1] / 2016-08-30
 ### Fixed
 - Add support for TeX Live 2016 on Windows.  

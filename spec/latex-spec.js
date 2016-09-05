@@ -2,7 +2,7 @@
 
 import './spec-helpers'
 import Latex from '../lib/latex'
-import {NullOpener} from './stubs'
+import { NullOpener } from './stubs'
 
 describe('Latex', () => {
   let latex, globalLatex
