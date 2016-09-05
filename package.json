@@ -110,11 +110,12 @@
       "order": 6
     },
     "loggingLevel": {
+      "description": "The minimum level of message severity to output in the logger. A logging level of `error` shows only messages indicating catastrophic issues such as undefined symbols, `warning` shows error messages and messages indicating unintended consequences such as bad boxes, and `info` shows all messages including purely informational messages such a font loading.",
       "type": "string",
       "enum": [
-        "info",
+        "error",
         "warning",
-        "error"
+        "info"
       ],
       "default": "warning",
       "order": 7
