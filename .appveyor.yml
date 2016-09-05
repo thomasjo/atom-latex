@@ -25,4 +25,4 @@ environment:
     - ATOM_CHANNEL: beta
 
 build_script:
-  - bash ./script/cibuild
+  - sh ./script/cibuild

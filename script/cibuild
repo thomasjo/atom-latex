@@ -19,7 +19,7 @@ exec_ci() {
     curl -so ${script_path} "https://raw.githubusercontent.com/atom/ci/jf-only-run-top-level-linters/build-package.ps1"
     powershell -noninteractive -noprofile -command "${script_path}"
   else
-    curl -s "https://raw.githubusercontent.com/atom/ci/jf-only-run-top-level-linters/build-package.sh" | bash
+    curl -s "https://raw.githubusercontent.com/atom/ci/jf-only-run-top-level-linters/build-package.sh" | sh
   fi
 }
 
