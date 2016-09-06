@@ -95,7 +95,7 @@ describe('Builder', () => {
     it('attempts to parse the resolved log file', () => {
       builder.parseLogFile(filePath)
 
-      expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath)
+      expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath, filePath)
       expect(logParser.parse).toHaveBeenCalled()
     })
   })

@@ -79,8 +79,7 @@ describe('Composer', () => {
 
       builder.parseLogFile.andReturn({
         outputFilePath: 'file.pdf',
-        errors: [],
-        warnings: []
+        messages: []
       })
 
       waitsForPromise(() => {
@@ -98,8 +97,7 @@ describe('Composer', () => {
 
       builder.parseLogFile.andReturn({
         outputFilePath: 'file.pdf',
-        errors: [],
-        warnings: []
+        messages: []
       })
 
       waitsForPromise(() => {
@@ -114,8 +112,7 @@ describe('Composer', () => {
     it('invokes `showResult` after a successful build, with expected log parsing result', () => {
       const result = {
         outputFilePath: 'file.pdf',
-        errors: [],
-        warnings: []
+        messages: []
       }
 
       initializeSpies('file.tex')
@@ -135,8 +132,7 @@ describe('Composer', () => {
 
       builder.parseLogFile.andReturn({
         outputFilePath: null,
-        errors: [],
-        warnings: []
+        messages: []
       })
 
       waitsForPromise(() => {
