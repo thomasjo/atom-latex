@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import path from 'path'
 import MagicParser from '../../lib/parsers/magic-parser'

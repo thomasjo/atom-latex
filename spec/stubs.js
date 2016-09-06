@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import Builder from '../lib/builder'
 import Logger from '../lib/logger'

@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import helpers from './spec-helpers'
 import path from 'path'

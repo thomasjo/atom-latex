@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import './spec-bootstrap'
 import fs from 'fs-plus'

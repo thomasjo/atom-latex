@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import Latex from '../lib/latex'
 import { NullLogger } from './stubs'

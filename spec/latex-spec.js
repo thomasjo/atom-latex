@@ -1,4 +1,4 @@
-'use babel'
+/** @babel */
 
 import './spec-helpers'
 import Latex from '../lib/latex'
