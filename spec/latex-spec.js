@@ -2,7 +2,7 @@
 
 import './spec-helpers'
 import Latex from '../lib/latex'
-import {NullOpener} from './stubs'
+import { NullOpener } from './stubs'
 
 describe('Latex', () => {
   let latex, globalLatex
@@ -27,10 +27,10 @@ describe('Latex', () => {
   })
 
   describe('getDefaultLogger', () => {
-    it('returns an instance of ConsoleLogger', () => {
+    it('returns an instance of DefaultLogger', () => {
       const defaultLogger = latex.getDefaultLogger()
 
-      expect(defaultLogger.constructor.name).toBe('ConsoleLogger')
+      expect(defaultLogger.constructor.name).toBe('DefaultLogger')
     })
   })
 

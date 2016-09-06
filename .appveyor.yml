@@ -1,0 +1,28 @@
+branches:
+  only:
+    - master
+
+skip_tags: true
+clone_depth: 10
+
+version: "{build}"
+
+os: Visual Studio 2015
+platform: x64
+
+test: off
+deploy: off
+
+install:
+  - ps: Install-Product node ""
+  - choco install R.project
+
+environment:
+  APM_TEST_PACKAGES: "language-latex pdf-view"
+
+  matrix:
+    - ATOM_CHANNEL: stable
+    - ATOM_CHANNEL: beta
+
+build_script:
+  - sh ./script/cibuild

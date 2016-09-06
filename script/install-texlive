@@ -3,13 +3,40 @@
 # Exit on failure, and treat expansion of unset variables as an error.
 set -eu
 
-# Download and extract prebuilt TeX Live distribution.
-echo "Downloading portable TeX Live installation..."
-curl -L https://raw.githubusercontent.com/thomasjo/travis-texlive/master/texlive.tar.xz | tar xJC ~
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
 
-# Ensure PATH points to the platform-specific binaries.
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  PATH=$HOME/texlive/bin/x86_64-linux:$PATH
-else
-  PATH=$HOME/texlive/bin/x86_64-darwin:$PATH
-fi
+ensure_xz_installed() {
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    echo "Installing XZ..."
+    local archive_path="/tmp/xz.7z"
+    curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+
+    local xz_root="${HOME}/xz"
+    7z x -o"${xz_root}" "${archive_path}" > /dev/null
+
+    export PATH="${xz_root}/bin_x86-64:${PATH}"
+  fi
+}
+
+get_download_url() {
+  local platform="travis"
+  [[ "${APPVEYOR:-}" == true ]] && platform="appveyor"
+  echo "https://raw.githubusercontent.com/thomasjo/${platform}-texlive/master/texlive.tar.xz"
+}
+
+install_texlive() {
+  ensure_xz_installed
+
+  echo "Downloading portable TeX Live installation..."
+  curl -s $( get_download_url ) | tar -xJC "${HOME}"
+
+  # Ensure PATH points to the platform-specific binaries.
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    export PATH="${HOME}/texlive/bin/win32:${PATH}"
+  elif [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then
+    export PATH="${HOME}/texlive/bin/x86_64-linux:${PATH}"
+  else
+    export PATH="${HOME}/texlive/bin/x86_64-darwin:${PATH}"
+  fi
+}
