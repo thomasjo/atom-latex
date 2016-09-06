@@ -12,13 +12,11 @@ describe('BuilderRegistry', () => {
     registry = new BuilderRegistry()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
+
+    atom.config.set('latex.builder', 'latexmk')
   })
 
   describe('getBuilder', () => {
-    beforeEach(() => {
-      atom.config.set('latex.builder', 'latexmk')
-    })
-
     it('returns null when no builders are associated with the given file', () => {
       const filePath = path.join('foo', 'quux.txt')
       expect(registry.getBuilder(filePath)).toBeNull()
@@ -38,16 +36,16 @@ describe('BuilderRegistry', () => {
       expect(() => { registry.getBuilder(filePath) }).toThrow()
     })
 
-    describe('getBuilderFromMagic', () => {
-      it('detects builder magic and outputs builder', () => {
-        const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
-        expect(registry.getBuilderFromMagic(filePath)).toEqual('texify')
-      })
-    })
-
     it('returns the overridden builder when given a .tex file with a magic comment', () => {
       const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
       expect(registry.getBuilder(filePath).name).toEqual('TexifyBuilder')
+    })
+  })
+
+  describe('getBuilderFromMagic', () => {
+    it('detects builder magic and outputs builder', () => {
+      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
+      expect(registry.getBuilderFromMagic(filePath)).toEqual('texify')
     })
   })
 })
