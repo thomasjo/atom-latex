@@ -42,6 +42,7 @@ The package has support for the following "magic" TeX comments
 - `% !TEX program = pdflatex` Override the LaTeX engine (pdflatex, lualatex,
   xelatex) to use for build.
 - `% !TEX jobnames = foo bar` Control the number and names of build jobs.
+- `% !TEX builder = latexmk` Override the LaTeX builder (latexmk, texify).
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
@@ -53,12 +54,13 @@ Any and all help is greatly appreciated!
 ### TODO
 Current wish list, in a semi-prioritized order.
 
-- [ ] Improved build output parsing;
-  - [x] Error handling.
-  - [ ] Warnings, and other non-critical messages.
+- [X] Improved build output parsing;
+  - [X] Error handling.
+  - [X] Warnings, and other non-critical messages.
+- [ ] Improved display of errors, warnings and other non-critical messages.
 - [ ] Project-specific settings;
   - [ ] Setting to override the output directory.
-  - [ ] Setting to override the builder.
+  - [X] Setting to override the builder.
 
 If you see something that's missing, or disagree with the prioritization,
 consider submitting a [feature request](https://github.com/thomasjo/atom-latex/issues?labels=feature&state=open),
