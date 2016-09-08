@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Allow builder override via magic comments.
+    ~ [#192](https://github.com/thomasjo/atom-latex/pull/192)
+    / [@yitzchak](https://github.com/yitzchak)
+
 ### Changed
 - Improved Log Parsing and Error Reporting.
     ~ [#204](https://github.com/thomasjo/atom-latex/pull/204)
