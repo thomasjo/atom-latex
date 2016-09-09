@@ -66,7 +66,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.31.0] / 2016-03-12
 ### Added
-- Optional functionality for automatically building a file after is has been
+- Optional functionality for automatically building a file after it has been
   saved. To avoid possible race conditions that could potentially be triggered
   by *Save All*, automatic builds are only triggered on the active file.  
     ~ [#152](https://github.com/thomasjo/atom-latex/pull/152)
