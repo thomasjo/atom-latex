@@ -151,7 +151,7 @@
       "order": 9
     },
     "outputFormat": {
-      "description": "Output file format. DVI and PS currently only supported for latexmk.",
+      "description": "Output file format. PS is currently only supported for latexmk.",
       "type": "string",
       "enum": [
         "pdf",
