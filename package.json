@@ -110,11 +110,11 @@
       "order": 6
     },
     "logger": {
-      "description": "The logger to use for reporting error and other messages. The `default` logger highlights rows of the source file, whereas the `report` is used to generate reports for bug reports.",
+      "description": "The logger to use for reporting error and other messages. The `default` logger highlights rows of the source file, whereas the `issue` is used to generate issue reports for GitHub.",
       "type": "string",
       "enum": [
         "default",
-        "report"
+        "issue"
       ],
       "default": "default",
       "order": 7
