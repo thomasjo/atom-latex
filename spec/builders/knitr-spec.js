@@ -33,9 +33,11 @@ describe('KnitrBuilder', () => {
 
   describe('run', () => {
     let exitCode
+    let originalTimeout
 
     beforeEach(() => {
       atom.config.set('latex.builder', 'latexmk')
+      originalTimeout = helpers.setTimeoutInterval(120000)
     })
 
     it('successfully executes knitr when given a valid R Sweave file', () => {
@@ -49,7 +51,7 @@ describe('KnitrBuilder', () => {
         expect(exitCode).toBe(0)
         expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
       })
-    }, 10000)
+    })
 
     it('fails to execute knitr when given an invalid file path', () => {
       filePath = path.join(fixturesPath, 'foo.Rnw')
@@ -78,6 +80,11 @@ describe('KnitrBuilder', () => {
         expect(latex.log.error).toHaveBeenCalled()
       })
     })
+
+    afterEach(() => {
+      setTimeoutInterval(originalTimeout)
+    })
+
   })
 
   describe('resolveOutputPath', () => {
