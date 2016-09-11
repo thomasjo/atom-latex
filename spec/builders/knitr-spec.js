@@ -4,7 +4,6 @@ import helpers from '../spec-helpers'
 import _ from 'lodash'
 import fs from 'fs-plus'
 import path from 'path'
-import { NullBuilder } from '../stubs'
 import KnitrBuilder from '../../lib/builders/knitr'
 
 function getRawFile (filePath) {
@@ -18,7 +17,6 @@ describe('KnitrBuilder', () => {
     builder = new KnitrBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
-    spyOn(builder, 'getResultBuilder').andReturn(new NullBuilder())
   })
 
   describe('constructArgs', () => {
