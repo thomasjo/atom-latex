@@ -4,6 +4,7 @@ import helpers from '../spec-helpers'
 import _ from 'lodash'
 import fs from 'fs-plus'
 import path from 'path'
+import { NullBuilder } from '../stubs'
 import KnitrBuilder from '../../lib/builders/knitr'
 
 function getRawFile (filePath) {
@@ -17,6 +18,7 @@ describe('KnitrBuilder', () => {
     builder = new KnitrBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+    spyOn(builder, 'getResultBuilder').andReturn(new NullBuilder())
   })
 
   describe('constructArgs', () => {
@@ -49,7 +51,7 @@ describe('KnitrBuilder', () => {
         expect(exitCode).toBe(0)
         expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
       })
-    }, 10000)
+    })
 
     it('fails to execute knitr when given an invalid file path', () => {
       filePath = path.join(fixturesPath, 'foo.Rnw')
