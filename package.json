@@ -109,6 +109,16 @@
       "default": true,
       "order": 6
     },
+    "logger": {
+      "description": "The logger to use for reporting error and other messages. The `default` logger highlights rows of the source file, whereas the `issue` is used to generate issue reports for GitHub.",
+      "type": "string",
+      "enum": [
+        "default",
+        "issue"
+      ],
+      "default": "default",
+      "order": 7
+    },
     "loggingLevel": {
       "description": "The minimum level of message severity to output in the logger. A logging level of `error` shows only messages indicating catastrophic issues such as undefined symbols, `warning` shows error messages and messages indicating unintended consequences such as bad boxes, and `info` shows all messages including purely informational messages such a font loading.",
       "type": "string",
@@ -118,7 +128,7 @@
         "info"
       ],
       "default": "warning",
-      "order": 7
+      "order": 8
     },
     "cleanExtensions": {
       "type": "array",
@@ -142,13 +152,13 @@
         ".synctex.gz",
         ".toc"
       ],
-      "order": 8
+      "order": 9
     },
     "outputDirectory": {
       "description": "All files generated during a build will be redirected here. Leave blank if you want the build output to be stored in the same directory as the TeX document.",
       "type": "string",
       "default": "",
-      "order": 9
+      "order": 10
     },
     "outputFormat": {
       "description": "Output file format. DVI and PS currently only supported for latexmk.",
@@ -159,72 +169,72 @@
         "ps"
       ],
       "default": "pdf",
-      "order": 10
+      "order": 11
     },
     "moveResultToSourceDirectory": {
       "title": "Move Result to Source Directory",
       "description": "Ensures that the output file produced by a successful build is stored together with the TeX document that produced it.",
       "type": "boolean",
       "default": true,
-      "order": 11
+      "order": 12
     },
     "buildOnSave": {
       "title": "Build on Save",
       "description": "Automatically run builds when files are saved.",
       "type": "boolean",
       "default": false,
-      "order": 12
+      "order": 13
     },
     "openResultAfterBuild": {
       "title": "Open Result after Successful Build",
       "type": "boolean",
       "default": true,
-      "order": 13
+      "order": 14
     },
     "openResultInBackground": {
       "title": "Open Result in Background",
       "type": "boolean",
       "default": true,
-      "order": 14
+      "order": 15
     },
     "alwaysOpenResultInAtom": {
       "title": "Always Open Result in Atom",
       "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
       "type": "boolean",
       "default": false,
-      "order": 15
+      "order": 16
     },
     "skimPath": {
       "description": "Full application path to Skim (macOS).",
       "type": "string",
       "default": "/Applications/Skim.app",
-      "order": 16
+      "order": 17
     },
     "sumatraPath": {
       "title": "SumatraPDF Path",
       "description": "Full application path to SumatraPDF (Windows).",
       "type": "string",
       "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe",
-      "order": 17
+      "order": 18
     },
     "okularPath": {
       "description": "Full application path to Okular (*nix).",
       "type": "string",
       "default": "/usr/bin/okular",
-      "order": 18
+      "order": 19
     },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 19
+      "order": 20
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 20
+      "order": 21
     }
   }
 }
