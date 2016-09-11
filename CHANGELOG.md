@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Allow builder override via magic comments.
+- Basic knitr builder functionality.
+  Note that at this point it only works with `.Rnw` files. This limitation will
+  be addressed in a future release.
 
 ### Changed
 - Improved log parsing and error reporting.
