@@ -38,7 +38,7 @@ describe('KnitrBuilder', () => {
       atom.config.set('latex.builder', 'latexmk')
     })
 
-    it('successfully executes Knitr when given a valid R Sweave file', () => {
+    it('successfully executes knitr when given a valid R Sweave file', () => {
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
       })
@@ -51,7 +51,7 @@ describe('KnitrBuilder', () => {
       })
     })
 
-    it('fails to execute Knitr when given an invalid file path', () => {
+    it('fails to execute knitr when given an invalid file path', () => {
       filePath = path.join(fixturesPath, 'foo.Rnw')
 
       waitsForPromise(() => {

@@ -1,7 +1,7 @@
 \documentclass{article}
 
 \begin{document}
-\section{\LaTeX + Knitr}
+\section{\LaTeX + knitr}
 <<foo, cache=FALSE>>=
 tau = 2 * pi
 @
