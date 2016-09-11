@@ -8,7 +8,7 @@ shopt -s nocasematch
 
 import_dependencies() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
-  local scripts=(install-texlive install-knitr)
+  local scripts=(install-texlive install-miktex install-knitr)
 
   for script in ${scripts[@]}; do
     source "${script_dir}/${script}"
@@ -27,7 +27,11 @@ exec_ci() {
 
 main() {
   import_dependencies
-  install_texlive
+  if [[ "${TEX_DIST}" == "miktex" ]]; then
+    install_miktex
+  else
+    install_texlive
+  fi
   install_knitr
   exec_ci
 }
