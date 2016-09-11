@@ -17,6 +17,7 @@ import_dependencies() {
 
 exec_ci() {
   if [[ "${APPVEYOR:-}" == true ]]; then
+    Rscript -e "library(knitr)" -e "knit('spec\\fixtures\\knitr\\file.Rnw')"
     local script_path="/tmp/build-package.ps1"
     curl -so ${script_path} "https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
     powershell -noninteractive -noprofile -command "${script_path}"
