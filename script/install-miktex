@@ -9,8 +9,12 @@ shopt -s nocasematch
 install_miktex() {
   echo "Install MiKTeX..."
   choco install miktex
+
   # Ensure PATH points to the binaries.
-  echo $PATH
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
-  mpm --admin --install=latexmk
+  
+  echo "Install LaTeX packages..."
+  for package in latexmk graphicx color framed alltt upquote; do
+    mpm --admin --install=$package
+  done
 }
