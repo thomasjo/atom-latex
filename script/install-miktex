@@ -12,9 +12,10 @@ install_miktex() {
 
   # Ensure PATH points to the binaries.
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
-  
+
   echo "Install LaTeX packages..."
-  for package in latexmk graphicx color framed alltt upquote; do
-    mpm --admin --install=$package
+  for PACKAGE in latexmk graphics color framed alltt upquote
+  do
+    mpm --admin --install=$PACKAGE
   done
 }
