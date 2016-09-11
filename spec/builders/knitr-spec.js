@@ -37,7 +37,9 @@ describe('KnitrBuilder', () => {
 
     beforeEach(() => {
       atom.config.set('latex.builder', 'latexmk')
-      originalTimeout = helpers.setTimeoutInterval(120000)
+      if (process.env.TEX_DIST === 'miktex') {
+        originalTimeout = helpers.setTimeoutInterval(120000)
+      }
     })
 
     it('successfully executes knitr when given a valid R Sweave file', () => {
@@ -82,9 +84,10 @@ describe('KnitrBuilder', () => {
     })
 
     afterEach(() => {
-      setTimeoutInterval(originalTimeout)
+      if (process.env.TEX_DIST === 'miktex') {
+        helpers.setTimeoutInterval(originalTimeout)
+      }
     })
-
   })
 
   describe('resolveOutputPath', () => {
