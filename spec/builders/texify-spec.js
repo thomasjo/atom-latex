@@ -7,7 +7,6 @@ import _ from 'lodash'
 
 // This should probably try to detect texify
 if (process.env.TEX_DIST === 'miktex') {
-
   describe('TexifyBuilder', () => {
     let builder, fixturesPath, filePath
 
