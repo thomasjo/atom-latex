@@ -17,8 +17,5 @@ install_miktex() {
   initexmf --admin --disable-installer
 
   echo "Install LaTeX packages..."
-  for PACKAGE in latexmk alltt
-  do
-    mpm --admin --install=$PACKAGE
-  done
+  mpm --admin --install=latexmk
 }
