@@ -23,6 +23,7 @@ if (process.env.TEX_DIST === 'miktex') {
           '--pdf',
           '--tex-option="--interaction=nonstopmode"',
           '--tex-option="--max-print-line=1000"',
+          '--tex-option="--synctex=1"',
           `"${filePath}"`
         ]
         const args = builder.constructArgs(filePath)
@@ -114,7 +115,7 @@ if (process.env.TEX_DIST === 'miktex') {
               logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
           }
 
-          expect(exitCode).toBe(12)
+          expect(exitCode).toBe(1)
         })
       })
 
@@ -126,7 +127,7 @@ if (process.env.TEX_DIST === 'miktex') {
         })
 
         runs(() => {
-          expect(exitCode).toBe(10)
+          expect(exitCode).toBe(1)
         })
       })
 
@@ -145,7 +146,7 @@ if (process.env.TEX_DIST === 'miktex') {
         })
 
         runs(() => {
-          expect(exitCode).toBe(11)
+          expect(exitCode).toBe(1)
         })
       })
     })
