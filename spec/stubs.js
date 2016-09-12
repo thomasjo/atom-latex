@@ -5,9 +5,8 @@ import Logger from '../lib/logger'
 import Opener from '../lib/opener'
 
 export class NullBuilder extends Builder {
-  run () { return new Promise(resolve => resolve(0)) }
-
   static canProcess (filePath) { return true }
+  run () { return new Promise(resolve => resolve(0)) }
 }
 
 export class NullLogger extends Logger {
