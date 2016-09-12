@@ -135,10 +135,6 @@ if (process.env.TEX_DIST === 'miktex') {
         filePath = path.join(fixturesPath, 'foo.tex')
         const args = builder.constructArgs(filePath)
 
-        // Need to remove the 'force' flag to trigger the desired failure.
-        const removed = args.splice(1, 1)
-        expect(removed).toEqual(['--pdf'])
-
         spyOn(builder, 'constructArgs').andReturn(args)
 
         waitsForPromise(() => {
