@@ -1,3 +1,5 @@
+language: node_js
+
 branches:
   only:
     - master
@@ -5,12 +7,12 @@ branches:
 git:
   depth: 1
 
-matrix:
-  include:
-    - os: linux
-      sudo: false
-    - os: osx
-      osx_image: xcode8
+os:
+  - linux
+  - osx
+
+sudo: false
+osx_image: xcode8
 
 env:
   global:
