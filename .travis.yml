@@ -10,6 +10,7 @@ os:
   - osx
 
 sudo: false
+osx_image: xcode8
 
 env:
   global:
