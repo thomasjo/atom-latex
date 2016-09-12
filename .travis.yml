@@ -1,3 +1,5 @@
+language: generic
+
 branches:
   only:
     - master
@@ -10,9 +12,11 @@ os:
   - osx
 
 sudo: false
+osx_image: xcode8
 
 env:
   global:
+    - MAKE="make -j8"
     - R_LIBS_USER=${HOME}/R/library
     - APM_TEST_PACKAGES="language-latex pdf-view"
   matrix:
