@@ -11,7 +11,7 @@ ensure_r_installed() {
     echo "Installing R..."
     choco install R.Project --ia="/DIR=\"${R_HOME}\""
 
-    export PATH="${R_HOME}/bin:${PATH}"
+    export PATH="/c/Program Files/R/bin:${PATH}"
   elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing R..."
     brew update
@@ -29,7 +29,7 @@ install_knitr() {
     [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
 
     echo "Installing knitr..."
-    Rscript -e "install.packages('knitr', repos = 'http://cran.us.r-project.org')"
+    Rscript -e "install.packages('knitr', repos = 'https://cran.r-project.org')"
   else
     echo "Using cached installation of knitr"
   fi

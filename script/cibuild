@@ -32,7 +32,7 @@ exec_ci() {
 main() {
   import_dependencies
   install_knitr
-  if [[ "${TEX_DIST}" == "miktex" ]]; then
+  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
     install_miktex
   else
     install_texlive
