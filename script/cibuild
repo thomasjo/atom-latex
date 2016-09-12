@@ -16,7 +16,7 @@ import_dependencies() {
 }
 
 exec_ci() {
-  if [[ "${TEX_DIST}" == "miktex" ]]; then
+  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
     Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
   fi
 
