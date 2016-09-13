@@ -18,7 +18,6 @@ initialize() {
 install_latex_distribution() {
   if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
     install_miktex
-    mpm --admin --list
   else
     install_texlive
   fi
@@ -26,9 +25,13 @@ install_latex_distribution() {
 
 exec_ci() {
   if [[ "${APPVEYOR:-}" == true ]]; then
+    Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
     local script_path="/tmp/build-package.ps1"
     curl -so ${script_path} "https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
     powershell -noninteractive -noprofile -command "${script_path}"
+    if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
+      mpm --admin --list
+    fi
   else
     curl -s "https://raw.githubusercontent.com/atom/ci/master/build-package.sh" | sh
   fi
@@ -38,10 +41,6 @@ main() {
   initialize
   install_latex_distribution
   install_knitr
-  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
-    Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
-    mpm --admin --list
-  fi
   exec_ci
 }
 
