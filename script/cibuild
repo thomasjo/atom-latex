@@ -6,7 +6,7 @@ set -eu
 # Enable case-insensitive pattern matching.
 shopt -s nocasematch
 
-import_dependencies() {
+initialize() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
   local scripts=(install-texlive install-miktex install-knitr)
 
@@ -15,8 +15,16 @@ import_dependencies() {
   done
 }
 
-exec_ci() {
+install_latex_distribution() {
   if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
+    install_miktex
+  else
+    install_texlive
+  fi
+}
+
+exec_ci() {
+  if [[ "${TEX_DIST}" == "miktex" ]]; then
     Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
   fi
 
@@ -30,13 +38,9 @@ exec_ci() {
 }
 
 main() {
-  import_dependencies
+  inititialize
+  install_latex_distribution
   install_knitr
-  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
-    install_miktex
-  else
-    install_texlive
-  fi
   exec_ci
 }
 
