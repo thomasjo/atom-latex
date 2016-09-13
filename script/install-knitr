@@ -11,7 +11,7 @@ ensure_r_installed() {
     echo "Installing R..."
     choco install R.Project --ia="/DIR=\"${R_HOME}\""
 
-    export PATH="/c/Program Files/R/bin:${PATH}"
+    export PATH="${R_HOME}/bin:${PATH}"
   elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing R..."
     brew update
