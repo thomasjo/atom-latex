@@ -12,7 +12,7 @@ install:
 
 environment:
   global:
-    MIKTEX_HOME: '%PROGRAMFILES%\MiKTeX 2.9'
+    MIKTEX_HOME: '%PROGRAMFILES%\MiKTeX'
     R_HOME: '%PROGRAMFILES%\R'
     R_LIBS_USER: '%USERPROFILE%\R\library'
     APM_TEST_PACKAGES: "language-latex pdf-view"

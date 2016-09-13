@@ -38,7 +38,7 @@ exec_ci() {
 }
 
 main() {
-  inititialize
+  initialize
   install_latex_distribution
   install_knitr
   exec_ci
