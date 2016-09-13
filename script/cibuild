@@ -24,10 +24,6 @@ install_latex_distribution() {
 }
 
 exec_ci() {
-  if [[ "${TEX_DIST}" == "miktex" ]]; then
-    Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
-  fi
-
   if [[ "${APPVEYOR:-}" == true ]]; then
     local script_path="/tmp/build-package.ps1"
     curl -so ${script_path} "https://raw.githubusercontent.com/atom/ci/master/build-package.ps1"
