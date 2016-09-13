@@ -18,4 +18,5 @@ install_miktex() {
 
   echo "Installing MiKTeX packages..."
   mpm --admin --install=latexmk
+  mpm --admin --install=framed
 }
