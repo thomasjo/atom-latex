@@ -18,6 +18,7 @@ initialize() {
 install_latex_distribution() {
   if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
     install_miktex
+    mpm --admin --list
   else
     install_texlive
   fi
@@ -37,6 +38,10 @@ main() {
   initialize
   install_latex_distribution
   install_knitr
+  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
+    Rscript -e "library(knitr)" -e "knit('spec\\\\fixtures\\\\knitr\\\\file.Rnw')"
+    mpm --admin --list
+  fi
   exec_ci
 }
 
