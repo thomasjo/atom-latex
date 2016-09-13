@@ -7,8 +7,8 @@ set -eu
 shopt -s nocasematch
 
 install_miktex() {
-  echo "Installing MiKTeX..."
-  choco install miktex --force --ia="--common-install=${MIKTEX_HOME}"
+  echo "Install MiKTeX..."
+  choco install miktex
 
   # Ensure PATH points to the binaries.
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
@@ -16,6 +16,6 @@ install_miktex() {
   # Disable installer to prevent timeouts if package is missing
   initexmf --admin --disable-installer
 
-  echo "Installing MiKTeX packages..."
+  echo "Install LaTeX packages..."
   mpm --admin --install=latexmk
 }
