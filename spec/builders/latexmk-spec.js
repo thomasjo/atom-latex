@@ -22,7 +22,7 @@ describe('LatexmkBuilder', () => {
         '-cd',
         '-file-line-error',
         '-synctex=1',
-         '-pdf',
+        '-pdf',
         `"${filePath}"`
       ]
       const args = builder.constructArgs(filePath)
