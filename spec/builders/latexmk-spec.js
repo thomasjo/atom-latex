@@ -20,9 +20,9 @@ describe('LatexmkBuilder', () => {
         '-interaction=nonstopmode',
         '-f',
         '-cd',
-        '-pdf',
         '-file-line-error',
         '-synctex=1',
+         '-pdf',
         `"${filePath}"`
       ]
       const args = builder.constructArgs(filePath)
@@ -50,7 +50,7 @@ describe('LatexmkBuilder', () => {
 
     it('adds engine argument according to package config', () => {
       atom.config.set('latex.engine', 'lualatex')
-      expect(builder.constructArgs(filePath)).toContain('-lualatex')
+      expect(builder.constructArgs(filePath)).toContain('-pdflatex="lualatex"')
     })
 
     it('adds a custom engine string according to package config', () => {
