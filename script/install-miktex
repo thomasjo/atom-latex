@@ -7,7 +7,7 @@ set -eu
 shopt -s nocasematch
 
 install_miktex() {
-  echo "Install MiKTeX..."
+  echo "Installing MiKTeX..."
   choco install miktex
 
   # Ensure PATH points to the binaries.
@@ -16,6 +16,6 @@ install_miktex() {
   # Disable installer to prevent timeouts if package is missing
   initexmf --admin --disable-installer
 
-  echo "Install LaTeX packages..."
+  echo "Installing MiKTeX packages..."
   mpm --admin --install=latexmk
 }
