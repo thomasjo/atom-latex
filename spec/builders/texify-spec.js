@@ -20,9 +20,9 @@ if (process.env.TEX_DIST === 'miktex') {
       it('produces default arguments when package has default config values', () => {
         const expectedArgs = [
           '--batch',
-          '--pdf',
           '--tex-option="--interaction=nonstopmode"',
           '--tex-option="--max-print-line=1000"',
+          '--pdf',
           '--tex-option="--synctex=1"',
           `"${filePath}"`
         ]
@@ -49,6 +49,11 @@ if (process.env.TEX_DIST === 'miktex') {
       it('adds a custom engine string according to package config', () => {
         atom.config.set('latex.customEngine', 'pdflatex %O %S')
         expect(builder.constructArgs(filePath)).toContain('--engine="pdflatex %O %S"')
+      })
+
+      it('adds or removes --pdf arguments according to package config', () => {
+        atom.config.set('latex.outputFormat', 'dvi')
+        expect(builder.constructArgs(filePath)).not.toContain('--pdf')
       })
     })
 
