@@ -12,12 +12,17 @@ install:
 
 environment:
   global:
+    MIKTEX_HOME: '%PROGRAMFILES%\MiKTeX 2.9'
     R_HOME: '%PROGRAMFILES%\R'
     R_LIBS_USER: '%USERPROFILE%\R\library'
     APM_TEST_PACKAGES: "language-latex pdf-view"
   matrix:
     - ATOM_CHANNEL: stable
     - ATOM_CHANNEL: beta
+    - TEX_DIST: miktex
+      ATOM_CHANNEL: stable
+    - TEX_DIST: miktex
+      ATOM_CHANNEL: beta
 
 cache:
   - '%R_LIBS_USER%'
