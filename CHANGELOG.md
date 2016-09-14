@@ -461,7 +461,7 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...HEAD
+[0.36.0]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...v0.36.0
 [0.35.1]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...v0.35.1
 [0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
 [0.34.1]: https://github.com/thomasjo/atom-latex/compare/v0.34.0...v0.34.1
