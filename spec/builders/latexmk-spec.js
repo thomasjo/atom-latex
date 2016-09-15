@@ -14,6 +14,16 @@ describe('LatexmkBuilder', () => {
     filePath = path.join(fixturesPath, 'file.tex')
   })
 
+  describe('canProcess', () => {
+    it('correctly allows a LaTeX file', () => {
+      expect(LatexmkBuilder.canProcess('foo/bar.tex')).toBe(true)
+    })
+
+    it('correctly prohibits a non-LaTeX file', () => {
+      expect(LatexmkBuilder.canProcess('foo/bar.txt')).toBe(false)
+    })
+  })
+
   describe('constructArgs', () => {
     it('produces default arguments when package has default config values', () => {
       const expectedArgs = [
