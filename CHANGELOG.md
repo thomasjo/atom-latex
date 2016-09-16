@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.36.0] / 2016-09-14
 ### Added
 - Allow builder override via magic comments.
 - Basic knitr builder functionality.
@@ -461,7 +461,7 @@ minor release.
 - First release.
 
 <!--- refs --->
-[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...HEAD
+[0.36.0]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...v0.36.0
 [0.35.1]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...v0.35.1
 [0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
 [0.34.1]: https://github.com/thomasjo/atom-latex/compare/v0.34.0...v0.34.1

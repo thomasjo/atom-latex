@@ -6,13 +6,21 @@ set -eu
 # Enable case-insensitive pattern matching.
 shopt -s nocasematch
 
-import_dependencies() {
+initialize() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
-  local scripts=(install-texlive install-knitr)
+  local scripts=(install-texlive install-miktex install-knitr)
 
   for script in ${scripts[@]}; do
     source "${script_dir}/${script}"
   done
+}
+
+install_latex_distribution() {
+  if [[ "${TEX_DIST:=texlive}" == "miktex" ]]; then
+    install_miktex
+  else
+    install_texlive
+  fi
 }
 
 exec_ci() {
@@ -26,8 +34,8 @@ exec_ci() {
 }
 
 main() {
-  import_dependencies
-  install_texlive
+  initialize
+  install_latex_distribution
   install_knitr
   exec_ci
 }

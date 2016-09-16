@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
+install_miktex() {
+  echo "Installing MiKTeX..."
+  choco install miktex
+
+  # Ensure PATH points to the binaries.
+  export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
+
+  # Disable installer to prevent timeouts if package is missing
+  #initexmf --admin --disable-installer
+
+  echo "Installing MiKTeX packages..."
+  mpm --admin --install=latexmk
+  mpm --admin --install=framed
+  mpm --admin --install=upquote
+  mpm --admin --install=mptopdf
+}
