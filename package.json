@@ -13,6 +13,7 @@
   "main": "./lib/main",
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
+    "dbus-native": "^0.2.0",
     "etch": "0.7.1",
     "fs-plus": "^2.9.1",
     "lodash": "^4.13.1",
@@ -213,18 +214,24 @@
       "default": "/usr/bin/okular",
       "order": 18
     },
+    "evincePath": {
+      "description": "Full application path to Evince (*nix).",
+      "type": "string",
+      "default": "/usr/bin/evince",
+      "order": 19
+    },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 19
+      "order": 20
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 20
+      "order": 21
     }
   }
 }
