@@ -209,4 +209,11 @@ describe('LatexmkBuilder', () => {
       })
     })
   })
+
+  describe('canProcess', () => {
+    it('returns true when given a file path with a .tex extension', () => {
+      const canProcess = LatexmkBuilder.canProcess(filePath)
+      expect(canProcess).toBe(true)
+    })
+  })
 })
