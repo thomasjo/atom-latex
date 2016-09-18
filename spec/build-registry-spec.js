@@ -1,6 +1,7 @@
 /** @babel */
 
 import helpers from './spec-helpers'
+import fs from 'fs-plus'
 import path from 'path'
 import BuilderRegistry from '../lib/builder-registry'
 import { NullBuilder } from './stubs'
@@ -51,6 +52,16 @@ describe('BuilderRegistry', () => {
     it('detects builder magic and outputs builder', () => {
       const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
       expect(registry.getBuilderFromMagic(filePath)).toEqual('texify')
+    })
+  })
+
+  describe('getAllBuilders', () => {
+    it('returns all bundled builders', () => {
+      const moduleDir = registry.getModuleDirPath()
+      const numModules = fs.readdirSync(moduleDir).length
+
+      const builders = registry.getAllBuilders()
+      expect(builders.length).toBe(numModules)
     })
   })
 })
