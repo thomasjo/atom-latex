@@ -459,5 +459,14 @@ describe('LatexmkBuilder', () => {
       expect(messages.length).toBe(statusCodes.length)
       expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
     })
+
+    it('passes through to super class when given non-latex status codes', () => {
+      spyOn(builder.__proto__, 'logStatusCode').andCallThrough()
+
+      const statusCode = 1
+      builder.logStatusCode(statusCode)
+
+      expect(builder.__proto__.logStatusCode).toHaveBeenCalledWith(statusCode)
+    })
   })
 })
