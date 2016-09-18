@@ -216,4 +216,19 @@ describe('LatexmkBuilder', () => {
       expect(canProcess).toBe(true)
     })
   })
+
+  describe('logStatusCode', () => {
+    it('handles latexmk specific status codes', () => {
+      let messages = []
+      spyOn(latex.log, 'error').andCallFake(message => messages.push(message))
+
+      const statusCodes = [10, 11, 12, 13, 20]
+      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode))
+
+      const startsWithPrefix = str => str.startsWith('latexmk:')
+
+      expect(messages.length).toBe(statusCodes.length)
+      expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
+    })
+  })
 })
