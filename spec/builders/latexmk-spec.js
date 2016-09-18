@@ -231,13 +231,14 @@ describe('LatexmkBuilder', () => {
       expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
     })
 
-    it('passes through to super class when given non-latex status codes', () => {
-      spyOn(builder.__proto__, 'logStatusCode').andCallThrough()
+    it('passes through to superclass when given non-latex status codes', () => {
+      const superclass = Object.getPrototypeOf(builder)
+      spyOn(superclass, 'logStatusCode').andCallThrough()
 
       const statusCode = 1
       builder.logStatusCode(statusCode)
 
-      expect(builder.__proto__.logStatusCode).toHaveBeenCalledWith(statusCode)
+      expect(superclass.logStatusCode).toHaveBeenCalledWith(statusCode)
     })
   })
 })
