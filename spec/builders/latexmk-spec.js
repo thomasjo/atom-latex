@@ -12,6 +12,8 @@ describe('LatexmkBuilder', () => {
     builder = new LatexmkBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
+    atom.config.set('latex.engine', 'pdflatex')
+    atom.config.set('latex.outputFormat', 'pdf')
   })
 
   describe('constructArgs', () => {
@@ -22,6 +24,7 @@ describe('LatexmkBuilder', () => {
         '-cd',
         '-file-line-error',
         '-synctex=1',
+        '-pdflatex="pdflatex"',
         '-pdf',
         `"${filePath}"`
       ]

@@ -162,16 +162,16 @@
       "order": 10
     },
     "producer": {
-      "description": "Program to use when post-process DVI output in order to produce PDF. This is not used for pdflatex based builders. Currently only supported for latexmk.",
+      "title": "PDF Producer",
+      "description": "Program to use when post-process DVI output in order to produce PDF. This is only used for LaTeX engines not capable of natively producing PDF. Currently only supported for latexmk.",
       "type": "string",
       "enum": [
-        "default",
-        "dvipdf",
-        "dvipdfm",
         "dvipdfmx",
+        "xdvipdfmx",
+        "dvipdf",
         "ps2pdf"
       ],
-      "default": "default",
+      "default": "dvipdfmx",
       "order": 11
     },
     "moveResultToSourceDirectory": {
