@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.36.1] / 2016-09-20
+### Fixed
+- Open LaTeX log from error indicator
+
 ## [0.36.0] / 2016-09-14
 ### Added
 - Allow builder override via magic comments.
@@ -461,6 +465,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.36.1]: https://github.com/thomasjo/atom-latex/compare/v0.36.0...v0.36.1
 [0.36.0]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...v0.36.0
 [0.35.1]: https://github.com/thomasjo/atom-latex/compare/v0.35.0...v0.35.1
 [0.35.0]: https://github.com/thomasjo/atom-latex/compare/v0.34.1...v0.35.0
