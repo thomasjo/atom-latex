@@ -71,7 +71,7 @@ describe('BuilderRegistry', () => {
   describe('getBuilderFromMagic', () => {
     it('detects builder magic and outputs builder', () => {
       const filePath = path.join(fixturesPath, 'magic-comments', 'latex-builder.tex')
-      expect(builderRegistry.getBuilderFromMagic(filePath)).toEqual('texify')
+      expect(registry.getBuilderFromMagic(filePath)).toEqual('null')
     })
   })
 })

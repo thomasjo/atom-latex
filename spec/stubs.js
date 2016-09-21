@@ -5,7 +5,8 @@ import Logger from '../lib/logger'
 import Opener from '../lib/opener'
 
 export class NullBuilder extends Builder {
-  static canProcess (filePath) { return true }
+  static extension = '.tex'
+  static canProcess (filePath) { return filePath.endsWith(NullBuilder.extension) }
 }
 
 export class NullLogger extends Logger {
