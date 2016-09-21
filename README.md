@@ -12,9 +12,9 @@ from the command line.
 
 ## Prerequisites
 ### TeX distribution
-Since this package relies upon either `latexmk` or `texify`, a reasonably up to
-date and working TeX distribution is required. The only current officially
-supported distributions are [TeX Live](https://www.tug.org/texlive/), and
+Since this package relies upon `latexmk`, a reasonably up to date and working
+TeX distribution is required. The only current officially supported
+distributions are [TeX Live](https://www.tug.org/texlive/), and
 [MiKTeX](http://miktex.org/). Although the latter is not as well tested and
 supported as TeX Live, hence using TeX Live is highly recommended.
 
@@ -28,9 +28,8 @@ If you're using TeX Live and have installed to the default location then no
 further action should be required.
 
 #### MiKTeX
-If you're using MikTeX and have installed to the default location then all you
-should need to do is change the *Builder* to `texify`. This can be done either
-in the settings view, or directly in your `config.cson` file.
+If you're using MikTeX and have not installed the required `latexmk` package,
+please read the instructions on how to [use `latexmk` with MiKTeX](https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX)
 
 ## Usage
 Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
