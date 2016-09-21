@@ -12,25 +12,40 @@ from the command line.
 
 ## Prerequisites
 ### TeX distribution
-Since this package relies upon either `latexmk` or `texify`, a reasonably up to
-date and working TeX distribution is required. The only current officially
-supported distributions are [TeX Live](https://www.tug.org/texlive/), and
-[MiKTeX](http://miktex.org/). Although the latter is not as well tested and
-supported as TeX Live, hence using TeX Live is highly recommended.
+Since this package relies upon `latexmk`, a reasonably up-to-date and working
+TeX distribution is required. The only officially supported distributions are
+[TeX Live](https://www.tug.org/texlive/), and [MiKTeX](http://miktex.org/).
+Although, the latter is not as well tested and supported as TeX Live, hence
+using TeX Live is highly recommended.
 
-You need to ensure that the package can find your TeX distribution; to help the
-package find the distribution's binaries, you need to configure the *TeX Path*
-configuration variable to point to the folder containing the binaries. This can
-be done either in the settings view, or directly in your `config.cson` file.
+You need to ensure that the package can find your TeX distribution's binaries;
+by default the package uses your `PATH` environment variable, as well as the
+following search paths on Linux and macOS
+
+1. `/usr/texbin`
+2. `/Library/TeX/texbin`
+
+and on Windows it uses
+
+1. `%SystemDrive%\texlive\2016\bin\win32`
+2. `%SystemDrive%\texlive\2015\bin\win32`
+3. `%SystemDrive%\texlive\2014\bin\win32`
+4. `%ProgramFiles%\MiKTeX 2.9\miktex\bin\x64`
+5. `%ProgramFiles(x86)%\MiKTeX 2.9\miktex\bin`
+
+If your TeX distribution's binaries are not installed in one of those locations
+or discoverable via the `PATH` environment variable, you will need to help the
+package find the binaries. This can be done by setting the *TeX Path*
+configuration option to point to the folder containing the binaries, either in
+the settings view, or directly in your `config.cson` file.
 
 #### TeX Live
 If you're using TeX Live and have installed to the default location then no
 further action should be required.
 
 #### MiKTeX
-If you're using MikTeX and have installed to the default location then all you
-should need to do is change the *Builder* to `texify`. This can be done either
-in the settings view, or directly in your `config.cson` file.
+If you're using MikTeX and have not installed the required `latexmk` package,
+please read the instructions on how to [use `latexmk` with MiKTeX](https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX)
 
 ## Usage
 Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
@@ -50,19 +65,3 @@ some important features. As an example, there's no proper error and warning
 handling.
 
 Any and all help is greatly appreciated!
-
-### TODO
-Current wish list, in a semi-prioritized order.
-
-- [X] Improved build output parsing;
-  - [X] Error handling.
-  - [X] Warnings, and other non-critical messages.
-- [ ] Improved display of errors, warnings and other non-critical messages.
-- [ ] Project-specific settings;
-  - [ ] Setting to override the output directory.
-  - [X] Setting to override the builder.
-
-If you see something that's missing, or disagree with the prioritization,
-consider submitting a [feature request](https://github.com/thomasjo/atom-latex/issues?labels=feature&state=open),
-and if you're feeling super helpful, submit a pull request with an updated TODO
-list :sparkling_heart:
