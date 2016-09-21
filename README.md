@@ -45,7 +45,7 @@ further action should be required.
 
 #### MiKTeX
 If you're using MikTeX and have not installed the required `latexmk` package,
-please read the instructions on how to [use `latexmk` with MiKTeX](https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX)
+learn how to [use `latexmk` with MiKTeX](https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX).
 
 ## Usage
 Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
