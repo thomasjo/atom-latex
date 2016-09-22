@@ -5,13 +5,14 @@ import path from 'path'
 import Builder from '../lib/builder'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, logFilePath
+  let builder, fixturesPath, filePath, logFilePath, magicOverrideFilePath
 
   beforeEach(() => {
     builder = new Builder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
+    magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
   })
 
   describe('constructPath', () => {
@@ -100,17 +101,27 @@ describe('Builder', () => {
     })
   })
 
+  describe('getOutputFormatFromMagic', () => {
+    it('detects output magic and outputs output format', () => {
+      expect(builder.getOutputFormatFromMagic(magicOverrideFilePath)).toEqual('ps')
+    })
+  })
+
+  describe('getProducerFromMagic', () => {
+    it('detects producer magic and outputs producer', () => {
+      expect(builder.getProducerFromMagic(magicOverrideFilePath)).toEqual('xdvipdfmx')
+    })
+  })
+
   describe('getLatexEngineFromMagic', () => {
     it('detects program magic and outputs correct engine', () => {
-      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-engine.tex')
-      expect(builder.getLatexEngineFromMagic(filePath)).toEqual('pdflatex')
+      expect(builder.getLatexEngineFromMagic(magicOverrideFilePath)).toEqual('lualatex')
     })
   })
 
   describe('getJobNamesFromMagic', () => {
-    it('detects program magic and outputs jobnames', () => {
-      const filePath = path.join(fixturesPath, 'magic-comments', 'latex-jobnames.tex')
-      expect(builder.getJobNamesFromMagic(filePath)).toEqual(['foo', 'bar'])
+    it('detects jobnames magic and outputs jobnames', () => {
+      expect(builder.getJobNamesFromMagic(magicOverrideFilePath)).toEqual(['foo', 'bar'])
     })
   })
 })

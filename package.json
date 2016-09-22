@@ -163,7 +163,7 @@
     },
     "producer": {
       "title": "PDF Producer",
-      "description": "Program to use when post-process DVI output in order to produce PDF. This is only used for LaTeX engines not capable of natively producing PDF. Currently only supported for latexmk.",
+      "description": "Program to use when post-processing DVI output in order to produce PDF. This is only used for LaTeX engines not capable of natively producing PDF. Currently only supported for latexmk.",
       "type": "string",
       "enum": [
         "dvipdfmx",
