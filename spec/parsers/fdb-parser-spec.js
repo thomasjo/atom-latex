@@ -2,7 +2,6 @@
 
 import '../spec-helpers'
 
-import _ from 'lodash'
 import path from 'path'
 import FdbParser from '../../lib/parsers/fdb-parser'
 
