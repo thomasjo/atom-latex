@@ -5,13 +5,14 @@ import path from 'path'
 import Builder from '../lib/builder'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, logFilePath, magicOverrideFilePath
+  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath
 
   beforeEach(() => {
     builder = new Builder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
+    fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
     magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
   })
 
@@ -98,6 +99,37 @@ describe('Builder', () => {
 
       expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath, filePath)
       expect(logParser.parse).toHaveBeenCalled()
+    })
+  })
+
+  describe('parseFdbFile', () => {
+    let fdbParser
+
+    beforeEach(() => {
+      fdbParser = jasmine.createSpyObj('MockFdbParser', ['parse'])
+      spyOn(builder, 'getFdbParser').andReturn(fdbParser)
+    })
+
+    it('resolves the associated fdb file path by invoking @resolveFdbFilePath', () => {
+      spyOn(builder, 'resolveFdbFilePath').andReturn('foo.fdb_latexmk')
+
+      builder.parseFdbFile(filePath, null)
+      expect(builder.resolveFdbFilePath).toHaveBeenCalledWith(filePath, null)
+    })
+
+    it('returns null if passed a file path that does not exist', () => {
+      filePath = '/foo/bar/quux.tex'
+      const result = builder.parseFdbFile(filePath, null)
+
+      expect(result).toBeNull()
+      expect(fdbParser.parse).not.toHaveBeenCalled()
+    })
+
+    it('attempts to parse the resolved fdb file', () => {
+      builder.parseLogFile(filePath)
+
+      expect(builder.getFdbParser).toHaveBeenCalledWith(fdbFilePath)
+      expect(fdbParser.parse).toHaveBeenCalled()
     })
   })
 
