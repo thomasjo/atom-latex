@@ -126,7 +126,7 @@ describe('Builder', () => {
     })
 
     it('attempts to parse the resolved fdb file', () => {
-      builder.parseLogFile(filePath)
+      builder.parseFdbFile(filePath)
 
       expect(builder.getFdbParser).toHaveBeenCalledWith(fdbFilePath)
       expect(fdbParser.parse).toHaveBeenCalled()
