@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Support for Evince viewer.
+
 ## [0.36.1] / 2016-09-20
 ### Fixed
 - Open LaTeX log from error indicator
