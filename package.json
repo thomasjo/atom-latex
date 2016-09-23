@@ -87,6 +87,7 @@
       "enum": [
         "pdflatex",
         "lualatex",
+        "uplatex",
         "xelatex"
       ],
       "default": "pdflatex",
