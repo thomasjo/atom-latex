@@ -5,13 +5,13 @@ import path from 'path'
 import Builder from '../lib/builder'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, win32_filePath, logFilePath, fdbFilePath, magicOverrideFilePath
+  let builder, fixturesPath, filePath, filePathWin32, logFilePath, fdbFilePath, magicOverrideFilePath
 
   beforeEach(() => {
     builder = new Builder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
-    win32_filePath = path.join(fixturesPath, 'file_win32.tex')
+    filePathWin32 = path.join(fixturesPath, 'file_win32.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
     magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
@@ -137,7 +137,7 @@ describe('Builder', () => {
   describe('parseLogAndFdbFiles', () => {
     it('verifys that fdb file output overrides log file output', () => {
       spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
-      const result = builder.parseLogAndFdbFiles(process.platform === 'win32' ? win32_filePath : filePath)
+      const result = builder.parseLogAndFdbFiles(process.platform === 'win32' ? filePathWin32 : filePath)
 
       expect(result.outputFilePath).toEqual(process.platform === 'win32' ? 'C:\\foo\\output\\file.pdf' : '/foo/output/file.pdf')
     })
