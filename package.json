@@ -87,6 +87,7 @@
       "enum": [
         "pdflatex",
         "lualatex",
+        "platex",
         "uplatex",
         "xelatex"
       ],

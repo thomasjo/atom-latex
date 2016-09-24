@@ -133,6 +133,14 @@ describe('Builder', () => {
     })
   })
 
+  describe('parseLogAndFdbFiles', () => {
+    it('verifys that fdb file output overrides log file output', () => {
+      spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
+
+      expect(builder.parseLogAndFdbFiles(filePath).outputFilePath).toEqual('/foo/output/file.pdf')
+    })
+  })
+
   describe('getOutputFormatFromMagic', () => {
     it('detects output magic and outputs output format', () => {
       expect(builder.getOutputFormatFromMagic(magicOverrideFilePath)).toEqual('ps')
