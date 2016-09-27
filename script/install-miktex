@@ -8,8 +8,7 @@ shopt -s nocasematch
 
 install_miktex() {
   echo "Installing MiKTeX..."
-  curl -s "https://www.dropbox.com/s/yop91s5bcq4moz5/miktex-portable.tar.xz?dl=1" | tar -xJC "${HOME}"
-  ls ${HOME}
+  curl -sL "https://www.dropbox.com/s/yop91s5bcq4moz5/miktex-portable.tar.xz?dl=1" | tar -xJC "${HOME}"
 
   # Ensure PATH points to the binaries.
   export PATH="${HOME}/miktex-portable/texmfs/install/miktex/bin:${PATH}"
