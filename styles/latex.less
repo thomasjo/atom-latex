@@ -34,3 +34,29 @@ status-bar{
   50% { opacity: 0.1; }
   100% { opacity: 1; }
 }
+
+.latex-info {
+  border-left: 2px solid @background-color-info;
+  padding-left: ~"calc(0.5em - 2px)";
+}
+
+.latex-warning {
+  border-left: 2px solid @background-color-warning;
+  padding-left: ~"calc(0.5em - 2px)";
+}
+
+.latex-error {
+  border-left: 2px solid @background-color-error;
+  padding-left: ~"calc(0.5em - 2px)";
+}
+
+.latex-source-ref {
+  color: @text-color-subtle;
+  cursor: pointer;
+}
+
+.latex-log-ref {
+  color: @text-color-subtle;
+  cursor: pointer;
+  font-style: italic;
+}
