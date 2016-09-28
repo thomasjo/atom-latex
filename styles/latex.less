@@ -35,26 +35,43 @@ status-bar{
   100% { opacity: 1; }
 }
 
-.latex-info {
-  border-left: 2px solid @background-color-info;
-  padding-left: ~"calc(0.5em - 2px)";
-}
+.latex-log {
+  .panel-body {
+    margin-top: 5px;
+    overflow-y: scroll;
+  }
 
-.latex-warning {
-  border-left: 2px solid @background-color-warning;
-  padding-left: ~"calc(0.5em - 2px)";
-}
+  .panel-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: row-resize;
+    z-index: 3
+  }
 
-.latex-error {
-  border-left: 2px solid @background-color-error;
-  padding-left: ~"calc(0.5em - 2px)";
-}
+  .latex-info {
+    border-left: 2px solid @background-color-info;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
 
-.latex-file-ref {
-  color: @text-color-subtle;
-  cursor: pointer;
-}
+  .latex-warning {
+    border-left: 2px solid @background-color-warning;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
 
-.latex-file-link:hover {
-  text-decoration: underline;
+  .latex-error {
+    border-left: 2px solid @background-color-error;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
+
+  .latex-file-ref {
+    color: @text-color-subtle;
+    cursor: pointer;
+  }
+
+  .latex-file-link:hover {
+    text-decoration: underline;
+  }
 }

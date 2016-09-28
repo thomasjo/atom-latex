@@ -123,6 +123,13 @@
       "default": "warning",
       "order": 7
     },
+    "autoShowLog": {
+      "title": "Automatically Show/Hide Log",
+      "description": "Automatically show the log when there are messages present and hide the log when there are no messages present.",
+      "type": "boolean",
+      "default": true,
+      "order": 8
+    },
     "cleanExtensions": {
       "type": "array",
       "items": {
@@ -145,13 +152,13 @@
         ".synctex.gz",
         ".toc"
       ],
-      "order": 8
+      "order": 9
     },
     "outputDirectory": {
       "description": "All files generated during a build will be redirected here. Leave blank if you want the build output to be stored in the same directory as the TeX document.",
       "type": "string",
       "default": "",
-      "order": 9
+      "order": 10
     },
     "outputFormat": {
       "description": "Output file format. DVI and PS currently only supported for latexmk.",
@@ -162,7 +169,7 @@
         "ps"
       ],
       "default": "pdf",
-      "order": 10
+      "order": 11
     },
     "producer": {
       "title": "PDF Producer",
@@ -233,20 +240,20 @@
       "description": "Full application path to Evince (*nix).",
       "type": "string",
       "default": "/usr/bin/evince",
-      "order": 19
+      "order": 20
     },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 20
+      "order": 21
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 21
+      "order": 22
     }
   }
 }
