@@ -1,7 +1,6 @@
 /** @babel */
 
 import helpers from './spec-helpers'
-import fs from 'fs-plus'
 import path from 'path'
 import { NullBuilder } from './stubs'
 import BuilderRegistry from '../lib/builder-registry'
