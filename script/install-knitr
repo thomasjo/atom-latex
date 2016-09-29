@@ -16,6 +16,8 @@ ensure_r_installed() {
     echo "Installing R..."
     brew update
     brew tap homebrew/science
+    brew install readline
+    brew link --force readline
     brew install r
   fi
 }
