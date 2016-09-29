@@ -314,8 +314,8 @@ describe('Composer', () => {
   })
 
   describe('moveResult', () => {
-    const texFilePath = '/angle/gronk.tex'
-    const outputFilePath = '/angle/dangle/gronk.pdf'
+    const texFilePath = path.normalize('/angle/gronk.tex')
+    const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
     const result = { outputFilePath }
 
     beforeEach(() => {
@@ -324,9 +324,9 @@ describe('Composer', () => {
     })
 
     it('verifies that the output file and the synctex file are moved when they exist', () => {
-      const destOutputFilePath = '/angle/gronk.pdf'
-      const syncTexPath = '/angle/dangle/gronk.synctex.gz'
-      const destSyncTexPath = '/angle/gronk.synctex.gz'
+      const destOutputFilePath = path.normalize('/angle/gronk.pdf')
+      const syncTexPath = path.normalize('/angle/dangle/gronk.synctex.gz')
+      const destSyncTexPath = path.normalize('/angle/gronk.synctex.gz')
 
       spyOn(fs, 'existsSync').andReturn(true)
 
