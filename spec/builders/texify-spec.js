@@ -16,6 +16,16 @@ if (process.env.TEX_DIST === 'miktex') {
       filePath = path.join(fixturesPath, 'file.tex')
     })
 
+    describe('canProcess', () => {
+      it('correctly allows a LaTeX file', () => {
+        expect(TexifyBuilder.canProcess('foo/bar.tex')).toBe(true)
+      })
+
+      it('correctly prohibits a non-LaTeX file', () => {
+        expect(TexifyBuilder.canProcess('foo/bar.txt')).toBe(false)
+      })
+    })
+
     describe('constructArgs', () => {
       it('produces default arguments when package has default config values', () => {
         const expectedArgs = [

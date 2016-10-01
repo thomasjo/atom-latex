@@ -21,6 +21,16 @@ describe('KnitrBuilder', () => {
     atom.config.set('latex.outputFormat', 'pdf')
   })
 
+  describe('canProcess', () => {
+    it('correctly allows a Knitr file', () => {
+      expect(KnitrBuilder.canProcess('foo/bar.Rnw')).toBe(true)
+    })
+
+    it('correctly prohibits a non-Knitr file', () => {
+      expect(KnitrBuilder.canProcess('foo/bar.txt')).toBe(false)
+    })
+  })
+
   describe('constructArgs', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
