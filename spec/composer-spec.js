@@ -25,7 +25,7 @@ describe('Composer', () => {
         filePath: filePath
       })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogFile', 'getJobNamesFromMagic'])
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
       builder.getJobNamesFromMagic.andReturn(jobnames)
       builder.run.andCallFake(() => {
         switch (statusCode) {
@@ -77,7 +77,7 @@ describe('Composer', () => {
       initializeSpies('file.tex')
       editor.isModified.andReturn(true)
 
-      builder.parseLogFile.andReturn({
+      builder.parseLogAndFdbFiles.andReturn({
         outputFilePath: 'file.pdf',
         messages: []
       })
@@ -95,7 +95,7 @@ describe('Composer', () => {
     it('runs the build two times with multiple job names', () => {
       initializeSpies('file.tex', ['foo', 'bar'])
 
-      builder.parseLogFile.andReturn({
+      builder.parseLogAndFdbFiles.andReturn({
         outputFilePath: 'file.pdf',
         messages: []
       })
@@ -116,7 +116,7 @@ describe('Composer', () => {
       }
 
       initializeSpies('file.tex')
-      builder.parseLogFile.andReturn(result)
+      builder.parseLogAndFdbFiles.andReturn(result)
 
       waitsForPromise(() => {
         return composer.build()
@@ -130,7 +130,7 @@ describe('Composer', () => {
     it('treats missing output file data in log file as an error', () => {
       initializeSpies('file.tex')
 
-      builder.parseLogFile.andReturn({
+      builder.parseLogAndFdbFiles.andReturn({
         outputFilePath: null,
         messages: []
       })
@@ -146,7 +146,7 @@ describe('Composer', () => {
 
     it('treats missing result from parser as an error', () => {
       initializeSpies('file.tex')
-      builder.parseLogFile.andReturn(null)
+      builder.parseLogAndFdbFiles.andReturn(null)
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)

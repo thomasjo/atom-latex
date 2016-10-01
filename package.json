@@ -88,6 +88,8 @@
       "enum": [
         "pdflatex",
         "lualatex",
+        "platex",
+        "uplatex",
         "xelatex"
       ],
       "default": "pdflatex",
@@ -162,57 +164,70 @@
       "default": "pdf",
       "order": 10
     },
+    "producer": {
+      "title": "PDF Producer",
+      "description": "Program to use when post-processing DVI output in order to produce PDF. This is only used for LaTeX engines not capable of natively producing PDF. Currently only supported for latexmk.",
+      "type": "string",
+      "enum": [
+        "dvipdfmx",
+        "xdvipdfmx",
+        "dvipdf",
+        "ps2pdf"
+      ],
+      "default": "dvipdfmx",
+      "order": 11
+    },
     "moveResultToSourceDirectory": {
       "title": "Move Result to Source Directory",
       "description": "Ensures that the output file produced by a successful build is stored together with the TeX document that produced it.",
       "type": "boolean",
       "default": true,
-      "order": 11
+      "order": 12
     },
     "buildOnSave": {
       "title": "Build on Save",
       "description": "Automatically run builds when files are saved.",
       "type": "boolean",
       "default": false,
-      "order": 12
+      "order": 13
     },
     "openResultAfterBuild": {
       "title": "Open Result after Successful Build",
       "type": "boolean",
       "default": true,
-      "order": 13
+      "order": 14
     },
     "openResultInBackground": {
       "title": "Open Result in Background",
       "type": "boolean",
       "default": true,
-      "order": 14
+      "order": 15
     },
     "alwaysOpenResultInAtom": {
       "title": "Always Open Result in Atom",
       "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
       "type": "boolean",
       "default": false,
-      "order": 15
+      "order": 16
     },
     "skimPath": {
       "description": "Full application path to Skim (macOS).",
       "type": "string",
       "default": "/Applications/Skim.app",
-      "order": 16
+      "order": 17
     },
     "sumatraPath": {
       "title": "SumatraPDF Path",
       "description": "Full application path to SumatraPDF (Windows).",
       "type": "string",
       "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe",
-      "order": 17
+      "order": 18
     },
     "okularPath": {
       "description": "Full application path to Okular (*nix).",
       "type": "string",
       "default": "/usr/bin/okular",
-      "order": 18
+      "order": 19
     },
     "evincePath": {
       "description": "Full application path to Evince (*nix).",

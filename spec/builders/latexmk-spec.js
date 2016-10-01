@@ -12,6 +12,8 @@ describe('LatexmkBuilder', () => {
     builder = new LatexmkBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
+    atom.config.set('latex.engine', 'pdflatex')
+    atom.config.set('latex.outputFormat', 'pdf')
   })
 
   describe('constructArgs', () => {
@@ -20,9 +22,10 @@ describe('LatexmkBuilder', () => {
         '-interaction=nonstopmode',
         '-f',
         '-cd',
-        '-pdf',
         '-file-line-error',
         '-synctex=1',
+        '-pdflatex="pdflatex"',
+        '-pdf',
         `"${filePath}"`
       ]
       const args = builder.constructArgs(filePath)
@@ -48,9 +51,9 @@ describe('LatexmkBuilder', () => {
       expect(builder.constructArgs(filePath)).toContain(expectedArg)
     })
 
-    it('adds engine argument according to package config', () => {
+    it('adds pdflatex arguments according to package config', () => {
       atom.config.set('latex.engine', 'lualatex')
-      expect(builder.constructArgs(filePath)).toContain('-lualatex')
+      expect(builder.constructArgs(filePath)).toContain('-pdflatex="lualatex"')
     })
 
     it('adds a custom engine string according to package config', () => {
@@ -58,13 +61,49 @@ describe('LatexmkBuilder', () => {
       expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
     })
 
-    it('adds -ps or -dvi and removes -pdf arguments according to package config', () => {
+    it('adds -ps and removes -pdf arguments according to package config', () => {
       atom.config.set('latex.outputFormat', 'ps')
-      expect(builder.constructArgs(filePath)).toContain('-ps')
-      expect(builder.constructArgs(filePath)).not.toContain('-pdf')
+      const args = builder.constructArgs(filePath)
+      expect(args).toContain('-ps')
+      expect(args).not.toContain('-pdf')
+    })
+
+    it('adds -dvi and removes -pdf arguments according to package config', () => {
       atom.config.set('latex.outputFormat', 'dvi')
-      expect(builder.constructArgs(filePath)).toContain('-dvi')
-      expect(builder.constructArgs(filePath)).not.toContain('-pdf')
+      const args = builder.constructArgs(filePath)
+      expect(args).toContain('-dvi')
+      expect(args).not.toContain('-pdf')
+    })
+
+    it('adds latex dvipdfmx arguments according to package config', () => {
+      atom.config.set('latex.engine', 'uplatex')
+      atom.config.set('latex.producer', 'dvipdfmx')
+      const args = builder.constructArgs(filePath)
+      expect(args).toContain('-latex="uplatex"')
+      expect(args).toContain('-pdfdvi -e "\\$dvipdf = \'dvipdfmx %O -o %D %S\';"')
+      expect(args).not.toContain('-pdf')
+    })
+
+    it('adds latex dvipdf arguments according to package config', () => {
+      atom.config.set('latex.engine', 'uplatex')
+      atom.config.set('latex.producer', 'dvipdf')
+      const args = builder.constructArgs(filePath)
+      expect(args).toContain('-latex="uplatex"')
+      expect(args).toContain('-pdfdvi -e "\\$dvipdf = \'dvipdf %O %S %D\';"')
+      expect(args).not.toContain('-pdf')
+    })
+
+    it('adds latex ps arguments according to package config', () => {
+      atom.config.set('latex.engine', 'uplatex')
+      atom.config.set('latex.producer', 'ps2pdf')
+      const args = builder.constructArgs(filePath)
+      expect(args).toContain('-latex="uplatex"')
+      expect(args).toContain('-pdfps')
+      expect(args).not.toContain('-pdf')
+    })
+
+    it('adds a jobname argument when passed a non-null jobname', () => {
+      expect(builder.constructArgs(filePath, 'foo')).toContain('-jobname=foo')
     })
   })
 
