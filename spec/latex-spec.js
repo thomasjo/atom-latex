@@ -133,11 +133,28 @@ describe('Latex', () => {
       expect(opener.name).toBe('SkimOpener')
     })
 
-    it('does not support GNU/Linux', () => {
-      spyOn(latex, 'hasPdfViewerPackage').andReturn(false)
+    it('returns OkularOpener when when installed and running on Linux', () => {
+      spyOn(latex, 'okularExecutableExists').andReturn(true)
+      spyOn(latex, 'evinceExecutableExists').andReturn(false)
       const opener = latex.resolveOpenerImplementation('linux')
 
-      expect(opener).toBeNull()
+      expect(opener.name).toBe('OkularOpener')
+    })
+
+    it('returns EvinceOpener when installed and running on Linux', () => {
+      spyOn(latex, 'okularExecutableExists').andReturn(false)
+      spyOn(latex, 'evinceExecutableExists').andReturn(true)
+      const opener = latex.resolveOpenerImplementation('linux')
+
+      expect(opener.name).toBe('EvinceOpener')
+    })
+
+    it('returns XdgOPener when Okular or Evince are not installed, and running on Linux', () => {
+      spyOn(latex, 'okularExecutableExists').andReturn(false)
+      spyOn(latex, 'evinceExecutableExists').andReturn(false)
+      const opener = latex.resolveOpenerImplementation('linux')
+
+      expect(opener.name).toBe('XdgOpener')
     })
 
     it('does not support unknown operating systems without pdf-view package', () => {
