@@ -22,6 +22,10 @@ status-bar {
       cursor: pointer;
     }
   }
+
+  .latex-spin {
+    -webkit-animation: spin 2s infinite linear;
+  }
 }
 
 .latex-log {
@@ -66,5 +70,14 @@ status-bar {
 
   .latex-highlight {
     color: @text-color-highlight;
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
   }
 }
