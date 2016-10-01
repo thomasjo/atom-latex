@@ -4,7 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Support for Evince viewer.
+- Evince viewer support including SyncTeX forward/backward and open in background.
+- xdg-open viewer support.
+- Non-PDF producing LaTeX engine support.
+- Allow PDF producer override via magic comments.
+- Allow output format override via magic comments.
 
 ## [0.36.1] / 2016-09-20
 ### Fixed

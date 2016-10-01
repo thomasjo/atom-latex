@@ -57,7 +57,10 @@ The package has support for the following "magic" TeX comments
 - `% !TEX program = pdflatex` Override the LaTeX engine (pdflatex, lualatex,
   xelatex) to use for build.
 - `% !TEX jobnames = foo bar` Control the number and names of build jobs.
+- `% !TEX format = dvi` Override the output format (pdf, ps, dvi).
+- `% !TEX producer = xdvipdfmx` Override the PDF producer (dvipdf, dvipdfmx, xdvipdfmx).
 - `% !TEX builder = latexmk` Override the LaTeX builder (latexmk, texify).
+
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
