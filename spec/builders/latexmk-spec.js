@@ -33,6 +33,10 @@ describe('LatexmkBuilder', () => {
       expect(args).toEqual(expectedArgs)
     })
 
+    it('adds -g flag when rebuild is passed', () => {
+      expect(builder.constructArgs(filePath, null, true)).toContain('-g')
+    })
+
     it('adds -shell-escape flag when package config value is set', () => {
       atom.config.set('latex.enableShellEscape', true)
       expect(builder.constructArgs(filePath)).toContain('-shell-escape')
