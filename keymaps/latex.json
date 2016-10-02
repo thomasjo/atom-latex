@@ -1,7 +1,4 @@
 {
-  "atom-text-editor": {
-    "ctrl-alt-l": "latex:toggle-log"
-  },
   "atom-text-editor[data-grammar~=\"latex\"]": {
     "ctrl-alt-b": "latex:build",
     "ctrl-alt-s": "latex:sync",
