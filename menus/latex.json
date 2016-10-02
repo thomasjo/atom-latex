@@ -13,5 +13,11 @@
         }
       ]
     }
-  ]
+  ],
+  "context-menu": {
+    "atom-text-editor[data-grammar~=\"latex\"]": [
+      { "label": "LaTeX Sync",     "command": "latex:sync" },
+      { "label": "LaTeX Sync Log", "command": "latex:sync-log" }
+    ]
+  }
 }
