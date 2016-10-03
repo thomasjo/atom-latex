@@ -4,11 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Deprecation notice for `texify`.
 - Evince viewer support including SyncTeX forward/backward and open in background.
 - xdg-open viewer support.
 - Non-PDF producing LaTeX engine support.
 - Allow PDF producer override via magic comments.
 - Allow output format override via magic comments.
+- Rebuild command including automatic rebuild on change in settings.
 
 ## [0.36.1] / 2016-09-20
 ### Fixed
