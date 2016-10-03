@@ -10,6 +10,15 @@ describe('Logger', () => {
     logger = new Logger()
   })
 
+  describe('showMessage', () => {
+    it('verifies that calling directly without preceding call to group automatically calls groupEnd', () => {
+      spyOn(logger, 'groupEnd').andReturn()
+      logger.showMessage({ type: 'Error' })
+
+      expect(logger.groupEnd).toHaveBeenCalled()
+    })
+  })
+
   describe('showFilteredMessages', () => {
     beforeEach(() => {
       spyOn(logger, 'showMessages').andReturn()
