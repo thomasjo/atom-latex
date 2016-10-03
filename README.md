@@ -4,7 +4,7 @@
 [![Dependency Status](https://david-dm.org/thomasjo/atom-latex.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![devDependency Status](https://david-dm.org/thomasjo/atom-latex/dev-status.svg)](https://david-dm.org/thomasjo/atom-latex?type=dev)
 
-Compile LaTeX documents from within Atom.
+Compile LaTeX or Knitr documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -48,19 +48,42 @@ If you're using MikTeX and have not installed the required `latexmk` package,
 learn how to [use `latexmk` with MiKTeX](https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX).
 
 ## Usage
-Invoke the `build` command by pressing the default keybind `ctrl-alt-b` while in
-a `.tex` file.
+The `latex:build` command can be invoked from the LaTex menu or by pressing the
+default keybind <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> while in a LaTex or Knitr file.
+
+The `latex` package supports other commands as detailed in the table below.
+
+| Command         | Keybinding                                  | Use                                                               |
+|:----------------|:--------------------------------------------|:------------------------------------------------------------------|
+| `latex:build`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/Knitr file and open result.                           |
+| `latex:rebuild` | None                                        | Force a rebuild of LaTeX/Knitr file.                              |
+| `latex:clean`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                      |
+| `latex:sync`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position. |
 
 ### Magic comments
-The package has support for the following "magic" TeX comments
-- `% !TEX root = ../file.tex` Specify the root file that should be built.
-- `% !TEX program = pdflatex` Override the LaTeX engine (pdflatex, lualatex,
-  xelatex) to use for build.
-- `% !TEX jobnames = foo bar` Control the number and names of build jobs.
-- `% !TEX format = dvi` Override the output format (pdf, ps, dvi).
-- `% !TEX producer = xdvipdfmx` Override the PDF producer (dvipdf, dvipdfmx, xdvipdfmx).
-- `% !TEX builder = latexmk` Override the LaTeX builder (latexmk, texify).
+The package has support for various "magic" TeX comments in the form of
+`% !TEX <name> = <value>` as detailed in the table below.
 
+| Name       | Value                                 | Use                                         |
+|:-----------|:--------------------------------------|:--------------------------------------------|
+| `format`   | `dvi`, `ps`, `pdf`                    | Override the output format                  |
+| `jobnames` | space separated names, e.g. `foo bar` | Control the number and names of build jobs. |
+| `producer` | `dvipdf`, `dvipdfmx`, `xdvipdfmx`     | Override the PDF producer                   |
+| `program`  | `pdflatex`, `lualatex`, etc.          | Override the LaTeX engine to use for build. |
+| `root`     | file path, e.g. `../file.tex`         | Specify the root file that should be built. |
+
+### PDF/DVI/PS Viewers
+THe `latex` package supports various PDF/DVI/PS viewers, including support for cursor
+synchronization via SyncTeX if possible. Specific features of each of the viewers is detailed on the
+[Wiki](https://github.com/thomasjo/atom-latex/wiki/Supported-Viewers). The currently supported viewers are:
+
+- [pdf-view](https://atom.io/packages/pdf-view)
+- [Evince](https://wiki.gnome.org/Apps/Evince)
+- [Okular](https://okular.kde.org/)
+- [Preview](https://support.apple.com/en-us/HT201740)
+- [Skim](http://skim-app.sourceforge.net/)
+- [Sumatra PDF](http://www.sumatrapdfreader.org/free-pdf-reader.html)
+- [xdg-open](https://linux.die.net/man/1/xdg-open)
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
