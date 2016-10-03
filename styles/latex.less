@@ -77,9 +77,13 @@ status-bar {
       content: 'at '
     }
   }
-  
-  .latex-line-reference::before {
+
+  .latex-line-number::before {
     content: ' at line ';
+  }
+
+  .latex-end-line-number::before {
+    content: '\2013';
   }
 
   .latex-log-reference {
