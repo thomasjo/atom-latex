@@ -4,7 +4,7 @@
 [![Dependency Status][dependency svg]][dependency]
 [![devDependency Status][devDependency svg]][devDependency]
 
-Compile LaTeX or knitr documents from within Atom.
+Compile LaTeX or [knitr] documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -49,14 +49,15 @@ learn how to [use `latexmk` with MiKTeX][latexmk with MiKTeX].
 
 ## Usage
 The `latex:build` command can be invoked from the LaTex menu or by pressing the
-default keybind <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> while in a LaTex or Knitr file.
+default keybind <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> while in a LaTex or
+knitr file.
 
 The `latex` package supports other commands as detailed in the table below.
 
 | Command         | Keybinding                                  | Use                                                               |
 |:----------------|:-------------------------------------------:|:------------------------------------------------------------------|
 | `latex:build`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                           |
-| `latex:rebuild` | None                                        | Force a rebuild of LaTeX/Knitr file.                              |
+| `latex:rebuild` | None                                        | Force a rebuild of LaTeX/knitr file.                              |
 | `latex:clean`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                      |
 | `latex:sync`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position. |
 
@@ -94,6 +95,7 @@ Any and all help is greatly appreciated!
 [devDependency svg]: https://david-dm.org/thomasjo/atom-latex/dev-status.svg
 [devDependency]: https://david-dm.org/thomasjo/atom-latex?type=dev
 [Evince]: https://wiki.gnome.org/Apps/Evince
+[knitr]: http://yihui.name/knitr/
 [latexmk with MiKTeX]: https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX
 [MiKTeX]: http://miktex.org/
 [Okular]: https://okular.kde.org/
