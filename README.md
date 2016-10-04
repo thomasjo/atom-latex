@@ -4,7 +4,7 @@
 [![Dependency Status](https://david-dm.org/thomasjo/atom-latex.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![devDependency Status](https://david-dm.org/thomasjo/atom-latex/dev-status.svg)](https://david-dm.org/thomasjo/atom-latex?type=dev)
 
-Compile LaTeX or Knitr documents from within Atom.
+Compile LaTeX or knitr documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -37,7 +37,9 @@ If your TeX distribution's binaries are not installed in one of those locations
 or discoverable via the `PATH` environment variable, you will need to help the
 package find the binaries. This can be done by setting the *TeX Path*
 configuration option to point to the folder containing the binaries, either in
-the settings view, or directly in your `config.cson` file.
+the settings view, or directly in your `config.cson` file. See
+[Configuration](https://github.com/thomasjo/atom-latex/wiki/Configuration) for
+further details regarding the settings of this package.
 
 #### TeX Live
 If you're using TeX Live and have installed to the default location then no
@@ -54,26 +56,26 @@ default keybind <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> while in a LaTex or 
 The `latex` package supports other commands as detailed in the table below.
 
 | Command         | Keybinding                                  | Use                                                               |
-|:----------------|:--------------------------------------------|:------------------------------------------------------------------|
-| `latex:build`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/Knitr file and open result.                           |
+|:----------------|:-------------------------------------------:|:------------------------------------------------------------------|
+| `latex:build`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                           |
 | `latex:rebuild` | None                                        | Force a rebuild of LaTeX/Knitr file.                              |
 | `latex:clean`   | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                      |
 | `latex:sync`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position. |
 
 ### Magic comments
-The package has support for various "magic" TeX comments in the form of
+This package has support for various "magic" TeX comments in the form of
 `% !TEX <name> = <value>` as detailed in the table below.
 
 | Name       | Value                                 | Use                                         |
 |:-----------|:--------------------------------------|:--------------------------------------------|
-| `format`   | `dvi`, `ps`, `pdf`                    | Override the output format                  |
+| `format`   | `dvi`, `ps`, or `pdf`                 | Override the output format                  |
 | `jobnames` | space separated names, e.g. `foo bar` | Control the number and names of build jobs. |
-| `producer` | `dvipdf`, `dvipdfmx`, `xdvipdfmx`     | Override the PDF producer                   |
+| `producer` | `dvipdf`, `dvipdfmx`, or `xdvipdfmx`  | Override the PDF producer                   |
 | `program`  | `pdflatex`, `lualatex`, etc.          | Override the LaTeX engine to use for build. |
 | `root`     | file path, e.g. `../file.tex`         | Specify the root file that should be built. |
 
 ### PDF/DVI/PS Viewers
-THe `latex` package supports various PDF/DVI/PS viewers, including support for cursor
+The `latex` package supports various PDF/DVI/PS viewers, including support for cursor
 synchronization via SyncTeX if possible. Specific features of each of the viewers is detailed on the
 [Wiki](https://github.com/thomasjo/atom-latex/wiki/Supported-Viewers). The currently supported viewers are:
 
