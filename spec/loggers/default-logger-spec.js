@@ -3,12 +3,37 @@
 import '../spec-bootstrap'
 import DefaultLogger from '../../lib/loggers/default-logger'
 import werkzeug from '../../lib/werkzeug'
+import Latex from '../../lib/latex'
 
 describe('DefaultLogger', () => {
   let logger
 
   beforeEach(() => {
     logger = new DefaultLogger()
+    global.latex = new Latex()
+  })
+
+  describe('showErrorMarkersInEditor', () => {
+    it('verifies that only messages that have a range and a matching file path are marked', () => {
+      const editor = { getPath: () => 'foo.tex' }
+      const messages = [{
+        type: 'Error',
+        range: [[0, 0], [0, 1]],
+        filePath: 'foo.tex'
+      }, {
+        type: 'Warning',
+        range: [[0, 0], [0, 1]],
+        filePath: 'bar.tex'
+      }, {
+        type: 'Info',
+        filePath: 'foo.tex'
+      }]
+      spyOn(logger, 'addErrorMarker')
+
+      logger.showErrorMarkersInEditor(editor, messages)
+
+      expect(logger.addErrorMarker).toHaveBeenCalled()
+    })
   })
 
   describe('sync', () => {
