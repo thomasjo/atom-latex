@@ -1,36 +1,122 @@
 @import "ui-variables";
 
-status-bar{
-  .latex-progress-indicator {
-    color: @text-color-info;
+status-bar {
+  .latex-status {
+    &.latex-highlight {
+      color: @text-color-highlight;
+    }
 
-    .dot {
-      opacity: 0;
-      -webkit-animation: dot 1.0s infinite;
+    &.latex-info {
+      color: @text-color-info;
+    }
 
-      &.one {
-        -webkit-animation-delay: 0.0s;
-      }
+    &.latex-warning {
+      color: @text-color-warning;
+    }
 
-      &.two {
-        -webkit-animation-delay: 0.2s;
-      }
+    &.latex-error {
+      color: @text-color-error;
+    }
 
-      &.three {
-        -webkit-animation-delay: 0.3s;
-      }
+    &.latex-status-link {
+      cursor: pointer;
     }
   }
 
-  .latex-error-indicator {
-    &, a, a:hover {
-      color: @text-color-error;
-    }
+  .icon {
+    text-align: center;
+    display: inline-block;
+  }
+
+  .latex-spin {
+    -webkit-animation: spin 2s infinite linear;
   }
 }
 
-@-webkit-keyframes dot {
-  0% { opacity: 0; }
-  50% { opacity: 0.1; }
-  100% { opacity: 1; }
+.latex-log {
+  .panel-body {
+    margin-top: 5px;
+    overflow-y: scroll;
+  }
+
+  .panel-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    cursor: row-resize;
+    z-index: 3
+  }
+
+  .latex-info {
+    border-left: 2px solid @background-color-info;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
+
+  .latex-warning {
+    border-left: 2px solid @background-color-warning;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
+
+  .latex-error {
+    border-left: 2px solid @background-color-error;
+    padding-left: ~"calc(0.5em - 2px)";
+  }
+
+  .latex-source-reference, .latex-log-reference {
+    color: @text-color-subtle;
+  }
+
+  .latex-source-reference {
+    &::before {
+      content: ' ';
+    }
+
+    .latex-file-link::before {
+      content: 'at '
+    }
+  }
+
+  .latex-line-number::before {
+    content: ' at line ';
+  }
+
+  .latex-end-line-number::before {
+    content: '\2013';
+  }
+
+  .latex-log-reference {
+    &::before {
+      content: ' [';
+    }
+    &::after {
+      content: ']';
+    }
+
+    .latex-file-link::before {
+      content: 'from '
+    }
+  }
+
+  .latex-file-link {
+    cursor: pointer;
+  }
+
+  .latex-file-link:hover {
+    text-decoration: underline;
+  }
+
+  .latex-highlight {
+    color: @text-color-highlight;
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }

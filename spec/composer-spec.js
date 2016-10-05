@@ -5,6 +5,7 @@ import fs from 'fs-plus'
 import _ from 'lodash'
 import path from 'path'
 import Composer from '../lib/composer'
+import werkzeug from '../lib/werkzeug'
 
 describe('Composer', () => {
   let composer
@@ -20,7 +21,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(composer, 'getEditorDetails').andReturn({
+      spyOn(werkzeug, 'getEditorDetails').andReturn({
         editor: editor,
         filePath: filePath
       })
@@ -159,14 +160,14 @@ describe('Composer', () => {
 
     it('handles active item not being a text editor', () => {
       spyOn(atom.workspace, 'getActiveTextEditor').andReturn()
-      spyOn(composer, 'getEditorDetails').andCallThrough()
+      spyOn(werkzeug, 'getEditorDetails').andCallThrough()
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
       })
 
       runs(() => {
-        expect(composer.getEditorDetails).toHaveBeenCalled()
+        expect(werkzeug.getEditorDetails).toHaveBeenCalled()
       })
     })
   })
@@ -180,7 +181,7 @@ describe('Composer', () => {
     }
 
     function initializeSpies (filePath) {
-      spyOn(composer, 'getEditorDetails').andReturn({filePath})
+      spyOn(werkzeug, 'getEditorDetails').andReturn({filePath})
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
     }
 

@@ -2,15 +2,15 @@
 
 :host(:host) .gutter .line-number {
   &.latex-error {
-    background-color: fade(@background-color-error, 50%);
-    color: @text-color-error;
+    border-left: 2px solid @background-color-error;
+    padding-left: ~"calc(0.5em - 2px)";
   }
   &.latex-warning {
-    background-color: fade(@background-color-warning, 50%);
-    color: @text-color-warning;
+    border-left: 2px solid @background-color-warning;
+    padding-left: ~"calc(0.5em - 2px)";
   }
   &.latex-info {
-    background-color: fade(@background-color-info, 50%);
-    color: @text-color-info;
+    border-left: 2px solid @background-color-info;
+    padding-left: ~"calc(0.5em - 2px)";
   }
 }
