@@ -262,13 +262,13 @@
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 20
+      "order": 19
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 21
+      "order": 20
     }
   }
   }
