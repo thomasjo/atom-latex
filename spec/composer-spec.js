@@ -274,7 +274,7 @@ describe('Composer', () => {
 
   describe('sync', () => {
     it('silently does nothing when the current editor is transient', () => {
-      spyOn(composer, 'getEditorDetails').andReturn({ filePath: null })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
       spyOn(composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex, 'getOpener').andCallThrough()
 
@@ -285,7 +285,7 @@ describe('Composer', () => {
     })
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
-      spyOn(composer, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
       spyOn(composer, 'resolveOutputFilePath').andReturn()
       spyOn(latex, 'getOpener').andCallThrough()
       spyOn(latex.log, 'warning').andCallThrough()
@@ -300,11 +300,10 @@ describe('Composer', () => {
       const filePath = 'file.tex'
       const lineNumber = 1
       const outputFilePath = 'file.pdf'
-      spyOn(composer, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
       spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
 
       const opener = jasmine.createSpyObj('MockOpener', ['open'])
-      console.log(opener)
       spyOn(latex, 'getOpener').andReturn(opener)
 
       composer.sync()
