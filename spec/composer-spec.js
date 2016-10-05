@@ -120,7 +120,7 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(result)
 
       waitsForPromise(() => {
-        return composer.build()
+        return composer.build('build')
       })
 
       runs(() => {
