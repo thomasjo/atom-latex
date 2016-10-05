@@ -26,7 +26,7 @@ describe('Composer', () => {
         filePath: filePath
       })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'logStatusCode'])
       builder.getJobNamesFromMagic.andReturn(jobnames)
       builder.run.andCallFake(() => {
         switch (statusCode) {
@@ -55,6 +55,7 @@ describe('Composer', () => {
         expect(result).toBe(false)
         expect(composer.showResult).not.toHaveBeenCalled()
         expect(composer.showError).not.toHaveBeenCalled()
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
       })
     })
 
@@ -71,6 +72,7 @@ describe('Composer', () => {
         expect(result).toBe(false)
         expect(composer.showResult).not.toHaveBeenCalled()
         expect(composer.showError).not.toHaveBeenCalled()
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
       })
     })
 
@@ -120,7 +122,7 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(result)
 
       waitsForPromise(() => {
-        return composer.build('build')
+        return composer.build()
       })
 
       runs(() => {
