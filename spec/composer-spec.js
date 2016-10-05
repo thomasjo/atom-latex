@@ -1,9 +1,6 @@
 /** @babel */
 
 import './spec-bootstrap'
-import fs from 'fs-plus'
-import _ from 'lodash'
-import path from 'path'
 import Composer from '../lib/composer'
 import werkzeug from '../lib/werkzeug'
 
@@ -170,56 +167,6 @@ describe('Composer', () => {
 
       runs(() => {
         expect(werkzeug.getEditorDetails).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('clean', () => {
-    const extensions = ['.bar', '.baz', '.quux']
-
-    function fakeFilePaths (filePath) {
-      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
-      return extensions.map(ext => filePathSansExtension + ext)
-    }
-
-    function initializeSpies (filePath) {
-      spyOn(werkzeug, 'getEditorDetails').andReturn({filePath})
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-    }
-
-    beforeEach(() => {
-      spyOn(fs, 'remove').andCallThrough()
-      atom.config.set('latex.cleanExtensions', extensions)
-    })
-
-    it('deletes all files for the current tex document when output has not been redirected', () => {
-      const filePath = path.normalize('/a/foo.tex')
-      const filesToDelete = fakeFilePaths(filePath)
-      initializeSpies(filePath)
-
-      let candidatePaths
-      waitsForPromise(() => {
-        return composer.clean().then(resolutions => {
-          candidatePaths = _.map(resolutions, 'filePath')
-        })
-      })
-
-      runs(() => {
-        expect(candidatePaths).toEqual(filesToDelete)
-      })
-    })
-
-    it('stops immidiately if the file is not a TeX document', () => {
-      const filePath = 'foo.bar'
-      initializeSpies(filePath, [])
-
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
-
-      runs(() => {
-        expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
-        expect(fs.remove).not.toHaveBeenCalled()
       })
     })
   })
