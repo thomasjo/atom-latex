@@ -26,29 +26,29 @@ if (process.env.TEX_DIST === 'miktex') {
           '--tex-option="--synctex=1"',
           `"${filePath}"`
         ]
-        const args = builder.constructArgs(filePath)
+        const args = builder.constructArgs(filePath, 'build')
 
         expect(args).toEqual(expectedArgs)
       })
 
       it('adds -shell-escape flag when package config value is set', () => {
         atom.config.set('latex.enableShellEscape', true)
-        expect(builder.constructArgs(filePath)).toContain('--tex-option=--enable-write18')
+        expect(builder.constructArgs(filePath, 'build')).toContain('--tex-option=--enable-write18')
       })
 
       it('disables synctex according to package config', () => {
         atom.config.set('latex.enableSynctex', false)
-        expect(builder.constructArgs(filePath)).not.toContain('--tex-option="--synctex=1"')
+        expect(builder.constructArgs(filePath, 'build')).not.toContain('--tex-option="--synctex=1"')
       })
 
       it('adds engine argument according to package config', () => {
         atom.config.set('latex.engine', 'lualatex')
-        expect(builder.constructArgs(filePath)).toContain('--engine=luatex')
+        expect(builder.constructArgs(filePath, 'build')).toContain('--engine=luatex')
       })
 
       it('adds a custom engine string according to package config', () => {
         atom.config.set('latex.customEngine', 'pdflatex %O %S')
-        expect(builder.constructArgs(filePath)).toContain('--engine="pdflatex %O %S"')
+        expect(builder.constructArgs(filePath, 'build')).toContain('--engine="pdflatex %O %S"')
       })
     })
 
@@ -57,7 +57,7 @@ if (process.env.TEX_DIST === 'miktex') {
 
       it('successfully executes texify when given a valid TeX file', () => {
         waitsForPromise(() => {
-          return builder.run(filePath).then(code => { exitCode = code })
+          return builder.run(filePath, 'build').then(code => { exitCode = code })
         })
 
         runs(() => {
@@ -69,7 +69,7 @@ if (process.env.TEX_DIST === 'miktex') {
         filePath = path.join(fixturesPath, 'filename with spaces.tex')
 
         waitsForPromise(() => {
-          return builder.run(filePath).then(code => { exitCode = code })
+          return builder.run(filePath, 'build').then(code => { exitCode = code })
         })
 
         runs(() => {
@@ -81,7 +81,7 @@ if (process.env.TEX_DIST === 'miktex') {
         filePath = path.join(fixturesPath, 'error-warning.tex')
 
         waitsForPromise(() => {
-          return builder.run(filePath).then(code => {
+          return builder.run(filePath, 'build').then(code => {
             exitCode = code
             parsedLog = builder.parseLogFile(filePath)
           })
@@ -123,7 +123,7 @@ if (process.env.TEX_DIST === 'miktex') {
         spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
 
         waitsForPromise(() => {
-          return builder.run(filePath).then(code => { exitCode = code })
+          return builder.run(filePath, 'build').then(code => { exitCode = code })
         })
 
         runs(() => {
@@ -133,12 +133,12 @@ if (process.env.TEX_DIST === 'miktex') {
 
       it('fails to execute texify when given invalid file path', () => {
         filePath = path.join(fixturesPath, 'foo.tex')
-        const args = builder.constructArgs(filePath)
+        const args = builder.constructArgs(filePath, 'build')
 
         spyOn(builder, 'constructArgs').andReturn(args)
 
         waitsForPromise(() => {
-          return builder.run(filePath).then(code => { exitCode = code })
+          return builder.run(filePath, 'build').then(code => { exitCode = code })
         })
 
         runs(() => {
