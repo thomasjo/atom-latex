@@ -6,10 +6,11 @@
         {
           "label": "LaTeX",
           "submenu": [
-            { "label": "Build",   "command": "latex:build" },
-            { "label": "Rebuild", "command": "latex:rebuild" },
-            { "label": "Clean",   "command": "latex:clean" },
-            { "label": "Kill",   "command": "latex:kill" }
+            { "label": "Build",      "command": "latex:build" },
+            { "label": "Rebuild",    "command": "latex:rebuild" },
+            { "label": "Clean",      "command": "latex:clean" },
+            { "label": "Full Clean", "command": "latex:full-clean" },
+            { "label": "Kill",       "command": "latex:kill" }
           ]
         }
       ]

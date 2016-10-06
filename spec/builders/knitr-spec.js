@@ -19,6 +19,7 @@ describe('KnitrBuilder', () => {
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
     atom.config.set('latex.engine', 'pdflatex')
     atom.config.set('latex.outputFormat', 'pdf')
+    atom.config.set('latex.cleanExtensions', [])
   })
 
   describe('constructArgs', () => {

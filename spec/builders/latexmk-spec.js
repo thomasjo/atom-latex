@@ -4,7 +4,7 @@ import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import _ from 'lodash'
-import { BUILD_ACTION, REBUILD_ACTION, CLEAN_ACTION } from '../../lib/actions'
+import { BUILD_ACTION, REBUILD_ACTION, CLEAN_ACTION, FULL_CLEAN_ACTION } from '../../lib/actions'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
@@ -43,9 +43,13 @@ describe('LatexmkBuilder', () => {
       expect(builder.constructArgs(filePath, CLEAN_ACTION)).toContain('-c')
     })
 
+    it('adds -C flag when full clean is passed', () => {
+      expect(builder.constructArgs(filePath, FULL_CLEAN_ACTION)).toContain('-c')
+    })
+
     it('adds cleanExtensions flag when clean is passed', () => {
       atom.config.set('latex.cleanExtensions', ['foo', 'bar'])
-      expect(builder.constructArgs(filePath, CLEAN_ACTION)).toContain('-e "\\$clean_ext=\'foo bar\'"')
+      expect(builder.constructArgs(filePath, CLEAN_ACTION)).toContain('-c -e "\\$clean_ext=\'foo bar\'"')
     })
 
     it('adds -shell-escape flag when package config value is set', () => {
