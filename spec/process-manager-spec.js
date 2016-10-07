@@ -8,7 +8,7 @@ import ProcessManager from '../lib/process-manager'
 describe('ProcessManager', () => {
   let processManager, tempPath
 
-  function constructCommand(fileName) {
+  function constructCommand (fileName) {
     const filePath = path.join(tempPath, fileName)
     return `latexmk -cd -f -pdf "${filePath}"`
   }
