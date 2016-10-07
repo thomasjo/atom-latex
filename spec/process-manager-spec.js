@@ -16,7 +16,6 @@ describe('ProcessManager', () => {
   beforeEach(() => {
     processManager = new ProcessManager()
     tempPath = fs.realpathSync(temp.mkdirSync('latex'))
-    jasmine.Clock.useMock()
   })
 
   describe('ProcessManager', () => {
