@@ -12,12 +12,35 @@ describe('ProcessManager', () => {
 
   describe('ProcessManager', () => {
     it('kills latexmk when given non-existant file', () => {
-      let killed
+      let killed = false
+
       processManager.exec('latexmk -f foo.tex').then(result => {
         killed = true
       })
-      waitsFor(() => killed, 5000)
       processManager.kill()
+
+      waitsFor(() => killed, 5000)
     })
+
+    it('kills old latexmk instances, but not ones created after the kill command', () => {
+      let oldKilled = false
+      let newKilled = false
+
+      processManager.exec('latexmk -f old.tex').then(result => {
+        oldKilled = true
+      })
+      processManager.kill()
+      processManager.exec('latexmk -f new.tex').then(result => {
+        newKilled = true
+      })
+
+      waitsFor(() => oldKilled, 5000)
+
+      runs(() => {
+        expect(newKilled).toBe(false)
+        processManager.kill()
+      })
+    })
+
   })
 })
