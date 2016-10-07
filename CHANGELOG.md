@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.37.1] / 2016-10-07
+### Fixed
+- Output extension matching in log parser. Fixes [#245](https://github.com/thomasjo/atom-latex/issues/245).
+
 ## [0.37.0] / 2016-10-05
 ### Added
 - Deprecation notice for `texify`.
@@ -476,6 +480,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.37.1]: https://github.com/thomasjo/atom-latex/compare/v0.37.0...v0.37.1
 [0.37.0]: https://github.com/thomasjo/atom-latex/compare/v0.36.1...v0.37.0
 [0.36.1]: https://github.com/thomasjo/atom-latex/compare/v0.36.0...v0.36.1
 [0.36.0]: https://github.com/thomasjo/atom-latex/compare/v0.35.1...v0.36.0
