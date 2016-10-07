@@ -20,6 +20,7 @@ describe('FdbParser', () => {
       const result = parser.parse()
       const expectedResult = {
         pdflatex: [
+          '/foo/output/file.pdfsync',
           '/foo/output/file.pdf',
           'output/file.log',
           'output/file.pdf',
@@ -39,7 +40,7 @@ describe('FdbParser', () => {
       const parser = new FdbParser(fdbFile, texFile)
       const lines = parser.getLines()
 
-      expect(lines.length).toBe(27)
+      expect(lines.length).toBe(28)
     })
 
     it('throws an error when passed a filepath that does not exist', () => {
