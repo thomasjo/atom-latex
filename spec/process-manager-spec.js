@@ -41,6 +41,5 @@ describe('ProcessManager', () => {
         processManager.kill()
       })
     })
-
   })
 })
