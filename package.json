@@ -130,7 +130,12 @@
       "items": {
         "type": "string"
       },
-      "default": [],
+      "default": [
+        "bbl",
+        "nav",
+        "lol",
+        "snm"
+      ],
       "order": 8
     },
     "outputDirectory": {
