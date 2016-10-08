@@ -11,6 +11,20 @@ describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
 
   async function runActions (filePath, actions, jobname) {
+    function readdir (dirPath, rootPath) {
+      if (!rootPath) rootPath = dirPath
+      let files = []
+      for (const file of fs.readdirSync(dirPath)) {
+        const filePath = path.join(dirPath, file)
+        if (fs.isDirectorySync(filePath)) {
+          files = files.concat(readdir(filePath, rootPath))
+        } else {
+          files.push(path.relative(rootPath, filePath))
+        }
+      }
+      return files
+    }
+
     function dirDiff (currentFiles, previousFiles) {
       return {
         created: _.difference(currentFiles, previousFiles),
@@ -19,13 +33,13 @@ describe('LatexmkBuilder', () => {
     }
 
     const dirPath = path.dirname(filePath)
-    const initialFiles = fs.readdirSync(dirPath)
+    const initialFiles = readdir(dirPath)
     let previousFiles = initialFiles
     const results = {}
 
     for (const action of actions) {
       await builder.run(filePath, action, jobname)
-      const currentFiles = fs.readdirSync(dirPath)
+      const currentFiles = readdir(dirPath)
       results[action] = dirDiff(currentFiles, previousFiles)
       previousFiles = currentFiles
     }
@@ -250,51 +264,126 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    it('Leaves PDF and SyncTeX files and removes others during a normal clean', () => {
+    it('leaves PDF and SyncTeX files and removes others during a normal clean', () => {
+      const built = ['file.pdf', 'file.synctex.gz']
+      const cleaned = ['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log']
       let results
+
       waitsForPromise(() => {
         return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION]).then(res => { results = res })
       })
 
       runs(() => {
-        expect(results.overall.created).toEqual(['file.pdf', 'file.synctex.gz'])
-        expect(results[CLEAN_ACTION].deleted).toEqual(['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log'])
+        expect(results.overall.created).toEqual(built)
+        expect(results[CLEAN_ACTION].deleted).toEqual(cleaned)
       })
     })
 
-    it('Leaves PDF and SyncTeX files and removes others during a normal clean when a jobname is specified', () => {
+    it('leaves PDF and SyncTeX files and removes others during a normal clean when a jobname is specified', () => {
+      const built = ['gronk.pdf', 'gronk.synctex.gz']
+      const cleaned = ['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log']
       let results
+
       waitsForPromise(() => {
         return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION], 'gronk').then(res => { results = res })
       })
 
       runs(() => {
-        expect(results.overall.created).toEqual(['gronk.pdf', 'gronk.synctex.gz'])
-        expect(results[CLEAN_ACTION].deleted).toEqual(['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log'])
+        expect(results.overall.created).toEqual(built)
+        expect(results[CLEAN_ACTION].deleted).toEqual(cleaned)
       })
     })
 
-    it('Removes all files during a full clean', () => {
+    it('leaves PDF and SyncTeX files and removes others during a normal clean with outputDirectory set', () => {
+      const built = _.map(['bar/file.pdf', 'bar/file.synctex.gz'], path.normalize)
+      const cleaned = _.map(['bar/file.aux', 'bar/file.fdb_latexmk', 'bar/file.fls', 'bar/file.log'], path.normalize)
+      let results
+
+      atom.config.set('latex.outputDirectory', 'bar')
+
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION]).then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(built)
+        expect(results[CLEAN_ACTION].deleted).toEqual(cleaned)
+      })
+    })
+
+    it('leaves PDF, SyncTeX and BibLaTeX files and removes others during a normal clean of complex file', () => {
+      const filePath = path.join(fixturesPath, 'complex', 'wibble.tex')
+      const built = ['wibble.bbl', 'wibble.pdf', 'wibble.run.xml', 'wibble.synctex.gz']
+      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.bcf', 'wibble.blg', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log'], path.normalize)
+      let results
+
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION]).then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(built)
+        expect(results[CLEAN_ACTION].deleted).toEqual(cleaned)
+      })
+    })
+
+    it('removes all files during a full clean', () => {
+      const built = []
+      const cleaned = ['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log', 'file.pdf', 'file.synctex.gz']
       let results
       waitsForPromise(() => {
         return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION]).then(res => { results = res })
       })
 
       runs(() => {
-        expect(results.overall.created).toEqual([])
-        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log', 'file.pdf', 'file.synctex.gz'])
+        expect(results.overall.created).toEqual(built)
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(cleaned)
       })
     })
 
-    it('Removes all files during a full clean when a jobname is specified', () => {
+    it('removes all files during a full clean when a jobname is specified', () => {
+      const built = []
+      const cleaned = ['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log', 'gronk.pdf', 'gronk.synctex.gz']
       let results
       waitsForPromise(() => {
         return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION], 'gronk').then(res => { results = res })
       })
 
       runs(() => {
-        expect(results.overall.created).toEqual([])
-        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log', 'gronk.pdf', 'gronk.synctex.gz'])
+        expect(results.overall.created).toEqual(built)
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(cleaned)
+      })
+    })
+
+    it('removes all files during a full clean with outputDirectory set', () => {
+      const outdir = 'bar'
+      const built = []
+      const cleaned = _.map(['bar/file.aux', 'bar/file.fdb_latexmk', 'bar/file.fls', 'bar/file.log', 'bar/file.pdf', 'bar/file.synctex.gz'], path.normalize)
+      atom.config.set('latex.outputDirectory', outdir)
+      let results
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION]).then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(built)
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(cleaned)
+      })
+    })
+
+    it('removes all files during a full clean of complex file', () => {
+      const filePath = path.join(fixturesPath, 'complex', 'wibble.tex')
+      const built = ['wibble.bbl', 'wibble.run.xml']
+      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.bcf', 'wibble.blg', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log', 'wibble.pdf', 'wibble.synctex.gz'], path.normalize)
+      let results
+
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION]).then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(built)
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(cleaned)
       })
     })
   })

@@ -1,0 +1,10 @@
+\documentclass{article}
+
+\usepackage[style=numeric,backend=biber]{biblatex}
+\addbibresource{wibble.bib}
+
+\begin{document}
+  \cite{quux}
+  \include{foo}
+  \include{sub/bar}
+\end{document}
