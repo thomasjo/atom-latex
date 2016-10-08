@@ -125,26 +125,16 @@
       "order": 7
     },
     "cleanExtensions": {
+      "description": "Extensions of files to clean beyond the automatic set determined by `latexmk`.",
       "type": "array",
       "items": {
         "type": "string"
       },
       "default": [
-        ".aux",
-        ".bbl",
-        ".blg",
-        ".fdb_latexmk",
-        ".fls",
-        ".lof",
-        ".log",
-        ".lol",
-        ".lot",
-        ".nav",
-        ".out",
-        ".pdf",
-        ".snm",
-        ".synctex.gz",
-        ".toc"
+        "bbl",
+        "nav",
+        "lol",
+        "snm"
       ],
       "order": 8
     },
