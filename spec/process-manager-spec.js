@@ -6,26 +6,24 @@ import path from 'path'
 import ProcessManager from '../lib/process-manager'
 
 describe('ProcessManager', () => {
-  let processManager, tempPath
+  let processManager
 
   function constructCommand (fileName) {
+    const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
     const filePath = path.join(tempPath, fileName)
     return `latexmk -cd -f -pdf "${filePath}"`
   }
 
   beforeEach(() => {
     processManager = new ProcessManager()
-    tempPath = fs.realpathSync(temp.mkdirSync('latex'))
   })
 
   describe('ProcessManager', () => {
     it('kills latexmk when given non-existant file', () => {
       let killed = false
 
-      processManager.exec(constructCommand('foo.tex')).then(result => {
-        killed = true
-      })
-      processManager.kill()
+      processManager.executeChildProcess(constructCommand('foo.tex')).then(result => { killed = true })
+      processManager.killChildProcesses()
 
       waitsFor(() => killed, 5000)
     })
@@ -34,19 +32,15 @@ describe('ProcessManager', () => {
       let oldKilled = false
       let newKilled = false
 
-      processManager.exec(constructCommand('old.tex')).then(result => {
-        oldKilled = true
-      })
-      processManager.kill()
-      processManager.exec(constructCommand('new.tex')).then(result => {
-        newKilled = true
-      })
+      processManager.executeChildProcess(constructCommand('old.tex')).then(result => { oldKilled = true })
+      processManager.killChildProcesses()
+      processManager.executeChildProcess(constructCommand('new.tex')).then(result => { newKilled = true })
 
       waitsFor(() => oldKilled, 5000)
 
       runs(() => {
         expect(newKilled).toBe(false)
-        processManager.kill()
+        processManager.killChildProcesses()
       })
     })
   })
