@@ -55,13 +55,14 @@ the LaTeX log panel accessible from the status bar.
 
 The `latex` package supports other commands as detailed in the table below.
 
-| Command          | Keybinding                                  | Use                                                                  |
-|:-----------------|:-------------------------------------------:|:---------------------------------------------------------------------|
-| `latex:build`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                              |
-| `latex:rebuild`  | None                                        | Force a rebuild of LaTeX/knitr file.                                 |
-| `latex:clean`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                         |
-| `latex:sync`     | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position.    |
-| `latex:sync-log` | None                                        | Display and highlight log messages from the current cursor position. |
+| Command          | Keybinding                                  | Use                                                                      |
+|:-----------------|:-------------------------------------------:|:-------------------------------------------------------------------------|
+| `latex:build`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                                  |
+| `latex:rebuild`  | None                                        | Force a rebuild of LaTeX/knitr file.                                     |
+| `latex:clean`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                             |
+| `latex:kill`     | None                                        | Terminate currently running build. Also available from status indicator. |
+| `latex:sync`     | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position.        |
+| `latex:sync-log` | None                                        | Display and highlight log messages from the current cursor position.     |
 
 ### Magic comments
 This package has support for various "magic" TeX comments in the form of
