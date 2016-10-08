@@ -1,5 +1,6 @@
 /** @babel */
 
+import fs from 'fs-plus'
 import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
@@ -8,6 +9,31 @@ import { BUILD_ACTION, REBUILD_ACTION, CLEAN_ACTION, FULL_CLEAN_ACTION } from '.
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
+
+  async function runActions (filePath, actions, jobname) {
+    function dirDiff (currentFiles, previousFiles) {
+      return {
+        created: _.difference(currentFiles, previousFiles),
+        deleted: _.difference(previousFiles, currentFiles)
+      }
+    }
+
+    const dirPath = path.dirname(filePath)
+    const initialFiles = fs.readdirSync(dirPath)
+    let previousFiles = initialFiles
+    const results = {}
+
+    for (const action of actions) {
+      await builder.run(filePath, action, jobname)
+      const currentFiles = fs.readdirSync(dirPath)
+      results[action] = dirDiff(currentFiles, previousFiles)
+      previousFiles = currentFiles
+    }
+
+    results.overall = dirDiff(previousFiles, initialFiles)
+
+    return results
+  }
 
   beforeEach(() => {
     builder = new LatexmkBuilder()
@@ -221,6 +247,18 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(11)
+      })
+    })
+
+    it('Leaves PDF and SyncTeX files and removes others during a normal clean', () => {
+      let results
+      waitsForPromise(() => {
+        return runActions(filePath, [REBUILD_ACTION, CLEAN_ACTION], 'fubar').then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(['fubar.pdf', 'fubar.synctex.gz'])
+        expect(results[CLEAN_ACTION].deleted).toEqual(['fubar.aux', 'fubar.fdb_latexmk', 'fubar.fls', 'fubar.log'])
       })
     })
   })
