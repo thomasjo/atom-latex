@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Command to terminate currently running or stuck build processes.
+
 ## [0.37.1] / 2016-10-07
 ### Fixed
 - Output extension matching in log parser. Fixes [#245](https://github.com/thomasjo/atom-latex/issues/245).
