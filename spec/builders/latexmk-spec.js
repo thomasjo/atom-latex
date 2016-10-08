@@ -70,7 +70,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('adds -C flag when full clean is passed', () => {
-      expect(builder.constructArgs(filePath, FULL_CLEAN_ACTION)).toContain('-c')
+      expect(builder.constructArgs(filePath, FULL_CLEAN_ACTION)).toContain('-C')
     })
 
     it('adds cleanExtensions flag when clean is passed', () => {
@@ -253,12 +253,48 @@ describe('LatexmkBuilder', () => {
     it('Leaves PDF and SyncTeX files and removes others during a normal clean', () => {
       let results
       waitsForPromise(() => {
-        return runActions(filePath, [REBUILD_ACTION, CLEAN_ACTION], 'fubar').then(res => { results = res })
+        return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION]).then(res => { results = res })
       })
 
       runs(() => {
-        expect(results.overall.created).toEqual(['fubar.pdf', 'fubar.synctex.gz'])
-        expect(results[CLEAN_ACTION].deleted).toEqual(['fubar.aux', 'fubar.fdb_latexmk', 'fubar.fls', 'fubar.log'])
+        expect(results.overall.created).toEqual(['file.pdf', 'file.synctex.gz'])
+        expect(results[CLEAN_ACTION].deleted).toEqual(['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log'])
+      })
+    })
+
+    it('Leaves PDF and SyncTeX files and removes others during a normal clean when a jobname is specified', () => {
+      let results
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, CLEAN_ACTION], 'gronk').then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual(['gronk.pdf', 'gronk.synctex.gz'])
+        expect(results[CLEAN_ACTION].deleted).toEqual(['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log'])
+      })
+    })
+
+    it('Removes all files during a full clean', () => {
+      let results
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION]).then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual([])
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(['file.aux', 'file.fdb_latexmk', 'file.fls', 'file.log', 'file.pdf', 'file.synctex.gz'])
+      })
+    })
+
+    it('Removes all files during a full clean when a jobname is specified', () => {
+      let results
+      waitsForPromise(() => {
+        return runActions(filePath, [BUILD_ACTION, FULL_CLEAN_ACTION], 'gronk').then(res => { results = res })
+      })
+
+      runs(() => {
+        expect(results.overall.created).toEqual([])
+        expect(results[FULL_CLEAN_ACTION].deleted).toEqual(['gronk.aux', 'gronk.fdb_latexmk', 'gronk.fls', 'gronk.log', 'gronk.pdf', 'gronk.synctex.gz'])
       })
     })
   })
