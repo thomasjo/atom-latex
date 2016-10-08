@@ -313,8 +313,8 @@ describe('LatexmkBuilder', () => {
 
     it('leaves PDF, SyncTeX and BibLaTeX files and removes others during a normal clean of complex file', () => {
       const filePath = path.join(fixturesPath, 'complex', 'wibble.tex')
-      const built = ['wibble.bbl', 'wibble.pdf', 'wibble.run.xml', 'wibble.synctex.gz']
-      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.bcf', 'wibble.blg', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log'], path.normalize)
+      const built = ['wibble.pdf', 'wibble.synctex.gz']
+      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log'], path.normalize)
       let results
 
       waitsForPromise(() => {
@@ -373,8 +373,8 @@ describe('LatexmkBuilder', () => {
 
     it('removes all files during a full clean of complex file', () => {
       const filePath = path.join(fixturesPath, 'complex', 'wibble.tex')
-      const built = ['wibble.bbl', 'wibble.run.xml']
-      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.bcf', 'wibble.blg', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log', 'wibble.pdf', 'wibble.synctex.gz'], path.normalize)
+      const built = []
+      const cleaned = _.map(['foo.aux', 'sub/bar.aux', 'wibble.aux', 'wibble.fdb_latexmk', 'wibble.fls', 'wibble.log', 'wibble.pdf', 'wibble.synctex.gz'], path.normalize)
       let results
 
       waitsForPromise(() => {
