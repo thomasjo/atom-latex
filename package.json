@@ -17,6 +17,7 @@
     "etch": "0.7.1",
     "fs-plus": "^2.9.1",
     "lodash": "^4.13.1",
+    "minimatch": "^3.0.3",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
@@ -145,6 +146,30 @@
         ".snm",
         ".synctex.gz",
         ".toc"
+      ],
+      "order": 8
+    },
+    "cleanPatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.fls",
+        "*.lof",
+        "*.log",
+        "*.lol",
+        "*.lot",
+        "*.nav",
+        "*.out",
+        "*.snm",
+        "*.toc",
+        "missfont.log",
+        "texput.log",
+        "texput.aux"
       ],
       "order": 8
     },
