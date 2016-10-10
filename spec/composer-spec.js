@@ -21,10 +21,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(werkzeug, 'getEditorDetails').andReturn({
-        editor: editor,
-        filePath: filePath
-      })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
       builder.getJobNamesFromMagic.andReturn(jobnames)
@@ -175,14 +172,20 @@ describe('Composer', () => {
   describe('clean', () => {
     const extensions = ['.bar', '.baz', '.quux']
 
-    function fakeFilePaths (filePath) {
-      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
-      return extensions.map(ext => filePathSansExtension + ext)
+    function fakeFilePaths (filePath, jobname) {
+      let { dir, name } = path.parse(filePath)
+      if (jobname) name = jobname
+      return extensions.map(ext => path.format({ dir, name, ext }))
     }
 
-    function initializeSpies (filePath) {
+    function initializeSpies (filePath, jobnames = [null]) {
+      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+
       spyOn(werkzeug, 'getEditorDetails').andReturn({filePath})
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+
+      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
     }
 
     beforeEach(() => {
@@ -207,7 +210,24 @@ describe('Composer', () => {
       })
     })
 
-    it('stops immidiately if the file is not a TeX document', () => {
+    it('deletes all files for the current tex document with jobnames when output has not been redirected', () => {
+      const filePath = path.normalize('/a/foo.tex')
+      const filesToDelete = fakeFilePaths(filePath, 'bar')
+      initializeSpies(filePath, ['bar'])
+
+      let candidatePaths
+      waitsForPromise(() => {
+        return composer.clean().then(resolutions => {
+          candidatePaths = _.map(resolutions, 'filePath')
+        })
+      })
+
+      runs(() => {
+        expect(candidatePaths).toEqual(filesToDelete)
+      })
+    })
+
+    it('stops immediately if the file is not a TeX document', () => {
       const filePath = 'foo.bar'
       initializeSpies(filePath, [])
 
