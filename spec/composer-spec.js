@@ -21,10 +21,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(werkzeug, 'getEditorDetails').andReturn({
-        editor: editor,
-        filePath: filePath
-      })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
       builder.getJobNamesFromMagic.andReturn(jobnames)
@@ -48,7 +45,7 @@ describe('Composer', () => {
 
       let result = 'aaaaaaaaaaaa'
       waitsForPromise(() => {
-        return composer.build().catch(r => { result = r })
+        return composer.build().then(r => { result = r })
       })
 
       runs(() => {
@@ -64,7 +61,7 @@ describe('Composer', () => {
 
       let result
       waitsForPromise(() => {
-        return composer.build().catch(r => { result = r })
+        return composer.build().then(r => { result = r })
       })
 
       runs(() => {
@@ -175,14 +172,20 @@ describe('Composer', () => {
   describe('clean', () => {
     const extensions = ['.bar', '.baz', '.quux']
 
-    function fakeFilePaths (filePath) {
-      const filePathSansExtension = filePath.substring(0, filePath.lastIndexOf('.'))
-      return extensions.map(ext => filePathSansExtension + ext)
+    function fakeFilePaths (filePath, jobname) {
+      let { dir, name } = path.parse(filePath)
+      if (jobname) name = jobname
+      return extensions.map(ext => path.format({ dir, name, ext }))
     }
 
-    function initializeSpies (filePath) {
+    function initializeSpies (filePath, jobnames = [null]) {
+      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+
       spyOn(werkzeug, 'getEditorDetails').andReturn({filePath})
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+
+      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
     }
 
     beforeEach(() => {
@@ -207,7 +210,24 @@ describe('Composer', () => {
       })
     })
 
-    it('stops immidiately if the file is not a TeX document', () => {
+    it('deletes all files for the current tex document with jobnames when output has not been redirected', () => {
+      const filePath = path.normalize('/a/foo.tex')
+      const filesToDelete = fakeFilePaths(filePath, 'bar').concat(fakeFilePaths(filePath, 'wibble'))
+      initializeSpies(filePath, ['bar', 'wibble'])
+
+      let candidatePaths
+      waitsForPromise(() => {
+        return composer.clean().then(resolutions => {
+          candidatePaths = _.map(resolutions, 'filePath')
+        })
+      })
+
+      runs(() => {
+        expect(candidatePaths).toEqual(filesToDelete)
+      })
+    })
+
+    it('stops immediately if the file is not a TeX document', () => {
       const filePath = 'foo.bar'
       initializeSpies(filePath, [])
 
@@ -269,6 +289,66 @@ describe('Composer', () => {
     it('returns null when passed an unhandled file type', () => {
       const filePath = 'quux.txt'
       expect(composer.getBuilder(filePath)).toBeNull()
+    })
+  })
+
+  describe('sync', () => {
+    it('silently does nothing when the current editor is transient', () => {
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
+      spyOn(composer, 'resolveOutputFilePath').andCallThrough()
+      spyOn(latex, 'getOpener').andCallThrough()
+
+      composer.sync()
+
+      expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+      expect(latex.getOpener).not.toHaveBeenCalled()
+    })
+
+    it('logs a warning and returns when an output file cannot be resolved', () => {
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
+      spyOn(composer, 'resolveOutputFilePath').andReturn()
+      spyOn(latex, 'getOpener').andCallThrough()
+      spyOn(latex.log, 'warning').andCallThrough()
+
+      composer.sync()
+
+      expect(latex.log.warning).toHaveBeenCalled()
+      expect(latex.getOpener).not.toHaveBeenCalled()
+    })
+
+    it('launches the opener using editor metadata and resolved output file', () => {
+      const filePath = 'file.tex'
+      const lineNumber = 1
+      const outputFilePath = 'file.pdf'
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
+
+      const opener = jasmine.createSpyObj('MockOpener', ['open'])
+      spyOn(latex, 'getOpener').andReturn(opener)
+
+      composer.sync()
+
+      expect(opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+    })
+
+    it('launches the opener using editor metadata and resolved output file with jobnames', () => {
+      const filePath = 'file.tex'
+      const lineNumber = 1
+      const rootFilePath = filePath
+      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+      const jobnames = ['foo', 'bar']
+
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
+      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
+
+      const opener = jasmine.createSpyObj('MockOpener', ['open'])
+      spyOn(latex, 'getOpener').andReturn(opener)
+
+      composer.sync()
+
+      expect(opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
+      expect(opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
     })
   })
 })
