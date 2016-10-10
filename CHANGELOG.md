@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Command to terminate currently running or stuck build processes.
 
+### Fixed
+- Clean and SyncTeX compatibility with `jobnames` magic comment. Fixes [#211](https://github.com/thomasjo/atom-latex/issues/211).
+
 ## [0.37.1] / 2016-10-07
 ### Fixed
 - Output extension matching in log parser. Fixes [#245](https://github.com/thomasjo/atom-latex/issues/245).
