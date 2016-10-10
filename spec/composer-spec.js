@@ -212,8 +212,8 @@ describe('Composer', () => {
 
     it('deletes all files for the current tex document with jobnames when output has not been redirected', () => {
       const filePath = path.normalize('/a/foo.tex')
-      const filesToDelete = fakeFilePaths(filePath, 'bar')
-      initializeSpies(filePath, ['bar'])
+      const filesToDelete = fakeFilePaths(filePath, 'bar').concat(fakeFilePaths(filePath, 'wibble'))
+      initializeSpies(filePath, ['bar', 'wibble'])
 
       let candidatePaths
       waitsForPromise(() => {
