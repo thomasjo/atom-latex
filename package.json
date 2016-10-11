@@ -145,7 +145,10 @@
         "**/*.out",
         "**/*.snm",
         "**/*.toc",
-        "/_minted-{jobname}"
+        "/_minted-{jobname}",
+        "/missfont.log",
+        "/texput.log",
+        "/texput.aux"
       ],
       "order": 8
     },
