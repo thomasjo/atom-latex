@@ -126,51 +126,26 @@
       "default": "warning",
       "order": 7
     },
-    "cleanExtensions": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "default": [
-        ".aux",
-        ".bbl",
-        ".blg",
-        ".fdb_latexmk",
-        ".fls",
-        ".lof",
-        ".log",
-        ".lol",
-        ".lot",
-        ".nav",
-        ".out",
-        ".pdf",
-        ".snm",
-        ".synctex.gz",
-        ".toc"
-      ],
-      "order": 8
-    },
     "cleanPatterns": {
       "type": "array",
       "items": {
         "type": "string"
       },
       "default": [
-        "{output}**.aux",
-        "{output}*.bbl",
-        "{output}*.blg",
-        "{output}*.fls",
-        "{output}*.lof",
-        "{output}*.log",
-        "{output}*.lol",
-        "{output}*.lot",
-        "{output}*.nav",
-        "{output}*.out",
-        "{output}*.snm",
-        "{output}*.toc",
-        "{output}missfont.log",
-        "{output}texput.log",
-        "{output}texput.aux"
+        "**/*.aux",
+        "**/*.bbl",
+        "**/*.blg",
+        "**/*.fdb_latexmk",
+        "**/*.fls",
+        "**/*.lof",
+        "**/*.log",
+        "**/*.lol",
+        "**/*.lot",
+        "**/*.nav",
+        "**/*.out",
+        "**/*.snm",
+        "**/*.toc",
+        "/_minted-{jobname}"
       ],
       "order": 8
     },

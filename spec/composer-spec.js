@@ -170,61 +170,38 @@ describe('Composer', () => {
   })
 
   describe('clean', () => {
-    const extensions = ['.bar', '.baz', '.quux']
-
-    function fakeFilePaths (filePath, jobname) {
-      let { dir, name } = path.parse(filePath)
-      if (jobname) name = jobname
-      return extensions.map(ext => path.format({ dir, name, ext }))
-    }
-
     function initializeSpies (filePath, jobnames = [null]) {
-      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+      const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic'])
 
-      spyOn(werkzeug, 'getEditorDetails').andReturn({filePath})
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-
       spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
+      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
+        let { dir, name } = path.parse(rootFilePath)
+        if (jobname) name = jobname
+        return [
+          path.format({ dir, name, ext: '.log' }),
+          path.format({ dir, name, ext: '.aux' })
+        ]
+      })
     }
 
     beforeEach(() => {
-      spyOn(fs, 'remove').andCallThrough()
-      atom.config.set('latex.cleanExtensions', extensions)
+      spyOn(fs, 'removeSync').andCallThrough()
+      atom.config.set('latex.cleanPatterns', ['**/*.aux', '/minted-{name}'])
     })
 
-    it('deletes all files for the current tex document when output has not been redirected', () => {
-      const filePath = path.normalize('/a/foo.tex')
-      const filesToDelete = fakeFilePaths(filePath)
-      initializeSpies(filePath)
-
-      let candidatePaths
-      waitsForPromise(() => {
-        return composer.clean().then(resolutions => {
-          candidatePaths = _.map(resolutions, 'filePath')
-        })
-      })
-
-      runs(() => {
-        expect(candidatePaths).toEqual(filesToDelete)
-      })
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns', () => {
+      initializeSpies('/a/foo.tex')
+      composer.clean()
+      expect(fs.removeSync).toHaveBeenCalledWith('/a/foo.aux')
     })
 
-    it('deletes all files for the current tex document with jobnames when output has not been redirected', () => {
-      const filePath = path.normalize('/a/foo.tex')
-      const filesToDelete = fakeFilePaths(filePath, 'bar').concat(fakeFilePaths(filePath, 'wibble'))
-      initializeSpies(filePath, ['bar', 'wibble'])
-
-      let candidatePaths
-      waitsForPromise(() => {
-        return composer.clean().then(resolutions => {
-          candidatePaths = _.map(resolutions, 'filePath')
-        })
-      })
-
-      runs(() => {
-        expect(candidatePaths).toEqual(filesToDelete)
-      })
+    it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', () => {
+      initializeSpies('/a/foo.tex', ['bar', 'wibble'])
+      composer.clean()
+      expect(fs.removeSync).toHaveBeenCalledWith('/a/bar.aux')
+      expect(fs.removeSync).toHaveBeenCalledWith('/a/wibble.aux')
     })
 
     it('stops immediately if the file is not a TeX document', () => {
@@ -236,8 +213,7 @@ describe('Composer', () => {
       })
 
       runs(() => {
-        expect(composer.resolveRootFilePath).not.toHaveBeenCalled()
-        expect(fs.remove).not.toHaveBeenCalled()
+        expect(fs.removeSync).not.toHaveBeenCalled()
       })
     })
   })
