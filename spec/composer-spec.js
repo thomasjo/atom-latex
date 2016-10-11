@@ -178,29 +178,32 @@ describe('Composer', () => {
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
         let { dir, name } = path.parse(rootFilePath)
         if (jobname) name = jobname
-        return [
+        return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
-        ]
+        ])
       })
     }
 
     beforeEach(() => {
       spyOn(fs, 'removeSync').andCallThrough()
-      atom.config.set('latex.cleanPatterns', ['**/*.aux', '/minted-{name}'])
+      atom.config.set('latex.cleanPatterns', ['**/*.aux', '/minted-{jobname}'])
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns', () => {
-      initializeSpies('/a/foo.tex')
+      initializeSpies(path.normalize('/a/foo.tex'))
       composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith('/a/foo.aux')
+      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/foo.log'))
     })
 
     it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', () => {
-      initializeSpies('/a/foo.tex', ['bar', 'wibble'])
+      initializeSpies(path.normalize('/a/foo.tex'), ['bar', 'wibble'])
       composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith('/a/bar.aux')
-      expect(fs.removeSync).toHaveBeenCalledWith('/a/wibble.aux')
+      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/bar.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/bar.log'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/wibble.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/wibble.log'))
     })
 
     it('stops immediately if the file is not a TeX document', () => {
