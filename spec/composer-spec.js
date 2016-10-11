@@ -1,6 +1,7 @@
 /** @babel */
 
 import './spec-bootstrap'
+import helpers from './spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import Composer from '../lib/composer'
@@ -169,6 +170,8 @@ describe('Composer', () => {
   })
 
   describe('clean', () => {
+    let fixturesPath
+
     function initializeSpies (filePath, jobnames = [null]) {
       const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic'])
 
@@ -186,24 +189,28 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
+      fixturesPath = helpers.cloneFixtures()
       spyOn(fs, 'removeSync').andCallThrough()
-      atom.config.set('latex.cleanPatterns', ['**/*.aux', '/minted-{jobname}'])
+      atom.config.set('latex.cleanPatterns', ['**/*.aux', '/_minted-{jobname}'])
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns', () => {
-      initializeSpies(path.normalize('/a/foo.tex'))
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
       composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/foo.log'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
     })
 
     it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', () => {
-      initializeSpies(path.normalize('/a/foo.tex'), ['bar', 'wibble'])
+      initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
       composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/bar.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/bar.log'))
-      expect(fs.removeSync).toHaveBeenCalledWith(path.normalize('/a/wibble.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.normalize('/a/wibble.log'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
     })
 
     it('stops immediately if the file is not a TeX document', () => {
