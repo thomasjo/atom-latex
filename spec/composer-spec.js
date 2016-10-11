@@ -2,7 +2,6 @@
 
 import './spec-bootstrap'
 import fs from 'fs-plus'
-import _ from 'lodash'
 import path from 'path'
 import Composer from '../lib/composer'
 import werkzeug from '../lib/werkzeug'
