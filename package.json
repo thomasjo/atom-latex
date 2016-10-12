@@ -52,7 +52,9 @@
     "atom-workspace": [
       "latex:build",
       "latex:clean",
-      "latex:sync"
+      "latex:rebuild",
+      "latex:sync",
+      "latex:sync-log"
     ]
   },
   "activationHooks": [
