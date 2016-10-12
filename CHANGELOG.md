@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Command to terminate currently running or stuck build processes.
+- SyncTeX support for knitr files.  
+    ~ [#254](https://github.com/thomasjo/atom-latex/pull/254)
+    / [@harmsk](https://github.com/harmsk)
 
 ### Fixed
 - Clean and SyncTeX compatibility with `jobnames` magic comment. Fixes [#211](https://github.com/thomasjo/atom-latex/issues/211).
