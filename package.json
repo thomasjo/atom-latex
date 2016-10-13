@@ -157,7 +157,7 @@
         "**/*.snm",
         "**/*.synctex.gz",
         "**/*.toc",
-        "/_minted-{jobname}",
+        "/**/_minted-{jobname}",
         "/missfont.log",
         "/texput.log",
         "/texput.aux"
