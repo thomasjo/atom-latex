@@ -29,7 +29,7 @@ install_knitr() {
     [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
 
     echo "Installing knitr..."
-    Rscript -e "install.packages('knitr', repos = 'https://cran.r-project.org')"
+    Rscript -e "install.packages('knitr', repos = 'http://cran.r-project.org')"
   else
     echo "Using cached installation of knitr"
   fi
