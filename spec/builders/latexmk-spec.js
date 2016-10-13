@@ -49,7 +49,7 @@ describe('LatexmkBuilder', () => {
 
     it('adds -outdir=<path> argument according to package config', () => {
       const outdir = 'bar'
-      const expectedArg = `-outdir="${path.join(fixturesPath, outdir)}"`
+      const expectedArg = `-outdir="${outdir}"`
       atom.config.set('latex.outputDirectory', outdir)
 
       expect(builder.constructArgs(filePath)).toContain(expectedArg)
