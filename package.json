@@ -16,7 +16,9 @@
     "dbus-native": "^0.2.0",
     "etch": "0.7.1",
     "fs-plus": "^2.9.1",
+    "glob": "^7.1.1",
     "lodash": "^4.13.1",
+    "minimatch": "^3.0.3",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
@@ -50,7 +52,9 @@
     "atom-workspace": [
       "latex:build",
       "latex:clean",
-      "latex:sync"
+      "latex:rebuild",
+      "latex:sync",
+      "latex:sync-log"
     ]
   },
   "activationHooks": [
@@ -124,27 +128,40 @@
       "default": "warning",
       "order": 7
     },
-    "cleanExtensions": {
+    "cleanPatterns": {
+      "description": "The files and directories to remove during a LaTeX clean. Basic glob patterns are understood and named properties such as {jobname} are replaced with the current build properties. Patterns that start with `/` or `\\` are matched against any file in the same directory as the source file. All other patterns are matched against generated files in the output directory. More information can be found on the Atom LaTeX wiki.",
       "type": "array",
       "items": {
         "type": "string"
       },
       "default": [
-        ".aux",
-        ".bbl",
-        ".blg",
-        ".fdb_latexmk",
-        ".fls",
-        ".lof",
-        ".log",
-        ".lol",
-        ".lot",
-        ".nav",
-        ".out",
-        ".pdf",
-        ".snm",
-        ".synctex.gz",
-        ".toc"
+        "**/*.aux",
+        "**/*.aux.bak",
+        "**/*.bbl",
+        "**/*.bcf",
+        "**/*.blg",
+        "**/*.dvi",
+        "**/*.fdb_latexmk",
+        "**/*.fls",
+        "**/*.idx",
+        "**/*.idx.bak",
+        "**/*.ilg",
+        "**/*.ind",
+        "**/*.lof",
+        "**/*.log",
+        "**/*.lol",
+        "**/*.lot",
+        "**/*.nav",
+        "**/*.out",
+        "**/*.pdf",
+        "**/*.ps",
+        "**/*.snm",
+        "**/*.synctex.gz",
+        "**/*.toc",
+        "/**/_minted-{jobname}",
+        "/missfont.log",
+        "/texput.log",
+        "/texput.aux"
       ],
       "order": 8
     },
