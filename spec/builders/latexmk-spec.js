@@ -84,7 +84,7 @@ describe('LatexmkBuilder', () => {
       atom.config.set('latex.producer', 'dvipdfmx')
       const args = builder.constructArgs(filePath)
       expect(args).toContain('-latex="uplatex"')
-      expect(args).toContain('-pdfdvi -e "\\$dvipdf = \'dvipdfmx %O -o %D %S\';"')
+      expect(args).toContain('-pdfdvi -e "$dvipdf = \'dvipdfmx %O -o %D %S\';"')
       expect(args).not.toContain('-pdf')
     })
 
@@ -93,7 +93,7 @@ describe('LatexmkBuilder', () => {
       atom.config.set('latex.producer', 'dvipdf')
       const args = builder.constructArgs(filePath)
       expect(args).toContain('-latex="uplatex"')
-      expect(args).toContain('-pdfdvi -e "\\$dvipdf = \'dvipdf %O %S %D\';"')
+      expect(args).toContain('-pdfdvi -e "$dvipdf = \'dvipdf %O %S %D\';"')
       expect(args).not.toContain('-pdf')
     })
 

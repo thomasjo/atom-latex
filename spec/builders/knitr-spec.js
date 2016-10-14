@@ -25,6 +25,7 @@ describe('KnitrBuilder', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
         '-e "library(knitr)"',
+        '-e "opts_knit$set(concordance = TRUE)"',
         `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
@@ -69,7 +70,7 @@ describe('KnitrBuilder', () => {
       const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
       const options = _.merge(builder.constructChildProcessOptions(filePath), { env })
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
-      spyOn(latex.log, 'error').andCallThrough()
+      spyOn(latex.log, 'showMessage').andCallThrough()
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
@@ -77,7 +78,10 @@ describe('KnitrBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(-1)
-        expect(latex.log.error).toHaveBeenCalled()
+        expect(latex.log.showMessage).toHaveBeenCalledWith({
+          type: 'Error',
+          text: 'The R package "knitr" could not be loaded.'
+        })
       })
     })
   })
