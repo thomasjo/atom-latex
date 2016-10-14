@@ -9,6 +9,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     ~ [#254](https://github.com/thomasjo/atom-latex/pull/254)
     / [@harmsk](https://github.com/harmsk)
 
+### Changed
+- Removed `cleanExtensions` setting and added `cleanPatterns` setting.
+  `latex:clean` command now supports file globbing and parsing of the `latexmk`
+  file name database.
+
 ### Fixed
 - Clean and SyncTeX compatibility with `jobnames` magic comment. Fixes [#211](https://github.com/thomasjo/atom-latex/issues/211).
 
