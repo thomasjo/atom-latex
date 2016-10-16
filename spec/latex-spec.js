@@ -2,7 +2,6 @@
 
 import './spec-helpers'
 import Latex from '../lib/latex'
-import { NullOpener } from './stubs'
 
 describe('Latex', () => {
   let latex, globalLatex
@@ -19,10 +18,9 @@ describe('Latex', () => {
 
   describe('initialize', () => {
     it('initializes all properties', () => {
-      spyOn(latex, 'resolveOpenerImplementation').andReturn(NullOpener)
-
       expect(latex.logger).toBeDefined()
       expect(latex.opener).toBeDefined()
+      expect(latex.process).toBeDefined()
     })
   })
 
@@ -31,15 +29,6 @@ describe('Latex', () => {
       const defaultLogger = latex.getDefaultLogger()
 
       expect(defaultLogger.constructor.name).toBe('DefaultLogger')
-    })
-  })
-
-  describe('getDefaultOpener', () => {
-    it('returns an instance of a resolved implementation of Opener', () => {
-      spyOn(latex, 'resolveOpenerImplementation').andReturn(NullOpener)
-      const defaultOpener = latex.getDefaultOpener()
-
-      expect(defaultOpener.constructor.name).toBe(NullOpener.name)
     })
   })
 
@@ -73,103 +62,6 @@ describe('Latex', () => {
       latex.log.info(message)
 
       expect(logger.info).toHaveBeenCalledWith(message)
-    })
-  })
-
-  describe('resolveOpenerImplementation', () => {
-    it('returns SkimOpener when installed, and running on macOS', () => {
-      spyOn(latex, 'skimExecutableExists').andReturn(true)
-      const opener = latex.resolveOpenerImplementation('darwin')
-
-      expect(opener.name).toBe('SkimOpener')
-    })
-
-    it('returns PreviewOpener when Skim is not installed, and running on macOS', () => {
-      spyOn(latex, 'skimExecutableExists').andReturn(false)
-      const opener = latex.resolveOpenerImplementation('darwin')
-
-      expect(opener.name).toBe('PreviewOpener')
-    })
-
-    it('returns SumatraOpener when installed, and running on Windows', () => {
-      spyOn(latex, 'sumatraExecutableExists').andReturn(true)
-      const opener = latex.resolveOpenerImplementation('win32')
-
-      expect(opener.name).toBe('SumatraOpener')
-    })
-
-    it('returns AtomPdfOpener as a fallback, if the pdf-view package is installed', () => {
-      spyOn(latex, 'hasPdfViewerPackage').andReturn(true)
-      const opener = latex.resolveOpenerImplementation('foo')
-
-      expect(opener.name).toBe('AtomPdfOpener')
-    })
-
-    it('always returns AtomPdfOpener if alwaysOpenResultInAtom is enabled and pdf-view is installed', () => {
-      spyOn(latex, 'hasPdfViewerPackage').andReturn(true)
-      spyOn(latex, 'shouldOpenResultInAtom').andReturn(true)
-      spyOn(latex, 'skimExecutableExists').andCallThrough()
-
-      const opener = latex.resolveOpenerImplementation('darwin')
-
-      expect(opener.name).toBe('AtomPdfOpener')
-      expect(latex.skimExecutableExists).not.toHaveBeenCalled()
-    })
-
-    it('responds to changes in configuration', () => {
-      spyOn(latex, 'hasPdfViewerPackage').andReturn(true)
-      spyOn(latex, 'shouldOpenResultInAtom').andReturn(false)
-      spyOn(latex, 'skimExecutableExists').andReturn(true)
-
-      let opener = latex.resolveOpenerImplementation('darwin')
-      expect(opener.name).toBe('SkimOpener')
-
-      latex.shouldOpenResultInAtom.andReturn(true)
-      opener = latex.resolveOpenerImplementation('darwin')
-      expect(opener.name).toBe('AtomPdfOpener')
-
-      latex.shouldOpenResultInAtom.andReturn(false)
-      opener = latex.resolveOpenerImplementation('darwin')
-      expect(opener.name).toBe('SkimOpener')
-    })
-
-    it('returns OkularOpener when when installed and running on Linux', () => {
-      spyOn(latex, 'okularExecutableExists').andReturn(true)
-      spyOn(latex, 'evinceExecutableExists').andReturn(false)
-      const opener = latex.resolveOpenerImplementation('linux')
-
-      expect(opener.name).toBe('OkularOpener')
-    })
-
-    it('returns EvinceOpener when installed and running on Linux', () => {
-      spyOn(latex, 'okularExecutableExists').andReturn(false)
-      spyOn(latex, 'evinceExecutableExists').andReturn(true)
-      const opener = latex.resolveOpenerImplementation('linux')
-
-      expect(opener.name).toBe('EvinceOpener')
-    })
-
-    it('returns XdgOPener when Okular or Evince are not installed, and running on Linux', () => {
-      spyOn(latex, 'okularExecutableExists').andReturn(false)
-      spyOn(latex, 'evinceExecutableExists').andReturn(false)
-      const opener = latex.resolveOpenerImplementation('linux')
-
-      expect(opener.name).toBe('XdgOpener')
-    })
-
-    it('does not support unknown operating systems without pdf-view package', () => {
-      spyOn(latex, 'hasPdfViewerPackage').andReturn(false)
-      const opener = latex.resolveOpenerImplementation('foo')
-
-      expect(opener).toBeNull()
-    })
-
-    it('returns CustomOpener when custom viewer exists and alwaysOpenResultInAtom is disabled', () => {
-      spyOn(latex, 'viewerExecutableExists').andReturn(true)
-      spyOn(latex, 'shouldOpenResultInAtom').andReturn(false)
-      const opener = latex.resolveOpenerImplementation('foo')
-
-      expect(opener.name).toBe('CustomOpener')
     })
   })
 })

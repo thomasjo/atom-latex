@@ -221,11 +221,20 @@
       "default": true,
       "order": 15
     },
-    "alwaysOpenResultInAtom": {
-      "title": "Always Open Result in Atom",
-      "description": "Always open result in Atom. Depends on the pdf-view package being installed.",
-      "type": "boolean",
-      "default": false,
+    "opener": {
+      "type": "string",
+      "enum": [
+        "automatic",
+        "evince",
+        "okular",
+        "pdf-view",
+        "preview",
+        "skim",
+        "sumatra",
+        "xdg-open",
+        "custom"
+      ],
+      "default": "automatic",
       "order": 16
     },
     "skimPath": {
