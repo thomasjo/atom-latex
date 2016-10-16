@@ -256,24 +256,18 @@
       "default": "/usr/bin/okular",
       "order": 19
     },
-    "evincePath": {
-      "description": "Full application path to Evince (*nix).",
-      "type": "string",
-      "default": "/usr/bin/evince",
-      "order": 20
-    },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 21
+      "order": 20
     },
     "useMasterFileSearch": {
       "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
       "type": "boolean",
       "default": false,
-      "order": 22
+      "order": 21
     }
   }
 }
