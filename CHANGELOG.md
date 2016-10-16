@@ -2,12 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.38.0] / 2016-10-16
 ### Added
 - Command to terminate currently running or stuck build processes.
 - SyncTeX support for knitr files.  
     ~ [#254](https://github.com/thomasjo/atom-latex/pull/254)
     / [@harmsk](https://github.com/harmsk)
+- Support opening files in background with Okular.
+- Allow output directory override via magic comments.
 
 ### Changed
 - Removed `cleanExtensions` setting and added `cleanPatterns` setting.
@@ -16,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Clean and SyncTeX compatibility with `jobnames` magic comment. Fixes [#211](https://github.com/thomasjo/atom-latex/issues/211).
+- Security issues with output directory. Fixes [#104](https://github.com/thomasjo/atom-latex/issues/104).
 
 ## [0.37.1] / 2016-10-07
 ### Fixed
@@ -495,6 +498,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.38.0]: https://github.com/thomasjo/atom-latex/compare/v0.37.1...v0.38.0
 [0.37.1]: https://github.com/thomasjo/atom-latex/compare/v0.37.0...v0.37.1
 [0.37.0]: https://github.com/thomasjo/atom-latex/compare/v0.36.1...v0.37.0
 [0.36.1]: https://github.com/thomasjo/atom-latex/compare/v0.36.0...v0.36.1
