@@ -23,8 +23,9 @@ describe('Composer', () => {
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
       builder.getJobNamesFromMagic.andReturn(jobnames)
+      builder.getOutputDirectory.andReturn('')
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -173,8 +174,9 @@ describe('Composer', () => {
     let fixturesPath
 
     function initializeSpies (filePath, jobnames = [null]) {
-      const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic'])
+      const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
 
+      builder.getOutputDirectory.andReturn('')
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
@@ -228,32 +230,39 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
+    let builder
+    const rootFilePath = '/wibble/gronk.tex'
+
+    function initializeSpies (outputDirectory = '') {
+      builder = { getOutputDirectory: () => outputDirectory }
+    }
+
     it('should return false when using neither an output directory, nor the move option', () => {
-      atom.config.set('latex.outputDirectory', '')
+      initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult()).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
-      atom.config.set('latex.outputDirectory', '')
+      initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult()).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
-      atom.config.set('latex.outputDirectory', 'baz')
+      initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult()).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
-      atom.config.set('latex.outputDirectory', 'baz')
+      initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult()).toBe(true)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
     })
   })
 
