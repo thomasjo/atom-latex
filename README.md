@@ -68,13 +68,14 @@ The `latex` package supports other commands as detailed in the table below.
 This package has support for various "magic" TeX comments in the form of
 `% !TEX <name> = <value>` as detailed in the table below.
 
-| Name       | Value                                         | Use                                         |
-|:-----------|:----------------------------------------------|:--------------------------------------------|
-| `format`   | `dvi`, `ps` or `pdf`                          | Override the output format                  |
-| `jobnames` | space separated names, e.g. `foo bar`         | Control the number and names of build jobs. |
-| `producer` | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf` | Override the PDF producer                   |
-| `program`  | `pdflatex`, `lualatex`, etc.                  | Override the LaTeX engine to use for build. |
-| `root`     | file path, e.g. `../file.tex`                 | Specify the root file that should be built. |
+| Name               | Value                                         | Use                                               |
+|:-------------------|:----------------------------------------------|:--------------------------------------------------|
+| `format`           | `dvi`, `ps` or `pdf`                          | Override the output format                        |
+| `jobnames`         | space separated names, e.g. `foo bar`         | Control the number and names of build jobs.       |
+| `output_directory` | directory path, e.g. `build`                  | Specify the output directory that should be used. |
+| `producer`         | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf` | Override the PDF producer                         |
+| `program`          | `pdflatex`, `lualatex`, etc.                  | Override the LaTeX engine to use for build.       |
+| `root`             | file path, e.g. `../file.tex`                 | Specify the root file that should be built.       |
 
 ### PDF/DVI/PS Viewers
 The `latex` package currently supports [Evince], [Okular], [pdf-view],
@@ -84,8 +85,7 @@ features of each of the viewers is detailed at [Supported Viewers].
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
-some important features. As an example, there's no proper error and warning
-handling.
+some important features.
 
 Any and all help is greatly appreciated!
 
