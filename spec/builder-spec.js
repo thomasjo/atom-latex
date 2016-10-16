@@ -78,6 +78,7 @@ describe('Builder', () => {
     beforeEach(() => {
       logParser = jasmine.createSpyObj('MockLogParser', ['parse'])
       spyOn(builder, 'getLogParser').andReturn(logParser)
+      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
@@ -109,6 +110,7 @@ describe('Builder', () => {
     beforeEach(() => {
       fdbParser = jasmine.createSpyObj('MockFdbParser', ['parse'])
       spyOn(builder, 'getFdbParser').andReturn(fdbParser)
+      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated fdb file path by invoking @resolveFdbFilePath', () => {
@@ -137,9 +139,16 @@ describe('Builder', () => {
   describe('parseLogAndFdbFiles', () => {
     it('verifys that fdb file output overrides log file output', () => {
       spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
+      spyOn(builder, 'getOutputDirectory').andReturn('')
       const result = builder.parseLogAndFdbFiles(process.platform === 'win32' ? filePathWin32 : filePath)
 
       expect(result.outputFilePath).toEqual(process.platform === 'win32' ? 'C:\\foo\\output\\file.pdf' : '/foo/output/file.pdf')
+    })
+  })
+
+  describe('getOutputDirectoryFromMagic', () => {
+    it('detects output director magic and outputs directory', () => {
+      expect(builder.getOutputDirectoryFromMagic(magicOverrideFilePath)).toEqual('wibble')
     })
   })
 

@@ -14,6 +14,7 @@ describe('LatexmkBuilder', () => {
     filePath = path.join(fixturesPath, 'file.tex')
     atom.config.set('latex.engine', 'pdflatex')
     atom.config.set('latex.outputFormat', 'pdf')
+    atom.config.set('latex.outputDirectory', '')
   })
 
   describe('constructArgs', () => {
@@ -49,7 +50,7 @@ describe('LatexmkBuilder', () => {
 
     it('adds -outdir=<path> argument according to package config', () => {
       const outdir = 'bar'
-      const expectedArg = `-outdir="${path.join(fixturesPath, outdir)}"`
+      const expectedArg = `-outdir="${outdir}"`
       atom.config.set('latex.outputDirectory', outdir)
 
       expect(builder.constructArgs(filePath)).toContain(expectedArg)
