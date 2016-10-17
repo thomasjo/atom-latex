@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.38.1] / 2016-10-17
 ### Fixed
 - File path resolution for errors reported in log files.
 
@@ -502,6 +502,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.38.1]: https://github.com/thomasjo/atom-latex/compare/v0.38.0...v0.38.1
 [0.38.0]: https://github.com/thomasjo/atom-latex/compare/v0.37.1...v0.38.0
 [0.37.1]: https://github.com/thomasjo/atom-latex/compare/v0.37.0...v0.37.1
 [0.37.0]: https://github.com/thomasjo/atom-latex/compare/v0.36.1...v0.37.0
