@@ -25,9 +25,6 @@
     Foo & Bar & Snafu \\
   \end{tabular}
 
-  % Undefined references
-  \ref{tab:snafu}
-
   % Class errors, warnings, etc.
   \ClassError{foo}{Significant class issue}{RTFM!}
   \ClassWarning{foo}{Class issue}
@@ -39,5 +36,8 @@
   \PackageWarning{bar}{Package issue}
   \PackageWarningNoLine{bar}{Nebulous package issue}
   \PackageInfo{bar}{Insignificant package issue}
+
+  % Generate an error in a subfile located in another directory
+  \input{sub/wibble}
 
 \end{document}

@@ -139,6 +139,7 @@ describe('LatexmkBuilder', () => {
 
     it('fails with code 12 and various errors, warnings and info messages are produced in log file', () => {
       filePath = path.join(fixturesPath, 'error-warning.tex')
+      const subFilePath = path.join(fixturesPath, 'sub', 'wibble.tex')
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => {
@@ -174,6 +175,10 @@ describe('LatexmkBuilder', () => {
           expect(_.some(parsedLog.messages,
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
+
+        expect(_.every(parsedLog.messages,
+          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
+          .toBe(true, 'Incorrect file path resolution in log.')
 
         expect(exitCode).toBe(12)
       })
