@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- File path resolution for errors reported in log files.
+
 ## [0.38.0] / 2016-10-16
 ### Added
 - Command to terminate currently running or stuck build processes.
