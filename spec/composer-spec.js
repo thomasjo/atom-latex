@@ -12,6 +12,7 @@ describe('Composer', () => {
 
   beforeEach(() => {
     atom.config.set('latex.builder', 'latexmk')
+    atom.config.set('latex.opener', 'automatic')
     composer = new Composer()
   })
 

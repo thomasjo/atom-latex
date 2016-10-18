@@ -140,9 +140,12 @@ describe('Builder', () => {
     it('verifys that fdb file output overrides log file output', () => {
       spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
       spyOn(builder, 'getOutputDirectory').andReturn('')
-      const result = builder.parseLogAndFdbFiles(process.platform === 'win32' ? filePathWin32 : filePath)
+      const rootPath = process.platform === 'win32' ? 'C:\\foo' : '/foo'
+      const myFilePath = process.platform === 'win32' ? filePathWin32 : filePath
+      const outputFilePath = process.platform === 'win32' ? 'C:\\foo\\output\\file.pdf' : '/foo/output/file.pdf'
+      const result = builder.parseLogAndFdbFiles(rootPath, myFilePath)
 
-      expect(result.outputFilePath).toEqual(process.platform === 'win32' ? 'C:\\foo\\output\\file.pdf' : '/foo/output/file.pdf')
+      expect(result.outputFilePath).toEqual(outputFilePath)
     })
   })
 
