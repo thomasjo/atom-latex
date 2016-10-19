@@ -79,7 +79,7 @@ describe('KnitrBuilder', () => {
       runs(() => {
         expect(exitCode).toBe(-1)
         expect(latex.log.showMessage).toHaveBeenCalledWith({
-          type: 'Error',
+          type: 'error',
           text: 'The R package "knitr" could not be loaded.'
         })
       })

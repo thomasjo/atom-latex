@@ -150,20 +150,20 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         const messages = [
-          { type: 'Error', text: 'There\'s no line here to end' },
-          { type: 'Error', text: 'Argument of \\@sect has an extra }' },
-          { type: 'Error', text: 'Paragraph ended before \\@sect was complete' },
-          { type: 'Error', text: 'Extra alignment tab has been changed to \\cr' },
-          { type: 'Warning', text: 'Reference `tab:snafu\' on page 1 undefined' },
-          { type: 'Error', text: 'Class foo: Significant class issue' },
-          { type: 'Warning', text: 'Class foo: Class issue' },
-          { type: 'Warning', text: 'Class foo: Nebulous class issue' },
-          { type: 'Info', text: 'Class foo: Insignificant class issue' },
-          { type: 'Error', text: 'Package bar: Significant package issue' },
-          { type: 'Warning', text: 'Package bar: Package issue' },
-          { type: 'Warning', text: 'Package bar: Nebulous package issue' },
-          { type: 'Info', text: 'Package bar: Insignificant package issue' },
-          { type: 'Warning', text: 'There were undefined references' }
+          { type: 'error', text: 'There\'s no line here to end' },
+          { type: 'error', text: 'Argument of \\@sect has an extra }' },
+          { type: 'error', text: 'Paragraph ended before \\@sect was complete' },
+          { type: 'error', text: 'Extra alignment tab has been changed to \\cr' },
+          { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined' },
+          { type: 'error', text: 'Class foo: Significant class issue' },
+          { type: 'warning', text: 'Class foo: Class issue' },
+          { type: 'warning', text: 'Class foo: Nebulous class issue' },
+          { type: 'info', text: 'Class foo: Insignificant class issue' },
+          { type: 'error', text: 'Package bar: Significant package issue' },
+          { type: 'warning', text: 'Package bar: Package issue' },
+          { type: 'warning', text: 'Package bar: Nebulous package issue' },
+          { type: 'info', text: 'Package bar: Insignificant package issue' },
+          { type: 'warning', text: 'There were undefined references' }
         ]
 
         // Loop through the required messages and make sure that each one appears
