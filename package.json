@@ -46,7 +46,7 @@
     ]
   },
   "engines": {
-    "atom": ">=1.10.0 <2.0.0"
+    "atom": ">=1.13.0 <2.0.0"
   },
   "activationCommands": {
     "atom-workspace": [
