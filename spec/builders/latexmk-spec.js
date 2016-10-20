@@ -216,11 +216,9 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    it('successfully creates glossary files when using the glossaries package', () => {
+    function checkCustomRules (name, extensions) {
       const dir = path.join(fixturesPath, 'latexmk')
-      const name = 'glossaries-test'
       filePath = path.format({ dir, name, ext: '.tex' })
-      const extensions = ['.acn', '.acr', '.glo', '.gls', '.pdf']
       atom.config.set('latex.enableLatexmkrc', true)
 
       waitsForPromise(() => {
@@ -231,9 +229,17 @@ describe('LatexmkBuilder', () => {
         expect(exitCode).toBe(0)
         for (const ext of extensions) {
           const output = path.format({ dir, name, ext })
-          expect(fs.existsSync(output)).toBe(true)
+          expect(fs.existsSync(output)).toBe(true, `Check the existance of ${ext} file.`)
         }
       })
+    }
+
+    it('successfully creates glossary files when using the glossaries package', () => {
+      checkCustomRules('glossaries-test', ['.acn', '.acr', '.glo', '.gls', '.pdf'])
+    })
+
+    it('successfully creates nomenclature files when using the nomencl package', () => {
+      checkCustomRules('nomencl-test', ['.nlo', '.nls', '.pdf'])
     })
   })
 })
