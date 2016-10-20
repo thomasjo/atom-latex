@@ -9,12 +9,49 @@ sub makeglossaries {
 
 push @generated_exts, 'glo', 'gls', 'glg', 'acn', 'acr', 'alg';
 
+# Support for the index package
+
+add_cus_dep('adx', 'and', 0, 'makeadx2and');
+
+sub makeadx2and {
+  system( "makeindex -o \"$_[0].and\" \"$_[0].adx\"");
+}
+
+push @generated_exts, 'adx', 'and';
+
+add_cus_dep('bdx', 'bnd', 0, 'makebdx2bnd');
+
+sub makebdx2bnd {
+  system("makeindex -s bibref.ist -o \"$_[0].bnd\" \"$_[0].bdx\"");
+}
+
+push @generated_exts, 'bdx', 'bnd';
+
+add_cus_dep('ndx', 'nnd', 0, 'makendx2nnd');
+
+sub makendx2nnd {
+  system("makeindex -o \"$_[0].nnd\" \"$_[0].ndx\"");
+}
+
+push @generated_exts, 'ndx', 'nnd';
+
+add_cus_dep('ldx', 'lnd', 0, 'makeldx2lnd');
+
+sub makeldx2lnd {
+  system("makeindex -o \"$_[0].lnd\" \"$_[0].ldx\"");
+}
+
+push @generated_exts, 'ldx', 'lnd';
+
 # Support for the nomenclature package
 
 add_cus_dep("nlo", "nls", 0, "nomenclature");
+
 sub nomenclature {
-    system("makeindex \"$_[0].nlo\" -s nomencl.ist -o \"$_[0].nls\" -t \"$_[0].nlg\"");
+  system("makeindex \"$_[0].nlo\" -s nomencl.ist -o \"$_[0].nls\" -t \"$_[0].nlg\"");
 }
+
+push @generated_exts, 'nlo', 'nls', 'nlg';
 
 # Support for SageTeX
 
@@ -23,7 +60,7 @@ add_cus_dep('sage', 'sout', 0, 'sage');
 $hash_calc_ignore_pattern{'sage'} = '^( _st_.goboom|print .SageT)';
 
 sub sage {
-   system("sage \"$_[0].sage\"");
+  system("sage \"$_[0].sage\"");
 }
 
 push @generated_exts, 'sout';
