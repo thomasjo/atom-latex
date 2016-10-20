@@ -255,7 +255,7 @@ describe('LatexmkBuilder', () => {
 
     checkCustomRules('successfully creates index files when using the index package',
       'index-test',
-      ['.idx', '.ind', '.pdf']
+      ['.idx', '.ind', '.ldx', '.lnd', '.pdf']
     )
   })
 })
