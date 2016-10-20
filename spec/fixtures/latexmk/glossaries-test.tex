@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\usepackage[acronym]{glossaries}
+ 
+\makeglossaries
+ 
+\newglossaryentry{foo}{
+  name=foo,
+  description={Metasyntactic variable used as a placeholder often in conjunction
+  with bar}
+}
+ 
+\newglossaryentry{bar}{
+  name=bar,
+  description={Metasyntactic variable used as a placeholder often in conjunction
+  with foo}
+}
+ 
+\newacronym{gce}{GCE}{Gross Conceptual Error}
+ 
+\begin{document}
+
+Without \gls{foo} there is no \gls{bar} which often leads to a \acrshort{gce}.
+
+\printglossary[type=\acronymtype]
+\printglossary
+
+\end{document}
