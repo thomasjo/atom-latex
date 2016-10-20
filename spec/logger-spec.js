@@ -13,7 +13,7 @@ describe('Logger', () => {
   describe('showMessage', () => {
     it('verifies that calling directly without preceding call to group automatically calls groupEnd', () => {
       spyOn(logger, 'groupEnd').andReturn()
-      logger.showMessage({ type: 'Error' })
+      logger.addMessage({ type: 'error' })
 
       expect(logger.groupEnd).toHaveBeenCalled()
     })
@@ -32,33 +32,33 @@ describe('Logger', () => {
       atom.config.set('latex.loggingLevel', 'info')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'Error' }, { type: 'Info' }, { type: 'Warning' }])
+      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }, { type: 'info' }, { type: 'warning' }])
     })
 
     it('verifies info messages filtered when logging level set to warning', () => {
       atom.config.set('latex.loggingLevel', 'warning')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'Error' }, { type: 'Warning' }])
+      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }, { type: 'warning' }])
     })
 
     it('verifies warning and info messages filtered when logging level set to error', () => {
       atom.config.set('latex.loggingLevel', 'error')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'Error' }])
+      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }])
     })
   })
 
   describe('getMostSevereType', () => {
     it('allows errors to override warnings and info messages', () => {
-      const mostSevereType = Logger.getMostSevereType([{ type: 'Info' }, { type: 'Warning' }, { type: 'Error' }])
-      expect(mostSevereType).toBe('Error')
+      const mostSevereType = Logger.getMostSevereType([{ type: 'info' }, { type: 'warning' }, { type: 'error' }])
+      expect(mostSevereType).toBe('error')
     })
 
     it('allows warnings to override info messages', () => {
-      const mostSevereType = Logger.getMostSevereType([{ type: 'Info' }, { type: 'Warning' }])
-      expect(mostSevereType).toBe('Warning')
+      const mostSevereType = Logger.getMostSevereType([{ type: 'info' }, { type: 'warning' }])
+      expect(mostSevereType).toBe('warning')
     })
   })
 })

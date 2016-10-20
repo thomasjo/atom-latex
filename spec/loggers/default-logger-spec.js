@@ -17,15 +17,15 @@ describe('DefaultLogger', () => {
     it('verifies that only messages that have a range and a matching file path are marked', () => {
       const editor = { getPath: () => 'foo.tex' }
       const messages = [{
-        type: 'Error',
+        type: 'error',
         range: [[0, 0], [0, 1]],
         filePath: 'foo.tex'
       }, {
-        type: 'Warning',
+        type: 'warning',
         range: [[0, 0], [0, 1]],
         filePath: 'bar.tex'
       }, {
-        type: 'Info',
+        type: 'info',
         filePath: 'foo.tex'
       }]
       spyOn(logger, 'addErrorMarker')
