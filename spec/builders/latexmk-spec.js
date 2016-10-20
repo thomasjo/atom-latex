@@ -4,6 +4,7 @@ import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import _ from 'lodash'
+import fs from 'fs-plus'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
@@ -212,6 +213,26 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(11)
+      })
+    })
+
+    it('successfully creates glossary files when using the glossaries package', () => {
+      const dir = path.join(fixturesPath, 'latexmk')
+      const name = 'glossaries-test'
+      filePath = path.format({ dir, name, ext: '.tex' })
+      const extensions = ['.acn', '.acr', '.glo', '.gls', '.pdf']
+      atom.config.set('latex.enableLatexmkrc', true)
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        for (const ext of extensions) {
+          const output = path.format({ dir, name, ext })
+          expect(fs.existsSync(output)).toBe(true)
+        }
       })
     })
   })
