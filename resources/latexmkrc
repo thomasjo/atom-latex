@@ -1,0 +1,29 @@
+# Support for the glossaries package
+
+add_cus_dep('glo', 'gls', 0, 'makeglossaries');
+add_cus_dep('acn', 'acr', 0, 'makeglossaries');
+
+sub makeglossaries {
+  system("makeglossaries \"$_[0]\"");
+}
+
+push @generated_exts, 'glo', 'gls', 'glg', 'acn', 'acr', 'alg';
+
+# Support for the nomenclature package
+
+add_cus_dep("nlo", "nls", 0, "nomenclature");
+sub nomenclature {
+    system("makeindex \"$_[0].nlo\" -s nomencl.ist -o \"$_[0].nls\" -t \"$_[0].nlg\"");
+}
+
+# Support for SageTeX
+
+add_cus_dep('sage', 'sout', 0, 'sage');
+
+$hash_calc_ignore_pattern{'sage'} = '^( _st_.goboom|print .SageT)';
+
+sub sage {
+   system("sage \"$_[0].sage\"");
+}
+
+push @generated_exts, 'sout';
