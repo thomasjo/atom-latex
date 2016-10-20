@@ -120,7 +120,7 @@
     },
     "enableLatexmkrc": {
       "title": "Enable Extended `latexmk` Rules",
-      "description": "Enable `latexmk` rules for custom files types. Currently includes support for the `glossaries` package, the `nomenclature` package and SageTeX.",
+      "description": "Enable `latexmk` rules for custom files types. Currently includes support for the `glossaries` package, the `index` package, the `nomencl` package and SageTeX.",
       "type": "boolean",
       "default": false,
       "order": 7
