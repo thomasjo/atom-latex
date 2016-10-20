@@ -216,30 +216,46 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    function checkCustomRules (name, extensions) {
-      const dir = path.join(fixturesPath, 'latexmk')
-      filePath = path.format({ dir, name, ext: '.tex' })
-      atom.config.set('latex.enableLatexmkrc', true)
+    function doCustomRuleCheck (label, name, extensions, outputDirectory) {
+      it(label, () => {
+        let dir = path.join(fixturesPath, 'latexmk')
+        filePath = path.format({ dir, name, ext: '.tex' })
+        dir = path.join(dir, outputDirectory)
+        atom.config.set('latex.enableLatexmkrc', true)
+        atom.config.set('latex.outputDirectory', outputDirectory)
 
-      waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
-      })
+        waitsForPromise(() => {
+          return builder.run(filePath).then(code => { exitCode = code })
+        })
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        for (const ext of extensions) {
-          const output = path.format({ dir, name, ext })
-          expect(fs.existsSync(output)).toBe(true, `Check the existance of ${ext} file.`)
-        }
+        runs(() => {
+          expect(exitCode).toBe(0)
+          for (const ext of extensions) {
+            const output = path.format({ dir, name, ext })
+            expect(fs.existsSync(output)).toBe(true, `Check the existance of ${ext} file.`)
+          }
+        })
       })
     }
 
-    it('successfully creates glossary files when using the glossaries package', () => {
-      checkCustomRules('glossaries-test', ['.acn', '.acr', '.glo', '.gls', '.pdf'])
-    })
+    function checkCustomRules (label, name, extensions) {
+      doCustomRuleCheck(label, name, extensions, '')
+      doCustomRuleCheck(`${label} with an output directory`, name, extensions, 'build')
+    }
 
-    it('successfully creates nomenclature files when using the nomencl package', () => {
-      checkCustomRules('nomencl-test', ['.nlo', '.nls', '.pdf'])
-    })
+    checkCustomRules('successfully creates glossary files when using the glossaries package',
+      'glossaries-test',
+      ['.acn', '.acr', '.glo', '.gls', '.pdf']
+    )
+
+    checkCustomRules('successfully creates nomenclature files when using the nomencl package',
+      'nomencl-test',
+      ['.nlo', '.nls', '.pdf']
+    )
+
+    checkCustomRules('successfully creates index files when using the index package',
+      'index-test',
+      ['.idx', '.ind', '.pdf']
+    )
   })
 })
