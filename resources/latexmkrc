@@ -1,4 +1,6 @@
-# Support for the glossaries package
+######################################
+# Support for the glossaries package #
+######################################
 
 add_cus_dep('glo', 'gls', 0, 'makeglossaries');
 add_cus_dep('acn', 'acr', 0, 'makeglossaries');
@@ -11,7 +13,9 @@ sub makeglossaries {
 
 push @generated_exts, 'glo', 'gls', 'glg', 'acn', 'acr', 'alg';
 
-# Support for the index package
+#################################
+# Support for the index package #
+#################################
 
 add_cus_dep('adx', 'and', 0, 'acro_index');
 
@@ -29,25 +33,35 @@ sub bib_index {
 
 push @generated_exts, 'bdx', 'bnd', 'blg';
 
-add_cus_dep('ndx', 'nnd', 0, 'nomencl_index');
+add_cus_dep('ndx', 'nnd', 0, 'name_index');
 
-sub nomencl_index {
+sub name_index {
   system("makeindex -o \"$_[0].nnd\" \"$_[0].ndx\"");
 }
 
 push @generated_exts, 'ndx', 'nnd', 'nlg';
 
-add_cus_dep('ldx', 'lnd', 0, 'makeldx2lnd');
+add_cus_dep('ldx', 'lnd', 0, 'list_index');
 
 sub makeldx2lnd {
-  system("makeindex -o \"$_[0].lnd\" \"$_[0].ldx\"");
+  system("list_index -o \"$_[0].lnd\" \"$_[0].ldx\"");
 }
 
 push @generated_exts, 'ldx', 'lnd', 'llg';
 
-# Support for the nomenclature package
+add_cus_dep('tdx', 'tnd', 0, 'title_index');
 
-add_cus_dep("nlo", "nls", 0, "nomenclature");
+sub title_index {
+  system("makeindex -o \"$_[0].tnd\" \"$_[0].tdx\"");
+}
+
+push @generated_exts, 'tdx', 'tnd', 'tlg';
+
+########################################
+# Support for the nomenclature package #
+########################################
+
+add_cus_dep("nlo", "nls", 0, "nomencl_index");
 
 sub nomenclature {
   system("makeindex \"$_[0].nlo\" -s nomencl.ist -o \"$_[0].nls\" -t \"$_[0].nlg\"");
@@ -55,14 +69,18 @@ sub nomenclature {
 
 push @generated_exts, 'nlo', 'nls', 'nlg';
 
-# Support for SageTeX
+#######################
+# Support for SageTeX #
+#######################
 
 add_cus_dep('sage', 'sout', 0, 'sage');
 
 $hash_calc_ignore_pattern{'sage'} = '^( _st_.goboom|print .SageT)';
 
 sub sage {
-  system("sage \"$_[0].sage\"");
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  system("cd \"$dir\" && sage \"$file.sage\"");
 }
 
 push @generated_exts, 'sout';
