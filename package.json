@@ -167,6 +167,7 @@
         "**/*.synctex.gz",
         "**/*.toc",
         "/**/_minted-{jobname}",
+        "/{output_dir}/sage-plots-for-{jobname}.tex",
         "/missfont.log",
         "/texput.log",
         "/texput.aux"
