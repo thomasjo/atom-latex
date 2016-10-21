@@ -8,13 +8,14 @@ shopt -s nocasematch
 
 install_miktex() {
   echo "Installing MiKTeX..."
-  choco install miktex -version 2.9.6069.2
+  choco install miktex
 
   # Ensure PATH points to the binaries.
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
 
   # Disable installer to prevent timeouts if package is missing
-  #initexmf --admin --disable-installer
+  initexmf --admin --set-config-value=[MPM]AutoInstall=0
+  initexmf --set-config-value=[MPM]AutoInstall=0
 
   echo "Installing MiKTeX packages..."
   mpm --admin --install=latexmk
