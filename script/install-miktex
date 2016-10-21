@@ -14,11 +14,14 @@ install_miktex() {
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
 
   # Disable installer to prevent timeouts if package is missing
-  #initexmf --admin --disable-installer
+  initexmf --admin --set-config-value=[MPM]AutoInstall=0
+  initexmf --set-config-value=[MPM]AutoInstall=0
 
   echo "Installing MiKTeX packages..."
   mpm --admin --install=latexmk
   mpm --admin --install=framed
   mpm --admin --install=upquote
   mpm --admin --install=mptopdf
+  
+  latexmk -v
 }
