@@ -17,7 +17,6 @@ if (process.env.TEX_DIST === 'miktex') {
       builder = new TexifyBuilder()
       fixturesPath = helpers.cloneFixtures()
       filePath = path.join(fixturesPath, 'file.tex')
-      atom.config.set('latex.outputDirectory', '')
     })
 
     describe('constructArgs', () => {

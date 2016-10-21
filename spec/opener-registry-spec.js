@@ -1,12 +1,10 @@
 /** @babel */
 
 import helpers from './spec-helpers'
-import OpenerRegistry from '../lib/opener-registry'
 
 describe('OpenerRegistry', () => {
   const filePath = 'wibble.pdf'
-  let registry
-  // The various viewer
+  // The various viewers
   let cannotOpen, canOpen, canOpenInBackground, canOpenWithSynctex
 
   beforeEach(() => {
@@ -20,12 +18,12 @@ describe('OpenerRegistry', () => {
     instance.canOpen.andReturn(canOpen)
     instance.hasSynctex.andReturn(hasSynctex)
     instance.canOpenInBackground.andReturn(canOpenInBackground)
-    registry.openers.set(name, instance)
+    latex.opener.openers.set(name, instance)
     return instance
   }
 
   beforeEach(() => {
-    registry = new OpenerRegistry()
+    latex.opener.openers.clear()
     // The opener names have to conform to latex.opener schema
     cannotOpen = createOpener('skim', false, true, true)
     canOpen = createOpener('xdg-open', true, false, false)
@@ -39,7 +37,7 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'xdg-open')
 
-      registry.open(filePath)
+      latex.opener.open(filePath)
 
       expect(cannotOpen.open).not.toHaveBeenCalled()
       expect(canOpen.open).toHaveBeenCalled()
@@ -52,7 +50,7 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'automatic')
 
-      registry.open(filePath)
+      latex.opener.open(filePath)
 
       expect(cannotOpen.open).not.toHaveBeenCalled()
       expect(canOpen.open).not.toHaveBeenCalled()
@@ -65,7 +63,7 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'automatic')
 
-      registry.open(filePath)
+      latex.opener.open(filePath)
 
       expect(cannotOpen.open).not.toHaveBeenCalled()
       expect(canOpen.open).not.toHaveBeenCalled()
