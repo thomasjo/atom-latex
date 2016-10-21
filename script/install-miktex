@@ -22,4 +22,6 @@ install_miktex() {
   mpm --admin --install=framed
   mpm --admin --install=upquote
   mpm --admin --install=mptopdf
+  
+  latexmk -v
 }
