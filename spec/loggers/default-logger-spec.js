@@ -1,16 +1,17 @@
 /** @babel */
 
-import '../spec-bootstrap'
 import DefaultLogger from '../../lib/loggers/default-logger'
 import werkzeug from '../../lib/werkzeug'
-import Latex from '../../lib/latex'
+import helpers from '../spec-helpers'
 
 describe('DefaultLogger', () => {
   let logger
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     logger = new DefaultLogger()
-    global.latex = new Latex()
   })
 
   describe('showErrorMarkersInEditor', () => {

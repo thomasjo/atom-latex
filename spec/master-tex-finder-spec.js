@@ -1,13 +1,16 @@
 /** @babel */
 
-import './spec-bootstrap'
 import path from 'path'
+import helpers from './spec-helpers'
 import MasterTexFinder from '../lib/master-tex-finder'
 
 describe('MasterTexFinder', () => {
   let rootPath, fixturesPath
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     rootPath = atom.project.getPaths()[0]
     fixturesPath = path.join(rootPath, 'master-tex-finder', 'single-master')
 

@@ -1,12 +1,19 @@
 /** @babel */
 
+import helpers from './spec-helpers'
 import OpenerRegistry from '../lib/opener-registry'
 
-describe('Latex', () => {
+describe('OpenerRegistry', () => {
   const filePath = 'wibble.pdf'
   let registry
   // The various viewer
   let cannotOpen, canOpen, canOpenInBackground, canOpenWithSynctex
+
+  beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
+  })
 
   function createOpener (name, canOpen, hasSynctex, canOpenInBackground) {
     const instance = jasmine.createSpyObj(name, ['canOpen', 'open', 'hasSynctex', 'canOpenInBackground'])
@@ -19,17 +26,18 @@ describe('Latex', () => {
 
   beforeEach(() => {
     registry = new OpenerRegistry()
-    cannotOpen = createOpener('cannot-open', false, true, true)
-    canOpen = createOpener('can-open', true, false, false)
-    canOpenInBackground = createOpener('can-open-in-background', true, false, true)
-    canOpenWithSynctex = createOpener('can-open-with-synctex', true, true, false)
+    // The opener names have to conform to latex.opener schema
+    cannotOpen = createOpener('skim', false, true, true)
+    canOpen = createOpener('xdg-open', true, false, false)
+    canOpenInBackground = createOpener('okular', true, false, true)
+    canOpenWithSynctex = createOpener('evince', true, true, false)
   })
 
   describe('open', () => {
     it('opens using preferred viewer even if it does not have requested features', () => {
       atom.config.set('latex.enableSynctex', true)
       atom.config.set('latex.openResultInBackground', true)
-      atom.config.set('latex.opener', 'can-open')
+      atom.config.set('latex.opener', 'xdg-open')
 
       registry.open(filePath)
 

@@ -1,19 +1,12 @@
 /** @babel */
 
-import './spec-helpers'
-import Latex from '../lib/latex'
+import helpers from './spec-helpers'
 
 describe('Latex', () => {
-  let latex, globalLatex
-
   beforeEach(() => {
-    globalLatex = global.latex
-    delete global.latex
-    latex = new Latex()
-  })
-
-  afterEach(() => {
-    global.latex = globalLatex
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
   })
 
   describe('initialize', () => {

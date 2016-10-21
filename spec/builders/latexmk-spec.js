@@ -9,6 +9,9 @@ describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     builder = new LatexmkBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
