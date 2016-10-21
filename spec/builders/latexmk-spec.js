@@ -108,6 +108,13 @@ describe('LatexmkBuilder', () => {
       expect(args).not.toContain('-pdf')
     })
 
+    it('adds latexmkrc argument according to package config', () => {
+      atom.config.set('latex.enableLatexmkrc', true)
+      const args = builder.constructArgs(filePath)
+      const latexmkrcPath = path.resolve(__dirname, '../../resources/latexmkrc')
+      expect(args).toContain(`-r "${latexmkrcPath}"`)
+    })
+
     it('adds a jobname argument when passed a non-null jobname', () => {
       expect(builder.constructArgs(filePath, 'foo')).toContain('-jobname=foo')
     })
@@ -256,6 +263,11 @@ describe('LatexmkBuilder', () => {
     checkCustomRules('successfully creates index files when using the index package',
       'index-test',
       ['.idx', '.ind', '.ldx', '.lnd', '.pdf']
+    )
+
+    checkCustomRules('successfully creates SageTeX files when using the sagetex package',
+      'sage-test',
+      ['.sagetex.sage', '.sagetex.sout', '.pdf']
     )
   })
 })

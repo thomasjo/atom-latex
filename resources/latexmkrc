@@ -83,4 +83,4 @@ sub sage {
   system("cd \"$dir\" && sage \"$file.sage\"");
 }
 
-push @generated_exts, 'sout';
+push @generated_exts, 'sage', 'sout', 'sage.py', 'scmd';
