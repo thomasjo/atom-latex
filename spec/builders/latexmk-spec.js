@@ -7,7 +7,7 @@ import _ from 'lodash'
 import fs from 'fs-plus'
 
 describe('LatexmkBuilder', () => {
-  let builder, fixturesPath, filePath
+  let builder, fixturesPath, filePath, extendedOutputPaths
 
   beforeEach(() => {
     waitsForPromise(() => {
@@ -17,6 +17,21 @@ describe('LatexmkBuilder', () => {
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
   })
+
+  function initializeExtendedBuild (name, extensions, outputDirectory = '') {
+    let dir = path.join(fixturesPath, 'latexmk')
+    filePath = path.format({ dir, name, ext: '.tex' })
+    dir = path.join(dir, outputDirectory)
+    atom.config.set('latex.enableExtendedBuildMode', true)
+    atom.config.set('latex.outputDirectory', outputDirectory)
+    extendedOutputPaths = extensions.map(ext => path.format({ dir, name, ext }))
+  }
+
+  function expectExistenceOfExtendedOutputs () {
+    for (const output of extendedOutputPaths) {
+      expect(fs.existsSync(output)).toBe(true, `Check the existence of ${output} file.`)
+    }
+  }
 
   describe('constructArgs', () => {
     it('produces default arguments when package has default config values', () => {
@@ -109,9 +124,9 @@ describe('LatexmkBuilder', () => {
     })
 
     it('adds latexmkrc argument according to package config', () => {
-      atom.config.set('latex.enableLatexmkrc', true)
+      atom.config.set('latex.enableExtendedBuildMode', true)
       const args = builder.constructArgs(filePath)
-      const latexmkrcPath = path.resolve(__dirname, '../../resources/latexmkrc')
+      const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
       expect(args).toContain(`-r "${latexmkrcPath}"`)
     })
 
@@ -223,51 +238,149 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    function doCustomRuleCheck (label, name, extensions, outputDirectory) {
-      it(label, () => {
-        let dir = path.join(fixturesPath, 'latexmk')
-        filePath = path.format({ dir, name, ext: '.tex' })
-        dir = path.join(dir, outputDirectory)
-        atom.config.set('latex.enableLatexmkrc', true)
-        atom.config.set('latex.outputDirectory', outputDirectory)
+    it('successfully creates glossary files when using the glossaries package', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'])
 
-        waitsForPromise(() => {
-          return builder.run(filePath).then(code => { exitCode = code })
-        })
-
-        runs(() => {
-          expect(exitCode).toBe(0)
-          for (const ext of extensions) {
-            const output = path.format({ dir, name, ext })
-            expect(fs.existsSync(output)).toBe(true, `Check the existance of ${ext} file.`)
-          }
-        })
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
       })
-    }
 
-    function checkCustomRules (label, name, extensions) {
-      doCustomRuleCheck(label, name, extensions, '')
-      doCustomRuleCheck(`${label} with an output directory`, name, extensions, 'build')
-    }
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
 
-    checkCustomRules('successfully creates glossary files when using the glossaries package',
-      'glossaries-test',
-      ['.acn', '.acr', '.glo', '.gls', '.pdf']
-    )
+    it('successfully creates glossary files when using the glossaries package with an output directory', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'],
+        'build')
 
-    checkCustomRules('successfully creates nomenclature files when using the nomencl package',
-      'nomencl-test',
-      ['.nlo', '.nls', '.pdf']
-    )
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
 
-    checkCustomRules('successfully creates index files when using the index package',
-      'index-test',
-      ['.idx', '.ind', '.ldx', '.lnd', '.pdf']
-    )
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
 
-    checkCustomRules('successfully creates SageTeX files when using the sagetex package',
-      'sage-test',
-      ['.sagetex.sage', '.sagetex.sout', '.pdf']
-    )
+    it('successfully creates glossary files when using the glossaries package', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates glossary files when using the glossaries package with an output directory', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates nomenclature files when using the nomencl package', () => {
+      initializeExtendedBuild('nomencl-test',
+        ['.nlo', '.nls', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates nomenclature files when using the nomencl package with an output directory', () => {
+      initializeExtendedBuild('nomencl-test',
+        ['.nlo', '.nls', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates index files when using the index package', () => {
+      initializeExtendedBuild('index-test',
+        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates index files when using the index package with an output directory', () => {
+      initializeExtendedBuild('index-test',
+        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates SageTeX files when using the sagetex package', () => {
+      initializeExtendedBuild('sagetex-test',
+        ['.sagetex.sage', '.sagetex.sout', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates SageTeX files when using the sagetex package with an output directory', () => {
+      initializeExtendedBuild('sagetex-test',
+        ['.sagetex.sage', '.sagetex.sout', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
   })
 })
