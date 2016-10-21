@@ -8,7 +8,7 @@ shopt -s nocasematch
 
 install_miktex() {
   echo "Installing MiKTeX..."
-  choco install miktex
+  choco install miktex -version 2.9.6069.2
 
   # Ensure PATH points to the binaries.
   export PATH="${MIKTEX_HOME}/miktex/bin/x64:${PATH}"
