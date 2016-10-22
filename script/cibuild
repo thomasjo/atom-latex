@@ -51,6 +51,7 @@ main() {
   ensure_xz_installed
   install_latex_distribution
   install_knitr
+  install_sage
   exec_ci
 }
 
