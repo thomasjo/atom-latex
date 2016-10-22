@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
+install_sagetex() {
+  if [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
+    echo "Installing Sage..."
+    brew cask install sage
+  elif [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then
+    echo "Installing Sage..."
+    sudo -E apt-add-repository -y ppa:aims/sagemath
+    sudo -E apt-get update
+    sudo -E apt-get install sagemath-upstream-binary
+  fi
+}
