@@ -354,6 +354,9 @@ describe('LatexmkBuilder', () => {
       })
     })
 
+    // Sage only runs in VM on Windows
+    if (process.platform === 'win32') return
+
     it('successfully creates SageTeX files when using the sagetex package', () => {
       initializeExtendedBuild('sagetex-test',
         ['.sagetex.sage', '.sagetex.sout', '.pdf'])
@@ -363,6 +366,7 @@ describe('LatexmkBuilder', () => {
       })
 
       runs(() => {
+        latex.process.executeChildProcess(`ls -l ${fixturesPath}/latexmk`).then(results => console.log(results.stdout))
         expect(exitCode).toBe(0)
         expectExistenceOfExtendedOutputs()
       })
