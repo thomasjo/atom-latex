@@ -10,10 +10,5 @@ install_sage() {
   if [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing Sage..."
     brew cask install sage
-  elif [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then
-    echo "Installing Sage..."
-    sudo apt-add-repository ppa:aims/sagemath -y
-    sudo apt-get update -q
-    sudo apt-get install sagemath-upstream-binary -y
   fi
 }

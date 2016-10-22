@@ -27,8 +27,10 @@ addons:
   apt:
     sources:
       - r-packages-precise
+      - source-line: 'ppa:aims/sagemath'
     packages:
       - r-recommended
+      - sagemath-upstream-binary
 
 cache:
   directories:
