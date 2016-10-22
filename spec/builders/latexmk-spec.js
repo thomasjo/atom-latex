@@ -354,8 +354,9 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    // Sage only runs in VM on Windows
-    if (process.platform === 'win32') return
+    // Sage only runs in a VM on Windows and installing Sage at 1GB for two tests
+    // is excessive.
+    if (process.platform === 'win32' || process.env.CI) return
 
     it('successfully creates SageTeX files when using the sagetex package', () => {
       initializeExtendedBuild('sagetex-test',
@@ -366,7 +367,6 @@ describe('LatexmkBuilder', () => {
       })
 
       runs(() => {
-        latex.process.executeChildProcess(`ls -l ${fixturesPath}/latexmk`).then(results => console.log(results.stdout))
         expect(exitCode).toBe(0)
         expectExistenceOfExtendedOutputs()
       })
