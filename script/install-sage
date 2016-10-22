@@ -6,7 +6,7 @@ set -eu
 # Enable case-insensitive pattern matching.
 shopt -s nocasematch
 
-install_sagetex() {
+install_sage() {
   if [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing Sage..."
     brew cask install sage
