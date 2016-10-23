@@ -29,6 +29,7 @@ addons:
       - r-packages-precise
     packages:
       - r-recommended
+      - freeglut3
 
 cache:
   directories:
