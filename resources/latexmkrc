@@ -21,7 +21,7 @@ sub asymptote_tex {
 sub asymptote {
   $dir = dirname($_[0]);
   $file = basename($_[0]);
-  my $ret = system("asy -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >\"$_[0].asy_log\" 2>&1");
+  my $ret = system("asy -offscreen -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >\"$_[0].asy_log\" 2>&1");
   my $log_handle = new FileHandle;
   open $log_handle, "$_[0].asy_log";
   %imp = ();
