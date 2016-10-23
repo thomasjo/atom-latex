@@ -21,7 +21,7 @@ sub asymptote_tex {
 sub asymptote {
   $dir = dirname($_[0]);
   $file = basename($_[0]);
-  my $ret = system("asy -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >& \"$_[0].asy_log\"");
+  my $ret = system("asy -offscreen -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >& \"$_[0].asy_log\"");
   my $log_handle = new FileHandle;
   open $log_handle, "$_[0].asy_log";
   %imp = ();
@@ -105,6 +105,20 @@ sub title_index {
 }
 
 push @generated_exts, 'tdx', 'tnd', 'tlg';
+
+#####################################
+# Metapost support for feynmp, etc. #
+#####################################
+
+add_cus_dep('mp', '1', 0, 'mpost');
+
+sub mpost {
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  return system("cd \"$dir\" && mpost \"$file\"");
+}
+
+push @generated_exts, '1';
 
 ########################################
 # Support for the nomenclature package #

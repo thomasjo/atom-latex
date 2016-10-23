@@ -240,7 +240,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully creates asymptote files when using the asymptote package', () => {
       initializeExtendedBuild('asymptote-test',
-        ['-1.tex'])
+        ['-1.tex', '.pdf'])
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
@@ -254,7 +254,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
       initializeExtendedBuild('asymptote-test',
-        ['-1.tex'],
+        ['-1.tex', '.pdf'],
         'build')
 
       waitsForPromise(() => {
@@ -296,9 +296,9 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    it('successfully creates glossary files when using the glossaries package', () => {
-      initializeExtendedBuild('glossaries-test',
-        ['.acn', '.acr', '.glo', '.gls', '.pdf'])
+    it('successfully creates metapost files when using the feynmp package', () => {
+      initializeExtendedBuild('mpost-test',
+        ['-feynmp.1', '.pdf'])
 
       waitsForPromise(() => {
         return builder.run(filePath).then(code => { exitCode = code })
@@ -310,9 +310,9 @@ describe('LatexmkBuilder', () => {
       })
     })
 
-    it('successfully creates glossary files when using the glossaries package with an output directory', () => {
-      initializeExtendedBuild('glossaries-test',
-        ['.acn', '.acr', '.glo', '.gls', '.pdf'],
+    it('successfully creates metapost files when using the feynmp package with an output directory', () => {
+      initializeExtendedBuild('mpost-test',
+        ['-feynmp.1', '.pdf'],
         'build')
 
       waitsForPromise(() => {

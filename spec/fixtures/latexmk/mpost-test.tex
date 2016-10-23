@@ -1,0 +1,22 @@
+\documentclass{article}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{feynmp}
+
+\DeclareGraphicsRule{.1}{mps}{*}{}
+
+\begin{document}
+
+\begin{fmffile}{mpost-test-feynmp}
+  \begin{fmfgraph*}(120,80)
+    \fmfpen{thin}
+    \fmfleft{i1,i2}
+    \fmfright{o1,o2}
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{photon,label=$\gamma$}{v1,v2}
+    \fmfdot{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\end{document}
