@@ -1,0 +1,16 @@
+\documentclass{article}
+
+\usepackage[inline]{asymptote}
+
+\begin{document}
+
+\begin{center}
+\begin{asy}
+import three;
+size(200);
+currentprojection=orthographic(5,4,3);
+draw(unitsphere,blue,render(compression=Zero,merge=true));
+\end{asy}
+\end{center}
+
+\end{document}

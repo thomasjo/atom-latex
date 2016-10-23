@@ -238,6 +238,35 @@ describe('LatexmkBuilder', () => {
       })
     })
 
+    it('successfully creates asymptote files when using the asymptote package', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
     it('successfully creates glossary files when using the glossaries package', () => {
       initializeExtendedBuild('glossaries-test',
         ['.acn', '.acr', '.glo', '.gls', '.pdf'])

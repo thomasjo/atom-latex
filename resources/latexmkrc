@@ -19,7 +19,9 @@ sub asymptote_tex {
 }
 
 sub asymptote {
-  my $ret = system("asy -vv -f \"$_[1]\" \"$_[0]\" >& \"$_[0].asy_log\"");
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  my $ret = system("asy -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >& \"$_[0].asy_log\"");
   my $log_handle = new FileHandle;
   open $log_handle, "$_[0].asy_log";
   %imp = ();
