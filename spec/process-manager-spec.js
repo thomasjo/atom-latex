@@ -22,7 +22,7 @@ describe('ProcessManager', () => {
     it('kills latexmk when given non-existant file', () => {
       let killed = false
 
-      processManager.executeChildProcess(constructCommand('foo.tex')).then(result => { killed = true })
+      processManager.executeChildProcess(constructCommand('foo.tex'), { allowKill: true }).then(result => { killed = true })
       processManager.killChildProcesses()
 
       waitsFor(() => killed, 5000)
@@ -32,9 +32,9 @@ describe('ProcessManager', () => {
       let oldKilled = false
       let newKilled = false
 
-      processManager.executeChildProcess(constructCommand('old.tex')).then(result => { oldKilled = true })
+      processManager.executeChildProcess(constructCommand('old.tex'), { allowKill: true }).then(result => { oldKilled = true })
       processManager.killChildProcesses()
-      processManager.executeChildProcess(constructCommand('new.tex')).then(result => { newKilled = true })
+      processManager.executeChildProcess(constructCommand('new.tex'), { allowKill: true }).then(result => { newKilled = true })
 
       waitsFor(() => oldKilled, 5000)
 

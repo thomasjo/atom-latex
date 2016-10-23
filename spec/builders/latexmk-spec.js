@@ -9,12 +9,12 @@ describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     builder = new LatexmkBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
-    atom.config.set('latex.engine', 'pdflatex')
-    atom.config.set('latex.outputFormat', 'pdf')
-    atom.config.set('latex.outputDirectory', '')
   })
 
   describe('constructArgs', () => {

@@ -1,18 +1,13 @@
 /** @babel */
 
-import './spec-bootstrap'
 import helpers from './spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
-import Composer from '../lib/composer'
 import werkzeug from '../lib/werkzeug'
 
 describe('Composer', () => {
-  let composer
-
   beforeEach(() => {
-    atom.config.set('latex.builder', 'latexmk')
-    composer = new Composer()
+    waitsForPromise(() => helpers.activatePackages())
   })
 
   describe('build', () => {
@@ -198,21 +193,33 @@ describe('Composer', () => {
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
-      composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
+      })
     })
 
     it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
-      composer.clean()
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
+      })
     })
 
     it('stops immediately if the file is not a TeX document', () => {
@@ -290,24 +297,24 @@ describe('Composer', () => {
     it('silently does nothing when the current editor is transient', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
       spyOn(composer, 'resolveOutputFilePath').andCallThrough()
-      spyOn(latex, 'getOpener').andCallThrough()
+      spyOn(latex.opener, 'open').andReturn(true)
 
       composer.sync()
 
       expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
-      expect(latex.getOpener).not.toHaveBeenCalled()
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
       spyOn(composer, 'resolveOutputFilePath').andReturn()
-      spyOn(latex, 'getOpener').andCallThrough()
+      spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
       composer.sync()
 
       expect(latex.log.warning).toHaveBeenCalled()
-      expect(latex.getOpener).not.toHaveBeenCalled()
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
     it('launches the opener using editor metadata and resolved output file', () => {
@@ -317,12 +324,11 @@ describe('Composer', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
       spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
 
-      const opener = jasmine.createSpyObj('MockOpener', ['open'])
-      spyOn(latex, 'getOpener').andReturn(opener)
+      spyOn(latex.opener, 'open').andReturn(true)
 
       composer.sync()
 
-      expect(opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+      expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
     })
 
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
@@ -336,13 +342,12 @@ describe('Composer', () => {
       spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
       spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
 
-      const opener = jasmine.createSpyObj('MockOpener', ['open'])
-      spyOn(latex, 'getOpener').andReturn(opener)
+      spyOn(latex.opener, 'open').andReturn(true)
 
       composer.sync()
 
-      expect(opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
-      expect(opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
+      expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
+      expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
     })
   })
 })

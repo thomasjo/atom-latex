@@ -1,7 +1,5 @@
 /** @babel */
 
-import './spec-bootstrap'
-
 import fs from 'fs-plus'
 import temp from 'temp'
 import wrench from 'wrench'
@@ -27,5 +25,13 @@ export default {
     env.defaultTimeoutInterval = interval
 
     return originalInterval
+  },
+
+  activatePackages () {
+    const workspaceElement = atom.views.getView(atom.workspace)
+    const packages = ['language-latex', 'pdf-view', 'latex']
+    const activationPromise = Promise.all(packages.map(pkg => atom.packages.activatePackage(pkg)))
+    atom.commands.dispatch(workspaceElement, 'latex:sync')
+    return activationPromise
   }
 }

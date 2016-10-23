@@ -14,11 +14,12 @@ describe('KnitrBuilder', () => {
   let builder, fixturesPath, filePath
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     builder = new KnitrBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
-    atom.config.set('latex.engine', 'pdflatex')
-    atom.config.set('latex.outputFormat', 'pdf')
   })
 
   describe('constructArgs', () => {
