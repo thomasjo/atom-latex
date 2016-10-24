@@ -238,6 +238,35 @@ describe('LatexmkBuilder', () => {
       })
     })
 
+    it('successfully creates asymptote files when using the asymptote package', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
     it('successfully creates glossary files when using the glossaries package', () => {
       initializeExtendedBuild('glossaries-test',
         ['.acn', '.acr', '.glo', '.gls', '.pdf'])
@@ -342,38 +371,6 @@ describe('LatexmkBuilder', () => {
     it('successfully creates index files when using the index package with an output directory', () => {
       initializeExtendedBuild('index-test',
         ['.idx', '.ind', '.ldx', '.lnd', '.pdf'],
-        'build')
-
-      waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
-      })
-
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expectExistenceOfExtendedOutputs()
-      })
-    })
-
-    // Asymptote is not distributed with MiKTeX 
-    if (process.TEX_DIST === 'miktex') return
-
-    it('successfully creates asymptote files when using the asymptote package', () => {
-      initializeExtendedBuild('asymptote-test',
-        ['-1.tex', '.pdf'])
-
-      waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
-      })
-
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expectExistenceOfExtendedOutputs()
-      })
-    })
-
-    it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
-      initializeExtendedBuild('asymptote-test',
-        ['-1.tex', '.pdf'],
         'build')
 
       waitsForPromise(() => {
