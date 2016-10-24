@@ -21,7 +21,12 @@ ensure_xz_installed() {
 
 initialize() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
-  local scripts=(install-texlive install-miktex install-knitr)
+  local scripts=(
+    install-ghostscript
+    install-knitr
+    install-miktex
+    install-texlive
+  )
 
   for script in ${scripts[@]}; do
     source "${script_dir}/${script}"
@@ -51,6 +56,7 @@ main() {
   ensure_xz_installed
   install_latex_distribution
   install_knitr
+  install_ghostscript
   exec_ci
 }
 
