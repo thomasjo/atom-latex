@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{index}
+
+\makeindex
+\newindex[theenumi]{list}{ldx}{lnd}{Items}
+ 
+\begin{document}
+
+Wibble, wibble, foo\index{foo}, foo, bar\index{bar}.
+ 
+\begin{enumerate}
+  \item Gronk
+  \item Baz\index[list]{baz}
+  \item Quux\index[list]{quux}
+\end{enumerate}
+
+\printindex[list]
+\printindex
+
+\end{document}

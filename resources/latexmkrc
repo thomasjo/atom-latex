@@ -1,0 +1,149 @@
+#########################
+# Support for Asymptote #
+#########################
+
+add_cus_dep('asy', 'eps', 0, 'asymptote_eps');
+add_cus_dep('asy', 'pdf', 0, 'asymptote_pdf');
+add_cus_dep('asy', 'tex', 0, 'asymptote_tex');
+
+sub asymptote_eps {
+  return asymptote($_[0], 'eps');
+}
+
+sub asymptote_pdf {
+  return asymptote($_[0], 'pdf');
+}
+
+sub asymptote_tex {
+  return asymptote($_[0], 'tex');
+}
+
+sub asymptote {
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  my $ret = system("asy -offscreen -vv -f \"$_[1]\" -cd \"$dir\" \"$file\" >\"$_[0].asy_log\" 2>&1");
+  my $log_handle = new FileHandle;
+  open $log_handle, "$_[0].asy_log";
+  %imp = ();
+
+  while (<$log_handle>) {
+    if (/^(Including|Loading) .* from (.*)\s*$/) {
+      my $import = $2;
+      $imp{$import} = 1;
+    } elsif (/^(error|.*\.asy: \d)/) {
+      warn "==Message from asy: $_";
+      $ret = 1;
+    } elsif (/^(kpsewhich|Processing|Using|Welcome|Wrote|cd|gs) /) {
+    } else {
+      warn "==Message from asy: $_";
+    }
+  }
+  close $log_handle;
+  if ($version_num >= '4.48') {
+    rdb_set_source( $rule, keys %imp );
+  }
+  return $ret;
+}
+
+push @generated_exts, 'asy_log';
+
+######################################
+# Support for the glossaries package #
+######################################
+
+add_cus_dep('glo', 'gls', 0, 'makeglossaries');
+add_cus_dep('acn', 'acr', 0, 'makeglossaries');
+
+sub makeglossaries {
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  system("makeglossaries -d \"$dir\" \"$file\"");
+}
+
+push @generated_exts, 'glo', 'gls', 'glg', 'acn', 'acr', 'alg';
+
+#################################
+# Support for the index package #
+#################################
+
+add_cus_dep('adx', 'and', 0, 'acro_index');
+
+sub acro_index {
+  system( "makeindex -o \"$_[0].and\" \"$_[0].adx\"");
+}
+
+push @generated_exts, 'adx', 'and', 'alg';
+
+add_cus_dep('bdx', 'bnd', 0, 'bib_index');
+
+sub bib_index {
+  system("makeindex -s bibref.ist -o \"$_[0].bnd\" \"$_[0].bdx\"");
+}
+
+push @generated_exts, 'bdx', 'bnd', 'blg';
+
+add_cus_dep('ndx', 'nnd', 0, 'name_index');
+
+sub name_index {
+  system("makeindex -o \"$_[0].nnd\" \"$_[0].ndx\"");
+}
+
+push @generated_exts, 'ndx', 'nnd', 'nlg';
+
+add_cus_dep('ldx', 'lnd', 0, 'list_index');
+
+sub list_index {
+  system("makeindex -o \"$_[0].lnd\" \"$_[0].ldx\"");
+}
+
+push @generated_exts, 'ldx', 'lnd', 'llg';
+
+add_cus_dep('tdx', 'tnd', 0, 'title_index');
+
+sub title_index {
+  system("makeindex -o \"$_[0].tnd\" \"$_[0].tdx\"");
+}
+
+push @generated_exts, 'tdx', 'tnd', 'tlg';
+
+#####################################
+# Metapost support for feynmp, etc. #
+#####################################
+
+add_cus_dep('mp', '1', 0, 'mpost');
+
+sub mpost {
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  return system("cd \"$dir\" && mpost \"$file\"");
+}
+
+push @generated_exts, '1';
+
+########################################
+# Support for the nomenclature package #
+########################################
+
+add_cus_dep("nlo", "nls", 0, "nomencl_index");
+
+sub nomencl_index {
+  system("makeindex \"$_[0].nlo\" -s nomencl.ist -o \"$_[0].nls\" -t \"$_[0].nlg\"");
+}
+
+push @generated_exts, 'nlo', 'nls', 'nlg';
+
+#######################
+# Support for SageTeX #
+#######################
+
+add_cus_dep('sage', 'sout', 0, 'sage');
+
+$hash_calc_ignore_pattern{'sage'} = '^( _st_.goboom|print .SageT)';
+
+sub sage {
+  $dir = dirname($_[0]);
+  $file = basename($_[0]);
+  system("cd \"$dir\" && sage \"$file.sage\"");
+}
+
+push @generated_exts, 'sage', 'sout', 'sage.py', 'scmd';

@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{sagetex}
+
+\begin{document}
+
+\begin{sageblock}
+  f(x) = x^2 * exp(x)
+\end{sageblock}
+
+The second derivative of $f$ is
+
+\[
+  \frac{\mathrm{d}^{2}}{\mathrm{d}x^{2}} \left[ \sage{f(x)} \right] =
+  \sage{diff(f, x, 2)(x)}.
+\]
+
+\end{document}

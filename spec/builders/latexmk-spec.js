@@ -4,9 +4,10 @@ import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import _ from 'lodash'
+import fs from 'fs-plus'
 
 describe('LatexmkBuilder', () => {
-  let builder, fixturesPath, filePath
+  let builder, fixturesPath, filePath, extendedOutputPaths
 
   beforeEach(() => {
     waitsForPromise(() => {
@@ -16,6 +17,21 @@ describe('LatexmkBuilder', () => {
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
   })
+
+  function initializeExtendedBuild (name, extensions, outputDirectory = '') {
+    let dir = path.join(fixturesPath, 'latexmk')
+    filePath = path.format({ dir, name, ext: '.tex' })
+    dir = path.join(dir, outputDirectory)
+    atom.config.set('latex.enableExtendedBuildMode', true)
+    atom.config.set('latex.outputDirectory', outputDirectory)
+    extendedOutputPaths = extensions.map(ext => path.format({ dir, name, ext }))
+  }
+
+  function expectExistenceOfExtendedOutputs () {
+    for (const output of extendedOutputPaths) {
+      expect(fs.existsSync(output)).toBe(true, `Check the existence of ${output} file.`)
+    }
+  }
 
   describe('constructArgs', () => {
     it('produces default arguments when package has default config values', () => {
@@ -105,6 +121,13 @@ describe('LatexmkBuilder', () => {
       expect(args).toContain('-latex="uplatex"')
       expect(args).toContain('-pdfps')
       expect(args).not.toContain('-pdf')
+    })
+
+    it('adds latexmkrc argument according to package config', () => {
+      atom.config.set('latex.enableExtendedBuildMode', true)
+      const args = builder.constructArgs(filePath)
+      const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
+      expect(args).toContain(`-r "${latexmkrcPath}"`)
     })
 
     it('adds a jobname argument when passed a non-null jobname', () => {
@@ -212,6 +235,184 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(11)
+      })
+    })
+
+    it('successfully creates asymptote files when using the asymptote package', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
+      initializeExtendedBuild('asymptote-test',
+        ['-1.tex', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates glossary files when using the glossaries package', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates glossary files when using the glossaries package with an output directory', () => {
+      initializeExtendedBuild('glossaries-test',
+        ['.acn', '.acr', '.glo', '.gls', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates metapost files when using the feynmp package', () => {
+      initializeExtendedBuild('mpost-test',
+        ['-feynmp.1', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates metapost files when using the feynmp package with an output directory', () => {
+      initializeExtendedBuild('mpost-test',
+        ['-feynmp.1', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates nomenclature files when using the nomencl package', () => {
+      initializeExtendedBuild('nomencl-test',
+        ['.nlo', '.nls', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates nomenclature files when using the nomencl package with an output directory', () => {
+      initializeExtendedBuild('nomencl-test',
+        ['.nlo', '.nls', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates index files when using the index package', () => {
+      initializeExtendedBuild('index-test',
+        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates index files when using the index package with an output directory', () => {
+      initializeExtendedBuild('index-test',
+        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    // Sage only runs in a VM on Windows and installing Sage at 1GB for two tests
+    // is excessive.
+    if (process.platform === 'win32' || process.env.CI) return
+
+    it('successfully creates SageTeX files when using the sagetex package', () => {
+      initializeExtendedBuild('sagetex-test',
+        ['.sagetex.sage', '.sagetex.sout', '.pdf'])
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
+      })
+    })
+
+    it('successfully creates SageTeX files when using the sagetex package with an output directory', () => {
+      initializeExtendedBuild('sagetex-test',
+        ['.sagetex.sage', '.sagetex.sout', '.pdf'],
+        'build')
+
+      waitsForPromise(() => {
+        return builder.run(filePath).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(exitCode).toBe(0)
+        expectExistenceOfExtendedOutputs()
       })
     })
   })

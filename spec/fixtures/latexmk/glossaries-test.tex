@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage[acronym]{glossaries}
+ 
+\makeglossaries
+ 
+\newglossaryentry{foo}{
+  name=foo,
+  description={Metasyntactic variable used as a placeholder often in conjunction
+  with bar}
+}
+ 
+\newglossaryentry{bar}{
+  name=bar,
+  description={Metasyntactic variable used as a placeholder often in conjunction
+  with foo}
+}
+ 
+\newacronym{gce}{GCE}{Gross Conceptual Error}
+\newacronym{rawq}{RAWQ}{Right Answer; Wrong Question}
+ 
+\begin{document}
+
+Without \gls{foo} there is no \gls{bar} which often leads to a \acrlong{gce},
+which is abbreviated \acrshort{gce}. This is often preceded by \gls{rawq}.
+
+\printglossary[type=\acronymtype]
+\printglossary
+
+\end{document}
