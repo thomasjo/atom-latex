@@ -6,6 +6,19 @@ set -eu
 # Enable case-insensitive pattern matching.
 shopt -s nocasematch
 
+ensure_xz_installed() {
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    echo "Installing XZ..."
+    local archive_path="/tmp/xz.7z"
+    curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+
+    local xz_root="${HOME}/xz"
+    7z x -o"${xz_root}" "${archive_path}" > /dev/null
+
+    export PATH="${xz_root}/bin_x86-64:${PATH}"
+  fi
+}
+
 initialize() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
   local scripts=(install-texlive install-miktex install-knitr)
@@ -35,6 +48,7 @@ exec_ci() {
 
 main() {
   initialize
+  ensure_xz_installed
   install_latex_distribution
   install_knitr
   exec_ci
