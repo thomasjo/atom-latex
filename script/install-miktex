@@ -12,6 +12,7 @@ install_miktex() {
 
   # Ensure PATH points to the binaries.
   export PATH="${HOME}/miktex-portable/texmfs/install/miktex/bin:${HOME}/miktex-portable/asymptote:${PATH}"
+  export ASYMPTOTE_HOME="${HOME}/miktex-portable/asymptote"
 
   choco install ghostscript
 }
