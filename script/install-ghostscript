@@ -7,7 +7,10 @@ set -eu
 shopt -s nocasematch
 
 install_ghostscript() {
-  if [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    echo "Installing ghostscript..."
+    choco install ghostscript
+  elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing ghostscript..."
     brew update
     brew install ghostscript
