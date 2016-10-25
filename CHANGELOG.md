@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Support for spaces with SyncTeX and Evince. Fixes [#279](https://github.com/thomasjo/atom-latex/issues/104).
+
+### Added
+- `latex.opener` setting to allow explicit selection of PDF/PS/DVI opener. The
+  support that each opener has for PDF/PS/DVI, SyncTeX, and open in background
+  is evaluated and used in the decision of which opener to use.
+
 ## [0.38.1] / 2016-10-17
 ### Fixed
 - File path resolution for errors reported in log files.
