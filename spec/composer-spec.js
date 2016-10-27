@@ -41,29 +41,29 @@ describe('Composer', () => {
 
       let result = 'aaaaaaaaaaaa'
       waitsForPromise(() => {
-        return composer.build().then(r => { result = r })
+        return latex.composer.build().then(r => { result = r })
       })
 
       runs(() => {
         expect(result).toBe(false)
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
+        expect(latex.composer.showResult).not.toHaveBeenCalled()
+        expect(latex.composer.showError).not.toHaveBeenCalled()
       })
     })
 
     it('does nothing for unsupported file extensions', () => {
       initializeSpies('foo.bar')
-      composer.getBuilder.andReturn(null)
+      latex.composer.getBuilder.andReturn(null)
 
       let result
       waitsForPromise(() => {
-        return composer.build().then(r => { result = r })
+        return latex.composer.build().then(r => { result = r })
       })
 
       runs(() => {
         expect(result).toBe(false)
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
+        expect(latex.composer.showResult).not.toHaveBeenCalled()
+        expect(latex.composer.showError).not.toHaveBeenCalled()
       })
     })
 
@@ -77,7 +77,7 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return composer.build()
+        return latex.composer.build()
       })
 
       runs(() => {
@@ -95,7 +95,7 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return composer.build()
+        return latex.composer.build()
       })
 
       runs(() => {
@@ -113,11 +113,11 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(result)
 
       waitsForPromise(() => {
-        return composer.build()
+        return latex.composer.build()
       })
 
       runs(() => {
-        expect(composer.showResult).toHaveBeenCalledWith(result)
+        expect(latex.composer.showResult).toHaveBeenCalledWith(result)
       })
     })
 
@@ -130,11 +130,11 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return composer.build().catch(r => r)
+        return latex.composer.build().catch(r => r)
       })
 
       runs(() => {
-        expect(composer.showError).toHaveBeenCalled()
+        expect(latex.composer.showError).toHaveBeenCalled()
       })
     })
 
@@ -143,11 +143,11 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(null)
 
       waitsForPromise(() => {
-        return composer.build().catch(r => r)
+        return latex.composer.build().catch(r => r)
       })
 
       runs(() => {
-        expect(composer.showError).toHaveBeenCalled()
+        expect(latex.composer.showError).toHaveBeenCalled()
       })
     })
 
@@ -156,7 +156,7 @@ describe('Composer', () => {
       spyOn(werkzeug, 'getEditorDetails').andCallThrough()
 
       waitsForPromise(() => {
-        return composer.build().catch(r => r)
+        return latex.composer.build().catch(r => r)
       })
 
       runs(() => {
@@ -195,7 +195,7 @@ describe('Composer', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
       waitsForPromise(() => {
-        return composer.clean().catch(r => r)
+        return latex.composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -209,7 +209,7 @@ describe('Composer', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
 
       waitsForPromise(() => {
-        return composer.clean().catch(r => r)
+        return latex.composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -227,7 +227,7 @@ describe('Composer', () => {
       initializeSpies(filePath, [])
 
       waitsForPromise(() => {
-        return composer.clean().catch(r => r)
+        return latex.composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -248,28 +248,28 @@ describe('Composer', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
+      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
     })
   })
 
@@ -281,15 +281,15 @@ describe('Composer', () => {
     it('returns a builder instance as configured for regular .tex files', () => {
       const filePath = 'foo.tex'
 
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
+      expect(latex.composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
 
       atom.config.set('latex.builder', 'texify')
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
+      expect(latex.composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
     })
 
     it('returns null when passed an unhandled file type', () => {
       const filePath = 'quux.txt'
-      expect(composer.getBuilder(filePath)).toBeNull()
+      expect(latex.composer.getBuilder(filePath)).toBeNull()
     })
   })
 
@@ -299,9 +299,9 @@ describe('Composer', () => {
       spyOn(composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      latex.composer.sync()
 
-      expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+      expect(latex.composer.resolveOutputFilePath).not.toHaveBeenCalled()
       expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
@@ -311,7 +311,7 @@ describe('Composer', () => {
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
-      composer.sync()
+      latex.composer.sync()
 
       expect(latex.log.warning).toHaveBeenCalled()
       expect(latex.opener.open).not.toHaveBeenCalled()
@@ -326,7 +326,7 @@ describe('Composer', () => {
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      latex.composer.sync()
 
       expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
     })
@@ -344,7 +344,7 @@ describe('Composer', () => {
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      latex.composer.sync()
 
       expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
       expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
