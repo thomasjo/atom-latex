@@ -22,7 +22,6 @@ describe('LatexmkBuilder', () => {
     let dir = path.join(fixturesPath, 'latexmk')
     filePath = path.format({ dir, name, ext: '.tex' })
     dir = path.join(dir, outputDirectory)
-    atom.config.set('latex.enableExtendedBuildMode', true)
     atom.config.set('latex.outputDirectory', outputDirectory)
     extendedOutputPaths = extensions.map(ext => path.format({ dir, name, ext }))
   }
@@ -35,12 +34,14 @@ describe('LatexmkBuilder', () => {
 
   describe('constructArgs', () => {
     it('produces default arguments when package has default config values', () => {
+      const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
       const expectedArgs = [
         '-interaction=nonstopmode',
         '-f',
         '-cd',
         '-file-line-error',
         '-synctex=1',
+        `-r "${latexmkrcPath}"`,
         '-pdflatex="pdflatex"',
         '-pdf',
         `"${filePath}"`
@@ -123,11 +124,11 @@ describe('LatexmkBuilder', () => {
       expect(args).not.toContain('-pdf')
     })
 
-    it('adds latexmkrc argument according to package config', () => {
-      atom.config.set('latex.enableExtendedBuildMode', true)
+    it('removes latexmkrc argument according to package config', () => {
+      atom.config.set('latex.enableExtendedBuildMode', false)
       const args = builder.constructArgs(filePath)
       const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
-      expect(args).toContain(`-r "${latexmkrcPath}"`)
+      expect(args).not.toContain(`-r "${latexmkrcPath}"`)
     })
 
     it('adds a jobname argument when passed a non-null jobname', () => {
