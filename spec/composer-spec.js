@@ -15,7 +15,7 @@ describe('Composer', () => {
 
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(latex.composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
@@ -28,12 +28,12 @@ describe('Composer', () => {
 
         return Promise.reject(statusCode)
       })
-      spyOn(composer, 'getBuilder').andReturn(builder)
+      spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
     }
 
     beforeEach(() => {
-      spyOn(composer, 'showResult').andReturn()
-      spyOn(composer, 'showError').andReturn()
+      spyOn(latex.composer, 'showResult').andReturn()
+      spyOn(latex.composer, 'showError').andReturn()
     })
 
     it('does nothing for new, unsaved files', () => {
@@ -53,7 +53,7 @@ describe('Composer', () => {
 
     it('does nothing for unsupported file extensions', () => {
       initializeSpies('foo.bar')
-      latex.composer.getBuilder.andReturn(null)
+      latex.builderRegistry.getBuilder.andReturn(null)
 
       let result
       waitsForPromise(() => {
@@ -173,9 +173,9 @@ describe('Composer', () => {
 
       builder.getOutputDirectory.andReturn('')
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
-      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
+      spyOn(latex.composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(latex.composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
+      spyOn(latex.composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
         let { dir, name } = path.parse(rootFilePath)
         if (jobname) name = jobname
         return new Set([
@@ -273,30 +273,10 @@ describe('Composer', () => {
     })
   })
 
-  describe('getBuilder', () => {
-    beforeEach(() => {
-      atom.config.set('latex.builder', 'latexmk')
-    })
-
-    it('returns a builder instance as configured for regular .tex files', () => {
-      const filePath = 'foo.tex'
-
-      expect(latex.composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
-
-      atom.config.set('latex.builder', 'texify')
-      expect(latex.composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
-    })
-
-    it('returns null when passed an unhandled file type', () => {
-      const filePath = 'quux.txt'
-      expect(latex.composer.getBuilder(filePath)).toBeNull()
-    })
-  })
-
   describe('sync', () => {
     it('silently does nothing when the current editor is transient', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
-      spyOn(composer, 'resolveOutputFilePath').andCallThrough()
+      spyOn(latex.composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex.opener, 'open').andReturn(true)
 
       latex.composer.sync()
@@ -307,7 +287,7 @@ describe('Composer', () => {
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
-      spyOn(composer, 'resolveOutputFilePath').andReturn()
+      spyOn(latex.composer, 'resolveOutputFilePath').andReturn()
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
@@ -322,7 +302,7 @@ describe('Composer', () => {
       const lineNumber = 1
       const outputFilePath = 'file.pdf'
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
+      spyOn(latex.composer, 'resolveOutputFilePath').andReturn(outputFilePath)
 
       spyOn(latex.opener, 'open').andReturn(true)
 
@@ -339,8 +319,8 @@ describe('Composer', () => {
       const jobnames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
+      spyOn(latex.composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
+      spyOn(latex.composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
 
       spyOn(latex.opener, 'open').andReturn(true)
 
