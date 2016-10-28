@@ -121,7 +121,7 @@
     "enableExtendedBuildMode": {
       "description": "Enable extended build mode using `latexmk` rules for custom files types. Currently includes support for the `glossaries` package, the `index` package, the `nomencl` package and SageTeX.",
       "type": "boolean",
-      "default": false,
+      "default": true,
       "order": 7
     },
     "loggingLevel": {
