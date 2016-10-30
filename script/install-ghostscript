@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Exit on failure, and treat expansion of unset variables as an error.
+set -eu
+
+# Enable case-insensitive pattern matching.
+shopt -s nocasematch
+
+install_ghostscript() {
+  if [[ "${APPVEYOR:-}" == true ]]; then
+    echo "Installing ghostscript..."
+    choco install ghostscript
+  elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
+    echo "Installing ghostscript..."
+    brew update
+    brew install ghostscript
+  fi
+}
