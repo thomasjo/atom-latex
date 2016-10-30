@@ -119,8 +119,8 @@
       "order": 6
     },
     "enableExtendedBuildMode": {
-      "description": "Enable extended build mode using `latexmk` rules for custom files types. Currently includes support for Asymptote, the `glossaries` package, the `index` package, MetaPost, the `nomencl` package and SageTeX.",
-      "type": "boolean",
+      "description": "Enable extended build mode using `latexmk` rules for custom files types. Currently includes support for Asymptote, the `glossaries` package, the `index` package, MetaPost, the `nomencl` package and SageTeX. Please note that these rules are loaded after all other `latexmkrc` files are loaded, and therefore may overwrite custom rules defined by the user.",
+      "type": "string",
       "default": true,
       "order": 7
     },
