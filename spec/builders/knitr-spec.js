@@ -68,8 +68,9 @@ describe('KnitrBuilder', () => {
     })
 
     it('detects missing knitr library and logs an error', () => {
+      const directoryPath = path.dirname(filePath)
       const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
-      const options = _.merge(builder.constructChildProcessOptions(filePath), { env })
+      const options = _.merge(builder.constructChildProcessOptions(directoryPath), { env })
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
       spyOn(latex.log, 'showMessage').andCallThrough()
 
@@ -80,7 +81,7 @@ describe('KnitrBuilder', () => {
       runs(() => {
         expect(exitCode).toBe(-1)
         expect(latex.log.showMessage).toHaveBeenCalledWith({
-          type: 'Error',
+          type: 'error',
           text: 'The R package "knitr" could not be loaded.'
         })
       })
