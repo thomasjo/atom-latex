@@ -4,6 +4,7 @@ import helpers from './spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
+import Composer from '../lib/composer'
 
 describe('Composer', () => {
   beforeEach(() => {
@@ -11,11 +12,11 @@ describe('Composer', () => {
   })
 
   describe('build', () => {
-    let editor, builder
+    let editor, builder, composer
 
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-      spyOn(latex.composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
@@ -32,8 +33,9 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
-      spyOn(latex.composer, 'showResult').andReturn()
-      spyOn(latex.composer, 'showError').andReturn()
+      composer = new Composer()
+      spyOn(composer, 'showResult').andReturn()
+      spyOn(composer, 'showError').andReturn()
     })
 
     it('does nothing for new, unsaved files', () => {
@@ -41,13 +43,13 @@ describe('Composer', () => {
 
       let result = 'aaaaaaaaaaaa'
       waitsForPromise(() => {
-        return latex.composer.build().then(r => { result = r })
+        return composer.build().then(r => { result = r })
       })
 
       runs(() => {
         expect(result).toBe(false)
-        expect(latex.composer.showResult).not.toHaveBeenCalled()
-        expect(latex.composer.showError).not.toHaveBeenCalled()
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
       })
     })
 
@@ -57,13 +59,13 @@ describe('Composer', () => {
 
       let result
       waitsForPromise(() => {
-        return latex.composer.build().then(r => { result = r })
+        return composer.build().then(r => { result = r })
       })
 
       runs(() => {
         expect(result).toBe(false)
-        expect(latex.composer.showResult).not.toHaveBeenCalled()
-        expect(latex.composer.showError).not.toHaveBeenCalled()
+        expect(composer.showResult).not.toHaveBeenCalled()
+        expect(composer.showError).not.toHaveBeenCalled()
       })
     })
 
@@ -77,7 +79,7 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return latex.composer.build()
+        return composer.build()
       })
 
       runs(() => {
@@ -95,7 +97,7 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return latex.composer.build()
+        return composer.build()
       })
 
       runs(() => {
@@ -113,11 +115,11 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(result)
 
       waitsForPromise(() => {
-        return latex.composer.build()
+        return composer.build()
       })
 
       runs(() => {
-        expect(latex.composer.showResult).toHaveBeenCalledWith(result)
+        expect(composer.showResult).toHaveBeenCalledWith(result)
       })
     })
 
@@ -130,11 +132,11 @@ describe('Composer', () => {
       })
 
       waitsForPromise(() => {
-        return latex.composer.build().catch(r => r)
+        return composer.build().catch(r => r)
       })
 
       runs(() => {
-        expect(latex.composer.showError).toHaveBeenCalled()
+        expect(composer.showError).toHaveBeenCalled()
       })
     })
 
@@ -143,11 +145,11 @@ describe('Composer', () => {
       builder.parseLogAndFdbFiles.andReturn(null)
 
       waitsForPromise(() => {
-        return latex.composer.build().catch(r => r)
+        return composer.build().catch(r => r)
       })
 
       runs(() => {
-        expect(latex.composer.showError).toHaveBeenCalled()
+        expect(composer.showError).toHaveBeenCalled()
       })
     })
 
@@ -156,7 +158,7 @@ describe('Composer', () => {
       spyOn(werkzeug, 'getEditorDetails').andCallThrough()
 
       waitsForPromise(() => {
-        return latex.composer.build().catch(r => r)
+        return composer.build().catch(r => r)
       })
 
       runs(() => {
@@ -166,16 +168,16 @@ describe('Composer', () => {
   })
 
   describe('clean', () => {
-    let fixturesPath
+    let fixturesPath, composer
 
     function initializeSpies (filePath, jobnames = [null]) {
       const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
 
       builder.getOutputDirectory.andReturn('')
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
-      spyOn(latex.composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(latex.composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
-      spyOn(latex.composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
+      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
+      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
         let { dir, name } = path.parse(rootFilePath)
         if (jobname) name = jobname
         return new Set([
@@ -186,6 +188,7 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
+      composer = new Composer()
       fixturesPath = helpers.cloneFixtures()
       spyOn(fs, 'removeSync').andCallThrough()
       atom.config.set('latex.cleanPatterns', ['**/*.aux', '/_minted-{jobname}'])
@@ -195,7 +198,7 @@ describe('Composer', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
       waitsForPromise(() => {
-        return latex.composer.clean().catch(r => r)
+        return composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -209,7 +212,7 @@ describe('Composer', () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
 
       waitsForPromise(() => {
-        return latex.composer.clean().catch(r => r)
+        return composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -227,7 +230,7 @@ describe('Composer', () => {
       initializeSpies(filePath, [])
 
       waitsForPromise(() => {
-        return latex.composer.clean().catch(r => r)
+        return composer.clean().catch(r => r)
       })
 
       runs(() => {
@@ -237,64 +240,75 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
-    let builder
+    let builder, composer
     const rootFilePath = '/wibble/gronk.tex'
 
     function initializeSpies (outputDirectory = '') {
       builder = { getOutputDirectory: () => outputDirectory }
+      composer = new Composer()
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(latex.composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
+      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
     })
   })
 
   describe('sync', () => {
+    let composer
+
+    beforeEach(() => {
+      composer = new Composer()
+    })
+
     it('silently does nothing when the current editor is transient', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
-      spyOn(latex.composer, 'resolveOutputFilePath').andCallThrough()
+      spyOn(composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex.opener, 'open').andReturn(true)
 
-      latex.composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.composer.resolveOutputFilePath).not.toHaveBeenCalled()
-      expect(latex.opener.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
     })
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
-      spyOn(latex.composer, 'resolveOutputFilePath').andReturn()
+      spyOn(composer, 'resolveOutputFilePath').andReturn()
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
-      latex.composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.log.warning).toHaveBeenCalled()
-      expect(latex.opener.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(latex.log.warning).toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
     })
 
     it('launches the opener using editor metadata and resolved output file', () => {
@@ -302,13 +316,15 @@ describe('Composer', () => {
       const lineNumber = 1
       const outputFilePath = 'file.pdf'
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(latex.composer, 'resolveOutputFilePath').andReturn(outputFilePath)
+      spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      latex.composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+      })
     })
 
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
@@ -319,15 +335,17 @@ describe('Composer', () => {
       const jobnames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(latex.composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
-      spyOn(latex.composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
+      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      latex.composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
-      expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
+        expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
+      })
     })
   })
 })
