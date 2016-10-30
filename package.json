@@ -32,7 +32,6 @@
     "parser": "babel-eslint",
     "globals": [
       "atom",
-      "composer",
       "latex",
       "afterEach",
       "beforeEach",

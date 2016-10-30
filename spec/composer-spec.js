@@ -4,6 +4,7 @@ import helpers from './spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
+import Composer from '../lib/composer'
 
 describe('Composer', () => {
   beforeEach(() => {
@@ -11,7 +12,7 @@ describe('Composer', () => {
   })
 
   describe('build', () => {
-    let editor, builder
+    let editor, builder, composer
 
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
@@ -28,10 +29,11 @@ describe('Composer', () => {
 
         return Promise.reject(statusCode)
       })
-      spyOn(composer, 'getBuilder').andReturn(builder)
+      spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
     }
 
     beforeEach(() => {
+      composer = new Composer()
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
     })
@@ -53,7 +55,7 @@ describe('Composer', () => {
 
     it('does nothing for unsupported file extensions', () => {
       initializeSpies('foo.bar')
-      composer.getBuilder.andReturn(null)
+      latex.builderRegistry.getBuilder.andReturn(null)
 
       let result
       waitsForPromise(() => {
@@ -166,7 +168,7 @@ describe('Composer', () => {
   })
 
   describe('clean', () => {
-    let fixturesPath
+    let fixturesPath, composer
 
     function initializeSpies (filePath, jobnames = [null]) {
       const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
@@ -186,6 +188,7 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
+      composer = new Composer()
       fixturesPath = helpers.cloneFixtures()
       spyOn(fs, 'removeSync').andCallThrough()
       atom.config.set('latex.cleanPatterns', ['**/*.aux', '/_minted-{jobname}'])
@@ -237,11 +240,12 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
-    let builder
+    let builder, composer
     const rootFilePath = '/wibble/gronk.tex'
 
     function initializeSpies (outputDirectory = '') {
       builder = { getOutputDirectory: () => outputDirectory }
+      composer = new Composer()
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
@@ -273,36 +277,24 @@ describe('Composer', () => {
     })
   })
 
-  describe('getBuilder', () => {
-    beforeEach(() => {
-      atom.config.set('latex.builder', 'latexmk')
-    })
-
-    it('returns a builder instance as configured for regular .tex files', () => {
-      const filePath = 'foo.tex'
-
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('LatexmkBuilder')
-
-      atom.config.set('latex.builder', 'texify')
-      expect(composer.getBuilder(filePath).constructor.name).toEqual('TexifyBuilder')
-    })
-
-    it('returns null when passed an unhandled file type', () => {
-      const filePath = 'quux.txt'
-      expect(composer.getBuilder(filePath)).toBeNull()
-    })
-  })
-
   describe('sync', () => {
+    let composer
+
+    beforeEach(() => {
+      composer = new Composer()
+    })
+
     it('silently does nothing when the current editor is transient', () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
       spyOn(composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
-      expect(latex.opener.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
     })
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
@@ -311,10 +303,12 @@ describe('Composer', () => {
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
-      composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.log.warning).toHaveBeenCalled()
-      expect(latex.opener.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(latex.log.warning).toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
     })
 
     it('launches the opener using editor metadata and resolved output file', () => {
@@ -326,9 +320,11 @@ describe('Composer', () => {
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+      })
     })
 
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
@@ -344,10 +340,12 @@ describe('Composer', () => {
 
       spyOn(latex.opener, 'open').andReturn(true)
 
-      composer.sync()
+      waitsForPromise(() => composer.sync())
 
-      expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
-      expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
+        expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
+      })
     })
   })
 })
