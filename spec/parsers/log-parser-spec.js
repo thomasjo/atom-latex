@@ -48,7 +48,7 @@ describe('LogParser', () => {
       const texFile = path.join(fixturesPath, 'errors.tex')
       const parser = new LogParser(logFile, texFile)
       const result = parser.parse()
-      const error = _.find(result.messages, (message) => { return message.type === 'error' })
+      const error = result.messages.find(message => { return message.type === 'error' })
 
       expect(error).toEqual({
         type: 'error',
