@@ -2,14 +2,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.39.0] / 2016-10-30
 ### Fixed
-- Support for spaces with SyncTeX and Evince. Fixes [#279](https://github.com/thomasjo/atom-latex/issues/104).
+- Support for spaces with SyncTeX and Evince. Fixes
+  [#279](https://github.com/thomasjo/atom-latex/issues/104).
+- Ignore extraneous error codes from SumatraPDF. Fixes
+  [#252](https://github.com/thomasjo/atom-latex/issues/252) and
+  [#279](https://github.com/thomasjo/atom-latex/issues/282).
 
 ### Added
 - `latex.opener` setting to allow explicit selection of PDF/PS/DVI opener. The
   support that each opener has for PDF/PS/DVI, SyncTeX, and open in background
   is evaluated and used in the decision of which opener to use.
+- Check runtime environment at startup, including `latexmk`, `knitr` and
+  availability of PDF/PS/DVI viewers.
+- Extended build rules enabling automatic processing of generated files. Uses
+  `latexmk` custom rules to support Asymptote, the `glossaries` package,
+  MetaPost, the `nomencl` package, the `index` package and SageTeX.
 
 ## [0.38.1] / 2016-10-17
 ### Fixed
@@ -511,6 +520,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.39.0]: https://github.com/thomasjo/atom-latex/compare/v0.38.1...v0.39.0
 [0.38.1]: https://github.com/thomasjo/atom-latex/compare/v0.38.0...v0.38.1
 [0.38.0]: https://github.com/thomasjo/atom-latex/compare/v0.37.1...v0.38.0
 [0.37.1]: https://github.com/thomasjo/atom-latex/compare/v0.37.0...v0.37.1
