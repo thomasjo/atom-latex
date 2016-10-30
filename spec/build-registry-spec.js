@@ -78,10 +78,10 @@ describe('BuilderRegistry', () => {
 
   describe('getAllBuilders', () => {
     it('returns all bundled builders', () => {
-      const moduleDir = registry.getModuleDirPath()
+      const moduleDir = builderRegistry.getModuleDirPath()
       const numModules = fs.readdirSync(moduleDir).length
 
-      const builders = registry.getAllBuilders()
+      const builders = builderRegistry.getAllBuilders()
       expect(builders.length).toBe(numModules)
     })
   })

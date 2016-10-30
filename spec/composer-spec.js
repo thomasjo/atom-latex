@@ -401,11 +401,13 @@ describe('Composer', () => {
   })
 
   describe('moveResult', () => {
+    let composer
     const texFilePath = path.normalize('/angle/gronk.tex')
     const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
     const result = { outputFilePath }
 
     beforeEach(() => {
+      composer = new Composer()
       spyOn(fs, 'removeSync')
       spyOn(fs, 'moveSync')
     })
