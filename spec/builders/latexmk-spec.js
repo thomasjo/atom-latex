@@ -42,7 +42,6 @@ describe('LatexmkBuilder', () => {
         '-file-line-error',
         '-synctex=1',
         `-r "${latexmkrcPath}"`,
-        '-pdflatex="pdflatex"',
         '-pdf',
         `"${filePath}"`
       ]
@@ -73,9 +72,14 @@ describe('LatexmkBuilder', () => {
       expect(builder.constructArgs(filePath)).toContain(expectedArg)
     })
 
-    it('adds pdflatex arguments according to package config', () => {
+    it('adds lualatex argument according to package config', () => {
       atom.config.set('latex.engine', 'lualatex')
-      expect(builder.constructArgs(filePath)).toContain('-pdflatex="lualatex"')
+      expect(builder.constructArgs(filePath)).toContain('-lualatex')
+    })
+
+    it('adds xelatex argument according to package config', () => {
+      atom.config.set('latex.engine', 'xelatex')
+      expect(builder.constructArgs(filePath)).toContain('-xelatex')
     })
 
     it('adds a custom engine string according to package config', () => {
