@@ -4,6 +4,7 @@ import helpers from './spec-helpers'
 import path from 'path'
 import { NullBuilder } from './stubs'
 import BuilderRegistry from '../lib/builder-registry'
+import helpers from './spec-helpers'
 
 describe('BuilderRegistry', () => {
   let fixturesPath, filePath, builderRegistry
