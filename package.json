@@ -51,6 +51,7 @@
   "activationCommands": {
     "atom-workspace": [
       "latex:build",
+      "latex:check-runtime",
       "latex:clean",
       "latex:rebuild",
       "latex:sync",
