@@ -54,6 +54,7 @@
       "latex:build",
       "latex:check-runtime",
       "latex:clean",
+      "latex:copy-log",
       "latex:rebuild",
       "latex:sync",
       "latex:sync-log"
