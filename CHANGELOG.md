@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.39.1] / 2016-11-01
+### Fixed
+- Avoid potential package activation issues by moving runtime checks out of
+  package initialization into command `latex:check-runtime`.
+
 ## [0.39.0] / 2016-10-30
 ### Added
 - `latex.opener` setting to allow explicit selection of PDF/PS/DVI opener. The
@@ -520,6 +525,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.39.1]: https://github.com/thomasjo/atom-latex/compare/v0.39.0...v0.39.1
 [0.39.0]: https://github.com/thomasjo/atom-latex/compare/v0.38.1...v0.39.0
 [0.38.1]: https://github.com/thomasjo/atom-latex/compare/v0.38.0...v0.38.1
 [0.38.0]: https://github.com/thomasjo/atom-latex/compare/v0.37.1...v0.38.0
