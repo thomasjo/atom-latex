@@ -173,12 +173,15 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null]) {
       const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
 
-      builder.getOutputDirectory.andReturn('')
+      const outputDirectory = atom.config.get('latex.outputDirectory')
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
         let { dir, name } = path.parse(rootFilePath)
+        if (outputDirectory) {
+          dir = path.resolve(dir, outputDirectory)
+        }
         if (jobname) name = jobname
         return new Set([
           path.format({ dir, name, ext: '.log' }),
@@ -205,6 +208,54 @@ describe('Composer', () => {
         expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
         expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
         expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
+      })
+    })
+
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory', () => {
+      const outdir = 'build'
+      atom.config.set('latex.outputDirectory', outdir)
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      })
+    })
+
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with relative output directory', () => {
+      const outdir = path.join('..', 'build')
+      atom.config.set('latex.outputDirectory', outdir)
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      })
+    })
+
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with absolute output directory', () => {
+      const outdir = path.join(path.sep, 'build')
+      atom.config.set('latex.outputDirectory', outdir)
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(outdir, 'foo.log'))
       })
     })
 
