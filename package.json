@@ -241,6 +241,7 @@
         "skim",
         "sumatra",
         "xdg-open",
+        "zathura",
         "custom"
       ],
       "default": "automatic",
