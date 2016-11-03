@@ -15,7 +15,7 @@ describe('OpenerRegistry', () => {
 
   function createOpener (name, canOpen, hasSynctex, canOpenInBackground) {
     const instance = jasmine.createSpyObj(name, ['canOpen', 'open', 'hasSynctex', 'canOpenInBackground'])
-    instance.canOpen.andReturn(canOpen)
+    instance.canOpen.andReturn(Promise.resolve(canOpen))
     instance.hasSynctex.andReturn(hasSynctex)
     instance.canOpenInBackground.andReturn(canOpenInBackground)
     latex.opener.openers.set(name, instance)
@@ -37,12 +37,14 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'xdg-open')
 
-      latex.opener.open(filePath)
+      waitsForPromise(() => latex.opener.open(filePath))
 
-      expect(cannotOpen.open).not.toHaveBeenCalled()
-      expect(canOpen.open).toHaveBeenCalled()
-      expect(canOpenInBackground.open).not.toHaveBeenCalled()
-      expect(canOpenWithSynctex.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(cannotOpen.open).not.toHaveBeenCalled()
+        expect(canOpen.open).toHaveBeenCalled()
+        expect(canOpenInBackground.open).not.toHaveBeenCalled()
+        expect(canOpenWithSynctex.open).not.toHaveBeenCalled()
+      })
     })
 
     it('opens viewer that supports SyncTeX when enabled', () => {
@@ -50,12 +52,14 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'automatic')
 
-      latex.opener.open(filePath)
+      waitsForPromise(() => latex.opener.open(filePath))
 
-      expect(cannotOpen.open).not.toHaveBeenCalled()
-      expect(canOpen.open).not.toHaveBeenCalled()
-      expect(canOpenInBackground.open).not.toHaveBeenCalled()
-      expect(canOpenWithSynctex.open).toHaveBeenCalled()
+      runs(() => {
+        expect(cannotOpen.open).not.toHaveBeenCalled()
+        expect(canOpen.open).not.toHaveBeenCalled()
+        expect(canOpenInBackground.open).not.toHaveBeenCalled()
+        expect(canOpenWithSynctex.open).toHaveBeenCalled()
+      })
     })
 
     it('opens viewer that supports background opening when enabled', () => {
@@ -63,12 +67,14 @@ describe('OpenerRegistry', () => {
       atom.config.set('latex.openResultInBackground', true)
       atom.config.set('latex.opener', 'automatic')
 
-      latex.opener.open(filePath)
+      waitsForPromise(() => latex.opener.open(filePath))
 
-      expect(cannotOpen.open).not.toHaveBeenCalled()
-      expect(canOpen.open).not.toHaveBeenCalled()
-      expect(canOpenInBackground.open).toHaveBeenCalled()
-      expect(canOpenWithSynctex.open).not.toHaveBeenCalled()
+      runs(() => {
+        expect(cannotOpen.open).not.toHaveBeenCalled()
+        expect(canOpen.open).not.toHaveBeenCalled()
+        expect(canOpenInBackground.open).toHaveBeenCalled()
+        expect(canOpenWithSynctex.open).not.toHaveBeenCalled()
+      })
     })
   })
 })
