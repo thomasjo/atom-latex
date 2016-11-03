@@ -244,8 +244,7 @@ describe('Composer', () => {
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with absolute output directory', () => {
-      const rootDir = process.platform === 'win32' ? 'c:\\' : '/'
-      const outdir = path.join(rootDir, 'build')
+      const outdir = process.platform === 'win32' ? 'c:\\build' : '/build'
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
