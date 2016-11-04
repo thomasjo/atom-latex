@@ -3,7 +3,6 @@
 import helpers from '../spec-helpers'
 import path from 'path'
 import TexifyBuilder from '../../lib/builders/texify'
-import _ from 'lodash'
 
 // This should probably try to detect texify
 if (process.env.TEX_DIST === 'miktex') {
