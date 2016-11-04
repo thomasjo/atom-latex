@@ -1,7 +1,6 @@
 /** @babel */
 
 import helpers from '../spec-helpers'
-import _ from 'lodash'
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
@@ -70,7 +69,8 @@ describe('KnitrBuilder', () => {
     it('detects missing knitr library and logs an error', () => {
       const directoryPath = path.dirname(filePath)
       const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
-      const options = _.merge(builder.constructChildProcessOptions(directoryPath), { env })
+      const options = builder.constructChildProcessOptions(directoryPath)
+      Object.assign(options.env, env)
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
       spyOn(latex.log, 'showMessage').andCallThrough()
 
