@@ -70,7 +70,7 @@ describe('KnitrBuilder', () => {
       const directoryPath = path.dirname(filePath)
       const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
       const options = builder.constructChildProcessOptions(directoryPath)
-      options.env = Object.assign(env, options.env)
+      Object.assign(options.env, env)
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
       spyOn(latex.log, 'showMessage').andCallThrough()
 
