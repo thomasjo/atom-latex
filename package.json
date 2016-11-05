@@ -230,7 +230,7 @@
       "order": 16
     },
     "opener": {
-      "Description": "Default opener to use when viewing PDF, PS or DVI files. `automatic` will try to find the viewer best suited to the file type and your current settings."
+      "Description": "Default opener to use when viewing PDF, PS or DVI files. `automatic` will try to find the viewer best suited to the file type and your current settings.",
       "type": "string",
       "enum": [
         "automatic",
