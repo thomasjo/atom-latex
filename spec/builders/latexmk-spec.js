@@ -3,7 +3,6 @@
 import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
-import _ from 'lodash'
 import fs from 'fs-plus'
 
 describe('LatexmkBuilder', () => {
@@ -196,11 +195,11 @@ describe('LatexmkBuilder', () => {
         // which TeX distribution is being used or which fonts are currently
         // installed.
         for (const message of messages) {
-          expect(_.some(parsedLog.messages,
+          expect(parsedLog.messages.some(
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
 
-        expect(_.every(parsedLog.messages,
+        expect(parsedLog.messages.every(
           logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 

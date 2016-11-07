@@ -1,10 +1,11 @@
 /** @babel */
 
+import _ from 'lodash'
 import './spec-helpers'
 import Logger from '../lib/logger'
 
 describe('Logger', () => {
-  let logger
+  let logger, counts
 
   beforeEach(() => {
     logger = new Logger()
@@ -21,7 +22,9 @@ describe('Logger', () => {
 
   describe('showFilteredMessages', () => {
     beforeEach(() => {
-      spyOn(logger, 'showMessages').andReturn()
+      spyOn(logger, 'showMessages').andCallFake((label, messages) => {
+        counts = _.countBy(messages, 'type')
+      })
       logger.group('foo')
       logger.info()
       logger.warning()
@@ -32,21 +35,27 @@ describe('Logger', () => {
       atom.config.set('latex.loggingLevel', 'info')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }, { type: 'info' }, { type: 'warning' }])
+      expect(counts.error).toBeDefined()
+      expect(counts.warning).toBeDefined()
+      expect(counts.info).toBe(1)
     })
 
     it('verifies info messages filtered when logging level set to warning', () => {
       atom.config.set('latex.loggingLevel', 'warning')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }, { type: 'warning' }])
+      expect(counts.error).toBeDefined()
+      expect(counts.warning).toBeDefined()
+      expect(counts.info).toBeUndefined()
     })
 
     it('verifies warning and info messages filtered when logging level set to error', () => {
       atom.config.set('latex.loggingLevel', 'error')
       logger.groupEnd()
 
-      expect(logger.showMessages).toHaveBeenCalledWith('foo', [{ type: 'error' }])
+      expect(counts.error).toBeDefined()
+      expect(counts.warning).toBeUndefined()
+      expect(counts.info).toBeUndefined()
     })
   })
 

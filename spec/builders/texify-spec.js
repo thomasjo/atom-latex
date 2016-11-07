@@ -3,7 +3,6 @@
 import helpers from '../spec-helpers'
 import path from 'path'
 import TexifyBuilder from '../../lib/builders/texify'
-import _ from 'lodash'
 
 // This should probably try to detect texify
 if (process.env.TEX_DIST === 'miktex') {
@@ -114,7 +113,7 @@ if (process.env.TEX_DIST === 'miktex') {
           // which TeX distribution is being used or which fonts are currently
           // installed.
           for (const message of messages) {
-            expect(_.some(parsedLog.messages,
+            expect(parsedLog.messages.some(
               logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
           }
 
