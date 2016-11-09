@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.40.0] / 2016-11-09
+### Added
+- Added support for additional openers including Windows shell open and the
+  Evince forks Atril (MATE) and Xreader (Cinnamon).
+
+### Fixed
+- Allow usage of either relative and absolute output directories in
+  `latex:clean` and `latex:build`. Fixes
+  [#290](https://github.com/thomasjo/atom-latex/issues/290).
+
 ## [0.39.1] / 2016-11-01
 ### Fixed
 - Avoid potential package activation issues by moving runtime checks out of
@@ -525,6 +535,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.39.1]: https://github.com/thomasjo/atom-latex/compare/v0.39.1...v0.40.0
 [0.39.1]: https://github.com/thomasjo/atom-latex/compare/v0.39.0...v0.39.1
 [0.39.0]: https://github.com/thomasjo/atom-latex/compare/v0.38.1...v0.39.0
 [0.38.1]: https://github.com/thomasjo/atom-latex/compare/v0.38.0...v0.38.1
