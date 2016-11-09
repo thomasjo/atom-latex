@@ -233,6 +233,7 @@
       "type": "string",
       "enum": [
         "automatic",
+        "atril",
         "evince",
         "okular",
         "pdf-view",
@@ -240,6 +241,7 @@
         "skim",
         "sumatra",
         "xdg-open",
+        "x-reader",
         "custom"
       ],
       "default": "automatic",
