@@ -55,14 +55,15 @@ the LaTeX log panel accessible from the status bar.
 
 The `latex` package supports other commands as detailed in the table below.
 
-| Command          | Keybinding                                  | Use                                                                      |
-|:-----------------|:-------------------------------------------:|:-------------------------------------------------------------------------|
-| `latex:build`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                                  |
-| `latex:rebuild`  | None                                        | Force a rebuild of LaTeX/knitr file.                                     |
-| `latex:clean`    | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                             |
-| `latex:kill`     | None                                        | Terminate currently running build. Also available from status indicator. |
-| `latex:sync`     | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position.        |
-| `latex:sync-log` | None                                        | Display and highlight log messages from the current cursor position.     |
+| Command               | Keybinding                                  | Use                                                                      |
+|:----------------------|:-------------------------------------------:|:-------------------------------------------------------------------------|
+| `latex:build`         | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>b</kbd> | Build LaTeX/knitr file and open result.                                  |
+| `latex:rebuild`       | None                                        | Force a rebuild of LaTeX/knitr file.                                     |
+| `latex:clean`         | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>c</kbd> | Cleanup files after a build.                                             |
+| `latex:kill`          | None                                        | Terminate currently running build. Also available from status indicator. |
+| `latex:sync`          | <kbd>ctrl</kbd>-<kbd>alt</kbd>-<kbd>s</kbd> | Use SyncTeX forward if possible from the current cursor position.        |
+| `latex:sync-log`      | None                                        | Display and highlight log messages from the current cursor position.     |
+| `latex:check-runtime` | None                                        | Check for the existence of `latexmk`, `Rscript` and PDF/PS/DVI viewers.  |
 
 ### Magic comments
 This package has support for various "magic" TeX comments in the form of
@@ -78,8 +79,8 @@ This package has support for various "magic" TeX comments in the form of
 | `root`             | file path, e.g. `../file.tex`                 | Specify the root file that should be built.       |
 
 ### PDF/DVI/PS Viewers
-The `latex` package currently supports [Evince], [Okular], [pdf-view],
-[Preview], [Skim], [Sumatra PDF] and [xdg-open] as PDF/DVI/PS viewers. This
+The `latex` package currently supports [Atril], [Evince], [Okular], [pdf-view],
+[Preview], [Skim], [Sumatra PDF], Windows shell open, [xdg-open] and [Xreader] as PDF/DVI/PS viewers. This
 includes support for cursor synchronization via SyncTeX if possible. Specific
 features of each of the viewers is detailed at [Supported Viewers].
 
@@ -92,6 +93,7 @@ Any and all help is greatly appreciated!
 <!--refs-->
 [appveyor svg]: https://ci.appveyor.com/api/projects/status/oc2v06stfwgd3bkn/branch/master?svg=true
 [appveyor]: https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master
+[Atril]: http://mate-desktop.com/#atril
 [Configuration]: https://github.com/thomasjo/atom-latex/wiki/Configuration
 [dependency svg]: https://david-dm.org/thomasjo/atom-latex.svg
 [dependency]: https://david-dm.org/thomasjo/atom-latex
@@ -111,3 +113,4 @@ Any and all help is greatly appreciated!
 [travis svg]: https://travis-ci.org/thomasjo/atom-latex.svg?branch=master
 [travis]: https://travis-ci.org/thomasjo/atom-latex
 [xdg-open]: https://linux.die.net/man/1/xdg-open
+[Xreader]: https://github.com/linuxmint/xreader
