@@ -20,6 +20,7 @@ describe('LatexmkBuilder', () => {
     state.engine = 'pdflatex'
     state.outputFormat = 'pdf'
     state.outputDirectory = ''
+    state.enableSynctex = true
   })
 
   function initializeExtendedBuild (name, extensions, outputDirectory = '') {
@@ -66,7 +67,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('disables synctex according to package config', () => {
-      atom.config.set('latex.enableSynctex', false)
+      state.enableSynctex = false
       expect(builder.constructArgs(state.jobStates[0], filePath)).not.toContain('-synctex=1')
     })
 
