@@ -5,6 +5,7 @@ import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
+import BuildState from '../lib/build-state'
 
 describe('Composer', () => {
   beforeEach(() => {
@@ -21,9 +22,7 @@ describe('Composer', () => {
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
-      builder.getJobNamesFromMagic.andReturn(jobnames)
-      builder.getOutputDirectory.andReturn('')
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -291,40 +290,41 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
-    let builder, composer
+    let composer, state
     const rootFilePath = '/wibble/gronk.tex'
 
     function initializeSpies (outputDirectory = '') {
-      builder = { getOutputDirectory: () => outputDirectory }
       composer = new Composer()
+      state = new BuildState(rootFilePath)
+      state.outputDirectory = outputDirectory
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(state)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(state)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(state)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
+      expect(composer.shouldMoveResult(state)).toBe(true)
     })
   })
 
@@ -435,6 +435,22 @@ describe('Composer', () => {
       expect(fs.removeSync).not.toHaveBeenCalled()
       expect(fs.moveSync).not.toHaveBeenCalled()
       expect(fs.moveSync).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('initializeBuildStateFromMagic', () => {
+    it('detects magic and overrides build state values', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const state = new BuildState(filePath)
+      const composer = new Composer()
+
+      composer.initializeBuildStateFromMagic(state)
+
+      expect(state.outputDirectory).toEqual('wibble')
+      expect(state.outputFormat).toEqual('ps')
+      expect(state.producer).toEqual('xdvipdfmx')
+      expect(state.engine).toEqual('lualatex')
+      expect(state.jobnames).toEqual(['foo', 'bar'])
     })
   })
 })

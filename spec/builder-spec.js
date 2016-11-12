@@ -6,7 +6,7 @@ import Builder from '../lib/builder'
 import BuildState from '../lib/build-state'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath, state
+  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, state
 
   beforeEach(() => {
     builder = new Builder()
@@ -14,7 +14,6 @@ describe('Builder', () => {
     filePath = path.join(fixturesPath, 'file.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
-    magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
     state = new BuildState(filePath)
     state.outputDirectory = ''
   })
@@ -80,7 +79,6 @@ describe('Builder', () => {
     beforeEach(() => {
       logParser = jasmine.createSpyObj('MockLogParser', ['parse'])
       spyOn(builder, 'getLogParser').andReturn(logParser)
-      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
@@ -112,7 +110,6 @@ describe('Builder', () => {
     beforeEach(() => {
       fdbParser = jasmine.createSpyObj('MockFdbParser', ['parse'])
       spyOn(builder, 'getFdbParser').andReturn(fdbParser)
-      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated fdb file path by invoking @resolveFdbFilePath', () => {
@@ -162,36 +159,6 @@ describe('Builder', () => {
         const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, `file-${name}`)
         expect(path.basename(result.outputFilePath)).toBe(`file-${name}.${format}`, `Select ${format} file when using -${name} switch.`)
       }
-    })
-  })
-
-  describe('getOutputDirectoryFromMagic', () => {
-    it('detects output director magic and outputs directory', () => {
-      expect(builder.getOutputDirectoryFromMagic(magicOverrideFilePath)).toEqual('wibble')
-    })
-  })
-
-  describe('getOutputFormatFromMagic', () => {
-    it('detects output magic and outputs output format', () => {
-      expect(builder.getOutputFormatFromMagic(magicOverrideFilePath)).toEqual('ps')
-    })
-  })
-
-  describe('getProducerFromMagic', () => {
-    it('detects producer magic and outputs producer', () => {
-      expect(builder.getProducerFromMagic(magicOverrideFilePath)).toEqual('xdvipdfmx')
-    })
-  })
-
-  describe('getLatexEngineFromMagic', () => {
-    it('detects program magic and outputs correct engine', () => {
-      expect(builder.getLatexEngineFromMagic(magicOverrideFilePath)).toEqual('lualatex')
-    })
-  })
-
-  describe('getJobNamesFromMagic', () => {
-    it('detects jobnames magic and outputs jobnames', () => {
-      expect(builder.getJobNamesFromMagic(magicOverrideFilePath)).toEqual(['foo', 'bar'])
     })
   })
 })
