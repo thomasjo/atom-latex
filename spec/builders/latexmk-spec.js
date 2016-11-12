@@ -21,6 +21,7 @@ describe('LatexmkBuilder', () => {
     state.outputFormat = 'pdf'
     state.outputDirectory = ''
     state.enableSynctex = true
+    state.enableExtendedBuildMode = true
   })
 
   function initializeExtendedBuild (name, extensions, outputDirectory = '') {
@@ -62,7 +63,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('adds -shell-escape flag when package config value is set', () => {
-      atom.config.set('latex.enableShellEscape', true)
+      state.enableShellEscape = true
       expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-shell-escape')
     })
 
@@ -136,7 +137,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('removes latexmkrc argument according to package config', () => {
-      atom.config.set('latex.enableExtendedBuildMode', false)
+      state.enableExtendedBuildMode = false
       const args = builder.constructArgs(state.jobStates[0], filePath)
       const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
       expect(args).not.toContain(`-r "${latexmkrcPath}"`)
