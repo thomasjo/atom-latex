@@ -150,7 +150,7 @@ describe('LatexmkBuilder', () => {
   })
 
   describe('run', () => {
-    let exitCode, parsedLog
+    let exitCode
 
     beforeEach(() => {
       spyOn(builder, 'logStatusCode').andCallThrough()
@@ -189,7 +189,7 @@ describe('LatexmkBuilder', () => {
       waitsForPromise(() => {
         return builder.run(state.jobStates[0], filePath).then(code => {
           exitCode = code
-          parsedLog = builder.parseLogFile(state.jobStates[0])
+          builder.parseLogFile(state.jobStates[0])
         })
       })
 
@@ -217,11 +217,11 @@ describe('LatexmkBuilder', () => {
         // which TeX distribution is being used or which fonts are currently
         // installed.
         for (const message of messages) {
-          expect(parsedLog.messages.some(
+          expect(state.jobStates[0].messages.some(
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
 
-        expect(parsedLog.messages.every(
+        expect(state.jobStates[0].messages.every(
           logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 

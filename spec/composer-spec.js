@@ -107,29 +107,28 @@ describe('Composer', () => {
     })
 
     it('invokes `showResult` after a successful build, with expected log parsing result', () => {
-      const result = {
-        outputFilePath: 'file.pdf',
-        messages: []
-      }
-
       initializeSpies('file.tex')
-      builder.parseLogAndFdbFiles.andReturn(result)
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.logFilePath = 'file.log'
+        state.outputFilePath = 'file.pdf'
+        state.messages = []
+      })
 
       waitsForPromise(() => {
         return composer.build()
       })
 
       runs(() => {
-        expect(composer.showResult).toHaveBeenCalledWith(result)
+        expect(composer.showResult).toHaveBeenCalled()
       })
     })
 
     it('treats missing output file data in log file as an error', () => {
       initializeSpies('file.tex')
-
-      builder.parseLogAndFdbFiles.andReturn({
-        outputFilePath: null,
-        messages: []
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.logFilePath = 'file.log'
+        state.outputFilePath = null
+        state.messages = []
       })
 
       waitsForPromise(() => {
@@ -143,7 +142,11 @@ describe('Composer', () => {
 
     it('treats missing result from parser as an error', () => {
       initializeSpies('file.tex')
-      builder.parseLogAndFdbFiles.andReturn(null)
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.logFilePath = null
+        state.outputFilePath = null
+        state.messages = []
+      })
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
@@ -290,41 +293,42 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
-    let composer, state
+    let composer, state, jobState
     const rootFilePath = '/wibble/gronk.tex'
 
     function initializeSpies (outputDirectory = '') {
       composer = new Composer()
       state = new BuildState(rootFilePath)
       state.outputDirectory = outputDirectory
+      jobState = state.jobStates[0]
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(state)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(state)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      expect(composer.shouldMoveResult(state)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
       atom.config.set('latex.moveResultToSourceDirectory', true)
 
-      expect(composer.shouldMoveResult(state)).toBe(true)
+      expect(composer.shouldMoveResult(jobState)).toBe(true)
     })
   })
 
@@ -388,7 +392,6 @@ describe('Composer', () => {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.jobnames = jobnames
       })
-      // spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
 
       spyOn(latex.opener, 'open').andReturn(true)
 
