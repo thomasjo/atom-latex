@@ -242,8 +242,8 @@ describe('LatexmkBuilder', () => {
     })
 
     it('fails to execute latexmk when given invalid file path', () => {
-      filePath = path.join(fixturesPath, 'foo.tex')
-      const args = builder.constructArgs(state.jobStates[0], filePath)
+      state.filePath = path.join(fixturesPath, 'foo.tex')
+      const args = builder.constructArgs(state.jobStates[0])
 
       // Need to remove the 'force' flag to trigger the desired failure.
       const removed = args.splice(1, 1)

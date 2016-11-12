@@ -35,7 +35,7 @@ describe('KnitrBuilder', () => {
         `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
-      const args = builder.constructArgs(state.jobStates[0], filePath)
+      const args = builder.constructArgs(state.jobStates[0])
       expect(args).toEqual(expectedArgs)
     })
   })
