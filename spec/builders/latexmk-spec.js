@@ -4,9 +4,10 @@ import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import fs from 'fs-plus'
+import BuildState from '../../lib/build-state'
 
 describe('LatexmkBuilder', () => {
-  let builder, fixturesPath, filePath, extendedOutputPaths
+  let builder, fixturesPath, filePath, extendedOutputPaths, state
 
   beforeEach(() => {
     waitsForPromise(() => {
@@ -15,13 +16,18 @@ describe('LatexmkBuilder', () => {
     builder = new LatexmkBuilder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
+    state = new BuildState(filePath)
+    state.engine = 'pdflatex'
+    state.outputFormat = 'pdf'
+    state.outputDirectory = ''
   })
 
   function initializeExtendedBuild (name, extensions, outputDirectory = '') {
     let dir = path.join(fixturesPath, 'latexmk')
     filePath = path.format({ dir, name, ext: '.tex' })
+    state.filePath = filePath
     dir = path.join(dir, outputDirectory)
-    atom.config.set('latex.outputDirectory', outputDirectory)
+    state.outputDirectory = outputDirectory
     extendedOutputPaths = extensions.map(ext => path.format({ dir, name, ext }))
   }
 
@@ -44,84 +50,85 @@ describe('LatexmkBuilder', () => {
         '-pdf',
         `"${filePath}"`
       ]
-      const args = builder.constructArgs(filePath)
+      const args = builder.constructArgs(state.jobStates[0], filePath)
 
       expect(args).toEqual(expectedArgs)
     })
 
     it('adds -g flag when rebuild is passed', () => {
-      expect(builder.constructArgs(filePath, null, true)).toContain('-g')
+      state.shouldRebuild = true
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-g')
     })
 
     it('adds -shell-escape flag when package config value is set', () => {
       atom.config.set('latex.enableShellEscape', true)
-      expect(builder.constructArgs(filePath)).toContain('-shell-escape')
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-shell-escape')
     })
 
     it('disables synctex according to package config', () => {
       atom.config.set('latex.enableSynctex', false)
-      expect(builder.constructArgs(filePath)).not.toContain('-synctex=1')
+      expect(builder.constructArgs(state.jobStates[0], filePath)).not.toContain('-synctex=1')
     })
 
     it('adds -outdir=<path> argument according to package config', () => {
       const outdir = 'bar'
       const expectedArg = `-outdir="${outdir}"`
-      atom.config.set('latex.outputDirectory', outdir)
+      state.outputDirectory = outdir
 
-      expect(builder.constructArgs(filePath)).toContain(expectedArg)
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain(expectedArg)
     })
 
     it('adds lualatex argument according to package config', () => {
-      atom.config.set('latex.engine', 'lualatex')
-      expect(builder.constructArgs(filePath)).toContain('-lualatex')
+      state.engine = 'lualatex'
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-lualatex')
     })
 
     it('adds xelatex argument according to package config', () => {
-      atom.config.set('latex.engine', 'xelatex')
-      expect(builder.constructArgs(filePath)).toContain('-xelatex')
+      state.engine = 'xelatex'
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-xelatex')
     })
 
     it('adds a custom engine string according to package config', () => {
-      atom.config.set('latex.customEngine', 'pdflatex %O %S')
-      expect(builder.constructArgs(filePath)).toContain('-pdflatex="pdflatex %O %S"')
+      state.engine = 'pdflatex %O %S'
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-pdflatex="pdflatex %O %S"')
     })
 
     it('adds -ps and removes -pdf arguments according to package config', () => {
-      atom.config.set('latex.outputFormat', 'ps')
-      const args = builder.constructArgs(filePath)
+      state.outputFormat = 'ps'
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       expect(args).toContain('-ps')
       expect(args).not.toContain('-pdf')
     })
 
     it('adds -dvi and removes -pdf arguments according to package config', () => {
-      atom.config.set('latex.outputFormat', 'dvi')
-      const args = builder.constructArgs(filePath)
+      state.outputFormat = 'dvi'
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       expect(args).toContain('-dvi')
       expect(args).not.toContain('-pdf')
     })
 
     it('adds latex dvipdfmx arguments according to package config', () => {
-      atom.config.set('latex.engine', 'uplatex')
-      atom.config.set('latex.producer', 'dvipdfmx')
-      const args = builder.constructArgs(filePath)
+      state.engine = 'uplatex'
+      state.producer = 'dvipdfmx'
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       expect(args).toContain('-latex="uplatex"')
       expect(args).toContain('-pdfdvi -e "$dvipdf = \'dvipdfmx %O -o %D %S\';"')
       expect(args).not.toContain('-pdf')
     })
 
     it('adds latex dvipdf arguments according to package config', () => {
-      atom.config.set('latex.engine', 'uplatex')
-      atom.config.set('latex.producer', 'dvipdf')
-      const args = builder.constructArgs(filePath)
+      state.engine = 'uplatex'
+      state.producer = 'dvipdf'
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       expect(args).toContain('-latex="uplatex"')
       expect(args).toContain('-pdfdvi -e "$dvipdf = \'dvipdf %O %S %D\';"')
       expect(args).not.toContain('-pdf')
     })
 
     it('adds latex ps arguments according to package config', () => {
-      atom.config.set('latex.engine', 'uplatex')
-      atom.config.set('latex.producer', 'ps2pdf')
-      const args = builder.constructArgs(filePath)
+      state.engine = 'uplatex'
+      state.producer = 'ps2pdf'
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       expect(args).toContain('-latex="uplatex"')
       expect(args).toContain('-pdfps')
       expect(args).not.toContain('-pdf')
@@ -129,13 +136,14 @@ describe('LatexmkBuilder', () => {
 
     it('removes latexmkrc argument according to package config', () => {
       atom.config.set('latex.enableExtendedBuildMode', false)
-      const args = builder.constructArgs(filePath)
+      const args = builder.constructArgs(state.jobStates[0], filePath)
       const latexmkrcPath = path.resolve(__dirname, '..', '..', 'resources', 'latexmkrc')
       expect(args).not.toContain(`-r "${latexmkrcPath}"`)
     })
 
     it('adds a jobname argument when passed a non-null jobname', () => {
-      expect(builder.constructArgs(filePath, 'foo')).toContain('-jobname=foo')
+      state.jobnames = ['foo']
+      expect(builder.constructArgs(state.jobStates[0], filePath)).toContain('-jobname=foo')
     })
   })
 
@@ -148,7 +156,7 @@ describe('LatexmkBuilder', () => {
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -159,9 +167,10 @@ describe('LatexmkBuilder', () => {
 
     it('successfully executes latexmk when given a file path containing spaces', () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
+      state.filePath = filePath
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -172,12 +181,13 @@ describe('LatexmkBuilder', () => {
 
     it('fails with code 12 and various errors, warnings and info messages are produced in log file', () => {
       filePath = path.join(fixturesPath, 'error-warning.tex')
+      state.filePath = filePath
       const subFilePath = path.join(fixturesPath, 'sub', 'wibble.tex')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => {
+        return builder.run(state.jobStates[0], filePath).then(code => {
           exitCode = code
-          parsedLog = builder.parseLogFile(filePath)
+          parsedLog = builder.parseLogFile(state.jobStates[0])
         })
       })
 
@@ -222,7 +232,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -233,7 +243,7 @@ describe('LatexmkBuilder', () => {
 
     it('fails to execute latexmk when given invalid file path', () => {
       filePath = path.join(fixturesPath, 'foo.tex')
-      const args = builder.constructArgs(filePath)
+      const args = builder.constructArgs(state.jobStates[0], filePath)
 
       // Need to remove the 'force' flag to trigger the desired failure.
       const removed = args.splice(1, 1)
@@ -242,7 +252,7 @@ describe('LatexmkBuilder', () => {
       spyOn(builder, 'constructArgs').andReturn(args)
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -256,7 +266,7 @@ describe('LatexmkBuilder', () => {
         ['-1.tex', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -272,7 +282,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -287,7 +297,7 @@ describe('LatexmkBuilder', () => {
         ['.acn', '.acr', '.glo', '.gls', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -303,7 +313,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -318,7 +328,7 @@ describe('LatexmkBuilder', () => {
         ['-feynmp.1', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -334,7 +344,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -349,7 +359,7 @@ describe('LatexmkBuilder', () => {
         ['.nlo', '.nls', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -365,7 +375,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -380,7 +390,7 @@ describe('LatexmkBuilder', () => {
         ['.idx', '.ind', '.ldx', '.lnd', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -396,7 +406,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -415,7 +425,7 @@ describe('LatexmkBuilder', () => {
         ['.sagetex.sage', '.sagetex.sout', '.pdf'])
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -431,7 +441,7 @@ describe('LatexmkBuilder', () => {
         'build')
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(state.jobStates[0], filePath).then(code => { exitCode = code })
       })
 
       runs(() => {

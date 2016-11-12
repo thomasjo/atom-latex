@@ -17,6 +17,9 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.jobnames = jobnames
+      })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
@@ -173,16 +176,17 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null]) {
       const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
 
-      const outputDirectory = atom.config.get('latex.outputDirectory')
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.jobnames = jobnames
+      })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
-      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
-        let { dir, name } = path.parse(rootFilePath)
-        if (outputDirectory) {
-          dir = path.resolve(dir, outputDirectory)
+      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
+        let { dir, name } = path.parse(state.filePath)
+        if (state.outputDirectory) {
+          dir = path.resolve(dir, state.outputDirectory)
         }
-        if (jobname) name = jobname
+        if (state.jobname) name = state.jobname
         return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
@@ -381,13 +385,14 @@ describe('Composer', () => {
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
       const filePath = 'file.tex'
       const lineNumber = 1
-      const rootFilePath = filePath
-      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
       const jobnames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.jobname + '.pdf')
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.jobnames = jobnames
+      })
+      // spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
 
       spyOn(latex.opener, 'open').andReturn(true)
 

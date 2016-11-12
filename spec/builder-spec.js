@@ -3,9 +3,10 @@
 import helpers from './spec-helpers'
 import path from 'path'
 import Builder from '../lib/builder'
+import BuildState from '../lib/build-state'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath
+  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath, state
 
   beforeEach(() => {
     builder = new Builder()
@@ -14,6 +15,8 @@ describe('Builder', () => {
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
     magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
+    state = new BuildState(filePath)
+    state.outputDirectory = ''
   })
 
   describe('constructPath', () => {
@@ -83,20 +86,20 @@ describe('Builder', () => {
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
       spyOn(builder, 'resolveLogFilePath').andReturn('foo.log')
 
-      builder.parseLogFile(filePath, null)
-      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath, null)
+      builder.parseLogFile(state)
+      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(state)
     })
 
     it('returns null if passed a file path that does not exist', () => {
-      filePath = '/foo/bar/quux.tex'
-      const result = builder.parseLogFile(filePath, null)
+      state.filePath = '/foo/bar/quux.tex'
+      const result = builder.parseLogFile(state)
 
       expect(result).toBeNull()
       expect(logParser.parse).not.toHaveBeenCalled()
     })
 
     it('attempts to parse the resolved log file', () => {
-      builder.parseLogFile(filePath)
+      builder.parseLogFile(state)
 
       expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath, filePath)
       expect(logParser.parse).toHaveBeenCalled()
@@ -115,20 +118,20 @@ describe('Builder', () => {
     it('resolves the associated fdb file path by invoking @resolveFdbFilePath', () => {
       spyOn(builder, 'resolveFdbFilePath').andReturn('foo.fdb_latexmk')
 
-      builder.parseFdbFile(filePath, null)
-      expect(builder.resolveFdbFilePath).toHaveBeenCalledWith(filePath, null)
+      builder.parseFdbFile(state)
+      expect(builder.resolveFdbFilePath).toHaveBeenCalledWith(state)
     })
 
     it('returns null if passed a file path that does not exist', () => {
-      filePath = '/foo/bar/quux.tex'
-      const result = builder.parseFdbFile(filePath, null)
+      state.filePath = '/foo/bar/quux.tex'
+      const result = builder.parseFdbFile(state)
 
       expect(result).toBeNull()
       expect(fdbParser.parse).not.toHaveBeenCalled()
     })
 
     it('attempts to parse the resolved fdb file', () => {
-      builder.parseFdbFile(filePath)
+      builder.parseFdbFile(state)
 
       expect(builder.getFdbParser).toHaveBeenCalledWith(fdbFilePath)
       expect(fdbParser.parse).toHaveBeenCalled()
