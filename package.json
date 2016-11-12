@@ -263,12 +263,6 @@
       "type": "string",
       "default": "",
       "order": 19
-    },
-    "useMasterFileSearch": {
-      "description": "Enables naive search for master/root file when building distributed documents. Note that this does not affect the equivalent *Magic Comments* functionality.",
-      "type": "boolean",
-      "default": false,
-      "order": 20
     }
   }
-  }
+}

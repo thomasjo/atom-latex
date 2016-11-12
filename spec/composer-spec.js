@@ -16,7 +16,6 @@ describe('Composer', () => {
 
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.jobnames = jobnames
       })
@@ -174,13 +173,10 @@ describe('Composer', () => {
     let fixturesPath, composer
 
     function initializeSpies (filePath, jobnames = [null]) {
-      const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
-
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.jobnames = jobnames
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
         let { dir, name } = path.parse(state.filePath)
         if (state.outputDirectory) {
