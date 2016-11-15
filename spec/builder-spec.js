@@ -137,7 +137,7 @@ describe('Builder', () => {
   })
 
   describe('parseLogAndFdbFiles', () => {
-    it('verifys that fdb file output overrides log file output', () => {
+    it('verifies that fdb file output overrides log file output', () => {
       spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
       spyOn(builder, 'getOutputDirectory').andReturn('')
       const rootPath = process.platform === 'win32' ? 'C:\\foo' : '/foo'
@@ -146,6 +146,36 @@ describe('Builder', () => {
       const result = builder.parseLogAndFdbFiles(rootPath, myFilePath)
 
       expect(result.outputFilePath).toEqual(outputFilePath)
+    })
+
+    it('verifies that the pdf output file is select when using -pdf', () => {
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdf')
+      expect(path.basename(result.outputFilePath)).toBe('file-pdf.pdf')
+    })
+
+    it('verifies that the pdf output file is select when using -pdfdvi', () => {
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdfdvi')
+      expect(path.basename(result.outputFilePath)).toBe('file-pdfdvi.pdf')
+    })
+
+    it('verifies that the pdf output file is select when using -pdfps', () => {
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdfps')
+      expect(path.basename(result.outputFilePath)).toBe('file-pdfps.pdf')
+    })
+
+    it('verifies that the ps output file is select when using -ps', () => {
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-ps')
+      expect(path.basename(result.outputFilePath)).toBe('file-ps.ps')
+    })
+
+    it('verifies that the dvi output file is select when using -dvi', () => {
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-dvi')
+      expect(path.basename(result.outputFilePath)).toBe('file-dvi.dvi')
     })
   })
 
