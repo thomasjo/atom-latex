@@ -19,14 +19,36 @@ describe('FdbParser', () => {
       const parser = new FdbParser(fdbFile, texFile)
       const result = parser.parse()
       const expectedResult = {
-        pdflatex: [
-          '/foo/output/file.pdfsync',
-          '/foo/output/file.pdf',
-          'output/file.log',
-          'output/file.pdf',
-          '/foo/output/file.log',
-          'output/file.aux'
-        ]
+        pdflatex: {
+          source: [
+            '/foo/output/file.aux',
+            '/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map',
+            '/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm',
+            '/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm',
+            '/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm',
+            '/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmr12.tfm',
+            '/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm',
+            '/usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb',
+            '/usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb',
+            '/usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb',
+            '/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls',
+            '/usr/local/texlive/2016/texmf-dist/tex/latex/base/size10.clo',
+            '/usr/local/texlive/2016/texmf-dist/web2c/texmf.cnf',
+            '/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map',
+            '/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt',
+            '/usr/local/texlive/2016/texmf.cnf',
+            'file.tex',
+            'output/file.aux'
+          ],
+          generated: [
+            '/foo/output/file.pdfsync',
+            '/foo/output/file.pdf',
+            'output/file.log',
+            'output/file.pdf',
+            '/foo/output/file.log',
+            'output/file.aux'
+          ]
+        }
       }
 
       expect(result).toEqual(expectedResult)
