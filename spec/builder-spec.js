@@ -148,34 +148,29 @@ describe('Builder', () => {
       expect(result.outputFilePath).toEqual(outputFilePath)
     })
 
-    it('verifies that the pdf output file is select when using -pdf', () => {
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
-      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdf')
-      expect(path.basename(result.outputFilePath)).toBe('file-pdf.pdf')
-    })
+    it('verifies that the correct output file is selected when using various latexmk modes', () => {
+      const switches = [{
+        name: 'pdf',
+        format: 'pdf'
+      }, {
+        name: 'pdfdvi',
+        format: 'pdf'
+      }, {
+        name: 'pdfps',
+        format: 'pdf'
+      }, {
+        name: 'ps',
+        format: 'ps'
+      }, {
+        name: 'dvi',
+        format: 'dvi'
+      }]
 
-    it('verifies that the pdf output file is select when using -pdfdvi', () => {
       spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
-      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdfdvi')
-      expect(path.basename(result.outputFilePath)).toBe('file-pdfdvi.pdf')
-    })
-
-    it('verifies that the pdf output file is select when using -pdfps', () => {
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
-      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-pdfps')
-      expect(path.basename(result.outputFilePath)).toBe('file-pdfps.pdf')
-    })
-
-    it('verifies that the ps output file is select when using -ps', () => {
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
-      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-ps')
-      expect(path.basename(result.outputFilePath)).toBe('file-ps.ps')
-    })
-
-    it('verifies that the dvi output file is select when using -dvi', () => {
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
-      const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, 'file-dvi')
-      expect(path.basename(result.outputFilePath)).toBe('file-dvi.dvi')
+      for (const { name, format } of switches) {
+        const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, `file-${name}`)
+        expect(path.basename(result.outputFilePath)).toBe(`file-${name}.${format}`, `Select ${format} file when using -${name} switch.`)
+      }
     })
   })
 
