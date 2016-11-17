@@ -1,27 +1,16 @@
 # Fdb version 3
-["dvips"] 1479245719 "log-parse/file-pdfps.dvi" "log-parse/file-pdfps.ps" "log-parse/file-pdfps" 1479245857
-  "log-parse/file-pdfps.dvi" 1479245719 388 56ea2dab531f583894405173db1bd311 "latex"
+["dvips"] 1479339798 "log-parse/file-pdfps.dvi" "log-parse/file-pdfps.ps" "log-parse/file-pdfps" 1479339798
+  "log-parse/file-pdfps.dvi" 1479339798 388 f41d63987574afa39860a8b64bdc7c18 "latex"
   (generated)
   "log-parse/file-pdfps.ps"
-["latex"] 1479245719 "file.tex" "log-parse/file-pdfps.dvi" "file-pdfps" 1479245857
-  "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
-  "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
-  "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
-  "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
-  "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
-  "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
-  "/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls" 1459635588 19821 310da678527a7dfe2a02c88af38079b7 ""
-  "/usr/local/texlive/2016/texmf-dist/tex/latex/base/size10.clo" 1459635588 8292 e897c12e1e886ce77fe26afc5d470886 ""
-  "/usr/local/texlive/2016/texmf-dist/web2c/texmf.cnf" 1470266149 31958 926ad82bc47ee89401cf24be7d2cbf7d ""
-  "/usr/local/texlive/2016/texmf-var/web2c/pdftex/latex.fmt" 1478538711 3873615 a2ac60ce598cce71a5ce6c5cb3a2dfae ""
-  "/usr/local/texlive/2016/texmf.cnf" 1465311657 1020 2966fa5b7c5b86b293259f0ebdcea22d ""
-  "file.tex" 1475669540 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
-  "log-parse/file-pdfps.aux" 1479245719 78 176b9809a80d53064f21009e02135ec4 ""
+["latex"] 1479339798 "file.tex" "log-parse/file-pdfps.dvi" "file-pdfps" 1479339798
+  "file-pdfps.aux" 0 -1 0 ""
+  "file.tex" 1476733827 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
   (generated)
   "log-parse/file-pdfps.aux"
-  "log-parse/file-pdfps.dvi"
   "log-parse/file-pdfps.log"
-["ps2pdf"] 1479245719 "log-parse/file-pdfps.ps" "log-parse/file-pdfps.pdf" "log-parse/file-pdfps" 1479245857
-  "log-parse/file-pdfps.ps" 1479245719 58953 2da41e75e8bb6b81526c96eadc92046e "dvips"
+  "log-parse/file-pdfps.dvi"
+["ps2pdf"] 1479339798 "log-parse/file-pdfps.ps" "log-parse/file-pdfps.pdf" "log-parse/file-pdfps" 1479339798
+  "log-parse/file-pdfps.ps" 1479339798 58953 def11a7aa0ae54e8f8c1eff9332043a0 "dvips"
   (generated)
   "log-parse/file-pdfps.pdf"

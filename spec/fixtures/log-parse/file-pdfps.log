@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=latex 2016.11.7)  15 NOV 2016 16:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=latex 2016.11.6)  16 NOV 2016 18:43
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -23,7 +23,7 @@ File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(log-parse/file-pdfps.aux)
+No file file-pdfps.aux.
 \openout1 = `file-pdfps.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
@@ -42,12 +42,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 4.
- [1
+[1
 
 ] (log-parse/file-pdfps.aux) ) 
 Here is how much of TeX's memory you used:
- 213 strings out of 493014
- 2381 string characters out of 6133369
+ 211 strings out of 493014
+ 2333 string characters out of 6133369
  53629 words of memory out of 5000000
  3839 multiletter control sequences out of 15000+600000
  5168 words of font info for 19 fonts, out of 8000000 for 9000
