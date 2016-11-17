@@ -1,0 +1,8 @@
+# Fdb version 3
+["pdflatex"] 1479339798 "file.tex" "log-parse/file-pdf.pdf" "file-pdf" 1479339798
+  "file-pdf.aux" 0 -1 0 ""
+  "file.tex" 1476733827 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
+  (generated)
+  "log-parse/file-pdf.pdf"
+  "log-parse/file-pdf.log"
+  "log-parse/file-pdf.aux"

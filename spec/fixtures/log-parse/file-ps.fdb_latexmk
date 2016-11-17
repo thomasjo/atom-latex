@@ -1,0 +1,12 @@
+# Fdb version 3
+["dvips"] 1479339799 "log-parse/file-ps.dvi" "log-parse/file-ps.ps" "log-parse/file-ps" 1479339799
+  "log-parse/file-ps.dvi" 1479339799 388 f41d63987574afa39860a8b64bdc7c18 "latex"
+  (generated)
+  "log-parse/file-ps.ps"
+["latex"] 1479339799 "file.tex" "log-parse/file-ps.dvi" "file-ps" 1479339799
+  "file-ps.aux" 0 -1 0 ""
+  "file.tex" 1476733827 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
+  (generated)
+  "log-parse/file-ps.aux"
+  "log-parse/file-ps.log"
+  "log-parse/file-ps.dvi"

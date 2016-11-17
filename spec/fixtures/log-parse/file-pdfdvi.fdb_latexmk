@@ -1,0 +1,12 @@
+# Fdb version 3
+["dvipdf"] 1479339798 "log-parse/file-pdfdvi.dvi" "log-parse/file-pdfdvi.pdf" "log-parse/file-pdfdvi" 1479339799
+  "log-parse/file-pdfdvi.dvi" 1479339798 388 f41d63987574afa39860a8b64bdc7c18 "latex"
+  (generated)
+  "log-parse/file-pdfdvi.pdf"
+["latex"] 1479339798 "file.tex" "log-parse/file-pdfdvi.dvi" "file-pdfdvi" 1479339799
+  "file-pdfdvi.aux" 0 -1 0 ""
+  "file.tex" 1476733827 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
+  (generated)
+  "log-parse/file-pdfdvi.dvi"
+  "log-parse/file-pdfdvi.log"
+  "log-parse/file-pdfdvi.aux"

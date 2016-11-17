@@ -5,13 +5,12 @@ import path from 'path'
 import Builder from '../lib/builder'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, filePathWin32, logFilePath, fdbFilePath, magicOverrideFilePath
+  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath
 
   beforeEach(() => {
     builder = new Builder()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
-    filePathWin32 = path.join(fixturesPath, 'file_win32.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
     magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
@@ -137,15 +136,29 @@ describe('Builder', () => {
   })
 
   describe('parseLogAndFdbFiles', () => {
-    it('verifys that fdb file output overrides log file output', () => {
-      spyOn(builder, 'getLogParser').andReturn({ parse: () => ({ outputFilePath: 'bar.pdf' }) })
-      spyOn(builder, 'getOutputDirectory').andReturn('')
-      const rootPath = process.platform === 'win32' ? 'C:\\foo' : '/foo'
-      const myFilePath = process.platform === 'win32' ? filePathWin32 : filePath
-      const outputFilePath = process.platform === 'win32' ? 'C:\\foo\\output\\file.pdf' : '/foo/output/file.pdf'
-      const result = builder.parseLogAndFdbFiles(rootPath, myFilePath)
+    it('verifies that the correct output file is selected when using various latexmk modes', () => {
+      const switches = [{
+        name: 'pdf',
+        format: 'pdf'
+      }, {
+        name: 'pdfdvi',
+        format: 'pdf'
+      }, {
+        name: 'pdfps',
+        format: 'pdf'
+      }, {
+        name: 'ps',
+        format: 'ps'
+      }, {
+        name: 'dvi',
+        format: 'dvi'
+      }]
 
-      expect(result.outputFilePath).toEqual(outputFilePath)
+      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
+      for (const { name, format } of switches) {
+        const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, `file-${name}`)
+        expect(path.basename(result.outputFilePath)).toBe(`file-${name}.${format}`, `Select ${format} file when using -${name} switch.`)
+      }
     })
   })
 

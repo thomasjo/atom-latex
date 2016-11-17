@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+shopt -s extglob
+
+cd spec/fixtures
+
+for i in pdf pdfps pdfdvi ps dvi; do
+  latexmk -$i -outdir=log-parse -jobname=file-$i file.tex
+  sed -i '/^  "\//d' log-parse/file-$i.fdb_latexmk
+done
+
+rm log-parse/*.!(log|fdb_latexmk)
