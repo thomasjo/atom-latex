@@ -14,6 +14,7 @@ if (process.env.TEX_DIST === 'miktex') {
         return helpers.activatePackages()
       })
       builder = new TexifyBuilder()
+      spyOn(builder, 'logStatusCode')
       fixturesPath = helpers.cloneFixtures()
       filePath = path.join(fixturesPath, 'file.tex')
     })
@@ -64,6 +65,7 @@ if (process.env.TEX_DIST === 'miktex') {
 
         runs(() => {
           expect(exitCode).toBe(0)
+          expect(builder.logStatusCode).not.toHaveBeenCalled()
         })
       })
 
@@ -76,6 +78,7 @@ if (process.env.TEX_DIST === 'miktex') {
 
         runs(() => {
           expect(exitCode).toBe(0)
+          expect(builder.logStatusCode).not.toHaveBeenCalled()
         })
       })
 
@@ -118,6 +121,7 @@ if (process.env.TEX_DIST === 'miktex') {
           }
 
           expect(exitCode).toBe(1)
+          expect(builder.logStatusCode).toHaveBeenCalled()
         })
       })
 
@@ -130,6 +134,7 @@ if (process.env.TEX_DIST === 'miktex') {
 
         runs(() => {
           expect(exitCode).toBe(1)
+          expect(builder.logStatusCode).toHaveBeenCalled()
         })
       })
 
@@ -145,6 +150,7 @@ if (process.env.TEX_DIST === 'miktex') {
 
         runs(() => {
           expect(exitCode).toBe(1)
+          expect(builder.logStatusCode).toHaveBeenCalled()
         })
       })
     })
