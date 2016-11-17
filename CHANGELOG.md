@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.41.0] / 2016-11-17
+### Fixed
+- Parsing of FDB files is more rigorous resulting in correct output path
+  detection when using PDF producers.
+- Log status codes resulting from failure of `latexmk` or `knitr`.
+
 ## [0.40.0] / 2016-11-09
 ### Added
 - Added support for additional openers including Windows shell open and the
@@ -535,6 +541,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.41.0]: https://github.com/thomasjo/atom-latex/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/thomasjo/atom-latex/compare/v0.39.1...v0.40.0
 [0.39.1]: https://github.com/thomasjo/atom-latex/compare/v0.39.0...v0.39.1
 [0.39.0]: https://github.com/thomasjo/atom-latex/compare/v0.38.1...v0.39.0
