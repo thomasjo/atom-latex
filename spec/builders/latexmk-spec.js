@@ -13,6 +13,7 @@ describe('LatexmkBuilder', () => {
       return helpers.activatePackages()
     })
     builder = new LatexmkBuilder()
+    spyOn(builder, 'logStatusCode')
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
   })
@@ -148,6 +149,7 @@ describe('LatexmkBuilder', () => {
       })
 
       runs(() => {
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expect(exitCode).toBe(0)
       })
     })
@@ -160,6 +162,7 @@ describe('LatexmkBuilder', () => {
       })
 
       runs(() => {
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expect(exitCode).toBe(0)
       })
     })
@@ -207,6 +210,7 @@ describe('LatexmkBuilder', () => {
           logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 
+        expect(builder.logStatusCode).toHaveBeenCalled()
         expect(exitCode).toBe(12)
       })
     })
@@ -220,6 +224,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(10)
+        expect(builder.logStatusCode).toHaveBeenCalled()
       })
     })
 
@@ -239,6 +244,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(11)
+        expect(builder.logStatusCode).toHaveBeenCalled()
       })
     })
 
@@ -252,6 +258,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -267,6 +274,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -281,6 +289,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -296,6 +305,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -310,6 +320,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -325,6 +336,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -339,6 +351,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -354,6 +367,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -368,6 +382,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -383,6 +398,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -401,6 +417,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })
@@ -416,6 +433,7 @@ describe('LatexmkBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
     })

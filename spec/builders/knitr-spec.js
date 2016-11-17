@@ -17,6 +17,7 @@ describe('KnitrBuilder', () => {
       return helpers.activatePackages()
     })
     builder = new KnitrBuilder()
+    spyOn(builder, 'logStatusCode')
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
   })
@@ -50,6 +51,7 @@ describe('KnitrBuilder', () => {
         const outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
 
         expect(exitCode).toBe(0)
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
         expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
       })
     })
@@ -63,6 +65,7 @@ describe('KnitrBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(1)
+        expect(builder.logStatusCode).toHaveBeenCalled()
       })
     })
 
@@ -80,6 +83,7 @@ describe('KnitrBuilder', () => {
 
       runs(() => {
         expect(exitCode).toBe(-1)
+        expect(builder.logStatusCode).toHaveBeenCalled()
         expect(latex.log.showMessage).toHaveBeenCalledWith({
           type: 'error',
           text: 'The R package "knitr" could not be loaded.'
