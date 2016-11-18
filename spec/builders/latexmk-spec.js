@@ -217,11 +217,11 @@ describe('LatexmkBuilder', () => {
         // which TeX distribution is being used or which fonts are currently
         // installed.
         for (const message of messages) {
-          expect(state.jobStates[0].messages.some(
+          expect(state.jobStates[0].results.log.messages.some(
             logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
         }
 
-        expect(state.jobStates[0].messages.every(
+        expect(state.jobStates[0].results.log.messages.every(
           logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 

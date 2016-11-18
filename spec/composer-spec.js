@@ -109,9 +109,12 @@ describe('Composer', () => {
     it('invokes `showResult` after a successful build, with expected log parsing result', () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
-        state.logFilePath = 'file.log'
-        state.outputFilePath = 'file.pdf'
-        state.messages = []
+        state.results.log = {
+          logFilePath: 'file.log',
+          outputFilePath: 'file.pdf',
+          messages: []
+        }
+        state.outputFilePath = state.results.log.outputFilePath
       })
 
       waitsForPromise(() => {
@@ -126,9 +129,10 @@ describe('Composer', () => {
     it('treats missing output file data in log file as an error', () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
-        state.logFilePath = 'file.log'
-        state.outputFilePath = null
-        state.messages = []
+        state.results.log = {
+          logFilePath: 'file.log',
+          messages: []
+        }
       })
 
       waitsForPromise(() => {
@@ -142,11 +146,7 @@ describe('Composer', () => {
 
     it('treats missing result from parser as an error', () => {
       initializeSpies('file.tex')
-      builder.parseLogAndFdbFiles.andCallFake(state => {
-        state.logFilePath = null
-        state.outputFilePath = null
-        state.messages = []
-      })
+      builder.parseLogAndFdbFiles.andCallFake(state => {})
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
