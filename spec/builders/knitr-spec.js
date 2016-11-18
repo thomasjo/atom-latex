@@ -17,7 +17,7 @@ describe('KnitrBuilder', () => {
       return helpers.activatePackages()
     })
     builder = new KnitrBuilder()
-    spyOn(builder, 'logStatusCode')
+    spyOn(builder, 'logStatusCode').andCallThrough()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
   })

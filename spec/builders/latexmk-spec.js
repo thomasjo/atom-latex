@@ -13,7 +13,6 @@ describe('LatexmkBuilder', () => {
       return helpers.activatePackages()
     })
     builder = new LatexmkBuilder()
-    spyOn(builder, 'logStatusCode')
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
   })
@@ -142,6 +141,10 @@ describe('LatexmkBuilder', () => {
 
   describe('run', () => {
     let exitCode, parsedLog
+
+    beforeEach(() => {
+      spyOn(builder, 'logStatusCode').andCallThrough()
+    })
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
@@ -460,14 +463,15 @@ describe('LatexmkBuilder', () => {
       expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
     })
 
-    it('passes through to superclass when given non-latex status codes', () => {
+    it('passes through to superclass when given non-latexmk status codes', () => {
+      const stderr = 'wibble'
       const superclass = Object.getPrototypeOf(builder)
       spyOn(superclass, 'logStatusCode').andCallThrough()
 
       const statusCode = 1
-      builder.logStatusCode(statusCode)
+      builder.logStatusCode(statusCode, stderr)
 
-      expect(superclass.logStatusCode).toHaveBeenCalledWith(statusCode)
+      expect(superclass.logStatusCode).toHaveBeenCalledWith(statusCode, stderr)
     })
   })
 })
