@@ -152,11 +152,14 @@ describe('Builder', () => {
         name: 'dvi',
         format: 'dvi'
       }]
+      state.outputDirectory = 'log-parse'
 
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
       for (const { name, format } of switches) {
-        const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, `file-${name}`)
-        expect(path.basename(result.outputFilePath)).toBe(`file-${name}.${format}`, `Select ${format} file when using -${name} switch.`)
+        state.jobnames = [`file-${name}`]
+        jobState = state.jobStates[0]
+        builder.parseLogAndFdbFiles(jobState)
+        expect(path.basename(jobState.outputFilePath)).toBe(`${jobState.jobname}.${format}`,
+          `Select ${format} file when using -${name} switch.`)
       }
     })
   })
