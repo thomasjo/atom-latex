@@ -145,7 +145,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('adds a jobname argument when passed a non-null jobname', () => {
-      state.setJobnames(['foo'])
+      state.setJobNames(['foo'])
       jobState = state.getJobStates()[0]
       expect(builder.constructArgs(jobState, filePath)).toContain('-jobname=foo')
     })

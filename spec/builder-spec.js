@@ -155,10 +155,10 @@ describe('Builder', () => {
       state.setOutputDirectory('log-parse')
 
       for (const { name, format } of switches) {
-        state.setJobnames([`file-${name}`])
+        state.setJobNames([`file-${name}`])
         jobState = state.getJobStates()[0]
         builder.parseLogAndFdbFiles(jobState)
-        expect(path.basename(jobState.getOutputFilePath())).toBe(`${jobState.getJobname()}.${format}`,
+        expect(path.basename(jobState.getOutputFilePath())).toBe(`${jobState.getJobName()}.${format}`,
           `Select ${format} file when using -${name} switch.`)
       }
     })

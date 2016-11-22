@@ -18,7 +18,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobnames(jobnames)
+        state.setJobNames(jobnames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
@@ -169,7 +169,7 @@ describe('Composer', () => {
 
     function initializeSpies (filePath, jobnames = [null]) {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobnames(jobnames)
+        state.setJobNames(jobnames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
@@ -177,7 +177,7 @@ describe('Composer', () => {
         if (state.getOutputDirectory()) {
           dir = path.resolve(dir, state.getOutputDirectory())
         }
-        if (state.getJobname()) name = state.getJobname()
+        if (state.getJobName()) name = state.getJobName()
         return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
@@ -381,9 +381,9 @@ describe('Composer', () => {
       const jobnames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobname() + '.pdf')
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobName() + '.pdf')
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobnames(jobnames)
+        state.setJobNames(jobnames)
       })
 
       spyOn(latex.opener, 'open').andReturn(true)
@@ -446,7 +446,7 @@ describe('Composer', () => {
       expect(state.getOutputFormat()).toEqual('ps')
       expect(state.getProducer()).toEqual('xdvipdfmx')
       expect(state.getEngine()).toEqual('lualatex')
-      expect(state.getJobnames()).toEqual(['foo', 'bar'])
+      expect(state.getJobNames()).toEqual(['foo', 'bar'])
     })
   })
 })
