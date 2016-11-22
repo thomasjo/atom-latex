@@ -18,7 +18,7 @@ describe('Composer', () => {
     function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.jobnames = jobnames
+        state.setJobnames(jobnames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
@@ -109,12 +109,8 @@ describe('Composer', () => {
     it('invokes `showResult` after a successful build, with expected log parsing result', () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
-        state.results.log = {
-          logFilePath: 'file.log',
-          outputFilePath: 'file.pdf',
-          messages: []
-        }
-        state.outputFilePath = state.results.log.outputFilePath
+        state.setLogMessages([])
+        state.setOutputFilePath('file.pdf')
       })
 
       waitsForPromise(() => {
@@ -129,10 +125,7 @@ describe('Composer', () => {
     it('treats missing output file data in log file as an error', () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
-        state.results.log = {
-          logFilePath: 'file.log',
-          messages: []
-        }
+        state.setLogMessages([])
       })
 
       waitsForPromise(() => {
@@ -176,15 +169,15 @@ describe('Composer', () => {
 
     function initializeSpies (filePath, jobnames = [null]) {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.jobnames = jobnames
+        state.setJobnames(jobnames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
-        let { dir, name } = path.parse(state.filePath)
-        if (state.outputDirectory) {
-          dir = path.resolve(dir, state.outputDirectory)
+        let { dir, name } = path.parse(state.getFilePath())
+        if (state.getOutputDirectory()) {
+          dir = path.resolve(dir, state.getOutputDirectory())
         }
-        if (state.jobname) name = state.jobname
+        if (state.getJobname()) name = state.getJobname()
         return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
@@ -299,8 +292,8 @@ describe('Composer', () => {
     function initializeSpies (outputDirectory = '') {
       composer = new Composer()
       state = new BuildState(rootFilePath)
-      state.outputDirectory = outputDirectory
-      jobState = state.jobStates[0]
+      state.setOutputDirectory(outputDirectory)
+      jobState = state.getJobStates()[0]
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
@@ -388,9 +381,9 @@ describe('Composer', () => {
       const jobnames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.jobname + '.pdf')
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobname() + '.pdf')
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.jobnames = jobnames
+        state.setJobnames(jobnames)
       })
 
       spyOn(latex.opener, 'open').andReturn(true)
@@ -449,11 +442,11 @@ describe('Composer', () => {
 
       composer.initializeBuildStateFromMagic(state)
 
-      expect(state.outputDirectory).toEqual('wibble')
-      expect(state.outputFormat).toEqual('ps')
-      expect(state.producer).toEqual('xdvipdfmx')
-      expect(state.engine).toEqual('lualatex')
-      expect(state.jobnames).toEqual(['foo', 'bar'])
+      expect(state.getOutputDirectory()).toEqual('wibble')
+      expect(state.getOutputFormat()).toEqual('ps')
+      expect(state.getProducer()).toEqual('xdvipdfmx')
+      expect(state.getEngine()).toEqual('lualatex')
+      expect(state.getJobnames()).toEqual(['foo', 'bar'])
     })
   })
 })

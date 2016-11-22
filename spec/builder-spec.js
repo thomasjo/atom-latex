@@ -15,8 +15,8 @@ describe('Builder', () => {
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
     state = new BuildState(filePath)
-    state.outputDirectory = ''
-    jobState = state.jobStates[0]
+    state.setOutputDirectory('')
+    jobState = state.getJobStates()[0]
   })
 
   describe('constructPath', () => {
@@ -90,7 +90,7 @@ describe('Builder', () => {
     })
 
     it('does not attempt parse if passed a file path that does not exist', () => {
-      state.filePath = '/foo/bar/quux.tex'
+      state.setFilePath('/foo/bar/quux.tex')
       builder.parseLogFile(jobState)
 
       expect(logParser.parse).not.toHaveBeenCalled()
@@ -120,7 +120,7 @@ describe('Builder', () => {
     })
 
     it('does not attempt parse if passed a file path that does not exist', () => {
-      state.filePath = '/foo/bar/quux.tex'
+      state.setFilePath('/foo/bar/quux.tex')
       builder.parseFdbFile(jobState)
 
       expect(fdbParser.parse).not.toHaveBeenCalled()
@@ -152,13 +152,13 @@ describe('Builder', () => {
         name: 'dvi',
         format: 'dvi'
       }]
-      state.outputDirectory = 'log-parse'
+      state.setOutputDirectory('log-parse')
 
       for (const { name, format } of switches) {
-        state.jobnames = [`file-${name}`]
-        jobState = state.jobStates[0]
+        state.setJobnames([`file-${name}`])
+        jobState = state.getJobStates()[0]
         builder.parseLogAndFdbFiles(jobState)
-        expect(path.basename(jobState.outputFilePath)).toBe(`${jobState.jobname}.${format}`,
+        expect(path.basename(jobState.getOutputFilePath())).toBe(`${jobState.getJobname()}.${format}`,
           `Select ${format} file when using -${name} switch.`)
       }
     })
