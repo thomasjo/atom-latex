@@ -298,28 +298,28 @@ describe('Composer', () => {
 
     it('should return false when using neither an output directory, nor the move option', () => {
       initializeSpies()
-      atom.config.set('latex.moveResultToSourceDirectory', false)
+      state.setMoveResultToSourceDirectory(false)
 
       expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
-      atom.config.set('latex.moveResultToSourceDirectory', true)
+      state.setMoveResultToSourceDirectory(true)
 
       expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
-      atom.config.set('latex.moveResultToSourceDirectory', false)
+      state.setMoveResultToSourceDirectory(false)
 
       expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
-      atom.config.set('latex.moveResultToSourceDirectory', true)
+      state.setMoveResultToSourceDirectory(true)
 
       expect(composer.shouldMoveResult(jobState)).toBe(true)
     })
