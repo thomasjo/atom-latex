@@ -434,6 +434,78 @@ describe('Composer', () => {
     })
   })
 
+  describe('initializeBuildStateFromProperties', () => {
+    let state, composer
+    const primaryString = 'primary'
+    const secondaryString = 'secondary'
+    const primaryArray = ['primary']
+
+    beforeEach(() => {
+      state = new BuildState('gronk.tex')
+      composer = new Composer()
+    })
+
+    it('verifies that first level properties override second level properties', () => {
+      const properties = {
+        cleanPatterns: primaryArray,
+        enableExtendedBuildMode: true,
+        enableShellEscape: true,
+        enableSynctex: true,
+        jobnames: primaryArray,
+        jobname: secondaryString,
+        customEngine: primaryString,
+        engine: secondaryString,
+        program: secondaryString,
+        moveResultToSourceDirectory: true,
+        outputFormat: primaryString,
+        format: secondaryString,
+        outputDirectory: primaryString,
+        output_directory: secondaryString,
+        producer: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getCleanPatterns()).toEqual(primaryArray, 'cleanPatterns to be set')
+      expect(state.getEnableExtendedBuildMode()).toBe(true, 'enableExtendedBuildMode to be set')
+      expect(state.getEnableShellEscape()).toBe(true, 'enableShellEscape to be set')
+      expect(state.getEnableSynctex()).toBe(true, 'enableSynctex to be set')
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to set by jobnames property not by jobname property')
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set by customEngine property not by engine or program property')
+      expect(state.getMoveResultToSourceDirectory()).toBe(true, 'moveResultToSourceDirectory to be set')
+      expect(state.getOutputFormat()).toBe(primaryString, 'outputFormat to be set by outputFormat property not by format property')
+      expect(state.getOutputDirectory()).toBe(primaryString, 'outputDirectory to be set by outputDirectory property not by output_directory property')
+      expect(state.getProducer()).toBe(primaryString, 'producer to be set')
+    })
+
+    it('verifies that second level properties override third level properties', () => {
+      const properties = {
+        jobname: primaryString,
+        engine: primaryString,
+        program: secondaryString,
+        format: primaryString,
+        output_directory: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to be set')
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set by engine property not by program property')
+      expect(state.getOutputFormat()).toBe(primaryString, 'outputFormat to be set')
+      expect(state.getOutputDirectory()).toBe(primaryString, 'outputDirectory to be set')
+    })
+
+    it('verifies that third level properties are set', () => {
+      const properties = {
+        program: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set')
+    })
+  })
+
   describe('initializeBuildStateFromMagic', () => {
     it('detects magic and overrides build state values', () => {
       const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
