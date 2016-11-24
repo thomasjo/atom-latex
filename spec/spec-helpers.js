@@ -1,14 +1,13 @@
 /** @babel */
 
-import fs from 'fs-plus'
+import fs from '../lib/fs'
 import temp from 'temp'
-import wrench from 'wrench'
 
 export default {
   cloneFixtures () {
     const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
     let fixturesPath = atom.project.getPaths()[0]
-    wrench.copyDirSyncRecursive(fixturesPath, tempPath, {forceDelete: true})
+    fs.copySync(fixturesPath, tempPath)
     atom.project.setPaths([tempPath])
     fixturesPath = tempPath
 
