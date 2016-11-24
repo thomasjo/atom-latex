@@ -13,7 +13,6 @@ describe('LatexmkBuilder', () => {
       return helpers.activatePackages()
     })
     builder = new LatexmkBuilder()
-    spyOn(builder, 'logStatusCode')
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
   })
@@ -142,6 +141,10 @@ describe('LatexmkBuilder', () => {
 
   describe('run', () => {
     let exitCode, parsedLog
+
+    beforeEach(() => {
+      spyOn(builder, 'logStatusCode').andCallThrough()
+    })
 
     it('successfully executes latexmk when given a valid TeX file', () => {
       waitsForPromise(() => {
@@ -436,6 +439,39 @@ describe('LatexmkBuilder', () => {
         expect(builder.logStatusCode).not.toHaveBeenCalled()
         expectExistenceOfExtendedOutputs()
       })
+    })
+  })
+
+  describe('canProcess', () => {
+    it('returns true when given a file path with a .tex extension', () => {
+      const canProcess = LatexmkBuilder.canProcess(filePath)
+      expect(canProcess).toBe(true)
+    })
+  })
+
+  describe('logStatusCode', () => {
+    it('handles latexmk specific status codes', () => {
+      let messages = []
+      spyOn(latex.log, 'error').andCallFake(message => messages.push(message))
+
+      const statusCodes = [10, 11, 12, 13, 20]
+      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode))
+
+      const startsWithPrefix = str => str.startsWith('latexmk:')
+
+      expect(messages.length).toBe(statusCodes.length)
+      expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
+    })
+
+    it('passes through to superclass when given non-latexmk status codes', () => {
+      const stderr = 'wibble'
+      const superclass = Object.getPrototypeOf(builder)
+      spyOn(superclass, 'logStatusCode').andCallThrough()
+
+      const statusCode = 1
+      builder.logStatusCode(statusCode, stderr)
+
+      expect(superclass.logStatusCode).toHaveBeenCalledWith(statusCode, stderr)
     })
   })
 })

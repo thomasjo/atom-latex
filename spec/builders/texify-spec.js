@@ -14,7 +14,7 @@ if (process.env.TEX_DIST === 'miktex') {
         return helpers.activatePackages()
       })
       builder = new TexifyBuilder()
-      spyOn(builder, 'logStatusCode')
+      spyOn(builder, 'logStatusCode').andCallThrough()
       fixturesPath = helpers.cloneFixtures()
       filePath = path.join(fixturesPath, 'file.tex')
     })

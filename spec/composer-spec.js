@@ -399,4 +399,41 @@ describe('Composer', () => {
       })
     })
   })
+
+  describe('moveResult', () => {
+    let composer
+    const texFilePath = path.normalize('/angle/gronk.tex')
+    const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
+    const result = { outputFilePath }
+
+    beforeEach(() => {
+      composer = new Composer()
+      spyOn(fs, 'removeSync')
+      spyOn(fs, 'moveSync')
+    })
+
+    it('verifies that the output file and the synctex file are moved when they exist', () => {
+      const destOutputFilePath = path.normalize('/angle/gronk.pdf')
+      const syncTexPath = path.normalize('/angle/dangle/gronk.synctex.gz')
+      const destSyncTexPath = path.normalize('/angle/gronk.synctex.gz')
+
+      spyOn(fs, 'existsSync').andReturn(true)
+
+      composer.moveResult(result, texFilePath)
+      expect(fs.removeSync).toHaveBeenCalledWith(destOutputFilePath)
+      expect(fs.removeSync).toHaveBeenCalledWith(destSyncTexPath)
+      expect(fs.moveSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
+      expect(fs.moveSync).toHaveBeenCalledWith(syncTexPath, destSyncTexPath)
+    })
+
+    it('verifies that the output file and the synctex file are not moved when they do not exist', () => {
+      spyOn(fs, 'existsSync').andReturn(false)
+
+      composer.moveResult(result, texFilePath)
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+    })
+  })
 })
