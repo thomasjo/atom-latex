@@ -434,6 +434,30 @@ describe('Composer', () => {
     })
   })
 
+  describe('initializeBuild', () => {
+    it('verifies that build state is cached and that old cached state is removed', () => {
+      const composer = new Composer()
+      const fixturesPath = helpers.cloneFixtures()
+      const filePath = path.join(fixturesPath, 'file.tex')
+      const subFilePath = path.join(fixturesPath, 'magic-comments', 'multiple-magic-comments.tex')
+      const engine = 'lualatex'
+
+      let build = composer.initializeBuild(subFilePath)
+      // Set engine as a flag to indicate the cached state
+      build.state.setEngine(engine)
+      expect(build.state.getFilePath()).toBe(filePath)
+      expect(build.state.getSubfiles().has(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath, true)
+      expect(build.state.getEngine()).toBe(engine)
+      expect(build.state.getSubfiles().has(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath)
+      expect(build.state.getEngine()).not.toBe(engine)
+      expect(build.state.getSubfiles().has(subFilePath)).toBe(false)
+    })
+  })
+
   describe('initializeBuildStateFromProperties', () => {
     let state, composer
     const primaryString = 'primary'
@@ -519,6 +543,16 @@ describe('Composer', () => {
       expect(state.getProducer()).toEqual('xdvipdfmx')
       expect(state.getEngine()).toEqual('lualatex')
       expect(state.getJobNames()).toEqual(['foo', 'bar'])
+    })
+
+    it('detect root magic comment and loads remaining magic comments from root', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'multiple-magic-comments.tex')
+      const state = new BuildState(filePath)
+      const composer = new Composer()
+
+      composer.initializeBuildStateFromMagic(state)
+
+      expect(state.getEngine()).not.toEqual('lualatex')
     })
   })
 })

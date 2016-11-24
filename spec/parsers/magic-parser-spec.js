@@ -53,7 +53,7 @@ describe('MagicParser', () => {
 
       expect(result).toEqual({
         'root': '../file.tex',
-        'program': 'pdflatex'
+        'program': 'lualatex'
       })
     })
   })
