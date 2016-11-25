@@ -46,7 +46,7 @@ describe('KnitrBuilder', () => {
 
     it('successfully executes knitr when given a valid R Sweave file', () => {
       waitsForPromise(() => {
-        return builder.run(jobState, filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -63,7 +63,7 @@ describe('KnitrBuilder', () => {
       state.setFilePath(filePath)
 
       waitsForPromise(() => {
-        return builder.run(jobState, filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -81,7 +81,7 @@ describe('KnitrBuilder', () => {
       spyOn(latex.log, 'showMessage').andCallThrough()
 
       waitsForPromise(() => {
-        return builder.run(jobState, filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
