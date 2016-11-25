@@ -398,13 +398,15 @@ describe('Composer', () => {
   })
 
   describe('moveResult', () => {
-    let composer
+    let composer, state, jobState
     const texFilePath = path.normalize('/angle/gronk.tex')
     const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
-    const result = { outputFilePath }
 
     beforeEach(() => {
       composer = new Composer()
+      state = new BuildState(texFilePath)
+      jobState = state.getJobStates()[0]
+      jobState.setOutputFilePath(outputFilePath)
       spyOn(fs, 'removeSync')
       spyOn(fs, 'moveSync')
     })
@@ -416,7 +418,7 @@ describe('Composer', () => {
 
       spyOn(fs, 'existsSync').andReturn(true)
 
-      composer.moveResult(result, texFilePath)
+      composer.moveResult(jobState)
       expect(fs.removeSync).toHaveBeenCalledWith(destOutputFilePath)
       expect(fs.removeSync).toHaveBeenCalledWith(destSyncTexPath)
       expect(fs.moveSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
@@ -426,7 +428,7 @@ describe('Composer', () => {
     it('verifies that the output file and the synctex file are not moved when they do not exist', () => {
       spyOn(fs, 'existsSync').andReturn(false)
 
-      composer.moveResult(result, texFilePath)
+      composer.moveResult(jobState)
       expect(fs.removeSync).not.toHaveBeenCalled()
       expect(fs.removeSync).not.toHaveBeenCalled()
       expect(fs.moveSync).not.toHaveBeenCalled()
