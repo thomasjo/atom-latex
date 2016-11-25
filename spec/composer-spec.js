@@ -446,15 +446,15 @@ describe('Composer', () => {
       // Set engine as a flag to indicate the cached state
       build.state.setEngine(engine)
       expect(build.state.getFilePath()).toBe(filePath)
-      expect(build.state.getSubfiles().has(subFilePath)).toBe(true)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
 
       build = composer.initializeBuild(filePath, true)
       expect(build.state.getEngine()).toBe(engine)
-      expect(build.state.getSubfiles().has(subFilePath)).toBe(true)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
 
       build = composer.initializeBuild(filePath)
       expect(build.state.getEngine()).not.toBe(engine)
-      expect(build.state.getSubfiles().has(subFilePath)).toBe(false)
+      expect(build.state.hasSubfile(subFilePath)).toBe(false)
     })
   })
 
