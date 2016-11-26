@@ -15,10 +15,10 @@ describe('Composer', () => {
   describe('build', () => {
     let editor, builder, composer
 
-    function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
+    function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobnames)
+        state.setJobNames(jobNames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
@@ -167,9 +167,9 @@ describe('Composer', () => {
   describe('clean', () => {
     let fixturesPath, composer
 
-    function initializeSpies (filePath, jobnames = [null]) {
+    function initializeSpies (filePath, jobNames = [null]) {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobnames)
+        state.setJobNames(jobNames)
       })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
@@ -378,12 +378,12 @@ describe('Composer', () => {
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
       const filePath = 'file.tex'
       const lineNumber = 1
-      const jobnames = ['foo', 'bar']
+      const jobNames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
       spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobName() + '.pdf')
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobnames)
+        state.setJobNames(jobNames)
       })
 
       spyOn(latex.opener, 'open').andReturn(true)
