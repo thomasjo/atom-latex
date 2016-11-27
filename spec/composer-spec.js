@@ -464,7 +464,8 @@ describe('Composer', () => {
     let state, composer
     const primaryString = 'primary'
     const secondaryString = 'secondary'
-    const primaryArray = ['primary']
+    const primaryArray = [primaryString]
+    const secondaryArray = [secondaryString]
 
     beforeEach(() => {
       state = new BuildState('gronk.tex')
@@ -477,7 +478,8 @@ describe('Composer', () => {
         enableExtendedBuildMode: true,
         enableShellEscape: true,
         enableSynctex: true,
-        jobnames: primaryArray,
+        jobNames: primaryArray,
+        jobnames: secondaryArray,
         jobname: secondaryString,
         customEngine: primaryString,
         engine: secondaryString,
@@ -496,7 +498,7 @@ describe('Composer', () => {
       expect(state.getEnableExtendedBuildMode()).toBe(true, 'enableExtendedBuildMode to be set')
       expect(state.getEnableShellEscape()).toBe(true, 'enableShellEscape to be set')
       expect(state.getEnableSynctex()).toBe(true, 'enableSynctex to be set')
-      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to set by jobnames property not by jobname property')
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to set by jobNames property not by jobnames or jobname property')
       expect(state.getEngine()).toBe(primaryString, 'engine to be set by customEngine property not by engine or program property')
       expect(state.getMoveResultToSourceDirectory()).toBe(true, 'moveResultToSourceDirectory to be set')
       expect(state.getOutputFormat()).toBe(primaryString, 'outputFormat to be set by outputFormat property not by format property')
@@ -506,7 +508,8 @@ describe('Composer', () => {
 
     it('verifies that second level properties override third level properties', () => {
       const properties = {
-        jobname: primaryString,
+        jobnames: primaryArray,
+        jobname: secondaryString,
         engine: primaryString,
         program: secondaryString,
         format: primaryString,
@@ -523,11 +526,13 @@ describe('Composer', () => {
 
     it('verifies that third level properties are set', () => {
       const properties = {
+        jobname: primaryString,
         program: primaryString
       }
 
       composer.initializeBuildStateFromProperties(state, properties)
 
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to be set')
       expect(state.getEngine()).toBe(primaryString, 'engine to be set')
     })
   })
@@ -545,6 +550,11 @@ describe('Composer', () => {
       expect(state.getProducer()).toEqual('xdvipdfmx')
       expect(state.getEngine()).toEqual('lualatex')
       expect(state.getJobNames()).toEqual(['foo', 'bar'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.quux', 'foo/bar'])
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
     })
 
     it('detect root magic comment and loads remaining magic comments from root', () => {
