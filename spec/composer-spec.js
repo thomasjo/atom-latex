@@ -436,30 +436,6 @@ describe('Composer', () => {
     })
   })
 
-  describe('initializeBuild', () => {
-    it('verifies that build state is cached and that old cached state is removed', () => {
-      const composer = new Composer()
-      const fixturesPath = helpers.cloneFixtures()
-      const filePath = path.join(fixturesPath, 'file.tex')
-      const subFilePath = path.join(fixturesPath, 'magic-comments', 'multiple-magic-comments.tex')
-      const engine = 'lualatex'
-
-      let build = composer.initializeBuild(subFilePath)
-      // Set engine as a flag to indicate the cached state
-      build.state.setEngine(engine)
-      expect(build.state.getFilePath()).toBe(filePath)
-      expect(build.state.hasSubfile(subFilePath)).toBe(true)
-
-      build = composer.initializeBuild(filePath, true)
-      expect(build.state.getEngine()).toBe(engine)
-      expect(build.state.hasSubfile(subFilePath)).toBe(true)
-
-      build = composer.initializeBuild(filePath)
-      expect(build.state.getEngine()).not.toBe(engine)
-      expect(build.state.hasSubfile(subFilePath)).toBe(false)
-    })
-  })
-
   describe('initializeBuildStateFromProperties', () => {
     let state, composer
     const primaryString = 'primary'
@@ -537,6 +513,31 @@ describe('Composer', () => {
     })
   })
 
+  describe('initializeBuildStateFromConfig', () => {
+    it('verifies that build state loaded from config settings is correct', () => {
+      const state = new BuildState('foo.tex')
+      const composer = new Composer()
+      const outputDirectory = 'build'
+      const cleanPatterns = ['**/*.foo']
+
+      atom.config.set('latex.outputDirectory', outputDirectory)
+      atom.config.set('latex.cleanPatterns', cleanPatterns)
+      atom.config.set('latex.enableShellEscape', true)
+
+      composer.initializeBuildStateFromConfig(state)
+
+      expect(state.getOutputDirectory()).toEqual(outputDirectory)
+      expect(state.getOutputFormat()).toEqual('pdf')
+      expect(state.getProducer()).toEqual('dvipdfmx')
+      expect(state.getEngine()).toEqual('pdflatex')
+      expect(state.getCleanPatterns()).toEqual(cleanPatterns)
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+  })
+
   describe('initializeBuildStateFromMagic', () => {
     it('detects magic and overrides build state values', () => {
       const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
@@ -565,6 +566,99 @@ describe('Composer', () => {
       composer.initializeBuildStateFromMagic(state)
 
       expect(state.getEngine()).not.toEqual('lualatex')
+    })
+  })
+
+  describe('initializeBuild', () => {
+    it('verifies that build state is cached and that old cached state is removed', () => {
+      const composer = new Composer()
+      const fixturesPath = helpers.cloneFixtures()
+      const filePath = path.join(fixturesPath, 'file.tex')
+      const subFilePath = path.join(fixturesPath, 'magic-comments', 'multiple-magic-comments.tex')
+      const engine = 'lualatex'
+
+      let build = composer.initializeBuild(subFilePath)
+      // Set engine as a flag to indicate the cached state
+      build.state.setEngine(engine)
+      expect(build.state.getFilePath()).toBe(filePath)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath, true)
+      expect(build.state.getEngine()).toBe(engine)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath)
+      expect(build.state.getEngine()).not.toBe(engine)
+      expect(build.state.hasSubfile(subFilePath)).toBe(false)
+    })
+
+    it('verifies that magic properties override config properties', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const composer = new Composer()
+
+      atom.config.set('latex.enableShellEscape', false)
+      atom.config.set('latex.enableExtendedBuildMode', false)
+      atom.config.set('latex.moveResultToSourceDirectory', false)
+
+      const { state } = composer.initializeBuild(filePath)
+
+      expect(state.getOutputDirectory()).toEqual('wibble')
+      expect(state.getOutputFormat()).toEqual('ps')
+      expect(state.getProducer()).toEqual('xdvipdfmx')
+      expect(state.getEngine()).toEqual('lualatex')
+      expect(state.getJobNames()).toEqual(['foo', 'bar'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.quux', 'foo/bar'])
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+  })
+
+  describe('resolveOutputFilePath', () => {
+    let builder, state, jobState, composer
+
+    beforeEach(() => {
+      composer = new Composer()
+      state = new BuildState('foo.tex')
+      jobState = state.getJobStates()[0]
+      builder = jasmine.createSpyObj('MockBuilder', ['parseLogAndFdbFiles'])
+    })
+
+    it('returns outputFilePath if already set in jobState', () => {
+      const outputFilePath = 'foo.pdf'
+
+      jobState.setOutputFilePath(outputFilePath)
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
+    })
+
+    it('returns outputFilePath returned by parseLogAndFdbFiles', () => {
+      const outputFilePath = 'foo.pdf'
+
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setOutputFilePath(outputFilePath)
+      })
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
+    })
+
+    it('returns null returned if parseLogAndFdbFiles fails', () => {
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(null)
+    })
+
+    it('updates outputFilePath if moveResultToSourceDirectory is set', () => {
+      const outputFilePath = 'foo.pdf'
+      const outputDirectory = 'bar'
+
+      state.setOutputDirectory(outputDirectory)
+      state.setMoveResultToSourceDirectory(true)
+
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setOutputFilePath(path.join(outputDirectory, outputFilePath))
+      })
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
     })
   })
 })
