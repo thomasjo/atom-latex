@@ -5,7 +5,7 @@ import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
-import BuildState from '../lib/build-state'
+import { BuildState } from '../lib/build-state'
 
 describe('Composer', () => {
   beforeEach(() => {

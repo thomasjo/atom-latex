@@ -3,7 +3,7 @@
 import helpers from './spec-helpers'
 import { NullBuilder } from './stubs'
 import BuilderRegistry from '../lib/builder-registry'
-import BuildState from '../lib/build-state'
+import { BuildState } from '../lib/build-state'
 
 describe('BuilderRegistry', () => {
   let builderRegistry

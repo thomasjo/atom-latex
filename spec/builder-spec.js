@@ -3,7 +3,7 @@
 import helpers from './spec-helpers'
 import path from 'path'
 import Builder from '../lib/builder'
-import BuildState from '../lib/build-state'
+import { BuildState } from '../lib/build-state'
 
 describe('Builder', () => {
   let builder, fixturesPath, filePath, logFilePath, fdbFilePath, state, jobState

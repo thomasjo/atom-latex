@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "flow-bin": "^0.36.0",
     "snazzy": "^6.0.0",
     "standard": "^8.6.0"
   },

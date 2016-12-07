@@ -4,7 +4,7 @@ import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import fs from 'fs-plus'
-import BuildState from '../../lib/build-state'
+import { BuildState } from '../../lib/build-state'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath, extendedOutputPaths, state, jobState

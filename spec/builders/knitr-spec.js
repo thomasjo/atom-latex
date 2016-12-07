@@ -4,7 +4,7 @@ import helpers from '../spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
-import BuildState from '../../lib/build-state'
+import { BuildState } from '../../lib/build-state'
 
 function getRawFile (filePath) {
   return fs.readFileSync(filePath, {encoding: 'utf-8'})
