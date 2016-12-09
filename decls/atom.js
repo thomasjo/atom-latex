@@ -15,3 +15,7 @@ declare module 'atom' {
   declare var TextEditorGutter: any;
   declare var TextEditorMarker: any;
 }
+
+declare module 'electron' {
+  declare var shell: any;
+}
