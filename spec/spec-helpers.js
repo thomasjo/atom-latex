@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import fs from 'fs-plus'
 import temp from 'temp'
@@ -15,11 +15,11 @@ export default {
     return fixturesPath
   },
 
-  overridePlatform (name) {
+  overridePlatform (name: string) {
     Object.defineProperty(process, 'platform', {__proto__: null, value: name})
   },
 
-  setTimeoutInterval (interval) {
+  setTimeoutInterval (interval: number) {
     const env = jasmine.getEnv()
     const originalInterval = env.defaultTimeoutInterval
     env.defaultTimeoutInterval = interval

@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import fs from 'fs-plus'
 import temp from 'temp'
@@ -25,7 +25,7 @@ describe('ProcessManager', () => {
       processManager.executeChildProcess(constructCommand('foo.tex'), { allowKill: true }).then(result => { killed = true })
       processManager.killChildProcesses()
 
-      waitsFor(() => killed, 5000)
+      waitsFor(() => killed, 'Unable to kill process', 5000)
     })
 
     it('kills old latexmk instances, but not ones created after the kill command', () => {
@@ -36,7 +36,7 @@ describe('ProcessManager', () => {
       processManager.killChildProcesses()
       processManager.executeChildProcess(constructCommand('new.tex'), { allowKill: true }).then(result => { newKilled = true })
 
-      waitsFor(() => oldKilled, 5000)
+      waitsFor(() => oldKilled, 'Unable to kill old process', 5000)
 
       runs(() => {
         expect(newKilled).toBe(false)

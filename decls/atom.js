@@ -19,3 +19,5 @@ declare module 'atom' {
 declare module 'electron' {
   declare var shell: any;
 }
+
+declare function waitsForPromise(callback: (() => Promise<any>)): void;

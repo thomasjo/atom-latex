@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import helpers from './spec-helpers'
 import fs from 'fs-plus'

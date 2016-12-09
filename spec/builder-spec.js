@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import helpers from './spec-helpers'
 import path from 'path'
@@ -39,7 +39,7 @@ describe('Builder', () => {
 
     it('replaces surrounded $PATH with process.env.PATH', () => {
       const texPath = '/foo:$PATH:/bar'
-      const expectedPath = texPath.replace('$PATH', process.env.PATH)
+      const expectedPath = texPath.replace('$PATH', process.env.PATH || '')
       atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
@@ -48,7 +48,7 @@ describe('Builder', () => {
 
     it('replaces leading $PATH with process.env.PATH', () => {
       const texPath = '$PATH:/bar'
-      const expectedPath = texPath.replace('$PATH', process.env.PATH)
+      const expectedPath = texPath.replace('$PATH', process.env.PATH || '')
       atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()
@@ -57,7 +57,7 @@ describe('Builder', () => {
 
     it('replaces trailing $PATH with process.env.PATH', () => {
       const texPath = '/foo:$PATH'
-      const expectedPath = texPath.replace('$PATH', process.env.PATH)
+      const expectedPath = texPath.replace('$PATH', process.env.PATH || '')
       atom.config.set('latex.texPath', texPath)
 
       const constructedPath = builder.constructPath()

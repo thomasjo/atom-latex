@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import _ from 'lodash'
 import './spec-helpers'
@@ -14,7 +14,7 @@ describe('Logger', () => {
   describe('showMessage', () => {
     it('verifies that calling directly without preceding call to group automatically calls groupEnd', () => {
       spyOn(logger, 'groupEnd').andReturn()
-      logger.showMessage({ type: 'error' })
+      logger.showMessage({ type: 'error', text: 'foo' })
 
       expect(logger.groupEnd).toHaveBeenCalled()
     })
@@ -26,9 +26,9 @@ describe('Logger', () => {
         counts = _.countBy(messages, 'type')
       })
       logger.group('foo')
-      logger.info()
-      logger.warning()
-      logger.error()
+      logger.info('bar')
+      logger.warning('wibble')
+      logger.error('quux')
     })
 
     it('verifies no messages filtered when logging level set to info', () => {

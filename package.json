@@ -45,6 +45,9 @@
       "spyOn",
       "waitsFor",
       "waitsForPromise"
+    ],
+    "ignore": [
+      "decls/*"
     ]
   },
   "engines": {
