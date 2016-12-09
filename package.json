@@ -83,7 +83,8 @@
       "type": "string",
       "enum": [
         "latexmk",
-        "texify"
+        "texify",
+        "make"
       ],
       "default": "latexmk",
       "order": 2
