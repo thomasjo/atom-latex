@@ -7,7 +7,7 @@ lint() {
   local npm_bin=$( npm bin )
   local paths="$1"
 
-  "${npm_bin}/standard" --verbose "${paths}" | "${npm_bin}/snazzy"
+  "${npm_bin}/eslint" --color "${paths}" | "${npm_bin}/snazzy"
 }
 
 flow() {
