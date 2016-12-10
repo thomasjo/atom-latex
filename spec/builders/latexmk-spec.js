@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import helpers from '../spec-helpers'
 import path from 'path'
@@ -498,7 +498,7 @@ describe('LatexmkBuilder', () => {
       spyOn(latex.log, 'error').andCallFake(message => messages.push(message))
 
       const statusCodes = [10, 11, 12, 13, 20]
-      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode))
+      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode, ''))
 
       const startsWithPrefix = str => str.startsWith('latexmk:')
 

@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import '../spec-helpers'
 
