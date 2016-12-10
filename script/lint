@@ -10,20 +10,13 @@ lint() {
   "${npm_bin}/eslint" --color "${paths}" | "${npm_bin}/snazzy"
 }
 
-flow() {
-  local npm_bin=$( npm bin )
-
-  "${npm_bin}/flow" --show-all-errors
-}
-
 main() {
   local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
   local source_dir=$( dirname "${script_dir}" )
 
   local -i status=0
-  echo "Linting package..." && lint "${source_dir}/lib/**/*.js" || status=$?
-  echo "Linting package specs..." && lint "${source_dir}/spec/**/*.js" || status=$?
-  echo "Type checking with flow..." && flow || status=$?
+  echo "Linting package..." && lint "${source_dir}/lib" || status=$?
+  echo "Linting package specs..." && lint "${source_dir}/spec" || status=$?
   return ${status}
 }
 
