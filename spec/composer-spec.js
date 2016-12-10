@@ -15,7 +15,7 @@ describe('Composer', () => {
   describe('build', () => {
     let editor, builder, composer
 
-    function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
+    function initializeSpies (filePath, jobNames = [''], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
@@ -42,7 +42,7 @@ describe('Composer', () => {
     it('does nothing for new, unsaved files', () => {
       initializeSpies(null)
 
-      let result = 'aaaaaaaaaaaa'
+      let result: ?boolean
       waitsForPromise(() => {
         return composer.build().then(r => { result = r })
       })
