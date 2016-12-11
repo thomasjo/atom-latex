@@ -184,7 +184,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('successfully executes latexmk when given a jobname', () => {
-      state.setJobNames('foo')
+      state.setJobNames(['foo'])
       jobState = state.getJobStates()[0]
 
       waitsForPromise(() => {
@@ -198,7 +198,7 @@ describe('LatexmkBuilder', () => {
     })
 
     it('successfully executes latexmk when given a jobname with spaces', () => {
-      state.setJobNames('foo bar')
+      state.setJobNames(['foo bar'])
       jobState = state.getJobStates()[0]
 
       waitsForPromise(() => {
