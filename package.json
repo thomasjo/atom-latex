@@ -52,7 +52,18 @@
       "latex": true
     },
     "rules": {
-      "flowtype-errors/show-errors": 2
+      "flowtype-errors/show-errors": 2,
+      "flowtype/delimiter-dangle": [
+        2,
+        "never"
+      ],
+      "flowtype/require-valid-file-annotation": [
+        2,
+        "always",
+        {
+          "annotationStyle": "block"
+        }
+      ]
     }
   },
   "engines": {
