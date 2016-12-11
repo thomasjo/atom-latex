@@ -147,7 +147,7 @@ describe('LatexmkBuilder', () => {
     it('adds a jobname argument when passed a non-null jobname', () => {
       state.setJobNames(['foo'])
       jobState = state.getJobStates()[0]
-      expect(builder.constructArgs(jobState)).toContain('-jobname=foo')
+      expect(builder.constructArgs(jobState)).toContain('-jobname="foo"')
     })
   })
 
@@ -172,6 +172,34 @@ describe('LatexmkBuilder', () => {
     it('successfully executes latexmk when given a file path containing spaces', () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
       state.setFilePath(filePath)
+
+      waitsForPromise(() => {
+        return builder.run(jobState).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
+        expect(exitCode).toBe(0)
+      })
+    })
+
+    it('successfully executes latexmk when given a jobname', () => {
+      state.setJobNames('foo')
+      jobState = state.getJobStates()[0]
+
+      waitsForPromise(() => {
+        return builder.run(jobState).then(code => { exitCode = code })
+      })
+
+      runs(() => {
+        expect(builder.logStatusCode).not.toHaveBeenCalled()
+        expect(exitCode).toBe(0)
+      })
+    })
+
+    it('successfully executes latexmk when given a jobname with spaces', () => {
+      state.setJobNames('foo bar')
+      jobState = state.getJobStates()[0]
 
       waitsForPromise(() => {
         return builder.run(jobState).then(code => { exitCode = code })
