@@ -600,7 +600,7 @@ describe('Composer', () => {
       atom.config.set('latex.enableExtendedBuildMode', false)
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
-      spyOn(composer, 'initializeBuildStateFromProjectFile').andCallFake(() => {})
+      spyOn(composer, 'initializeBuildStateFromSettingsFile').andCallFake(() => {})
 
       const { state } = composer.initializeBuild(filePath)
 
@@ -616,7 +616,7 @@ describe('Composer', () => {
       expect(state.getMoveResultToSourceDirectory()).toBe(true)
     })
 
-    it('verifies that project file properties override config properties', () => {
+    it('verifies that settings file properties override config properties', () => {
       const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
       const composer = new Composer()
 
@@ -640,7 +640,7 @@ describe('Composer', () => {
       expect(state.getMoveResultToSourceDirectory()).toBe(true)
     })
 
-    it('verifies that project file properties override magic properties', () => {
+    it('verifies that settings file properties override magic properties', () => {
       const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
       const composer = new Composer()
 
