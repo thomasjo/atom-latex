@@ -4,22 +4,28 @@ import helpers from '../spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
+import BuildState from '../../lib/build-state'
 
 function getRawFile (filePath) {
   return fs.readFileSync(filePath, {encoding: 'utf-8'})
 }
 
 describe('KnitrBuilder', () => {
-  let builder, fixturesPath, filePath
+  let builder, fixturesPath, filePath, state, jobState
 
   beforeEach(() => {
     waitsForPromise(() => {
       return helpers.activatePackages()
     })
     builder = new KnitrBuilder()
-    spyOn(builder, 'logStatusCode')
+    spyOn(builder, 'logStatusCode').andCallThrough()
     fixturesPath = helpers.cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+    state = new BuildState(filePath)
+    state.setEngine('pdflatex')
+    state.setOutputFormat('pdf')
+    state.setOutputDirectory('')
+    jobState = state.getJobStates()[0]
   })
 
   describe('constructArgs', () => {
@@ -30,7 +36,7 @@ describe('KnitrBuilder', () => {
         `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
-      const args = builder.constructArgs(filePath)
+      const args = builder.constructArgs(jobState)
       expect(args).toEqual(expectedArgs)
     })
   })
@@ -38,13 +44,9 @@ describe('KnitrBuilder', () => {
   describe('run', () => {
     let exitCode
 
-    beforeEach(() => {
-      atom.config.set('latex.builder', 'latexmk')
-    })
-
     it('successfully executes knitr when given a valid R Sweave file', () => {
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -58,9 +60,10 @@ describe('KnitrBuilder', () => {
 
     it('fails to execute knitr when given an invalid file path', () => {
       filePath = path.join(fixturesPath, 'foo.Rnw')
+      state.setFilePath(filePath)
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -78,7 +81,7 @@ describe('KnitrBuilder', () => {
       spyOn(latex.log, 'showMessage').andCallThrough()
 
       waitsForPromise(() => {
-        return builder.run(filePath).then(code => { exitCode = code })
+        return builder.run(jobState).then(code => { exitCode = code })
       })
 
       runs(() => {
@@ -112,6 +115,13 @@ describe('KnitrBuilder', () => {
       const resolvedPath = builder.resolveOutputPath(sourcePath, stdout)
 
       expect(resolvedPath).toBe(resultPath)
+    })
+  })
+
+  describe('canProcess', () => {
+    it('returns true when given a file path with a .Rnw extension', () => {
+      const canProcess = KnitrBuilder.canProcess(state)
+      expect(canProcess).toBe(true)
     })
   })
 })

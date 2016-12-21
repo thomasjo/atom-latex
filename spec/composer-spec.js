@@ -5,6 +5,7 @@ import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
+import BuildState from '../lib/build-state'
 
 describe('Composer', () => {
   beforeEach(() => {
@@ -14,14 +15,14 @@ describe('Composer', () => {
   describe('build', () => {
     let editor, builder, composer
 
-    function initializeSpies (filePath, jobnames = [null], statusCode = 0) {
+    function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.setJobNames(jobNames)
+      })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
 
-      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic', 'getOutputDirectory'])
-      builder.getJobNamesFromMagic.andReturn(jobnames)
-      builder.getOutputDirectory.andReturn('')
+      builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
       builder.run.andCallFake(() => {
         switch (statusCode) {
           case 0: { return Promise.resolve(statusCode) }
@@ -106,29 +107,25 @@ describe('Composer', () => {
     })
 
     it('invokes `showResult` after a successful build, with expected log parsing result', () => {
-      const result = {
-        outputFilePath: 'file.pdf',
-        messages: []
-      }
-
       initializeSpies('file.tex')
-      builder.parseLogAndFdbFiles.andReturn(result)
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setLogMessages([])
+        state.setOutputFilePath('file.pdf')
+      })
 
       waitsForPromise(() => {
         return composer.build()
       })
 
       runs(() => {
-        expect(composer.showResult).toHaveBeenCalledWith(result)
+        expect(composer.showResult).toHaveBeenCalled()
       })
     })
 
     it('treats missing output file data in log file as an error', () => {
       initializeSpies('file.tex')
-
-      builder.parseLogAndFdbFiles.andReturn({
-        outputFilePath: null,
-        messages: []
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setLogMessages([])
       })
 
       waitsForPromise(() => {
@@ -142,7 +139,7 @@ describe('Composer', () => {
 
     it('treats missing result from parser as an error', () => {
       initializeSpies('file.tex')
-      builder.parseLogAndFdbFiles.andReturn(null)
+      builder.parseLogAndFdbFiles.andCallFake(state => {})
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
@@ -170,19 +167,17 @@ describe('Composer', () => {
   describe('clean', () => {
     let fixturesPath, composer
 
-    function initializeSpies (filePath, jobnames = [null]) {
-      const builder = jasmine.createSpyObj('MockBuilder', ['parseFdbFile', 'getJobNamesFromMagic', 'getOutputDirectory'])
-
-      const outputDirectory = atom.config.get('latex.outputDirectory')
+    function initializeSpies (filePath, jobNames = [null]) {
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.setJobNames(jobNames)
+      })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
-      spyOn(composer, 'resolveRootFilePath').andReturn(filePath)
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath: filePath, builder, jobnames })
-      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, rootFilePath, jobname) => {
-        let { dir, name } = path.parse(rootFilePath)
-        if (outputDirectory) {
-          dir = path.resolve(dir, outputDirectory)
+      spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
+        let { dir, name } = path.parse(state.getFilePath())
+        if (state.getOutputDirectory()) {
+          dir = path.resolve(dir, state.getOutputDirectory())
         }
-        if (jobname) name = jobname
+        if (state.getJobName()) name = state.getJobName()
         return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
@@ -291,40 +286,42 @@ describe('Composer', () => {
   })
 
   describe('shouldMoveResult', () => {
-    let builder, composer
+    let composer, state, jobState
     const rootFilePath = '/wibble/gronk.tex'
 
     function initializeSpies (outputDirectory = '') {
-      builder = { getOutputDirectory: () => outputDirectory }
       composer = new Composer()
+      state = new BuildState(rootFilePath)
+      state.setOutputDirectory(outputDirectory)
+      jobState = state.getJobStates()[0]
     }
 
     it('should return false when using neither an output directory, nor the move option', () => {
       initializeSpies()
-      atom.config.set('latex.moveResultToSourceDirectory', false)
+      state.setMoveResultToSourceDirectory(false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using an output directory, but using the move option', () => {
       initializeSpies()
-      atom.config.set('latex.moveResultToSourceDirectory', true)
+      state.setMoveResultToSourceDirectory(true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return false when not using the move option, but using an output directory', () => {
       initializeSpies('baz')
-      atom.config.set('latex.moveResultToSourceDirectory', false)
+      state.setMoveResultToSourceDirectory(false)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(false)
+      expect(composer.shouldMoveResult(jobState)).toBe(false)
     })
 
     it('should return true when using both an output directory and the move option', () => {
       initializeSpies('baz')
-      atom.config.set('latex.moveResultToSourceDirectory', true)
+      state.setMoveResultToSourceDirectory(true)
 
-      expect(composer.shouldMoveResult(builder, rootFilePath)).toBe(true)
+      expect(composer.shouldMoveResult(jobState)).toBe(true)
     })
   })
 
@@ -381,13 +378,13 @@ describe('Composer', () => {
     it('launches the opener using editor metadata and resolved output file with jobnames', () => {
       const filePath = 'file.tex'
       const lineNumber = 1
-      const rootFilePath = filePath
-      const builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles', 'getJobNamesFromMagic'])
-      const jobnames = ['foo', 'bar']
+      const jobNames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
-      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, rootFilePath, jobname) => jobname + '.pdf')
-      spyOn(composer, 'initializeBuild').andReturn({ rootFilePath, builder, jobnames })
+      spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobName() + '.pdf')
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
+        state.setJobNames(jobNames)
+      })
 
       spyOn(latex.opener, 'open').andReturn(true)
 
@@ -397,6 +394,271 @@ describe('Composer', () => {
         expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
         expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
       })
+    })
+  })
+
+  describe('moveResult', () => {
+    let composer, state, jobState
+    const texFilePath = path.normalize('/angle/gronk.tex')
+    const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
+
+    beforeEach(() => {
+      composer = new Composer()
+      state = new BuildState(texFilePath)
+      jobState = state.getJobStates()[0]
+      jobState.setOutputFilePath(outputFilePath)
+      spyOn(fs, 'removeSync')
+      spyOn(fs, 'moveSync')
+    })
+
+    it('verifies that the output file and the synctex file are moved when they exist', () => {
+      const destOutputFilePath = path.normalize('/angle/gronk.pdf')
+      const syncTexPath = path.normalize('/angle/dangle/gronk.synctex.gz')
+      const destSyncTexPath = path.normalize('/angle/gronk.synctex.gz')
+
+      spyOn(fs, 'existsSync').andReturn(true)
+
+      composer.moveResult(jobState)
+      expect(fs.removeSync).toHaveBeenCalledWith(destOutputFilePath)
+      expect(fs.removeSync).toHaveBeenCalledWith(destSyncTexPath)
+      expect(fs.moveSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
+      expect(fs.moveSync).toHaveBeenCalledWith(syncTexPath, destSyncTexPath)
+    })
+
+    it('verifies that the output file and the synctex file are not moved when they do not exist', () => {
+      spyOn(fs, 'existsSync').andReturn(false)
+
+      composer.moveResult(jobState)
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('initializeBuildStateFromProperties', () => {
+    let state, composer
+    const primaryString = 'primary'
+    const secondaryString = 'secondary'
+    const primaryArray = [primaryString]
+    const secondaryArray = [secondaryString]
+
+    beforeEach(() => {
+      state = new BuildState('gronk.tex')
+      composer = new Composer()
+    })
+
+    it('verifies that first level properties override second level properties', () => {
+      const properties = {
+        cleanPatterns: primaryArray,
+        enableExtendedBuildMode: true,
+        enableShellEscape: true,
+        enableSynctex: true,
+        jobNames: primaryArray,
+        jobnames: secondaryArray,
+        jobname: secondaryString,
+        customEngine: primaryString,
+        engine: secondaryString,
+        program: secondaryString,
+        moveResultToSourceDirectory: true,
+        outputFormat: primaryString,
+        format: secondaryString,
+        outputDirectory: primaryString,
+        output_directory: secondaryString,
+        producer: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getCleanPatterns()).toEqual(primaryArray, 'cleanPatterns to be set')
+      expect(state.getEnableExtendedBuildMode()).toBe(true, 'enableExtendedBuildMode to be set')
+      expect(state.getEnableShellEscape()).toBe(true, 'enableShellEscape to be set')
+      expect(state.getEnableSynctex()).toBe(true, 'enableSynctex to be set')
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to set by jobNames property not by jobnames or jobname property')
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set by customEngine property not by engine or program property')
+      expect(state.getMoveResultToSourceDirectory()).toBe(true, 'moveResultToSourceDirectory to be set')
+      expect(state.getOutputFormat()).toBe(primaryString, 'outputFormat to be set by outputFormat property not by format property')
+      expect(state.getOutputDirectory()).toBe(primaryString, 'outputDirectory to be set by outputDirectory property not by output_directory property')
+      expect(state.getProducer()).toBe(primaryString, 'producer to be set')
+    })
+
+    it('verifies that second level properties override third level properties', () => {
+      const properties = {
+        jobnames: primaryArray,
+        jobname: secondaryString,
+        engine: primaryString,
+        program: secondaryString,
+        format: primaryString,
+        output_directory: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to be set')
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set by engine property not by program property')
+      expect(state.getOutputFormat()).toBe(primaryString, 'outputFormat to be set')
+      expect(state.getOutputDirectory()).toBe(primaryString, 'outputDirectory to be set')
+    })
+
+    it('verifies that third level properties are set', () => {
+      const properties = {
+        jobname: primaryString,
+        program: primaryString
+      }
+
+      composer.initializeBuildStateFromProperties(state, properties)
+
+      expect(state.getJobNames()).toEqual(primaryArray, 'jobNames to be set')
+      expect(state.getEngine()).toBe(primaryString, 'engine to be set')
+    })
+  })
+
+  describe('initializeBuildStateFromConfig', () => {
+    it('verifies that build state loaded from config settings is correct', () => {
+      const state = new BuildState('foo.tex')
+      const composer = new Composer()
+      const outputDirectory = 'build'
+      const cleanPatterns = ['**/*.foo']
+
+      atom.config.set('latex.outputDirectory', outputDirectory)
+      atom.config.set('latex.cleanPatterns', cleanPatterns)
+      atom.config.set('latex.enableShellEscape', true)
+
+      composer.initializeBuildStateFromConfig(state)
+
+      expect(state.getOutputDirectory()).toEqual(outputDirectory)
+      expect(state.getOutputFormat()).toEqual('pdf')
+      expect(state.getProducer()).toEqual('dvipdfmx')
+      expect(state.getEngine()).toEqual('pdflatex')
+      expect(state.getCleanPatterns()).toEqual(cleanPatterns)
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+  })
+
+  describe('initializeBuildStateFromMagic', () => {
+    it('detects magic and overrides build state values', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const state = new BuildState(filePath)
+      const composer = new Composer()
+
+      composer.initializeBuildStateFromMagic(state)
+
+      expect(state.getOutputDirectory()).toEqual('wibble')
+      expect(state.getOutputFormat()).toEqual('ps')
+      expect(state.getProducer()).toEqual('xdvipdfmx')
+      expect(state.getEngine()).toEqual('lualatex')
+      expect(state.getJobNames()).toEqual(['foo bar', 'snafu'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.quux', 'foo/bar'])
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+
+    it('detect root magic comment and loads remaining magic comments from root', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'multiple-magic-comments.tex')
+      const state = new BuildState(filePath)
+      const composer = new Composer()
+
+      composer.initializeBuildStateFromMagic(state)
+
+      expect(state.getEngine()).not.toEqual('lualatex')
+    })
+  })
+
+  describe('initializeBuild', () => {
+    it('verifies that build state is cached and that old cached state is removed', () => {
+      const composer = new Composer()
+      const fixturesPath = helpers.cloneFixtures()
+      const filePath = path.join(fixturesPath, 'file.tex')
+      const subFilePath = path.join(fixturesPath, 'magic-comments', 'multiple-magic-comments.tex')
+      const engine = 'lualatex'
+
+      let build = composer.initializeBuild(subFilePath)
+      // Set engine as a flag to indicate the cached state
+      build.state.setEngine(engine)
+      expect(build.state.getFilePath()).toBe(filePath)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath, true)
+      expect(build.state.getEngine()).toBe(engine)
+      expect(build.state.hasSubfile(subFilePath)).toBe(true)
+
+      build = composer.initializeBuild(filePath)
+      expect(build.state.getEngine()).not.toBe(engine)
+      expect(build.state.hasSubfile(subFilePath)).toBe(false)
+    })
+
+    it('verifies that magic properties override config properties', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const composer = new Composer()
+
+      atom.config.set('latex.enableShellEscape', false)
+      atom.config.set('latex.enableExtendedBuildMode', false)
+      atom.config.set('latex.moveResultToSourceDirectory', false)
+
+      const { state } = composer.initializeBuild(filePath)
+
+      expect(state.getOutputDirectory()).toEqual('wibble')
+      expect(state.getOutputFormat()).toEqual('ps')
+      expect(state.getProducer()).toEqual('xdvipdfmx')
+      expect(state.getEngine()).toEqual('lualatex')
+      expect(state.getJobNames()).toEqual(['foo bar', 'snafu'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.quux', 'foo/bar'])
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+  })
+
+  describe('resolveOutputFilePath', () => {
+    let builder, state, jobState, composer
+
+    beforeEach(() => {
+      composer = new Composer()
+      state = new BuildState('foo.tex')
+      jobState = state.getJobStates()[0]
+      builder = jasmine.createSpyObj('MockBuilder', ['parseLogAndFdbFiles'])
+    })
+
+    it('returns outputFilePath if already set in jobState', () => {
+      const outputFilePath = 'foo.pdf'
+
+      jobState.setOutputFilePath(outputFilePath)
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
+    })
+
+    it('returns outputFilePath returned by parseLogAndFdbFiles', () => {
+      const outputFilePath = 'foo.pdf'
+
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setOutputFilePath(outputFilePath)
+      })
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
+    })
+
+    it('returns null returned if parseLogAndFdbFiles fails', () => {
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(null)
+    })
+
+    it('updates outputFilePath if moveResultToSourceDirectory is set', () => {
+      const outputFilePath = 'foo.pdf'
+      const outputDirectory = 'bar'
+
+      state.setOutputDirectory(outputDirectory)
+      state.setMoveResultToSourceDirectory(true)
+
+      builder.parseLogAndFdbFiles.andCallFake(state => {
+        state.setOutputFilePath(path.join(outputDirectory, outputFilePath))
+      })
+
+      expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
     })
   })
 })

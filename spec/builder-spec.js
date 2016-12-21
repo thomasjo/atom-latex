@@ -3,9 +3,10 @@
 import helpers from './spec-helpers'
 import path from 'path'
 import Builder from '../lib/builder'
+import BuildState from '../lib/build-state'
 
 describe('Builder', () => {
-  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, magicOverrideFilePath
+  let builder, fixturesPath, filePath, logFilePath, fdbFilePath, state, jobState
 
   beforeEach(() => {
     builder = new Builder()
@@ -13,7 +14,9 @@ describe('Builder', () => {
     filePath = path.join(fixturesPath, 'file.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
-    magicOverrideFilePath = path.join(fixturesPath, 'magic-comments', 'override-settings.tex')
+    state = new BuildState(filePath)
+    state.setOutputDirectory('')
+    jobState = state.getJobStates()[0]
   })
 
   describe('constructPath', () => {
@@ -77,26 +80,24 @@ describe('Builder', () => {
     beforeEach(() => {
       logParser = jasmine.createSpyObj('MockLogParser', ['parse'])
       spyOn(builder, 'getLogParser').andReturn(logParser)
-      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated log file path by invoking @resolveLogFilePath', () => {
       spyOn(builder, 'resolveLogFilePath').andReturn('foo.log')
 
-      builder.parseLogFile(filePath, null)
-      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(filePath, null)
+      builder.parseLogFile(jobState)
+      expect(builder.resolveLogFilePath).toHaveBeenCalledWith(jobState)
     })
 
-    it('returns null if passed a file path that does not exist', () => {
-      filePath = '/foo/bar/quux.tex'
-      const result = builder.parseLogFile(filePath, null)
+    it('does not attempt parse if passed a file path that does not exist', () => {
+      state.setFilePath('/foo/bar/quux.tex')
+      builder.parseLogFile(jobState)
 
-      expect(result).toBeNull()
       expect(logParser.parse).not.toHaveBeenCalled()
     })
 
     it('attempts to parse the resolved log file', () => {
-      builder.parseLogFile(filePath)
+      builder.parseLogFile(jobState)
 
       expect(builder.getLogParser).toHaveBeenCalledWith(logFilePath, filePath)
       expect(logParser.parse).toHaveBeenCalled()
@@ -109,26 +110,24 @@ describe('Builder', () => {
     beforeEach(() => {
       fdbParser = jasmine.createSpyObj('MockFdbParser', ['parse'])
       spyOn(builder, 'getFdbParser').andReturn(fdbParser)
-      spyOn(builder, 'getOutputDirectory').andReturn('')
     })
 
     it('resolves the associated fdb file path by invoking @resolveFdbFilePath', () => {
       spyOn(builder, 'resolveFdbFilePath').andReturn('foo.fdb_latexmk')
 
-      builder.parseFdbFile(filePath, null)
-      expect(builder.resolveFdbFilePath).toHaveBeenCalledWith(filePath, null)
+      builder.parseFdbFile(jobState)
+      expect(builder.resolveFdbFilePath).toHaveBeenCalledWith(jobState)
     })
 
-    it('returns null if passed a file path that does not exist', () => {
-      filePath = '/foo/bar/quux.tex'
-      const result = builder.parseFdbFile(filePath, null)
+    it('does not attempt parse if passed a file path that does not exist', () => {
+      state.setFilePath('/foo/bar/quux.tex')
+      builder.parseFdbFile(jobState)
 
-      expect(result).toBeNull()
       expect(fdbParser.parse).not.toHaveBeenCalled()
     })
 
     it('attempts to parse the resolved fdb file', () => {
-      builder.parseFdbFile(filePath)
+      builder.parseFdbFile(jobState)
 
       expect(builder.getFdbParser).toHaveBeenCalledWith(fdbFilePath)
       expect(fdbParser.parse).toHaveBeenCalled()
@@ -153,42 +152,15 @@ describe('Builder', () => {
         name: 'dvi',
         format: 'dvi'
       }]
+      state.setOutputDirectory('log-parse')
 
-      spyOn(builder, 'getOutputDirectory').andReturn('log-parse')
       for (const { name, format } of switches) {
-        const result = builder.parseLogAndFdbFiles(fixturesPath, filePath, `file-${name}`)
-        expect(path.basename(result.outputFilePath)).toBe(`file-${name}.${format}`, `Select ${format} file when using -${name} switch.`)
+        state.setJobNames([`file-${name}`])
+        jobState = state.getJobStates()[0]
+        builder.parseLogAndFdbFiles(jobState)
+        expect(path.basename(jobState.getOutputFilePath())).toBe(`${jobState.getJobName()}.${format}`,
+          `Select ${format} file when using -${name} switch.`)
       }
-    })
-  })
-
-  describe('getOutputDirectoryFromMagic', () => {
-    it('detects output director magic and outputs directory', () => {
-      expect(builder.getOutputDirectoryFromMagic(magicOverrideFilePath)).toEqual('wibble')
-    })
-  })
-
-  describe('getOutputFormatFromMagic', () => {
-    it('detects output magic and outputs output format', () => {
-      expect(builder.getOutputFormatFromMagic(magicOverrideFilePath)).toEqual('ps')
-    })
-  })
-
-  describe('getProducerFromMagic', () => {
-    it('detects producer magic and outputs producer', () => {
-      expect(builder.getProducerFromMagic(magicOverrideFilePath)).toEqual('xdvipdfmx')
-    })
-  })
-
-  describe('getLatexEngineFromMagic', () => {
-    it('detects program magic and outputs correct engine', () => {
-      expect(builder.getLatexEngineFromMagic(magicOverrideFilePath)).toEqual('lualatex')
-    })
-  })
-
-  describe('getJobNamesFromMagic', () => {
-    it('detects jobnames magic and outputs jobnames', () => {
-      expect(builder.getJobNamesFromMagic(magicOverrideFilePath)).toEqual(['foo', 'bar'])
     })
   })
 })

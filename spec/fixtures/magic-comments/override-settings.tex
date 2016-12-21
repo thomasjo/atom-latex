@@ -1,9 +1,13 @@
 % !TEX program = lualatex
-% !TEX output = build
 % !TEX format = ps
-% !TEX jobnames = foo bar
+% !TEX jobnames = foo bar, snafu
 % !TEX producer = xdvipdfmx
 % !TEX output_directory = wibble
+% !TEX cleanPatterns = **/*.quux, foo/bar
+% !TEX enableShellEscape = yes
+% !TEX enableSynctex = true
+% !TEX enableExtendedBuildMode = YES
+% !TEX moveResultToSourceDirectory = Yes
 \documentclass{article}
 
 \begin{document}
