@@ -50,7 +50,7 @@ describe('KnitrBuilder', () => {
         `-e "patchSynctex('${escapedFilePath}',syncfile='${escapedSynctexPath}')"`
       ]
 
-      const args = builder.constructPatchSynctexArgs(filePath)
+      const args = builder.constructPatchSynctexArgs(jobState)
       expect(args).toEqual(expectedArgs)
     })
   })
