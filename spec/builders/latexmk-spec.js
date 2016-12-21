@@ -438,4 +438,36 @@ describe('LatexmkBuilder', () => {
       })
     })
   })
+
+  describe('canProcess', () => {
+    it('returns true when given a file path with a .tex extension', () => {
+      const canProcess = LatexmkBuilder.canProcess(filePath)
+      expect(canProcess).toBe(true)
+    })
+  })
+
+  describe('logStatusCode', () => {
+    it('handles latexmk specific status codes', () => {
+      let messages = []
+      spyOn(latex.log, 'error').andCallFake(message => messages.push(message))
+
+      const statusCodes = [10, 11, 12, 13, 20]
+      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode))
+
+      const startsWithPrefix = str => str.startsWith('latexmk:')
+
+      expect(messages.length).toBe(statusCodes.length)
+      expect(messages.filter(startsWithPrefix).length).toBe(statusCodes.length)
+    })
+
+    it('passes through to superclass when given non-latex status codes', () => {
+      const superclass = Object.getPrototypeOf(builder)
+      spyOn(superclass, 'logStatusCode').andCallThrough()
+
+      const statusCode = 1
+      builder.logStatusCode(statusCode)
+
+      expect(superclass.logStatusCode).toHaveBeenCalledWith(statusCode)
+    })
+  })
 })

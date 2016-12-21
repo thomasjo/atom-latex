@@ -399,4 +399,79 @@ describe('Composer', () => {
       })
     })
   })
+
+  describe('sync', () => {
+    it('silently does nothing when the current editor is transient', () => {
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
+      spyOn(composer, 'resolveOutputFilePath').andCallThrough()
+      spyOn(latex, 'getOpener').andCallThrough()
+
+      composer.sync()
+
+      expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+      expect(latex.getOpener).not.toHaveBeenCalled()
+    })
+
+    it('logs a warning and returns when an output file cannot be resolved', () => {
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
+      spyOn(composer, 'resolveOutputFilePath').andReturn()
+      spyOn(latex, 'getOpener').andCallThrough()
+      spyOn(latex.log, 'warning').andCallThrough()
+
+      composer.sync()
+
+      expect(latex.log.warning).toHaveBeenCalled()
+      expect(latex.getOpener).not.toHaveBeenCalled()
+    })
+
+    it('launches the opener using editor metadata and resolved output file', () => {
+      const filePath = 'file.tex'
+      const lineNumber = 1
+      const outputFilePath = 'file.pdf'
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
+
+      const opener = jasmine.createSpyObj('MockOpener', ['open'])
+      spyOn(latex, 'getOpener').andReturn(opener)
+
+      composer.sync()
+
+      expect(opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
+    })
+  })
+
+  describe('moveResult', () => {
+    const texFilePath = path.normalize('/angle/gronk.tex')
+    const outputFilePath = path.normalize('/angle/dangle/gronk.pdf')
+    const result = { outputFilePath }
+
+    beforeEach(() => {
+      spyOn(fs, 'removeSync')
+      spyOn(fs, 'moveSync')
+    })
+
+    it('verifies that the output file and the synctex file are moved when they exist', () => {
+      const destOutputFilePath = path.normalize('/angle/gronk.pdf')
+      const syncTexPath = path.normalize('/angle/dangle/gronk.synctex.gz')
+      const destSyncTexPath = path.normalize('/angle/gronk.synctex.gz')
+
+      spyOn(fs, 'existsSync').andReturn(true)
+
+      composer.moveResult(result, texFilePath)
+      expect(fs.removeSync).toHaveBeenCalledWith(destOutputFilePath)
+      expect(fs.removeSync).toHaveBeenCalledWith(destSyncTexPath)
+      expect(fs.moveSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
+      expect(fs.moveSync).toHaveBeenCalledWith(syncTexPath, destSyncTexPath)
+    })
+
+    it('verifies that the output file and the synctex file are not moved when they do not exist', () => {
+      spyOn(fs, 'existsSync').andReturn(false)
+
+      composer.moveResult(result, texFilePath)
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+      expect(fs.moveSync).not.toHaveBeenCalled()
+    })
+  })
 })

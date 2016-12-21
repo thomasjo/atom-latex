@@ -114,4 +114,11 @@ describe('KnitrBuilder', () => {
       expect(resolvedPath).toBe(resultPath)
     })
   })
+
+  describe('canProcess', () => {
+    it('returns true when given a file path with a .Rnw extension', () => {
+      const canProcess = KnitrBuilder.canProcess(filePath)
+      expect(canProcess).toBe(true)
+    })
+  })
 })
