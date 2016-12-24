@@ -41,6 +41,20 @@ describe('KnitrBuilder', () => {
     })
   })
 
+  describe('constructPatchSynctexArgs', () => {
+    it('produces default arguments containing expected file path', () => {
+      const escapedFilePath = filePath.replace(/\\/g, '\\\\')
+      const escapedSynctexPath = escapedFilePath.replace(/\.[^.]+$/, '')
+      const expectedArgs = [
+        '-e "library(patchSynctex)"',
+        `-e "patchSynctex('${escapedFilePath}',syncfile='${escapedSynctexPath}')"`
+      ]
+
+      const args = builder.constructPatchSynctexArgs(jobState)
+      expect(args).toEqual(expectedArgs)
+    })
+  })
+
   describe('run', () => {
     let exitCode
 
