@@ -10,3 +10,11 @@ for i in pdf pdfps pdfdvi ps dvi; do
 done
 
 rm log-parse/*.!(log|fdb_latexmk)
+
+cd bib
+
+latexmk -pdf -jobname=biber foo.tex
+latexmk -pdf -jobname=bibtex foo.tex
+
+rm *.!(blg|tex|bib)
+rm bibtex-blx.bib

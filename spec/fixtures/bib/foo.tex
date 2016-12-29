@@ -1,0 +1,14 @@
+% !TeX jobNames = biber, bibtex
+\documentclass{article}
+
+\usepackage[backend=\jobname]{biblatex}
+
+\bibliography{foo}{}
+
+\begin{document}
+
+``I was here'' said Kilroy ~\cite{wibble}.
+
+\printbibliography
+
+\end{document}
