@@ -17,8 +17,8 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: bibtex-blx.bib
-Database file #2: foo.bib
-I was expecting a `,' or a `}'---line 4 of file foo.bib
+Database file #2: biblatex.bib
+I was expecting a `,' or a `}'---line 4 of file biblatex.bib
  :   
  :   author = "Quux Kilroy",
 (Error may have been on previous line)
@@ -31,7 +31,7 @@ Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 You've used 2 entries,
             6256 wiz_defined-function locations,
-            1177 strings with 8533 characters,
+            1176 strings with 8530 characters,
 and the built_in function-call counts, 2603 in all, are:
 = -- 93
 > -- 52

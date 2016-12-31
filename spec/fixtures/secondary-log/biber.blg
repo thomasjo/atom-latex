@@ -1,0 +1,13 @@
+[0] Config.pm:354> INFO - This is Biber 2.6
+[0] Config.pm:357> INFO - Logfile is 'biber.blg'
+[32] biber:302> INFO - === Sat Dec 31, 2016, 09:22:00
+[50] Biber.pm:359> INFO - Reading 'biber.bcf'
+[118] Biber.pm:823> INFO - Found 1 citekeys in bib section 0
+[129] Biber.pm:3658> INFO - Processing section 0
+[141] Biber.pm:3828> INFO - Looking for bibtex format file 'biblatex.bib' for section 0
+[142] bibtex.pm:1425> INFO - Decoding LaTeX character macros into UTF-8
+[142] bibtex.pm:1282> INFO - Found BibTeX data source 'biblatex.bib'
+[142] Utils.pm:164> WARN - Entry wibble does not parse correctly
+[143] Utils.pm:180> ERROR - BibTeX subsystem: /tmp/SLmeMjvpji/biblatex.bib_10398.utf8, line 4, syntax error: found "author", expected end of entry ("}" or ")") (skipping to next "@")
+[143] Biber.pm:109> INFO - WARNINGS: 1
+[143] Biber.pm:113> INFO - ERRORS: 1

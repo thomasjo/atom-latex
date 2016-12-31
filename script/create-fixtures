@@ -11,10 +11,11 @@ done
 
 rm log-parse/*.!(log|fdb_latexmk)
 
-cd bib
+cd secondary-log
 
-latexmk -pdf -jobname=biber foo.tex
-latexmk -pdf -jobname=bibtex foo.tex
+latexmk -pdf -jobname=biber biblatex.tex
+latexmk -pdf -jobname=bibtex biblatex.tex
+latexmk -pdf imakeidx.tex
 
-rm *.!(blg|tex|bib)
+rm *.!(*lg|tex|bib)
 rm bibtex-blx.bib
