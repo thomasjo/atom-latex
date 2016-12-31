@@ -13,6 +13,16 @@ describe('SecondaryLogParser', () => {
   })
 
   describe('parse', () => {
+    it('parses garbled log file and returns undefined', () => {
+      const logPath = path.join(fixturesPath, 'imakeidx.zlg')
+      const texPath = path.join(fixturesPath, 'imakeidx.tex')
+      const parser = new SecondaryLogParser(logPath, texPath)
+
+      const result = parser.parse()
+
+      expect(result).toBeUndefined()
+    })
+
     it('parses Biber log file and returns all messages', () => {
       const logPath = path.join(fixturesPath, 'biber.blg')
       const texPath = path.join(fixturesPath, 'biblatex.tex')
@@ -90,7 +100,7 @@ describe('SecondaryLogParser', () => {
       expect(result).toEqual(expectedResult)
     })
 
-    it('parses and returns all errors', () => {
+    it('parses BibTeX log and returns all messages', () => {
       const logPath = path.join(fixturesPath, 'bibtex.blg')
       const texPath = path.join(fixturesPath, 'biblatex.tex')
       const filePath = path.join(fixturesPath, 'biblatex.bib')
@@ -98,21 +108,46 @@ describe('SecondaryLogParser', () => {
       const expectedResult = [{
         type: 'error',
         text: 'I was expecting a `,\' or a `}\'',
-        range: [[4, 0], [4, 65536]],
+        range: [[3, 0], [3, 65536]],
         filePath,
         logPath,
         logRange: [[20, 0], [21, 60]]
       }, {
         type: 'error',
         text: 'A bad cross reference---entry "wibble" refers to entry "bar", which doesn\'t exist',
-        logRange: [[25, 0], [26,
-          42]],
+        logRange: [[25, 0], [26, 42]],
         logPath
       }, {
         type: 'warning',
         text: 'I didn\'t find a database entry for "bar"',
         logPath,
         logRange: [[27, 0], [28, 49]]
+      }]
+
+      const result = parser.parse()
+
+      expect(result).toEqual(expectedResult)
+    })
+
+    it('parses makeindex log and returns all messages', () => {
+      const logPath = path.join(fixturesPath, 'imakeidx.ilg')
+      const texPath = path.join(fixturesPath, 'imakeidx.tex')
+      const filePath = path.join(fixturesPath, 'imakeidx.idx')
+      const parser = new SecondaryLogParser(logPath, texPath)
+      const expectedResult = [{
+        type: 'error',
+        text: 'Illegal null field.',
+        range: [[0, 0], [0, 65536]],
+        filePath,
+        logRange: [[2, 0], [3, 25]],
+        logPath
+      }, {
+        type: 'warning',
+        text: 'Unmatched range opening operator (.',
+        range: [[1, 0], [1, 65536]],
+        filePath,
+        logRange: [[7, 0], [8, 41]],
+        logPath
       }]
 
       const result = parser.parse()
