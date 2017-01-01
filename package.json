@@ -233,6 +233,7 @@
         "sumatra",
         "xdg-open",
         "x-reader",
+        "zathura",
         "custom"
       ],
       "default": "automatic",
