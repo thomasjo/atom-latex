@@ -600,6 +600,8 @@ describe('Composer', () => {
       atom.config.set('latex.enableExtendedBuildMode', false)
       atom.config.set('latex.moveResultToSourceDirectory', false)
 
+      spyOn(composer, 'initializeBuildStateFromSettingsFile').andCallFake(() => {})
+
       const { state } = composer.initializeBuild(filePath)
 
       expect(state.getOutputDirectory()).toEqual('wibble')
@@ -612,6 +614,48 @@ describe('Composer', () => {
       expect(state.getEnableSynctex()).toBe(true)
       expect(state.getEnableExtendedBuildMode()).toBe(true)
       expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+
+    it('verifies that settings file properties override config properties', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const composer = new Composer()
+
+      atom.config.set('latex.enableShellEscape', false)
+      atom.config.set('latex.enableExtendedBuildMode', false)
+      atom.config.set('latex.moveResultToSourceDirectory', false)
+
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(() => {})
+
+      const { state } = composer.initializeBuild(filePath)
+
+      expect(state.getOutputDirectory()).toEqual('foo')
+      expect(state.getOutputFormat()).toEqual('dvi')
+      expect(state.getProducer()).toEqual('ps2pdf')
+      expect(state.getEngine()).toEqual('xelatex')
+      expect(state.getJobNames()).toEqual(['wibble', 'quux'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.snafu', 'foo/bar/bax'])
+      expect(state.getEnableShellEscape()).toBe(true)
+      expect(state.getEnableSynctex()).toBe(true)
+      expect(state.getEnableExtendedBuildMode()).toBe(true)
+      expect(state.getMoveResultToSourceDirectory()).toBe(true)
+    })
+
+    it('verifies that settings file properties override magic properties', () => {
+      const filePath = path.join(__dirname, 'fixtures', 'magic-comments', 'override-settings.tex')
+      const composer = new Composer()
+
+      atom.config.set('latex.enableShellEscape', false)
+      atom.config.set('latex.enableExtendedBuildMode', false)
+      atom.config.set('latex.moveResultToSourceDirectory', false)
+
+      const { state } = composer.initializeBuild(filePath)
+
+      expect(state.getOutputDirectory()).toEqual('foo')
+      expect(state.getOutputFormat()).toEqual('dvi')
+      expect(state.getProducer()).toEqual('ps2pdf')
+      expect(state.getEngine()).toEqual('xelatex')
+      expect(state.getJobNames()).toEqual(['wibble', 'quux'])
+      expect(state.getCleanPatterns()).toEqual(['**/*.snafu', 'foo/bar/bax'])
     })
   })
 

@@ -1,0 +1,14 @@
+engine: xelatex
+format: dvi
+jobNames:
+  - wibble
+  - quux
+producer: ps2pdf
+outputDirectory: foo
+cleanPatterns:
+  - '**/*.snafu'
+  - foo/bar/bax
+enableShellEscape: yes
+enableSynctex: true
+enableExtendedBuildMode: YES
+moveResultToSourceDirectory: Yes
