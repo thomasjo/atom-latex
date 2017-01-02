@@ -234,6 +234,7 @@
         "sumatra",
         "xdg-open",
         "x-reader",
+        "zathura",
         "custom"
       ],
       "default": "automatic",
@@ -258,12 +259,18 @@
       "default": "/usr/bin/okular",
       "order": 19
     },
+    "zathuraPath": {
+      "description": "Full application path to Zathura (*nix).",
+      "type": "string",
+      "default": "/usr/bin/zathura",
+      "order": 20
+    },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 19
+      "order": 21
     }
   }
 }
