@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.42.0] / 2017-01-02
+### Added
+- Magic comment override of `cleanExtensions`, `enableSynctex`,
+  `enableShellEscape`, `enableExtendedBuildMode` and
+  `moveResultToSourceDirectory`.
+- Output directory and job name support in knitr SyncTeX patching.
+- Support for Zathura PDF/PS viewer.
+- Override of build settings via YAML formatted build setting file.
+
+### Changed
+- Use commas as delimiters in `jobnames` magic comment.
+
+### Removed
+- Deprecated `texify` builder in favor of `latexmk` builder.
+- Unneeded `builder` magic comment.
+- `Use Master File Search` setting and algorithm in favor of `root` magic comment.
+
 ## [0.41.0] / 2016-11-17
 ### Fixed
 - Parsing of FDB files is more rigorous resulting in correct output path
@@ -541,6 +558,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.42.0]: https://github.com/thomasjo/atom-latex/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/thomasjo/atom-latex/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/thomasjo/atom-latex/compare/v0.39.1...v0.40.0
 [0.39.1]: https://github.com/thomasjo/atom-latex/compare/v0.39.0...v0.39.1

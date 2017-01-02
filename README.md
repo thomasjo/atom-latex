@@ -65,24 +65,36 @@ The `latex` package supports other commands as detailed in the table below.
 | `latex:sync-log`      | None                                        | Display and highlight log messages from the current cursor position.     |
 | `latex:check-runtime` | None                                        | Check for the existence of `latexmk`, `Rscript` and PDF/PS/DVI viewers.  |
 
-### Magic comments
-This package has support for various "magic" TeX comments in the form of
-`% !TEX <name> = <value>` as detailed in the table below.
+### Overriding Build settings
+Many of the build settings in the settings page of the `latex` package can be
+overridden on a per file basis. One way to override specific build settings is
+to use "magic" TeX comments in the form of `% !TEX <name> = <value>`. Another
+way is to use a [YAML] formatted file with the same name as your root LaTeX
+file, but with an extension of `.yaml`. The settings and values that can
+overridden via either method are listed in the table below. If multiple setting
+names are listed then the first is preferred and following names are available
+for compatibility. More details can found at [Overridding Build Settings].
 
-| Name               | Value                                         | Use                                               |
-|:-------------------|:----------------------------------------------|:--------------------------------------------------|
-| `format`           | `dvi`, `ps` or `pdf`                          | Override the output format                        |
-| `jobnames`         | space separated names, e.g. `foo bar`         | Control the number and names of build jobs.       |
-| `output_directory` | directory path, e.g. `build`                  | Specify the output directory that should be used. |
-| `producer`         | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf` | Override the PDF producer                         |
-| `program`          | `pdflatex`, `lualatex`, etc.                  | Override the LaTeX engine to use for build.       |
-| `root`             | file path, e.g. `../file.tex`                 | Specify the root file that should be built.       |
+| Name                                    | Value                                          | Use                                                                                       |
+|:----------------------------------------|:-----------------------------------------------|:------------------------------------------------------------------------------------------|
+| `cleanPatterns`                         | comma separated patterns, e.g. `**/*.blg, foo` | Specify patterns to use for `latex:clean`                                                 |
+| `enableSynctex`                         | `yes`, `no`, `true` or `false`                 | Override SyncTeX setting                                                                  |
+| `enableExtendedBuildMode`               | `yes`, `no`, `true` or `false`                 | Override extended build mode setting                                                      |
+| `enableShellEscape`                     | `yes`, `no`, `true` or `false`                 | Override shell escape setting                                                             |
+| `engine` or `program`                   | `pdflatex`, `lualatex`, etc.                   | Override the LaTeX engine to use for build.                                               |
+| `moveResultToSourceDirectory`           | `yes`, `no`, `true` or `false`                 | Override move result to source directory setting                                          |
+| `outputFormat` or `format`              | `dvi`, `ps` or `pdf`                           | Override the output format                                                                |
+| `jobNames`, `jobnames` or `jobname`     | comma separated names, e.g. `foo, bar`         | Control the number and names of build jobs. Only a single name can be used for `jobname`. |
+| `outputDirectory` or `output_directory` | directory path, e.g. `build`                   | Specify the output directory that should be used.                                         |
+| `producer`                              | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf`  | Override the PDF producer                                                                 |
+| `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |
 
 ### PDF/DVI/PS Viewers
 The `latex` package currently supports [Atril], [Evince], [Okular], [pdf-view],
-[Preview], [Skim], [Sumatra PDF], Windows shell open, [xdg-open] and [Xreader] as PDF/DVI/PS viewers. This
-includes support for cursor synchronization via SyncTeX if possible. Specific
-features of each of the viewers is detailed at [Supported Viewers].
+[Preview], [Skim], [Sumatra PDF], Windows shell open, [xdg-open], [Xreader] and
+[Zathura] as PDF/DVI/PS viewers. This includes support for cursor
+synchronization via SyncTeX if possible. Specific features of each of the
+viewers is detailed at [Supported Viewers].
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
@@ -104,6 +116,7 @@ Any and all help is greatly appreciated!
 [latexmk with MiKTeX]: https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX
 [MiKTeX]: http://miktex.org/
 [Okular]: https://okular.kde.org/
+[Overridding Build Settings]: https://github.com/thomasjo/atom-latex/wiki/Overridding-Build-Settings
 [pdf-view]: https://atom.io/packages/pdf-view
 [Preview]: https://support.apple.com/en-us/HT201740
 [Skim]: http://skim-app.sourceforge.net/
@@ -114,3 +127,5 @@ Any and all help is greatly appreciated!
 [travis]: https://travis-ci.org/thomasjo/atom-latex
 [xdg-open]: https://linux.die.net/man/1/xdg-open
 [Xreader]: https://github.com/linuxmint/xreader
+[YAML]: http://yaml.org/
+[Zathura]: https://github.com/pwmt/zathura
