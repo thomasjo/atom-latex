@@ -15,7 +15,7 @@ describe('OpenerRegistry', () => {
 
   function createOpener (name, canOpen, hasSynctex, canOpenInBackground) {
     const instance = jasmine.createSpyObj(name, ['canOpen', 'open', 'hasSynctex', 'canOpenInBackground'])
-    instance.canOpen.andCallFake(() => Promise.resolve(canOpen))
+    instance.canOpen.andReturn(canOpen)
     instance.open.andCallFake(() => Promise.resolve(undefined))
     instance.hasSynctex.andReturn(hasSynctex)
     instance.canOpenInBackground.andReturn(canOpenInBackground)
