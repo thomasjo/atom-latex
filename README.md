@@ -69,12 +69,11 @@ The `latex` package supports other commands as detailed in the table below.
 Many of the build settings in the settings page of the `latex` package can be
 overridden on a per file basis. One way to override specific build settings is
 to use "magic" TeX comments in the form of `% !TEX <name> = <value>`. Another
-way to override build settings is to use a [YAML] formatted file with the same
-name as your root LaTeX file, but with an extension of `.yaml`. The settings and
-values that can overridden via either method are listed in the table below. If
-multiple setting names are listed then the first is preferred and following
-names are available for compatibility. More details can found at [Overridding
-Build Settings].
+way is to use a [YAML] formatted file with the same name as your root LaTeX
+file, but with an extension of `.yaml`. The settings and values that can
+overridden via either method are listed in the table below. If multiple setting
+names are listed then the first is preferred and following names are available
+for compatibility. More details can found at [Overridding Build Settings].
 
 | Name                                    | Value                                          | Use                                                                                       |
 |:----------------------------------------|:-----------------------------------------------|:------------------------------------------------------------------------------------------|
@@ -117,7 +116,7 @@ Any and all help is greatly appreciated!
 [latexmk with MiKTeX]: https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX
 [MiKTeX]: http://miktex.org/
 [Okular]: https://okular.kde.org/
-[Overridding Build Settings]:
+[Overridding Build Settings]: https://github.com/thomasjo/atom-latex/wiki/Overridding-Build-Settings
 [pdf-view]: https://atom.io/packages/pdf-view
 [Preview]: https://support.apple.com/en-us/HT201740
 [Skim]: http://skim-app.sourceforge.net/
