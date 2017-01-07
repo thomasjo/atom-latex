@@ -1,13 +1,13 @@
 /** @babel */
 
-import fs from '../lib/fs'
+import fsep from '../lib/fsep'
 import temp from 'temp'
 
 export default {
   cloneFixtures () {
-    const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
+    const tempPath = fsep.realpathSync(temp.mkdirSync('latex'))
     let fixturesPath = atom.project.getPaths()[0]
-    fs.copySync(fixturesPath, tempPath)
+    fsep.copySync(fixturesPath, tempPath)
     atom.project.setPaths([tempPath])
     fixturesPath = tempPath
 

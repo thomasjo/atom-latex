@@ -2,6 +2,7 @@
 
 import helpers from './spec-helpers'
 import fs from 'fs-plus'
+import fsep from '../lib/fsep'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
@@ -656,6 +657,48 @@ describe('Composer', () => {
       expect(state.getEngine()).toEqual('xelatex')
       expect(state.getJobNames()).toEqual(['wibble', 'quux'])
       expect(state.getCleanPatterns()).toEqual(['**/*.snafu', 'foo/bar/bax'])
+    })
+  })
+
+  describe('createOutputTree', () => {
+    let composer, fixturesPath, state
+
+    beforeEach(() => {
+      composer = new Composer()
+      fixturesPath = helpers.cloneFixtures()
+      state = new BuildState(path.join(fixturesPath, 'file.tex'))
+    })
+
+    it('replicates input tree in output directory but ignores files or directories in output directory', () => {
+      let paths
+      const outputDirectory = 'build'
+      const outputPath = path.resolve(state.getProjectPath(), outputDirectory)
+      const expectedPaths = [
+        outputPath,
+        path.join(outputPath, '_minted-wibble'),
+        path.join(outputPath, 'foo'),
+        path.join(outputPath, 'knitr'),
+        path.join(outputPath, 'latexmk'),
+        path.join(outputPath, 'log-parse'),
+        path.join(outputPath, 'magic-comments'),
+        path.join(outputPath, 'master-tex-finder'),
+        path.join(outputPath, 'sub'),
+        path.join(outputPath, 'foo', 'quux.txt'),
+        path.join(outputPath, 'master-tex-finder', 'multiple-masters'),
+        path.join(outputPath, 'master-tex-finder', 'single-master'),
+        path.join(outputPath, 'sub', 'bar')
+      ]
+
+      state.setOutputDirectory(outputDirectory)
+
+      waitsForPromise(() => composer.createOutputTree(state)
+        .then(() => fsep.walk(outputPath).then(items => {
+          paths = items.map(item => item.path)
+        })))
+
+      runs(() => {
+        expect(paths).toEqual(expectedPaths)
+      })
     })
   })
 
