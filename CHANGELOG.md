@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.42.1] / 2017-01-11
+### Fixed
+- Error upon package deactivation when build process still running.
+
+### Removed
+- Deprecated shadow DOM references.
+
 ## [0.42.0] / 2017-01-02
 ### Added
 - Magic comment override of `cleanExtensions`, `enableSynctex`,
@@ -558,6 +565,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.42.1]: https://github.com/thomasjo/atom-latex/compare/v0.42.0...v0.42.1
 [0.42.0]: https://github.com/thomasjo/atom-latex/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/thomasjo/atom-latex/compare/v0.40.0...v0.41.0
 [0.40.0]: https://github.com/thomasjo/atom-latex/compare/v0.39.1...v0.40.0
