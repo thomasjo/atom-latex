@@ -15,19 +15,19 @@
   "dependencies": {
     "dbus-native": "^0.2.0",
     "etch": "0.8.0",
-    "fs-plus": "^2.9.1",
+    "fs-plus": "^2.9.3",
     "glob": "^7.1.1",
     "js-yaml": "^3.7.0",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
   },
   "devDependencies": {
-    "babel-eslint": "^7.0.0",
-    "snazzy": "^5.0.0",
-    "standard": "^8.0.0"
+    "babel-eslint": "^7.1.1",
+    "snazzy": "^6.0.0",
+    "standard": "^8.6.0"
   },
   "standard": {
     "parser": "babel-eslint",
