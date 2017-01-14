@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.42.2] / 2017-01-13
+### Fixed
+- Malformed url which prevented Okular from opening with SyncTeX support. Fixes
+  [#332](https://github.com/thomasjo/atom-latex/issues/332).
+
 ## [0.42.1] / 2017-01-11
 ### Fixed
 - Error upon package deactivation when build process still running.
@@ -565,6 +570,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.42.2]: https://github.com/thomasjo/atom-latex/compare/v0.42.1...v0.42.2
 [0.42.1]: https://github.com/thomasjo/atom-latex/compare/v0.42.0...v0.42.1
 [0.42.0]: https://github.com/thomasjo/atom-latex/compare/v0.41.0...v0.42.0
 [0.41.0]: https://github.com/thomasjo/atom-latex/compare/v0.40.0...v0.41.0
