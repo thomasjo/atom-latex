@@ -1,10 +1,10 @@
-/** @babel */
+/* @flow */
 
 import helpers from '../spec-helpers'
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import fs from 'fs-plus'
-import BuildState from '../../lib/build-state'
+import { BuildState } from '../../lib/build-state'
 
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath, extendedOutputPaths, state, jobState
@@ -498,7 +498,7 @@ describe('LatexmkBuilder', () => {
       spyOn(latex.log, 'error').andCallFake(message => messages.push(message))
 
       const statusCodes = [10, 11, 12, 13, 20]
-      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode))
+      statusCodes.forEach(statusCode => builder.logStatusCode(statusCode, ''))
 
       const startsWithPrefix = str => str.startsWith('latexmk:')
 

@@ -1,11 +1,11 @@
-/** @babel */
+/* @flow */
 
 import fs from 'fs-plus'
 import temp from 'temp'
 import wrench from 'wrench'
 
 export default {
-  cloneFixtures () {
+  cloneFixtures (): string {
     const tempPath = fs.realpathSync(temp.mkdirSync('latex'))
     let fixturesPath = atom.project.getPaths()[0]
     wrench.copyDirSyncRecursive(fixturesPath, tempPath, {forceDelete: true})
@@ -15,11 +15,11 @@ export default {
     return fixturesPath
   },
 
-  overridePlatform (name) {
+  overridePlatform (name: string) {
     Object.defineProperty(process, 'platform', {__proto__: null, value: name})
   },
 
-  setTimeoutInterval (interval) {
+  setTimeoutInterval (interval: number): number {
     const env = jasmine.getEnv()
     const originalInterval = env.defaultTimeoutInterval
     env.defaultTimeoutInterval = interval

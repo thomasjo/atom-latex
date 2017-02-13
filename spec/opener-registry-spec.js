@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import helpers from './spec-helpers'
 
@@ -8,9 +8,7 @@ describe('OpenerRegistry', () => {
   let cannotOpen, canOpen, canOpenInBackground, canOpenWithSynctex
 
   beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+    waitsForPromise(() => helpers.activatePackages())
   })
 
   function createOpener (name, canOpen, hasSynctex, canOpenInBackground) {

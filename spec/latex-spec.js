@@ -1,12 +1,10 @@
-/** @babel */
+/* @flow */
 
 import helpers from './spec-helpers'
 
 describe('Latex', () => {
   beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+    waitsForPromise(() => helpers.activatePackages())
   })
 
   describe('initialize', () => {

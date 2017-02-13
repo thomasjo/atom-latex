@@ -1,12 +1,12 @@
-/** @babel */
+/* @flow */
 
 import Builder from '../lib/builder'
 import Logger from '../lib/logger'
 import Opener from '../lib/opener'
 
 export class NullBuilder extends Builder {
-  static extension = '.tex'
-  static canProcess (filePath) { return filePath.endsWith(NullBuilder.extension) }
+  extension = '.tex'
+  canProcess (filePath: string): boolean { return filePath.endsWith(this.extension) }
 }
 
 export class NullLogger extends Logger {
@@ -16,5 +16,5 @@ export class NullLogger extends Logger {
 }
 
 export class NullOpener extends Opener {
-  open () {}
+  async open () {}
 }

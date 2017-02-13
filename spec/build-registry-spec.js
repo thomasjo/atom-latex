@@ -1,9 +1,9 @@
-/** @babel */
+/* @flow */
 
 import helpers from './spec-helpers'
 import { NullBuilder } from './stubs'
 import BuilderRegistry from '../lib/builder-registry'
-import BuildState from '../lib/build-state'
+import { BuildState } from '../lib/build-state'
 
 describe('BuilderRegistry', () => {
   let builderRegistry
@@ -23,7 +23,11 @@ describe('BuilderRegistry', () => {
 
     it('returns the configured builder when given a regular .tex file', () => {
       const state = new BuildState('foo.tex')
-      expect(builderRegistry.getBuilderImplementation(state).name).toEqual('LatexmkBuilder')
+      const BuilderImpl = builderRegistry.getBuilderImplementation(state)
+      expect(BuilderImpl).not.toBeNull()
+      if (BuilderImpl) {
+        expect(BuilderImpl.name).toEqual('LatexmkBuilder')
+      }
     })
 
     it('throws an error when unable to resolve ambiguous builder registration', () => {
@@ -35,7 +39,11 @@ describe('BuilderRegistry', () => {
 
     it('returns the Knitr builder when presented with an .Rnw file', () => {
       const state = new BuildState('bar.Rnw')
-      expect(builderRegistry.getBuilderImplementation(state).name).toEqual('KnitrBuilder')
+      const BuilderImpl = builderRegistry.getBuilderImplementation(state)
+      expect(BuilderImpl).not.toBeNull()
+      if (BuilderImpl) {
+        expect(BuilderImpl.name).toEqual('KnitrBuilder')
+      }
     })
   })
 
@@ -51,12 +59,20 @@ describe('BuilderRegistry', () => {
 
     it('returns a builder instance as configured for regular .tex files', () => {
       const state = new BuildState('foo.tex')
-      expect(builderRegistry.getBuilder(state).constructor.name).toEqual('LatexmkBuilder')
+      const builder = builderRegistry.getBuilder(state)
+      expect(builder).not.toBeNull()
+      if (builder) {
+        expect(builder.constructor.name).toEqual('LatexmkBuilder')
+      }
     })
 
     it('returns a builder instance as configured for knitr files', () => {
       const state = new BuildState('bar.Rnw')
-      expect(builderRegistry.getBuilder(state).constructor.name).toEqual('KnitrBuilder')
+      const builder = builderRegistry.getBuilder(state)
+      expect(builder).not.toBeNull()
+      if (builder) {
+        expect(builder.constructor.name).toEqual('KnitrBuilder')
+      }
     })
   })
 })

@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import DefaultLogger from '../../lib/loggers/default-logger'
 import werkzeug from '../../lib/werkzeug'
@@ -19,14 +19,17 @@ describe('DefaultLogger', () => {
       const editor = { getPath: () => 'foo.tex' }
       const messages = [{
         type: 'error',
+        text: 'wibble',
         range: [[0, 0], [0, 1]],
         filePath: 'foo.tex'
       }, {
         type: 'warning',
+        text: 'wibble',
         range: [[0, 0], [0, 1]],
         filePath: 'bar.tex'
       }, {
         type: 'info',
+        text: 'wibble',
         filePath: 'foo.tex'
       }]
       spyOn(logger, 'addErrorMarker')

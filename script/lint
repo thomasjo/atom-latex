@@ -7,7 +7,7 @@ lint() {
   local npm_bin=$( npm bin )
   local paths="$1"
 
-  "${npm_bin}/standard" --verbose "${paths}" | "${npm_bin}/snazzy"
+  "${npm_bin}/eslint" --color "${paths}" | "${npm_bin}/snazzy"
 }
 
 main() {
@@ -15,8 +15,8 @@ main() {
   local source_dir=$( dirname "${script_dir}" )
 
   local -i status=0
-  echo "Linting package..." && lint "${source_dir}/lib/**/*.js" || status=$?
-  echo "Linting package specs..." && lint "${source_dir}/spec/**/*.js" || status=$?
+  echo "Linting package..." && lint "${source_dir}/lib" || status=$?
+  echo "Linting package specs..." && lint "${source_dir}/spec" || status=$?
   return ${status}
 }
 

@@ -1,12 +1,12 @@
-/** @babel */
+/* @flow */
 
 import helpers from '../spec-helpers'
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
-import BuildState from '../../lib/build-state'
+import { BuildState } from '../../lib/build-state'
 
-function getRawFile (filePath) {
+function getRawFile (filePath: string): string {
   return fs.readFileSync(filePath, {encoding: 'utf-8'})
 }
 

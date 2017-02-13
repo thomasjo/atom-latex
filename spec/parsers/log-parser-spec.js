@@ -1,4 +1,4 @@
-/** @babel */
+/* @flow */
 
 import '../spec-helpers'
 
@@ -21,7 +21,10 @@ describe('LogParser', () => {
       const parser = new LogParser(logFile, texFile)
       const result = parser.parse()
 
-      expect(result.outputFilePath).toBe(expectedPath)
+      expect(result).not.toBeNull()
+      if (result) {
+        expect(result.outputFilePath).toBe(expectedPath)
+      }
     })
 
     it('returns the expected output path when the compiled file contained spaces', () => {
@@ -31,7 +34,10 @@ describe('LogParser', () => {
       const parser = new LogParser(logFile, texFile)
       const result = parser.parse()
 
-      expect(result.outputFilePath).toBe(expectedPath)
+      expect(result).not.toBeNull()
+      if (result) {
+        expect(result.outputFilePath).toBe(expectedPath)
+      }
     })
 
     it('parses and returns all errors', () => {
@@ -40,7 +46,10 @@ describe('LogParser', () => {
       const parser = new LogParser(logFile, texFile)
       const result = parser.parse()
 
-      expect(_.countBy(result.messages, 'type').error).toBe(3)
+      expect(result).not.toBeNull()
+      if (result) {
+        expect(_.countBy(result.messages, 'type').error).toBe(3)
+      }
     })
 
     it('associates an error with a file path, line number, and message', () => {
@@ -48,6 +57,12 @@ describe('LogParser', () => {
       const texFile = path.join(fixturesPath, 'errors.tex')
       const parser = new LogParser(logFile, texFile)
       const result = parser.parse()
+
+      expect(result).not.toBeNull()
+      if (!result) {
+        return
+      }
+
       const error = result.messages.find(message => { return message.type === 'error' })
 
       expect(error).toEqual({

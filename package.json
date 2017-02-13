@@ -26,25 +26,46 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
-    "snazzy": "^6.0.0",
-    "standard": "^8.6.0"
+    "eslint": "^3.12.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-flowtype": "^2.29.1",
+    "eslint-plugin-flowtype-errors": "^2.0.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "flow-bin": "^0.36.0",
+    "snazzy": "^6.0.0"
   },
-  "standard": {
+  "eslintConfig": {
     "parser": "babel-eslint",
-    "globals": [
-      "atom",
-      "latex",
-      "afterEach",
-      "beforeEach",
-      "describe",
-      "expect",
-      "it",
-      "jasmine",
-      "runs",
-      "spyOn",
-      "waitsFor",
-      "waitsForPromise"
-    ]
+    "extends": [
+      "standard",
+      "plugin:flowtype/recommended"
+    ],
+    "plugins": [
+      "flowtype",
+      "flowtype-errors"
+    ],
+    "env": {
+      "atomtest": true,
+      "jasmine": true
+    },
+    "globals": {
+      "atom": true,
+      "latex": true
+    },
+    "rules": {
+      "flowtype-errors/show-errors": 2,
+      "flowtype/delimiter-dangle": [
+        2,
+        "never"
+      ],
+      "flowtype/require-valid-file-annotation": [
+        2,
+        "always",
+        {
+          "annotationStyle": "block"
+        }
+      ]
+    }
   },
   "engines": {
     "atom": ">=1.13.0 <2.0.0"
