@@ -151,7 +151,7 @@
       "order": 8
     },
     "cleanAfterBuild": {
-      "title": "Clean after build.",
+      "title": "Clean after Build",
       "description": "Run clean command after every successful build.",
       "type": "boolean",
       "default": false,
