@@ -20,6 +20,7 @@
     "js-yaml": "^3.8.2",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
+    "ouroboros": "file:../ouroboros",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
@@ -77,6 +78,12 @@
       "description": "The full path to your TeX distribution's bin directory. Supports `$PATH` substitution.",
       "type": "string",
       "default": "",
+      "order": 0
+    },
+    "useOuroboros": {
+      "description": "Use the experimental Ouroboros builder instead of latexmk.",
+      "type": "boolean",
+      "default": "false",
       "order": 1
     },
     "engine": {
