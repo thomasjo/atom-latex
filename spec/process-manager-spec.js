@@ -4,6 +4,7 @@ import fs from 'fs-plus'
 import temp from 'temp'
 import path from 'path'
 import ProcessManager from '../lib/process-manager'
+import helpers from './spec-helpers'
 
 describe('ProcessManager', () => {
   let processManager
@@ -15,6 +16,9 @@ describe('ProcessManager', () => {
   }
 
   beforeEach(() => {
+    waitsForPromise(() => {
+      return helpers.activatePackages()
+    })
     processManager = new ProcessManager()
   })
 

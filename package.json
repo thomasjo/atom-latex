@@ -72,6 +72,14 @@
     }
   },
   "configSchema": {
+    "additionalPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "order": 0
+    },
     "texPath": {
       "title": "TeX Path",
       "description": "The full path to your TeX distribution's bin directory. Supports `$PATH` substitution.",
