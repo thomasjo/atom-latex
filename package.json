@@ -55,6 +55,7 @@
       "latex:build",
       "latex:check-runtime",
       "latex:clean",
+      "latex:deep-clean",
       "latex:rebuild",
       "latex:sync",
       "latex:sync-log"
