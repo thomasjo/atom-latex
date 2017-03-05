@@ -81,8 +81,8 @@
       "default": "",
       "order": 0
     },
-    "useOuroboros": {
-      "description": "Use the experimental Ouroboros builder instead of latexmk.",
+    "enableOuroboros": {
+      "description": "Enable the usage of the experimental Ouroboros builder instead of `latexmk`.",
       "type": "boolean",
       "default": "false",
       "order": 1
