@@ -141,9 +141,9 @@
         "type": "string"
       },
       "default": [
-        "$outdir/$job!($outext|.synctex.gz|.tex)",
-        "/$outdir/_minted-$job/*",
-        "/$outdir/sage-plots-for-$job.tex",
+        "$OUTDIR/$JOB!($OUTEXT|.synctex.gz|.tex)",
+        "/$OUTDIR/_minted-$JOB/*",
+        "/$OUTDIR/sage-plots-for-$JOB.tex",
         "/missfont.log",
         "/texput.log",
         "/texput.aux"
