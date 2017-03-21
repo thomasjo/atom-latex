@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "version": "0.42.3",
+  "version": "0.42.4",
   "description": "Compile LaTeX documents from within Atom.",
   "keywords": [
     "tex",

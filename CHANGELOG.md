@@ -2,9 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.42.4] / 2017-03-21
+### Fixed
+- Incorrect call to Evince's `SyncView` which prevented correct window to be
+  opened when multiple jobnames where in use.
+
 ## [0.42.3] / 2017-01-25
 ### Fixed
-- Added parsing of `xdvipdfmx`, `lualatex` and `xelatex` sections of file database to enable detection of output file for updated `latexmk` version. Fixes [#339](https://github.com/thomasjo/atom-latex/issues/339).
+- Added parsing of `xdvipdfmx`, `lualatex` and `xelatex` sections of file
+  database to enable detection of output file for updated `latexmk` version.
+  Fixes [#339](https://github.com/thomasjo/atom-latex/issues/339).
 
 ## [0.42.2] / 2017-01-13
 ### Fixed
@@ -574,6 +581,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.42.4]: https://github.com/thomasjo/atom-latex/compare/v0.42.3...v0.42.4
 [0.42.3]: https://github.com/thomasjo/atom-latex/compare/v0.42.2...v0.42.3
 [0.42.2]: https://github.com/thomasjo/atom-latex/compare/v0.42.1...v0.42.2
 [0.42.1]: https://github.com/thomasjo/atom-latex/compare/v0.42.0...v0.42.1
