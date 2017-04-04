@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "version": "0.42.4",
+  "version": "0.43.0",
   "description": "Compile LaTeX documents from within Atom.",
   "keywords": [
     "tex",
@@ -14,10 +14,10 @@
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
     "dbus-native": "^0.2.0",
-    "etch": "0.8.0",
-    "fs-plus": "^2.9.3",
+    "etch": "0.12.0",
+    "fs-plus": "^3.0.0",
     "glob": "^7.1.1",
-    "js-yaml": "^3.7.0",
+    "js-yaml": "^3.8.2",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
     "temp": "^0.8.3",
@@ -25,9 +25,9 @@
     "wrench": "^1.5.9"
   },
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
+    "babel-eslint": "^7.2.1",
     "snazzy": "^6.0.0",
-    "standard": "^8.6.0"
+    "standard": "^9.0.2"
   },
   "standard": {
     "parser": "babel-eslint",
