@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.43.0] / 2017-04-04
+### Changed
+- Reverse sync from Evince now focuses Atom window. Resolves
+  [#355](https://github.com/thomasjo/atom-latex/issues/355).
+- Added SumatraPDF `-reuse-instance` flag for non-tabbed usage to prevent
+  multiple windows from being opened. Resolves
+  [#357](https://github.com/thomasjo/atom-latex/issues/357).
+
+### Fixed
+- Removed extra quoting of Atom path in SumatraPDF reverse sync command. Fixes
+  [#347](https://github.com/thomasjo/atom-latex/issues/347).
+
 ## [0.42.4] / 2017-03-21
 ### Fixed
 - Incorrect call to Evince's `SyncView` which prevented correct window to be
@@ -581,6 +593,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.43.0]: https://github.com/thomasjo/atom-latex/compare/v0.42.4...v0.43.0
 [0.42.4]: https://github.com/thomasjo/atom-latex/compare/v0.42.3...v0.42.4
 [0.42.3]: https://github.com/thomasjo/atom-latex/compare/v0.42.2...v0.42.3
 [0.42.2]: https://github.com/thomasjo/atom-latex/compare/v0.42.1...v0.42.2
