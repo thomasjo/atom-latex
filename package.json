@@ -20,7 +20,7 @@
     "js-yaml": "^3.8.2",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
-    "ouroboros": "file:../ouroboros",
+    "ouroboros": "file:../ouroboros/packages/ouroboros",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
