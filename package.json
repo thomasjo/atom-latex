@@ -13,6 +13,7 @@
   "main": "./lib/main",
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
+    "@dicy/core": "^0.1.0",
     "dbus-native": "^0.2.0",
     "etch": "0.12.0",
     "fs-plus": "^3.0.0",
@@ -20,7 +21,6 @@
     "js-yaml": "^3.8.2",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
-    "ouroboros": "file:../ouroboros/packages/ouroboros",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
@@ -81,12 +81,6 @@
       "default": "",
       "order": 0
     },
-    "enableOuroboros": {
-      "description": "Enable the usage of the experimental Ouroboros builder instead of `latexmk`.",
-      "type": "boolean",
-      "default": "false",
-      "order": 1
-    },
     "engine": {
       "description": "Select standard LaTeX engine",
       "type": "string",
@@ -98,23 +92,29 @@
         "xelatex"
       ],
       "default": "pdflatex",
-      "order": 2
+      "order": 1
     },
     "customEngine": {
       "description": "Enter command for custom LaTeX engine. Overrides Engine.",
       "type": "string",
       "default": "",
-      "order": 3
+      "order": 2
     },
     "enableShellEscape": {
       "type": "boolean",
       "default": false,
-      "order": 4
+      "order": 3
     },
     "enableSynctex": {
       "title": "Enable SyncTeX",
       "type": "boolean",
       "default": true,
+      "order": 4
+    },
+    "enableDicy": {
+      "description": "Enable the usage of the experimental [Dicy](https://yitzchak.github.io/dicy/) builder instead of `latexmk`.",
+      "type": "boolean",
+      "default": "false",
       "order": 5
     },
     "enableExtendedBuildMode": {
