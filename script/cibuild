@@ -10,7 +10,7 @@ ensure_xz_installed() {
   if [[ "${APPVEYOR:-}" == true ]]; then
     echo "Installing XZ..."
     local archive_path="/tmp/xz.7z"
-    curl -so ${archive_path} "http://tukaani.org/xz/xz-5.2.1-windows.7z"
+    curl -Lso ${archive_path} "https://tukaani.org/xz/xz-5.2.3-windows.7z"
 
     local xz_root="${HOME}/xz"
     7z x -o"${xz_root}" "${archive_path}" > /dev/null
