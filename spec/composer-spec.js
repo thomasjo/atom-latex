@@ -206,6 +206,20 @@ describe('Composer', () => {
       })
     })
 
+    it('deletes all generated files when deepClean is enabled', () => {
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
+
+      waitsForPromise(() => {
+        return composer.clean(true).catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
+      })
+    })
+
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory', () => {
       const outdir = 'build'
       atom.config.set('latex.outputDirectory', outdir)
