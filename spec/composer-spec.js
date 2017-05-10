@@ -779,4 +779,61 @@ describe('Composer', () => {
       })
     })
   })
+
+  describe('runDicy', () => {
+    const sourceBaseName = 'file.tex'
+    const outputBaseName = 'file.pdf'
+    const synctexBaseName = 'file.synctex.gz'
+
+    let composer, dicy, fixturesPath, sourcePath, outputPath, synctexPath
+
+    beforeEach(() => {
+      composer = new Composer()
+      fixturesPath = path.join(__dirname, 'fixtures')
+    })
+
+    function initializeSpies (result = true) {
+      dicy = jasmine.createSpyObj('MockDicy', ['run', 'getTargetPaths'])
+      dicy.run.andCallFake(() => Promise.resolve(result))
+      dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputBaseName, synctexBaseName]))
+      dicy.rootPath = fixturesPath
+      sourcePath = path.join(fixturesPath, sourceBaseName)
+      outputPath = path.join(fixturesPath, outputBaseName)
+      synctexPath = path.join(fixturesPath, synctexBaseName)
+      spyOn(composer, 'getDicy').andCallFake(() => Promise.resolve(dicy))
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
+      spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
+    }
+
+    it('opens PDF after successful build, but does open SyncTeX file', () => {
+      initializeSpies()
+
+      waitsForPromise(() => composer.runDicy(['build']))
+
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith(outputPath, sourcePath, 1)
+        expect(latex.opener.open).not.toHaveBeenCalledWith(synctexPath, sourcePath, 1)
+      })
+    })
+
+    it('does not open targets after unsuccessful build', () => {
+      initializeSpies(false)
+
+      waitsForPromise(() => composer.runDicy(['build']))
+
+      runs(() => {
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
+    })
+
+    it('does not open targets after successful build if open is not requested', () => {
+      initializeSpies(true)
+
+      waitsForPromise(() => composer.runDicy(['build'], {}, false))
+
+      runs(() => {
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
+    })
+  })
 })
