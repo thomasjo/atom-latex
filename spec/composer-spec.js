@@ -705,4 +705,78 @@ describe('Composer', () => {
       expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
     })
   })
+
+  describe('getDicy', () => {
+    let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
+
+    beforeEach(() => {
+      composer = new Composer()
+      spyOn(composer, 'shouldUseDicy').andReturn(true)
+      fixturesPath = path.join(__dirname, 'fixtures')
+      rootBaseName = 'file.tex'
+      rootFilePath = path.join(fixturesPath, rootBaseName)
+      subFileBaseName = 'root-comment.tex'
+      subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
+    })
+
+    it('verifies that Dicy builder is created for a simple file', () => {
+      let result
+
+      waitsForPromise(() =>
+        composer.getDicy(rootFilePath)
+          .then(dicy => { result = dicy })
+      )
+
+      runs(() => {
+        expect(result).toBeDefined()
+        expect(result.filePath).toEqual(rootBaseName)
+      })
+    })
+
+    it('verifies that root magic comment is detected', () => {
+      let result
+
+      waitsForPromise(() =>
+        composer.getDicy(rootFilePath)
+          .then(dicy => { result = dicy })
+      )
+
+      runs(() => {
+        expect(result).toBeDefined()
+      })
+    })
+
+    it('verifies that Dicy builder is cached', () => {
+      let firstResult, secondResult
+
+      waitsForPromise(() =>
+        composer.getDicy(rootFilePath)
+          .then(dicy => { firstResult = dicy })
+          .then(() => composer.getDicy(rootFilePath))
+          .then(dicy => { secondResult = dicy })
+      )
+
+      runs(() => {
+        expect(firstResult).toBeDefined()
+        expect(secondResult).toBe(firstResult)
+      })
+    })
+
+    it('verifies that Dicy builder is not cached if ignoreCache is enabled', () => {
+      let firstResult, secondResult
+
+      waitsForPromise(() =>
+        composer.getDicy(rootFilePath)
+          .then(dicy => { firstResult = dicy })
+          .then(() => composer.getDicy(rootFilePath, { ignoreCache: true }))
+          .then(dicy => { secondResult = dicy })
+      )
+
+      runs(() => {
+        expect(firstResult).toBeDefined()
+        expect(secondResult).toBeDefined()
+        expect(secondResult).not.toBe(firstResult)
+      })
+    })
+  })
 })
