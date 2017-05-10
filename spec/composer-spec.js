@@ -737,7 +737,7 @@ describe('Composer', () => {
       let result
 
       waitsForPromise(() =>
-        composer.getDicy(rootFilePath)
+        composer.getDicy(subFilePath)
           .then(dicy => { result = dicy })
       )
 
