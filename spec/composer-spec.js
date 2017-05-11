@@ -13,14 +13,14 @@ describe('Composer', () => {
   })
 
   describe('build', () => {
-    let editor, builder, composer
+    let editor, builder, composer, fixturesPath
 
     function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
       })
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath, lineNumber: 1 })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
       builder.run.andCallFake(() => {
@@ -31,12 +31,17 @@ describe('Composer', () => {
         return Promise.reject(statusCode)
       })
       spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
+
+      spyOn(composer, 'runDicy').andCallThrough()
+      spyOn(latex.opener, 'open')
+      spyOn(latex.log, 'showMessage')
     }
 
     beforeEach(() => {
       composer = new Composer()
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
+      fixturesPath = helpers.cloneFixtures()
     })
 
     it('does nothing for new, unsaved files', () => {
@@ -160,6 +165,59 @@ describe('Composer', () => {
 
       runs(() => {
         expect(werkzeug.getEditorDetails).toHaveBeenCalled()
+      })
+    })
+
+    it('successfully builds LaTeX file using Dicy', () => {
+      const filePath = path.join(fixturesPath, 'file.tex')
+      const targetPath = path.join(fixturesPath, 'file.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.enableDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDicy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.showMessage).not.toHaveBeenCalled()
+      })
+    })
+
+    it('successfully executes Dicy when given a file path containing spaces', () => {
+      const filePath = path.join(fixturesPath, 'filename with spaces.tex')
+      const targetPath = path.join(fixturesPath, 'filename with spaces.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.enableDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDicy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.showMessage).not.toHaveBeenCalled()
+      })
+    })
+
+    it('fails to produce target when error messages are generated using Dicy', () => {
+      const filePath = path.join(fixturesPath, 'error-warning.tex')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.enableDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDicy).toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+        expect(latex.log.showMessage).toHaveBeenCalled()
       })
     })
   })
