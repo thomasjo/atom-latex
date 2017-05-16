@@ -16,6 +16,8 @@ ensure_r_installed() {
     echo "Installing R..."
     brew update
     brew tap homebrew/science
+    brew tap homebrew/versions
+    brew install readline6
     brew install r
   fi
 }
