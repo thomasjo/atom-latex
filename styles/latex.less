@@ -2,11 +2,11 @@
 
 status-bar {
   .latex-status {
-    .latex-message-count {
-      .icon {
-        padding-right: 0.125em;
-      }
+    .icon {
+      padding-right: 0.125em;
+    }
 
+    .latex-message-count {
       padding-left: 0.5em;
     }
 
@@ -36,8 +36,13 @@ status-bar {
     display: inline-block;
   }
 
-  .latex-spin {
-    -webkit-animation: spin 2s infinite linear;
+  .is-busy {
+    color: @text-color-highlight;
+
+    .busy.icon::before {
+      -webkit-animation: spin 2s infinite linear;
+      text-align: center;
+    }
   }
 }
 
