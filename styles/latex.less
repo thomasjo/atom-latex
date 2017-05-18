@@ -2,23 +2,31 @@
 
 status-bar {
   .latex-status {
-    &.latex-highlight {
+    .latex-message-count {
+      .icon {
+        padding-right: 0.125em;
+      }
+
+      padding-left: 0.5em;
+    }
+
+    .latex-highlight {
       color: @text-color-highlight;
     }
 
-    &.latex-info {
+    .latex-info {
       color: @text-color-info;
     }
 
-    &.latex-warning {
+    .latex-warning {
       color: @text-color-warning;
     }
 
-    &.latex-error {
+    .latex-error {
       color: @text-color-error;
     }
 
-    &.latex-status-link {
+    .latex-status-link {
       cursor: pointer;
     }
   }
