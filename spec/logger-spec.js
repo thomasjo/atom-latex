@@ -11,21 +11,8 @@ describe('Logger', () => {
     logger = new Logger()
   })
 
-  describe('showMessage', () => {
-    it('verifies that calling directly without preceding call to group automatically calls groupEnd', () => {
-      spyOn(logger, 'groupEnd').andReturn()
-      logger.showMessage({ type: 'error' })
-
-      expect(logger.groupEnd).toHaveBeenCalled()
-    })
-  })
-
-  describe('showFilteredMessages', () => {
+  describe('shouldShowMessage', () => {
     beforeEach(() => {
-      spyOn(logger, 'showMessages').andCallFake((label, messages) => {
-        counts = _.countBy(messages, 'type')
-      })
-      logger.group('foo')
       logger.info()
       logger.warning()
       logger.error()
@@ -33,7 +20,7 @@ describe('Logger', () => {
 
     it('verifies no messages filtered when logging level set to info', () => {
       atom.config.set('latex.loggingLevel', 'info')
-      logger.groupEnd()
+      counts = _.countBy(logger.getMessages(), 'type')
 
       expect(counts.error).toBeDefined()
       expect(counts.warning).toBeDefined()
@@ -42,7 +29,7 @@ describe('Logger', () => {
 
     it('verifies info messages filtered when logging level set to warning', () => {
       atom.config.set('latex.loggingLevel', 'warning')
-      logger.groupEnd()
+      counts = _.countBy(logger.getMessages(), 'type')
 
       expect(counts.error).toBeDefined()
       expect(counts.warning).toBeDefined()
@@ -51,7 +38,7 @@ describe('Logger', () => {
 
     it('verifies warning and info messages filtered when logging level set to error', () => {
       atom.config.set('latex.loggingLevel', 'error')
-      logger.groupEnd()
+      counts = _.countBy(logger.getMessages(), 'type')
 
       expect(counts.error).toBeDefined()
       expect(counts.warning).toBeUndefined()
