@@ -49,6 +49,22 @@ status-bar {
 .latex-log {
   overflow: auto;
 
+  td, th {
+    padding: .05em .25em .05em .25em;
+  }
+
+  .latex-info span.icon {
+    color: @text-color-info;
+  }
+
+  .latex-warning span.icon {
+    color: @text-color-warning;
+  }
+
+  .latex-error span.icon {
+    color: @text-color-error;
+  }
+
   .panel-body {
     margin-top: 5px;
     overflow-y: scroll;
@@ -64,54 +80,8 @@ status-bar {
     z-index: 3
   }
 
-  .latex-info {
-    border-left: 2px solid @background-color-info;
-    padding-left: ~"calc(0.5em - 2px)";
-  }
-
-  .latex-warning {
-    border-left: 2px solid @background-color-warning;
-    padding-left: ~"calc(0.5em - 2px)";
-  }
-
-  .latex-error {
-    border-left: 2px solid @background-color-error;
-    padding-left: ~"calc(0.5em - 2px)";
-  }
-
   .latex-source-reference, .latex-log-reference {
     color: @text-color-subtle;
-  }
-
-  .latex-source-reference {
-    &::before {
-      content: ' ';
-    }
-
-    .latex-file-link::before {
-      content: 'at '
-    }
-  }
-
-  .latex-line-number::before {
-    content: ' at line ';
-  }
-
-  .latex-end-line-number::before {
-    content: '\2013';
-  }
-
-  .latex-log-reference {
-    &::before {
-      content: ' [';
-    }
-    &::after {
-      content: ']';
-    }
-
-    .latex-file-link::before {
-      content: 'from '
-    }
   }
 
   .latex-file-link {
