@@ -2,10 +2,6 @@
 
 status-bar {
   .latex-status {
-    .icon {
-      padding-right: 0.125em;
-    }
-
     .latex-message-count {
       padding-left: 0.5em;
     }
@@ -26,22 +22,26 @@ status-bar {
       color: @text-color-error;
     }
 
-    .latex-status-link {
+    a {
       cursor: pointer;
     }
-  }
 
-  .icon {
-    text-align: center;
-    display: inline-block;
-  }
+    .icon {
+      padding-right: 0.125em;
+      display: inline-block;
+    }
 
-  .is-busy {
-    color: @text-color-highlight;
+    &.is-busy {
+      color: @text-color-highlight;
 
-    .busy.icon::before {
-      -webkit-animation: spin 2s infinite linear;
-      text-align: center;
+      a {
+        color: @text-color-highlight;
+      }
+
+      .busy.icon::before {
+        -webkit-animation: spin 2s infinite linear;
+        text-align: center;
+      }
     }
   }
 }
