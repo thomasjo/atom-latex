@@ -47,9 +47,23 @@ status-bar {
 }
 
 .latex-log {
-  overflow: auto;
+  overflow-y: scroll;
+
+  table {
+    width: 100%;
+  }
+
+  th {
+    background-color: @base-background-color;
+    border: 1px solid @base-border-color;
+  }
+
+  td {
+    border: 1px none;
+  }
 
   td, th {
+    vertical-align: top;
     padding: .05em .25em .05em .25em;
   }
 
