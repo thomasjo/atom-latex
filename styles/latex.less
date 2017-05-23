@@ -47,7 +47,21 @@ status-bar {
 }
 
 .latex-log {
-  overflow-y: scroll;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0.375em;
+
+  .log-block {
+    padding: 0.375em;
+    flex: 0 1 auto;
+  }
+
+  .log-block.expand {
+    border: 1px solid @base-border-color;
+    overflow-y: scroll;
+    flex: 1 1 auto;
+  }
 
   table {
     width: 100%;
@@ -67,15 +81,15 @@ status-bar {
     padding: .05em .25em .05em .25em;
   }
 
-  .latex-info span.icon {
+  .latex-info .icon {
     color: @text-color-info;
   }
 
-  .latex-warning span.icon {
+  .latex-warning .icon {
     color: @text-color-warning;
   }
 
-  .latex-error span.icon {
+  .latex-error .icon {
     color: @text-color-error;
   }
 
