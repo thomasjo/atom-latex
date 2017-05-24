@@ -10,6 +10,12 @@
             { "label": "Rebuild", "command": "latex:rebuild" },
             { "label": "Clean",   "command": "latex:clean" },
             { "label": "Kill Build",   "command": "latex:kill" },
+            { "type": "separator" },
+            { "label": "Toggle Log",   "command": "latex:toggle-log" },
+            { "label": "Show Log",   "command": "latex:show-log" },
+            { "label": "Hide Log",   "command": "latex:hide-log" },
+            { "label": "Clear Log",   "command": "latex:clear-log" },
+            { "type": "separator" },
             { "label": "Check Runtime",   "command": "latex:check-runtime" }
           ]
         }

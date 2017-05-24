@@ -54,9 +54,13 @@
       "latex:build",
       "latex:check-runtime",
       "latex:clean",
+      "latex:clear-log",
+      "latex:hide-log",
       "latex:rebuild",
+      "latex:show-log",
+      "latex:sync-log",
       "latex:sync",
-      "latex:sync-log"
+      "latex:toggle-log"
     ]
   },
   "activationHooks": [
