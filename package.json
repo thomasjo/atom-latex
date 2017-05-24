@@ -71,6 +71,9 @@
       }
     }
   },
+  "deserializers": {
+    "latex/log": "deserializeLog"
+  },
   "configSchema": {
     "texPath": {
       "title": "TeX Path",
