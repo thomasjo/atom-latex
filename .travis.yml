@@ -12,6 +12,7 @@ os:
   - osx
 
 sudo: false
+dist: trusty
 osx_image: xcode8
 
 env:
@@ -26,7 +27,7 @@ env:
 addons:
   apt:
     sources:
-      - r-packages-precise
+      - r-packages-trusty
     packages:
       - r-recommended
       - freeglut3
