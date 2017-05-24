@@ -45,16 +45,4 @@ describe('Logger', () => {
       expect(counts.info).toBeUndefined()
     })
   })
-
-  describe('getMostSevereType', () => {
-    it('allows errors to override warnings and info messages', () => {
-      const mostSevereType = Logger.getMostSevereType([{ type: 'info' }, { type: 'warning' }, { type: 'error' }])
-      expect(mostSevereType).toBe('error')
-    })
-
-    it('allows warnings to override info messages', () => {
-      const mostSevereType = Logger.getMostSevereType([{ type: 'info' }, { type: 'warning' }])
-      expect(mostSevereType).toBe('warning')
-    })
-  })
 })
