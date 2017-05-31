@@ -11,7 +11,7 @@ describe('Logger', () => {
     logger = new Logger()
   })
 
-  describe('shouldShowMessage', () => {
+  describe('isMessageTypeVisible', () => {
     beforeEach(() => {
       logger.info()
       logger.warning()
