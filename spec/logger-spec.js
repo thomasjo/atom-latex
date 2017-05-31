@@ -56,29 +56,29 @@ describe('Logger', () => {
     })
   })
 
-  describe('isMessageTypeVisible', () => {
-    it('verifies isMessageTypeVisible is true for all levels when logging level set to info', () => {
+  describe('messageTypeIsVisible', () => {
+    it('verifies messageTypeIsVisible is true for all levels when logging level set to info', () => {
       atom.config.set('latex.loggingLevel', 'info')
 
-      expect(logger.isMessageTypeVisible('info')).toBe(true)
-      expect(logger.isMessageTypeVisible('warning')).toBe(true)
-      expect(logger.isMessageTypeVisible('error')).toBe(true)
+      expect(logger.messageTypeIsVisible('info')).toBe(true)
+      expect(logger.messageTypeIsVisible('warning')).toBe(true)
+      expect(logger.messageTypeIsVisible('error')).toBe(true)
     })
 
-    it('verifies isMessageTypeVisible is false for info when logging level set to warning', () => {
+    it('verifies messageTypeIsVisible is false for info when logging level set to warning', () => {
       atom.config.set('latex.loggingLevel', 'warning')
 
-      expect(logger.isMessageTypeVisible('info')).toBe(false)
-      expect(logger.isMessageTypeVisible('warning')).toBe(true)
-      expect(logger.isMessageTypeVisible('error')).toBe(true)
+      expect(logger.messageTypeIsVisible('info')).toBe(false)
+      expect(logger.messageTypeIsVisible('warning')).toBe(true)
+      expect(logger.messageTypeIsVisible('error')).toBe(true)
     })
 
-    it('verifies isMessageTypeVisible is false for info when logging level set to warning', () => {
+    it('verifies messageTypeIsVisible is false for info when logging level set to warning', () => {
       atom.config.set('latex.loggingLevel', 'error')
 
-      expect(logger.isMessageTypeVisible('info')).toBe(false)
-      expect(logger.isMessageTypeVisible('warning')).toBe(false)
-      expect(logger.isMessageTypeVisible('error')).toBe(true)
+      expect(logger.messageTypeIsVisible('info')).toBe(false)
+      expect(logger.messageTypeIsVisible('warning')).toBe(false)
+      expect(logger.messageTypeIsVisible('error')).toBe(true)
     })
   })
 
