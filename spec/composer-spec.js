@@ -34,7 +34,6 @@ describe('Composer', () => {
 
       spyOn(composer, 'runDicy').andCallThrough()
       spyOn(latex.opener, 'open')
-      spyOn(latex.log, 'showMessage')
     }
 
     beforeEach(() => {
@@ -182,7 +181,7 @@ describe('Composer', () => {
       runs(() => {
         expect(composer.runDicy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.showMessage).not.toHaveBeenCalled()
+        expect(latex.log.getMessages().length).toBe(0)
       })
     })
 
@@ -200,7 +199,7 @@ describe('Composer', () => {
       runs(() => {
         expect(composer.runDicy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.showMessage).not.toHaveBeenCalled()
+        expect(latex.log.getMessages().length).toBe(0)
       })
     })
 
@@ -217,7 +216,7 @@ describe('Composer', () => {
       runs(() => {
         expect(composer.runDicy).toHaveBeenCalled()
         expect(latex.opener.open).not.toHaveBeenCalled()
-        expect(latex.log.showMessage).toHaveBeenCalled()
+        expect(latex.log.getMessages().length).not.toBe(0)
       })
     })
   })
