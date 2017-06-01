@@ -47,16 +47,20 @@
     ]
   },
   "engines": {
-    "atom": ">=1.13.0 <2.0.0"
+    "atom": ">=1.17.0 <2.0.0"
   },
   "activationCommands": {
     "atom-workspace": [
       "latex:build",
       "latex:check-runtime",
       "latex:clean",
+      "latex:clear-log",
+      "latex:hide-log",
       "latex:rebuild",
+      "latex:show-log",
+      "latex:sync-log",
       "latex:sync",
-      "latex:sync-log"
+      "latex:toggle-log"
     ]
   },
   "activationHooks": [
@@ -70,6 +74,9 @@
         "^1.0.0": "consumeStatusBar"
       }
     }
+  },
+  "deserializers": {
+    "latex/log": "deserializeLog"
   },
   "configSchema": {
     "texPath": {

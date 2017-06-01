@@ -1,11 +1,14 @@
 @import "ui-variables";
 
 atom-text-editor .gutter .line-number {
-  &.latex-error {
+  /* Use CSS specificity to force errors to override warnings and info markers */
+  &.latex-error, &.latex-error.latex-warning, &.latex-error.latex-info,
+  &.latex-error.latex-warning.latex-info {
     border-left: 2px solid @background-color-error;
     padding-left: ~"calc(0.5em - 2px)";
   }
-  &.latex-warning {
+  /* Use CSS specificity to force warnings to override info markes. */
+  &.latex-warning, &.latex-warning.latex-info {
     border-left: 2px solid @background-color-warning;
     padding-left: ~"calc(0.5em - 2px)";
   }
