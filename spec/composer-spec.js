@@ -32,7 +32,7 @@ describe('Composer', () => {
       })
       spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
 
-      spyOn(composer, 'runDicy').andCallThrough()
+      spyOn(composer, 'runDiCy').andCallThrough()
       spyOn(latex.opener, 'open')
     }
 
@@ -167,7 +167,7 @@ describe('Composer', () => {
       })
     })
 
-    it('successfully builds LaTeX file using Dicy', () => {
+    it('successfully builds LaTeX file using DiCy', () => {
       const filePath = path.join(fixturesPath, 'file.tex')
       const targetPath = path.join(fixturesPath, 'file.pdf')
 
@@ -179,13 +179,13 @@ describe('Composer', () => {
       })
 
       runs(() => {
-        expect(composer.runDicy).toHaveBeenCalled()
+        expect(composer.runDiCy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
         expect(latex.log.getMessages().length).toBe(0)
       })
     })
 
-    it('successfully executes Dicy when given a file path containing spaces', () => {
+    it('successfully executes DiCy when given a file path containing spaces', () => {
       const filePath = path.join(fixturesPath, 'filename with spaces.tex')
       const targetPath = path.join(fixturesPath, 'filename with spaces.pdf')
 
@@ -197,13 +197,13 @@ describe('Composer', () => {
       })
 
       runs(() => {
-        expect(composer.runDicy).toHaveBeenCalled()
+        expect(composer.runDiCy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
         expect(latex.log.getMessages().length).toBe(0)
       })
     })
 
-    it('fails to produce target when error messages are generated using Dicy', () => {
+    it('fails to produce target when error messages are generated using DiCy', () => {
       const filePath = path.join(fixturesPath, 'error-warning.tex')
 
       initializeSpies(filePath)
@@ -214,7 +214,7 @@ describe('Composer', () => {
       })
 
       runs(() => {
-        expect(composer.runDicy).toHaveBeenCalled()
+        expect(composer.runDiCy).toHaveBeenCalled()
         expect(latex.opener.open).not.toHaveBeenCalled()
         expect(latex.log.getMessages().length).not.toBe(0)
       })
@@ -763,12 +763,12 @@ describe('Composer', () => {
     })
   })
 
-  describe('getDicy', () => {
+  describe('getDiCy', () => {
     let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
 
     beforeEach(() => {
       composer = new Composer()
-      spyOn(composer, 'shouldUseDicy').andReturn(true)
+      spyOn(composer, 'shouldUseDiCy').andReturn(true)
       fixturesPath = path.join(__dirname, 'fixtures')
       rootBaseName = 'file.tex'
       rootFilePath = path.join(fixturesPath, rootBaseName)
@@ -776,11 +776,11 @@ describe('Composer', () => {
       subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
     })
 
-    it('verifies that Dicy builder is created for a simple file', () => {
+    it('verifies that DiCy builder is created for a simple file', () => {
       let result
 
       waitsForPromise(() =>
-        composer.getDicy(rootFilePath)
+        composer.getDiCy(rootFilePath)
           .then(dicy => { result = dicy })
       )
 
@@ -794,7 +794,7 @@ describe('Composer', () => {
       let result
 
       waitsForPromise(() =>
-        composer.getDicy(subFilePath)
+        composer.getDiCy(subFilePath)
           .then(dicy => { result = dicy })
       )
 
@@ -803,13 +803,13 @@ describe('Composer', () => {
       })
     })
 
-    it('verifies that Dicy builder is cached', () => {
+    it('verifies that DiCy builder is cached', () => {
       let firstResult, secondResult
 
       waitsForPromise(() =>
-        composer.getDicy(rootFilePath)
+        composer.getDiCy(rootFilePath)
           .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDicy(rootFilePath))
+          .then(() => composer.getDiCy(rootFilePath))
           .then(dicy => { secondResult = dicy })
       )
 
@@ -819,13 +819,13 @@ describe('Composer', () => {
       })
     })
 
-    it('verifies that Dicy builder is not cached if ignoreCache is enabled', () => {
+    it('verifies that DiCy builder is not cached if ignoreCache is enabled', () => {
       let firstResult, secondResult
 
       waitsForPromise(() =>
-        composer.getDicy(rootFilePath)
+        composer.getDiCy(rootFilePath)
           .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDicy(rootFilePath, { ignoreCache: true }))
+          .then(() => composer.getDiCy(rootFilePath, { ignoreCache: true }))
           .then(dicy => { secondResult = dicy })
       )
 
@@ -837,7 +837,7 @@ describe('Composer', () => {
     })
   })
 
-  describe('runDicy', () => {
+  describe('runDiCy', () => {
     const sourceBaseName = 'file.tex'
     const outputBaseName = 'file.pdf'
     const synctexBaseName = 'file.synctex.gz'
@@ -850,14 +850,14 @@ describe('Composer', () => {
     })
 
     function initializeSpies (result = true) {
-      dicy = jasmine.createSpyObj('MockDicy', ['run', 'getTargetPaths'])
+      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths'])
       dicy.run.andCallFake(() => Promise.resolve(result))
       dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputBaseName, synctexBaseName]))
       dicy.rootPath = fixturesPath
       sourcePath = path.join(fixturesPath, sourceBaseName)
       outputPath = path.join(fixturesPath, outputBaseName)
       synctexPath = path.join(fixturesPath, synctexBaseName)
-      spyOn(composer, 'getDicy').andCallFake(() => Promise.resolve(dicy))
+      spyOn(composer, 'getDiCy').andCallFake(() => Promise.resolve(dicy))
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
       spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
     }
@@ -865,7 +865,7 @@ describe('Composer', () => {
     it('opens PDF after successful build, but does open SyncTeX file', () => {
       initializeSpies()
 
-      waitsForPromise(() => composer.runDicy(['build']))
+      waitsForPromise(() => composer.runDiCy(['build']))
 
       runs(() => {
         expect(latex.opener.open).toHaveBeenCalledWith(outputPath, sourcePath, 1)
@@ -876,7 +876,7 @@ describe('Composer', () => {
     it('does not open targets after unsuccessful build', () => {
       initializeSpies(false)
 
-      waitsForPromise(() => composer.runDicy(['build']))
+      waitsForPromise(() => composer.runDiCy(['build']))
 
       runs(() => {
         expect(latex.opener.open).not.toHaveBeenCalled()
@@ -886,7 +886,7 @@ describe('Composer', () => {
     it('does not open targets after successful build if open is not requested', () => {
       initializeSpies(true)
 
-      waitsForPromise(() => composer.runDicy(['build'], {}, false))
+      waitsForPromise(() => composer.runDiCy(['build'], {}, false))
 
       runs(() => {
         expect(latex.opener.open).not.toHaveBeenCalled()

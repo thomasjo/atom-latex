@@ -118,7 +118,7 @@
       "order": 5
     },
     "enableDicy": {
-      "description": "Enable the usage of the experimental [Dicy](https://yitzchak.github.io/dicy/) builder instead of `latexmk`.",
+      "description": "Enable the usage of the [DiCy](https://yitzchak.github.io/dicy/) builder instead of `latexmk`.",
       "type": "boolean",
       "default": "false",
       "order": 6
