@@ -26,9 +26,9 @@ following search paths on Linux and macOS
 
 and on Windows it uses
 
-1. `%SystemDrive%\texlive\2016\bin\win32`
-2. `%SystemDrive%\texlive\2015\bin\win32`
-3. `%SystemDrive%\texlive\2014\bin\win32`
+1. `%SystemDrive%\texlive\2017\bin\win32`
+2. `%SystemDrive%\texlive\2016\bin\win32`
+3. `%SystemDrive%\texlive\2015\bin\win32`
 4. `%ProgramFiles%\MiKTeX 2.9\miktex\bin\x64`
 5. `%ProgramFiles(x86)%\MiKTeX 2.9\miktex\bin`
 
