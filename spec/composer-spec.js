@@ -181,7 +181,7 @@ describe('Composer', () => {
       runs(() => {
         expect(composer.runDiCy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.getMessages().length).toBe(0)
+        expect(latex.log.getMessages()).toEqual([])
       })
     })
 
@@ -199,7 +199,7 @@ describe('Composer', () => {
       runs(() => {
         expect(composer.runDiCy).toHaveBeenCalled()
         expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.getMessages().length).toBe(0)
+        expect(latex.log.getMessages()).toEqual([])
       })
     })
 
