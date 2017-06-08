@@ -41,6 +41,7 @@ describe('Composer', () => {
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
       fixturesPath = helpers.cloneFixtures()
+      atom.config.set('latex.loggingLevel', 'error')
     })
 
     it('does nothing for new, unsaved files', () => {
