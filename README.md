@@ -4,7 +4,7 @@
 [![Dependency Status][dependency svg]][dependency]
 [![devDependency Status][devDependency svg]][devDependency]
 
-Compile LaTeX or [knitr] documents from within Atom.
+Compile LaTeX or [knitr][] documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -12,10 +12,10 @@ from the command line.
 
 ## Prerequisites
 ### TeX distribution
-Since this package relies upon `latexmk`, a reasonably up-to-date and working
-TeX distribution is required. The only officially supported distributions are
-[TeX Live], and [MiKTeX]. Although, the latter is not as well tested and
-supported as TeX Live, hence using TeX Live is highly recommended.
+A reasonably up-to-date and working TeX distribution is required. The only
+officially supported distributions are [TeX Live][], and [MiKTeX][]. Although,
+the latter is not as well tested and supported as TeX Live, hence using TeX Live
+is highly recommended.
 
 You need to ensure that the package can find your TeX distribution's binaries;
 by default the package uses your `PATH` environment variable, as well as the
@@ -36,16 +36,22 @@ If your TeX distribution's binaries are not installed in one of those locations
 or discoverable via the `PATH` environment variable, you will need to help the
 package find the binaries. This can be done by setting the *TeX Path*
 configuration option to point to the folder containing the binaries, either in
-the settings view, or directly in your `config.cson` file. See [Configuration]
+the settings view, or directly in your `config.cson` file. See [Configuration][]
 for further details regarding the settings of this package.
 
-#### TeX Live
-If you're using TeX Live and have installed to the default location then no
-further action should be required.
+### Builder Selection
+The `latex` package provides access to two automatic builders for LaTeX and
+knitr documents. By default the package will use `latexmk` for LaTeX documents
+and an included builder to prepare knitr documents for `latexmk`. In this case
+an up to date installation of `latexmk` is required. If you're using TeX Live
+then you need only insure that `latexmk` is installed and up to date using the
+appropriate package manager.  If you're using MikTeX then see how to [use
+`latexmk` with MiKTeX][latexmk with MiKTeX].
 
-#### MiKTeX
-If you're using MikTeX and have not installed the required `latexmk` package,
-learn how to [use `latexmk` with MiKTeX][latexmk with MiKTeX].
+The JavaScript based [DiCy][] builder may also be used for all documents by
+selecting the `Use DiCy` option in the settings page. [DiCy][] will be installed
+automatically and so no further action is required for either TeX Live or
+MiKTeX.
 
 ## Usage
 The `latex:build` command can be invoked from the LaTex menu or by pressing the
@@ -69,11 +75,11 @@ The `latex` package supports other commands as detailed in the table below.
 Many of the build settings in the settings page of the `latex` package can be
 overridden on a per file basis. One way to override specific build settings is
 to use "magic" TeX comments in the form of `% !TEX <name> = <value>`. Another
-way is to use a [YAML] formatted file with the same name as your root LaTeX
+way is to use a [YAML][] formatted file with the same name as your root LaTeX
 file, but with an extension of `.yaml`. The settings and values that can
 overridden via either method are listed in the table below. If multiple setting
 names are listed then the first is preferred and following names are available
-for compatibility. More details can found at [Overridding Build Settings].
+for compatibility. More details can found at [Overridding Build Settings][].
 
 | Name                                    | Value                                          | Use                                                                                       |
 |:----------------------------------------|:-----------------------------------------------|:------------------------------------------------------------------------------------------|
@@ -90,11 +96,11 @@ for compatibility. More details can found at [Overridding Build Settings].
 | `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |
 
 ### PDF/DVI/PS Viewers
-The `latex` package currently supports [Atril], [Evince], [Okular], [pdf-view],
-[Preview], [Skim], [Sumatra PDF], Windows shell open, [xdg-open], [Xreader] and
-[Zathura] as PDF/DVI/PS viewers. This includes support for cursor
-synchronization via SyncTeX if possible. Specific features of each of the
-viewers is detailed at [Supported Viewers].
+The `latex` package currently supports [Atril][], [Evince][], [Okular][],
+[pdf-view][], [Preview][], [Skim][], [Sumatra PDF][], Windows shell open,
+[xdg-open][], [Xreader][] and [Zathura][] as PDF/DVI/PS viewers. This includes
+support for cursor synchronization via SyncTeX if possible. Specific features of
+each of the viewers is detailed at [Supported Viewers][].
 
 ## Development status
 Please note that this package is in a **beta** state. It is stable, but lacks
@@ -107,6 +113,7 @@ Any and all help is greatly appreciated!
 [appveyor]: https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master
 [Atril]: http://mate-desktop.com/#atril
 [Configuration]: https://github.com/thomasjo/atom-latex/wiki/Configuration
+[DiCy]: https://yitzchak.github.io/dicy/
 [dependency svg]: https://david-dm.org/thomasjo/atom-latex.svg
 [dependency]: https://david-dm.org/thomasjo/atom-latex
 [devDependency svg]: https://david-dm.org/thomasjo/atom-latex/dev-status.svg
