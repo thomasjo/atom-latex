@@ -219,6 +219,24 @@ describe('Composer', () => {
         expect(latex.log.getMessages().length).not.toBe(0)
       })
     })
+
+    it('successfully builds knitr file using DiCy', () => {
+      const filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+      const targetPath = path.join(fixturesPath, 'knitr', 'file.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.enableDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDiCy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.getMessages()).toEqual([])
+      })
+    })
   })
 
   describe('clean', () => {
