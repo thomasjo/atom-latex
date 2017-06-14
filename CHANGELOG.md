@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.44.0] / 2017-06-14
+### Added
+- Add message count indicator in status bar.
+- Add error markers in log files.
+- Add support for TeX Live 2017.
+
+### Changed
+- Improve message panel by using Docks API and display messages in panel using a
+  table.
+- Serialize log messages in Atom session.
+
+### Removed
+- Remove support for TeX Live 2014.
+
+### Fixed
+- Decrease wobble of spinning busy indicator.
+- Log messages in knitr documents now reference generated LaTeX file. Fixes
+  [#370](https://github.com/thomasjo/atom-latex/issues/370).
+
 ## [0.43.0] / 2017-04-04
 ### Changed
 - Reverse sync from Evince now focuses Atom window. Resolves
@@ -593,6 +612,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.44.0]: https://github.com/thomasjo/atom-latex/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/thomasjo/atom-latex/compare/v0.42.4...v0.43.0
 [0.42.4]: https://github.com/thomasjo/atom-latex/compare/v0.42.3...v0.42.4
 [0.42.3]: https://github.com/thomasjo/atom-latex/compare/v0.42.2...v0.42.3
