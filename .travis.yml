@@ -27,8 +27,11 @@ env:
 addons:
   apt:
     sources:
+      - ubuntu-toolchain-r-test
       - r-packages-trusty
     packages:
+      - gcc-6
+      - g++-6
       - r-recommended
       - freeglut3
       - ghostscript
@@ -36,6 +39,9 @@ addons:
 cache:
   directories:
     - ${R_LIBS_USER}
+
+before_script:
+  - if [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then export CC=gcc-6 CXX=g++-6; fi
 
 script: ./script/cibuild
 
