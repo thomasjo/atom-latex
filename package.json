@@ -13,7 +13,7 @@
   "main": "./lib/main",
   "repository": "https://github.com/thomasjo/atom-latex",
   "dependencies": {
-    "@dicy/core": "^0.2.0",
+    "@dicy/core": "^0.3.0",
     "dbus-native": "^0.2.1",
     "etch": "0.12.4",
     "fs-plus": "^3.0.0",
