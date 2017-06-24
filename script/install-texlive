@@ -21,7 +21,7 @@ install_texlive() {
     export PATH="${HOME}/texlive/bin/win32:${PATH}"
   elif [[ "${TRAVIS_OS_NAME:-}" == "linux" ]]; then
     export PATH="${HOME}/texlive/bin/x86_64-linux:${PATH}"
-    asy -version
+    latexmk -pdf -r resources/latexmkrc spec/fixtures/latexmk/asymptote-test.tex
   else
     export PATH="${HOME}/texlive/bin/x86_64-darwin:${PATH}"
   fi
