@@ -31,6 +31,7 @@ addons:
     packages:
       - r-recommended
       - freeglut3
+      - ghostscript
 
 cache:
   directories:
