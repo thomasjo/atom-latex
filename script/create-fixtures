@@ -10,3 +10,14 @@ for i in pdf pdfps pdfdvi ps dvi; do
 done
 
 rm log-parse/*.!(log|fdb_latexmk)
+
+cd secondary-log
+
+latexmk -pdf -jobname=biber biblatex.tex
+latexmk -pdf -jobname=bibtex biblatex.tex
+latexmk -pdf imakeidx.tex
+
+sed -e 's/makeindex/zakeindex/' imakeidx.ilg >imakeidx.zlg
+
+rm *.!(*lg|tex|bib)
+rm bibtex-blx.bib

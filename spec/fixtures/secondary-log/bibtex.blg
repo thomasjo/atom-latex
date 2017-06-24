@@ -1,0 +1,73 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: bibtex.aux
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: bibtex-blx.bib
+Database file #2: biblatex.bib
+I was expecting a `,' or a `}'---line 4 of file biblatex.bib
+ :   
+ :   author = "Quux Kilroy",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+A bad cross reference---entry "wibble"
+refers to entry "bar", which doesn't exist
+Warning--I didn't find a database entry for "bar"
+Biblatex version: 3.3
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 2 entries,
+            6256 wiz_defined-function locations,
+            1176 strings with 8530 characters,
+and the built_in function-call counts, 2603 in all, are:
+= -- 93
+> -- 52
+< -- 16
++ -- 38
+- -- 22
+* -- 53
+:= -- 300
+add.period$ -- 0
+call.type$ -- 2
+change.case$ -- 1
+chr.to.int$ -- 30
+cite$ -- 2
+duplicate$ -- 208
+empty$ -- 325
+format.name$ -- 0
+if$ -- 613
+int.to.chr$ -- 0
+int.to.str$ -- 1
+missing$ -- 0
+newline$ -- 23
+num.names$ -- 0
+pop$ -- 382
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 133
+stack$ -- 0
+substring$ -- 111
+swap$ -- 42
+text.length$ -- 28
+text.prefix$ -- 1
+top$ -- 1
+type$ -- 56
+warning$ -- 0
+while$ -- 47
+width$ -- 0
+write$ -- 22
+(There were 2 error messages)

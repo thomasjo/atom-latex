@@ -1,0 +1,12 @@
+This is makeindex, version 2.15 [TeX Live 2016] (kpathsea + Thai support).
+Scanning input file imakeidx.idx...
+!! Input index error (file = imakeidx.idx, line = 1):
+   -- Illegal null field.
+.done (1 entries accepted, 1 rejected).
+Sorting entries...done (0 comparisons).
+Generating output file imakeidx.ind....
+## Warning (input = imakeidx.idx, line = 2; output = imakeidx.ind, line = 3):
+   -- Unmatched range opening operator (.
+done (5 lines written, 1 warning).
+Output written in imakeidx.ind.
+Transcript written in imakeidx.ilg.
