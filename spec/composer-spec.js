@@ -173,7 +173,7 @@ describe('Composer', () => {
       const targetPath = path.join(fixturesPath, 'file.pdf')
 
       initializeSpies(filePath)
-      atom.config.set('latex.enableDicy', true)
+      atom.config.set('latex.builder', 'dicy')
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
@@ -191,7 +191,7 @@ describe('Composer', () => {
       const targetPath = path.join(fixturesPath, 'filename with spaces.pdf')
 
       initializeSpies(filePath)
-      atom.config.set('latex.enableDicy', true)
+      atom.config.set('latex.builder', 'dicy')
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
@@ -208,7 +208,7 @@ describe('Composer', () => {
       const filePath = path.join(fixturesPath, 'error-warning.tex')
 
       initializeSpies(filePath)
-      atom.config.set('latex.enableDicy', true)
+      atom.config.set('latex.builder', 'dicy')
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
@@ -226,7 +226,7 @@ describe('Composer', () => {
       const targetPath = path.join(fixturesPath, 'knitr', 'file.pdf')
 
       initializeSpies(filePath)
-      atom.config.set('latex.enableDicy', true)
+      atom.config.set('latex.builder', 'dicy')
 
       waitsForPromise(() => {
         return composer.build().catch(r => r)
