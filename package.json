@@ -118,6 +118,7 @@
       "order": 5
     },
     "useDicy": {
+      "title": "Use DiCy",
       "description": "Use the experimental javascript based builder [`DiCy`](https://yitzchak.github.io/dicy/) instead of `latexmk`. [`DiCy`](https://yitzchak.github.io/dicy/) is included with this package so no further configuration or installation is required.",
       "type": "boolean",
       "default": "false",
