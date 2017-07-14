@@ -117,14 +117,10 @@
       "default": true,
       "order": 5
     },
-    "builder": {
-      "description": "Program to use for building LaTeX documents. Permitted builders include [latexmk](http://personal.psu.edu/jcc8/latexmk/) or [DiCy](https://yitzchak.github.io/dicy/).",
-      "type": "string",
-      "enum": [
-        "latexmk",
-        "dicy"
-      ],
-      "default": "latexmk",
+    "useDicy": {
+      "description": "Use the experimental javascript based builder [`DiCy`](https://yitzchak.github.io/dicy/) instead of `latexmk`. [`DiCy`](https://yitzchak.github.io/dicy/) is included with this package so no further configuration or installation is required.",
+      "type": "boolean",
+      "default": "false",
       "order": 6
     },
     "enableExtendedBuildMode": {
