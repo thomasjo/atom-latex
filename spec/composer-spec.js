@@ -13,14 +13,14 @@ describe('Composer', () => {
   })
 
   describe('build', () => {
-    let editor, builder, composer
+    let editor, builder, composer, fixturesPath
 
     function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
       })
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath, lineNumber: 1 })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
       builder.run.andCallFake(() => {
@@ -31,12 +31,17 @@ describe('Composer', () => {
         return Promise.reject(statusCode)
       })
       spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
+
+      spyOn(composer, 'runDiCy').andCallThrough()
+      spyOn(latex.opener, 'open')
     }
 
     beforeEach(() => {
       composer = new Composer()
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
+      fixturesPath = helpers.cloneFixtures()
+      atom.config.set('latex.loggingLevel', 'error')
     })
 
     it('does nothing for new, unsaved files', () => {
@@ -160,6 +165,77 @@ describe('Composer', () => {
 
       runs(() => {
         expect(werkzeug.getEditorDetails).toHaveBeenCalled()
+      })
+    })
+
+    it('successfully builds LaTeX file using DiCy', () => {
+      const filePath = path.join(fixturesPath, 'file.tex')
+      const targetPath = path.join(fixturesPath, 'file.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.useDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDiCy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.getMessages()).toEqual([])
+      })
+    })
+
+    it('successfully executes DiCy when given a file path containing spaces', () => {
+      const filePath = path.join(fixturesPath, 'filename with spaces.tex')
+      const targetPath = path.join(fixturesPath, 'filename with spaces.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.useDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDiCy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.getMessages()).toEqual([])
+      })
+    })
+
+    it('fails to produce target when error messages are generated using DiCy', () => {
+      const filePath = path.join(fixturesPath, 'error-warning.tex')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.useDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDiCy).toHaveBeenCalled()
+        expect(latex.opener.open).not.toHaveBeenCalled()
+        expect(latex.log.getMessages().length).not.toBe(0)
+      })
+    })
+
+    it('successfully builds knitr file using DiCy', () => {
+      const filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+      const targetPath = path.join(fixturesPath, 'knitr', 'file.pdf')
+
+      initializeSpies(filePath)
+      atom.config.set('latex.useDicy', true)
+
+      waitsForPromise(() => {
+        return composer.build().catch(r => r)
+      })
+
+      runs(() => {
+        expect(composer.runDiCy).toHaveBeenCalled()
+        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+        expect(latex.log.getMessages()).toEqual([])
       })
     })
   })
@@ -703,6 +779,137 @@ describe('Composer', () => {
       })
 
       expect(composer.resolveOutputFilePath(builder, jobState)).toEqual(outputFilePath)
+    })
+  })
+
+  describe('getDiCy', () => {
+    let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
+
+    beforeEach(() => {
+      composer = new Composer()
+      spyOn(composer, 'shouldUseDiCy').andReturn(true)
+      fixturesPath = path.join(__dirname, 'fixtures')
+      rootBaseName = 'file.tex'
+      rootFilePath = path.join(fixturesPath, rootBaseName)
+      subFileBaseName = 'root-comment.tex'
+      subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
+    })
+
+    it('verifies that DiCy builder is created for a simple file', () => {
+      let result
+
+      waitsForPromise(() =>
+        composer.getDiCy(rootFilePath)
+          .then(dicy => { result = dicy })
+      )
+
+      runs(() => {
+        expect(result).toBeDefined()
+        expect(result.filePath).toEqual(rootBaseName)
+      })
+    })
+
+    it('verifies that root magic comment is detected', () => {
+      let result
+
+      waitsForPromise(() =>
+        composer.getDiCy(subFilePath)
+          .then(dicy => { result = dicy })
+      )
+
+      runs(() => {
+        expect(result).toBeDefined()
+      })
+    })
+
+    it('verifies that DiCy builder is cached', () => {
+      let firstResult, secondResult
+
+      waitsForPromise(() =>
+        composer.getDiCy(rootFilePath)
+          .then(dicy => { firstResult = dicy })
+          .then(() => composer.getDiCy(rootFilePath))
+          .then(dicy => { secondResult = dicy })
+      )
+
+      runs(() => {
+        expect(firstResult).toBeDefined()
+        expect(secondResult).toBe(firstResult)
+      })
+    })
+
+    it('verifies that DiCy builder is not cached if ignoreCache is enabled', () => {
+      let firstResult, secondResult
+
+      waitsForPromise(() =>
+        composer.getDiCy(rootFilePath)
+          .then(dicy => { firstResult = dicy })
+          .then(() => composer.getDiCy(rootFilePath, { ignoreCache: true }))
+          .then(dicy => { secondResult = dicy })
+      )
+
+      runs(() => {
+        expect(firstResult).toBeDefined()
+        expect(secondResult).toBeDefined()
+        expect(secondResult).not.toBe(firstResult)
+      })
+    })
+  })
+
+  describe('runDiCy', () => {
+    const sourceBaseName = 'file.tex'
+    const outputBaseName = 'file.pdf'
+    const synctexBaseName = 'file.synctex.gz'
+
+    let composer, dicy, fixturesPath, sourcePath, outputPath, synctexPath
+
+    beforeEach(() => {
+      composer = new Composer()
+      fixturesPath = path.join(__dirname, 'fixtures')
+    })
+
+    function initializeSpies (result = true) {
+      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths'])
+      dicy.run.andCallFake(() => Promise.resolve(result))
+      dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputBaseName, synctexBaseName]))
+      dicy.rootPath = fixturesPath
+      sourcePath = path.join(fixturesPath, sourceBaseName)
+      outputPath = path.join(fixturesPath, outputBaseName)
+      synctexPath = path.join(fixturesPath, synctexBaseName)
+      spyOn(composer, 'getDiCy').andCallFake(() => Promise.resolve(dicy))
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
+      spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
+    }
+
+    it('opens PDF after successful build, but does open SyncTeX file', () => {
+      initializeSpies()
+
+      waitsForPromise(() => composer.runDiCy(['build']))
+
+      runs(() => {
+        expect(latex.opener.open).toHaveBeenCalledWith(outputPath, sourcePath, 1)
+        expect(latex.opener.open).not.toHaveBeenCalledWith(synctexPath, sourcePath, 1)
+      })
+    })
+
+    it('does not open targets after unsuccessful build', () => {
+      initializeSpies(false)
+
+      waitsForPromise(() => composer.runDiCy(['build']))
+
+      runs(() => {
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
+    })
+
+    it('does not open targets after successful build if open is not requested', () => {
+      initializeSpies(true)
+
+      waitsForPromise(() => composer.runDiCy(['build'], {}, false))
+
+      runs(() => {
+        expect(latex.opener.open).not.toHaveBeenCalled()
+      })
     })
   })
 })

@@ -54,7 +54,7 @@ describe('LogParser', () => {
         type: 'error',
         logRange: [[196, 0], [196, 84]],
         filePath: texFile,
-        range: [[9, 0], [9, 65536]],
+        range: [[9, 0], [9, Number.MAX_SAFE_INTEGER]],
         logPath: logFile,
         text: '\\begin{gather*} on input line 8 ended by \\end{gather}'
       })

@@ -24,12 +24,12 @@ install_knitr() {
   ensure_r_installed
 
   # Check if we need to install Knitr.
-  if ! Rscript -e "library(knitr)" &> /dev/null; then
+  if ! Rscript -e "library(knitr); library(patchSynctex)" &> /dev/null; then
     # Make sure the R_LIBS_USER directory exists to make R happy.
     [[ ! -d "${R_LIBS_USER}" ]] && mkdir -p "${R_LIBS_USER}"
 
     echo "Installing knitr..."
-    Rscript -e "install.packages('knitr', repos = 'http://cran.r-project.org')"
+    Rscript -e "install.packages(c('knitr', 'patchSynctex'), repos = 'http://cran.r-project.org')"
   else
     echo "Using cached installation of knitr"
   fi
