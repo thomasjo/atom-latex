@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.45.0][] / 2017-08-03
+### Added
+- Support for integrated JavaScript builder
+  [DiCy](https://yitzchak.github.io/dicy/).
+
+### Fixed
+- Prevent missing knitr generated LaTeX file from interferring with the parsing
+  of the LaTeX log. Fixes
+  [#386](https://github.com/thomasjo/atom-latex/issues/386).
+
 ## [0.44.1][] / 2017-07-23
 ### Changed
 - Adjust to changes in Atom `TextEditor` API
@@ -617,6 +627,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.45.0]: https://github.com/thomasjo/atom-latex/compare/v0.44.1...v0.45.0
 [0.44.1]: https://github.com/thomasjo/atom-latex/compare/v0.44.0...v0.44.1
 [0.44.0]: https://github.com/thomasjo/atom-latex/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/thomasjo/atom-latex/compare/v0.42.4...v0.43.0
