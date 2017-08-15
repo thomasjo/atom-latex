@@ -255,37 +255,49 @@
       "default": "automatic",
       "order": 17
     },
+    "pdfViewSplitDirection": {
+      "description": "Pane split direction to use for pdf-view.",
+      "type": "string",
+      "enum": [
+        "left",
+        "right",
+        "up",
+        "down"
+      ],
+      "default": "right",
+      "order": 18
+    },
     "skimPath": {
       "description": "Full application path to Skim (macOS).",
       "type": "string",
       "default": "/Applications/Skim.app",
-      "order": 18
+      "order": 19
     },
     "sumatraPath": {
       "title": "SumatraPDF Path",
       "description": "Full application path to SumatraPDF (Windows).",
       "type": "string",
       "default": "C:\\Program Files (x86)\\SumatraPDF\\SumatraPDF.exe",
-      "order": 19
+      "order": 20
     },
     "okularPath": {
       "description": "Full application path to Okular (*nix).",
       "type": "string",
       "default": "/usr/bin/okular",
-      "order": 20
+      "order": 21
     },
     "zathuraPath": {
       "description": "Full application path to Zathura (*nix).",
       "type": "string",
       "default": "/usr/bin/zathura",
-      "order": 21
+      "order": 22
     },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 22
+      "order": 23
     }
   }
 }
