@@ -255,8 +255,8 @@
       "default": "automatic",
       "order": 17
     },
-    "openerSplit": {
-      "description": "Split direction to use for embedded viewers. Currently this is only applicable for `pdf-view`.",
+    "pdfViewSplitDirection": {
+      "description": "Pane split direction to use for pdf-view.",
       "type": "string",
       "enum": [
         "left",
