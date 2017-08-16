@@ -20,7 +20,7 @@ describe('Composer', () => {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
       })
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath, lineNumber: 1 })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath, lineNumber: 1, isLatex: true })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
       builder.run.andCallFake(() => {
@@ -247,7 +247,7 @@ describe('Composer', () => {
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
       })
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, isLatex: true })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
         let { dir, name } = path.parse(state.getFilePath())
         if (state.getOutputDirectory()) {
@@ -422,7 +422,7 @@ describe('Composer', () => {
     })
 
     it('logs a warning and returns when an output file cannot be resolved', () => {
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1, isLatex: true })
       spyOn(composer, 'resolveOutputFilePath').andReturn()
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
@@ -439,7 +439,7 @@ describe('Composer', () => {
       const filePath = 'file.tex'
       const lineNumber = 1
       const outputFilePath = 'file.pdf'
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber, isLatex: true })
       spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
 
       spyOn(latex.opener, 'open').andReturn(true)
@@ -456,7 +456,7 @@ describe('Composer', () => {
       const lineNumber = 1
       const jobNames = ['foo', 'bar']
 
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber, isLatex: true })
       spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobName() + '.pdf')
       spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
         state.setJobNames(jobNames)
@@ -877,7 +877,7 @@ describe('Composer', () => {
       outputPath = path.join(fixturesPath, outputBaseName)
       synctexPath = path.join(fixturesPath, synctexBaseName)
       spyOn(composer, 'getDiCy').andCallFake(() => Promise.resolve(dicy))
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
+      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1, isLatex: true })
       spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
     }
 
