@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.46.0][] / 2017-08-21
+### Added
+- `pdfViewSplitDirection` setting.
+
+### Fixed
+- Forward sync when using multiple job names.
+- Multiple pane splitting when using `pdf-view`with multiple job names.
+
 ## [0.45.0][] / 2017-08-03
 ### Added
 - Support for integrated JavaScript builder
@@ -627,6 +635,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[0.46.0]: https://github.com/thomasjo/atom-latex/compare/v0.45.0...v0.4.0
 [0.45.0]: https://github.com/thomasjo/atom-latex/compare/v0.44.1...v0.45.0
 [0.44.1]: https://github.com/thomasjo/atom-latex/compare/v0.44.0...v0.44.1
 [0.44.0]: https://github.com/thomasjo/atom-latex/compare/v0.43.0...v0.44.0
