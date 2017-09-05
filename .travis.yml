@@ -19,7 +19,7 @@ env:
   global:
     - MAKE="make -j8"
     - R_LIBS_USER=${HOME}/R/library
-    - APM_TEST_PACKAGES="language-latex pdf-view"
+    - APM_TEST_PACKAGES="language-agda language-haskell language-latex language-r language-weave pdf-view"
   matrix:
     - ATOM_CHANNEL=stable
     - ATOM_CHANNEL=beta

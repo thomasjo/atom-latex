@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+\usepackage{xstring}
+
+\IfStrEqCase*{\jobname}{%
+  {job-2}{\usepackage{minted}}}
+
+\begin{document}
+
+<<>>=
+print("Hello world!")
+@
+
+<<caption='foo'>>=
+import matplotlib.pyplot as plt
+import numpy as np
+
+t = np.arange(0.0, 2.0, 0.01)
+s = 1 + np.sin(2*np.pi*t)
+plt.plot(t, s)
+plt.grid(True)
+plt.show()
+@
+
+\end{document}
