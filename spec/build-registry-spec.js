@@ -11,7 +11,6 @@ describe('BuilderRegistry', () => {
   beforeEach(() => {
     waitsForPromise(() => helpers.activatePackages())
 
-    atom.config.set('latex.builder', 'latexmk')
     builderRegistry = new BuilderRegistry()
   })
 
@@ -21,8 +20,23 @@ describe('BuilderRegistry', () => {
       expect(builderRegistry.getBuilderImplementation(state)).toBeNull()
     })
 
+    it('returns null when passed a Pweave file', () => {
+      const state = new BuildState('foo.Pnw')
+      expect(builderRegistry.getBuilderImplementation(state)).toBeNull()
+    })
+
     it('returns the configured builder when given a regular .tex file', () => {
       const state = new BuildState('foo.tex')
+      expect(builderRegistry.getBuilderImplementation(state).name).toEqual('LatexmkBuilder')
+    })
+
+    it('returns the configured builder when given a literate Haskell file', () => {
+      const state = new BuildState('foo.lhs')
+      expect(builderRegistry.getBuilderImplementation(state).name).toEqual('LatexmkBuilder')
+    })
+
+    it('returns the configured builder when given a literate Agda file', () => {
+      const state = new BuildState('foo.lagda')
       expect(builderRegistry.getBuilderImplementation(state).name).toEqual('LatexmkBuilder')
     })
 
@@ -40,10 +54,6 @@ describe('BuilderRegistry', () => {
   })
 
   describe('getBuilder', () => {
-    beforeEach(() => {
-      atom.config.set('latex.builder', 'latexmk')
-    })
-
     it('returns null when passed an unhandled file type', () => {
       const state = new BuildState('quux.txt')
       expect(builderRegistry.getBuilder(state)).toBeNull()
@@ -57,6 +67,21 @@ describe('BuilderRegistry', () => {
     it('returns a builder instance as configured for knitr files', () => {
       const state = new BuildState('bar.Rnw')
       expect(builderRegistry.getBuilder(state).constructor.name).toEqual('KnitrBuilder')
+    })
+
+    it('returns a builder instance as configured for literate Haskell files', () => {
+      const state = new BuildState('foo.lhs')
+      expect(builderRegistry.getBuilder(state).constructor.name).toEqual('LatexmkBuilder')
+    })
+
+    it('returns a builder instance as configured for literate Agda files', () => {
+      const state = new BuildState('foo.lagda')
+      expect(builderRegistry.getBuilder(state).constructor.name).toEqual('LatexmkBuilder')
+    })
+
+    it('returns null when passed an Pweave file', () => {
+      const state = new BuildState('foo.Pnw')
+      expect(builderRegistry.getBuilder(state)).toBeNull()
     })
   })
 })

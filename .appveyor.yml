@@ -15,7 +15,7 @@ environment:
     MIKTEX_HOME: '%PROGRAMFILES%\MiKTeX 2.9'
     R_HOME: '%PROGRAMFILES%\R'
     R_LIBS_USER: '%USERPROFILE%\R\library'
-    APM_TEST_PACKAGES: "language-latex pdf-view"
+    APM_TEST_PACKAGES: "language-agda language-haskell language-latex language-r language-weave pdf-view"
   matrix:
     - ATOM_CHANNEL: stable
     - ATOM_CHANNEL: beta
