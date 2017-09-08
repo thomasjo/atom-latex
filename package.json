@@ -15,7 +15,7 @@
   "dependencies": {
     "@dicy/core": "^0.8.0",
     "dbus-native": "^0.2.1",
-    "etch": "0.12.4",
+    "etch": "0.12.6",
     "fs-plus": "^3.0.0",
     "glob": "^7.1.1",
     "js-yaml": "^3.8.4",
