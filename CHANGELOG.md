@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased][] / YYYY-MM-DD
+### Added
+- Support for opening result in background with `pdf-view`. Resolves
+  [413](https://github.com/thomasjo/atom-latex/pull/413).  
+    ~ [#416](https://github.com/thomasjo/atom-latex/pull/416)
+    / [@nisargjhaveri](https://github.com/nisargjhaveri)
+
 ## [0.47.0][] / 2017-09-14
 ### Added
 - Support for literate Haskell, literate Agda and Pweave via DiCy upgrade.
@@ -643,6 +650,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.47.0...master
 [0.47.0]: https://github.com/thomasjo/atom-latex/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/thomasjo/atom-latex/compare/v0.45.0...v0.46.0
 [0.45.0]: https://github.com/thomasjo/atom-latex/compare/v0.44.1...v0.45.0
