@@ -5,7 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][] / YYYY-MM-DD
 ### Added
 - Support for opening result in background with `pdf-view`. Resolves
-  [413](https://github.com/thomasjo/atom-latex/pull/413).  
+  [#413](https://github.com/thomasjo/atom-latex/pull/413).  
     ~ [#416](https://github.com/thomasjo/atom-latex/pull/416)
     / [@nisargjhaveri](https://github.com/nisargjhaveri)
 
