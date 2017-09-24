@@ -176,6 +176,17 @@ describe('Logger', () => {
         reset: false
       })
     })
+
+    it('verifies a new message list is sent when the logging level is changed', () => {
+      initialize('info')
+
+      atom.config.set('latex.loggingLevel', 'error')
+
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'error' }],
+        reset: true
+      })
+    })
   })
 
   describe('setMessages', () => {
