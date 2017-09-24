@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Reset of error markers in source files after a new build. Fixes
-  [#419](https://github.com/thomasjo/atom-latex/pull/419).
+  [#419](https://github.com/thomasjo/atom-latex/issues/419).
 
 ## [0.47.0][] / 2017-09-14
 ### Added
