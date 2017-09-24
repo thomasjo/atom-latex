@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     ~ [#416](https://github.com/thomasjo/atom-latex/pull/416)
     / [@nisargjhaveri](https://github.com/nisargjhaveri)
 
+### Fixed
+- Reset of error markers in source files after a new build. Fixes
+  [#419](https://github.com/thomasjo/atom-latex/pull/419).
+
 ## [0.47.0][] / 2017-09-14
 ### Added
 - Support for literate Haskell, literate Agda and Pweave via DiCy upgrade.
