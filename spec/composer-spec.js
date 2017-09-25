@@ -838,13 +838,13 @@ describe('Composer', () => {
       })
     })
 
-    it('verifies that DiCy builder is not cached if loadCache is disabled', () => {
+    it('verifies that DiCy builder is not cached if shouldRebuild is set', () => {
       let firstResult, secondResult
 
       waitsForPromise(() =>
         composer.getDiCy(rootFilePath)
           .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDiCy(rootFilePath, { loadCache: false }))
+          .then(() => composer.getDiCy(rootFilePath, true))
           .then(dicy => { secondResult = dicy })
       )
 
@@ -905,7 +905,7 @@ describe('Composer', () => {
     it('does not open targets after successful build if open is not requested', () => {
       initializeSpies(true)
 
-      waitsForPromise(() => composer.runDiCy(['build'], {}, false))
+      waitsForPromise(() => composer.runDiCy(['build'], false, false))
 
       runs(() => {
         expect(latex.opener.open).not.toHaveBeenCalled()
