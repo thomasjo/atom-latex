@@ -838,13 +838,13 @@ describe('Composer', () => {
       })
     })
 
-    it('verifies that DiCy builder is not cached if ignoreCache is enabled', () => {
+    it('verifies that DiCy builder is not cached if loadCache is disabled', () => {
       let firstResult, secondResult
 
       waitsForPromise(() =>
         composer.getDiCy(rootFilePath)
           .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDiCy(rootFilePath, { ignoreCache: true }))
+          .then(() => composer.getDiCy(rootFilePath, { loadCache: false }))
           .then(dicy => { secondResult = dicy })
       )
 
