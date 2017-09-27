@@ -4,12 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][] / YYYY-MM-DD
 ### Added
+- Document minimum language syntax requirements.  
+    ~ [#401](https://github.com/thomasjo/atom-latex/pull/401)
+    / [@pabloguerrero](https://github.com/pabloguerrero)
 - Support for opening result in background with `pdf-view`. Resolves
   [#413](https://github.com/thomasjo/atom-latex/pull/413).  
     ~ [#416](https://github.com/thomasjo/atom-latex/pull/416)
     / [@nisargjhaveri](https://github.com/nisargjhaveri)
 
 ### Fixed
+- Status bar cleanup issue that prevented Atom v1.21 from exiting. Fixes
+  [#417](https://github.com/thomasjo/atom-latex/issues/417).
 - Reset of error markers in source files after a new build. Fixes
   [#419](https://github.com/thomasjo/atom-latex/issues/419).
 
