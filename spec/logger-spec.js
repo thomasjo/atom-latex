@@ -1,64 +1,71 @@
 /** @babel */
 
-import _ from 'lodash'
 import './spec-helpers'
 import Logger from '../lib/logger'
 import werkzeug from '../lib/werkzeug'
 
 describe('Logger', () => {
-  let logger, counts
+  let logger, messagesListener
 
-  beforeEach(() => {
+  function initialize (loggingLevel = 'warning') {
     logger = new Logger()
-  })
+    messagesListener = jasmine.createSpy('onMessagesListener')
+    logger.onMessages(messagesListener)
+
+    atom.config.set('latex.loggingLevel', loggingLevel)
+
+    logger.info()
+    logger.warning()
+    logger.error()
+  }
 
   describe('getMessages', () => {
-    beforeEach(() => {
-      logger.info()
-      logger.warning()
-      logger.error()
-    })
-
     it('verifies no messages filtered when logging level set to info', () => {
-      atom.config.set('latex.loggingLevel', 'info')
-      counts = _.countBy(logger.getMessages(), 'type')
+      initialize('info')
 
-      expect(counts.error).toBeDefined()
-      expect(counts.warning).toBeDefined()
-      expect(counts.info).toBeDefined()
+      expect(logger.getMessages()).toEqual([{
+        type: 'info'
+      }, {
+        type: 'warning'
+      }, {
+        type: 'error'
+      }])
     })
 
     it('verifies info messages filtered when logging level set to warning', () => {
-      atom.config.set('latex.loggingLevel', 'warning')
-      counts = _.countBy(logger.getMessages(), 'type')
+      initialize('warning')
 
-      expect(counts.error).toBeDefined()
-      expect(counts.warning).toBeDefined()
-      expect(counts.info).toBeUndefined()
+      expect(logger.getMessages()).toEqual([{
+        type: 'warning'
+      }, {
+        type: 'error'
+      }])
     })
 
     it('verifies warning and info messages filtered when logging level set to error', () => {
-      atom.config.set('latex.loggingLevel', 'error')
-      counts = _.countBy(logger.getMessages(), 'type')
+      initialize('error')
 
-      expect(counts.error).toBeDefined()
-      expect(counts.warning).toBeUndefined()
-      expect(counts.info).toBeUndefined()
+      expect(logger.getMessages()).toEqual([{
+        type: 'error'
+      }])
     })
 
     it('verifies no messages filtered when useFilters is false', () => {
-      atom.config.set('latex.loggingLevel', 'error')
-      counts = _.countBy(logger.getMessages(false), 'type')
+      initialize('error')
 
-      expect(counts.error).toBeDefined()
-      expect(counts.warning).toBeDefined()
-      expect(counts.info).toBeDefined()
+      expect(logger.getMessages(false)).toEqual([{
+        type: 'info'
+      }, {
+        type: 'warning'
+      }, {
+        type: 'error'
+      }])
     })
   })
 
   describe('messageTypeIsVisible', () => {
     it('verifies messageTypeIsVisible is true for all levels when logging level set to info', () => {
-      atom.config.set('latex.loggingLevel', 'info')
+      initialize('info')
 
       expect(logger.messageTypeIsVisible('info')).toBe(true)
       expect(logger.messageTypeIsVisible('warning')).toBe(true)
@@ -66,7 +73,7 @@ describe('Logger', () => {
     })
 
     it('verifies messageTypeIsVisible is false for info when logging level set to warning', () => {
-      atom.config.set('latex.loggingLevel', 'warning')
+      initialize('warning')
 
       expect(logger.messageTypeIsVisible('info')).toBe(false)
       expect(logger.messageTypeIsVisible('warning')).toBe(true)
@@ -74,7 +81,7 @@ describe('Logger', () => {
     })
 
     it('verifies messageTypeIsVisible is false for info when logging level set to warning', () => {
-      atom.config.set('latex.loggingLevel', 'error')
+      initialize('error')
 
       expect(logger.messageTypeIsVisible('info')).toBe(false)
       expect(logger.messageTypeIsVisible('warning')).toBe(false)
@@ -86,6 +93,7 @@ describe('Logger', () => {
     let logDock
 
     function initializeSpies (filePath, position) {
+      initialize()
       logDock = jasmine.createSpyObj('LogDock', ['update'])
       spyOn(logger, 'show').andCallFake(() => Promise.resolve(logDock))
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, position })
@@ -114,6 +122,103 @@ describe('Logger', () => {
         expect(logger.show).toHaveBeenCalled()
         expect(logDock.update).toHaveBeenCalledWith({ filePath, position })
       })
+    })
+  })
+
+  describe('onMessages', () => {
+    it('verifies no messages filtered when logging level set to info', () => {
+      initialize('info')
+
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'info' }],
+        reset: false
+      })
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'warning' }],
+        reset: false
+      })
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'error' }],
+        reset: false
+      })
+    })
+
+    it('verifies info messages filtered when logging level set to warning', () => {
+      initialize('warning')
+
+      expect(messagesListener).not.toHaveBeenCalledWith({
+        messages: [{ type: 'info' }],
+        reset: false
+      })
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'warning' }],
+        reset: false
+      })
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'error' }],
+        reset: false
+      })
+    })
+
+    it('verifies warning and info messages filtered when logging level set to error', () => {
+      initialize('error')
+
+      expect(messagesListener).not.toHaveBeenCalledWith({
+        messages: [{ type: 'info' }],
+        reset: false
+      })
+      expect(messagesListener).not.toHaveBeenCalledWith({
+        messages: [{ type: 'warning' }],
+        reset: false
+      })
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'error' }],
+        reset: false
+      })
+    })
+
+    it('verifies a new message list is sent when the logging level is changed', () => {
+      initialize('info')
+
+      atom.config.set('latex.loggingLevel', 'error')
+
+      expect(messagesListener).toHaveBeenCalledWith({
+        messages: [{ type: 'error' }],
+        reset: true
+      })
+    })
+  })
+
+  describe('setMessages', () => {
+    it('replaces message list and sends reset signal when called', () => {
+      const messages = [{ type: 'error', text: 'foo' }]
+
+      initialize('info')
+      logger.setMessages(messages)
+
+      expect(messagesListener).toHaveBeenCalledWith({ messages, reset: true })
+      expect(logger.getMessages(false)).toEqual(messages)
+    })
+  })
+
+  describe('clear', () => {
+    it('empties message list and sends reset signal when called', () => {
+      initialize('info')
+      logger.clear()
+
+      expect(messagesListener).toHaveBeenCalledWith({ messages: [], reset: true })
+      expect(logger.getMessages(false)).toEqual([])
+    })
+  })
+
+  describe('refresh', () => {
+    it('sends reset signal when called', () => {
+      const messages = [{ type: 'error' }]
+
+      initialize('error')
+      logger.refresh()
+
+      expect(messagesListener).toHaveBeenCalledWith({ messages, reset: true })
     })
   })
 })

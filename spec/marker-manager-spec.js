@@ -11,12 +11,19 @@ describe('MarkerManager', () => {
   })
 
   describe('addMarkers', () => {
-    it('verifies that only messages that have a range and a matching file path are marked', () => {
-      const editor = {
+    let editor, manager
+
+    beforeEach(() => {
+      editor = {
         getPath: () => 'foo.tex',
         onDidDestroy: () => { return { dispose: () => null } }
       }
-      const manager = new MarkerManager(editor)
+      manager = new MarkerManager(editor)
+      spyOn(manager, 'addMarker')
+      spyOn(manager, 'clear')
+    })
+
+    it('verifies that only messages that have a range and a matching file path are marked', () => {
       const messages = [{
         type: 'error',
         range: [[0, 0], [0, 1]],
@@ -29,12 +36,18 @@ describe('MarkerManager', () => {
         type: 'info',
         filePath: 'foo.tex'
       }]
-      spyOn(manager, 'addMarker')
 
       manager.addMarkers(messages, false)
 
       expect(manager.addMarker).toHaveBeenCalledWith('error', 'foo.tex', [[0, 0], [0, 1]])
       expect(manager.addMarker.calls.length).toEqual(1)
+      expect(manager.clear).not.toHaveBeenCalled()
+    })
+
+    it('verifies that clear is called when reset flag is set', () => {
+      manager.addMarkers([], true)
+
+      expect(manager.clear).toHaveBeenCalled()
     })
   })
 })
