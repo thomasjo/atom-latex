@@ -53,9 +53,10 @@ selecting the `Use DiCy` option in the settings page. [DiCy][] will be installed
 automatically and so no further action is required for either TeX Live or
 MiKTeX.
 
-### Code Highlighting
-In order to properly work in Atom with this package, you'll need a code
-highlighting extension, namely [`language-latex`][language-latex-pkg].
+### Syntax Highlighting
+In order for this package to behave as expected, your Atom environment must
+contain a package that provides a LaTeX grammar. We suggest
+[`language-latex`][language-latex-pkg], but other valid options might exist.
 
 ## Usage
 The `latex:build` command can be invoked from the LaTex menu or by pressing the
