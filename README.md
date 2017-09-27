@@ -39,6 +39,13 @@ configuration option to point to the folder containing the binaries, either in
 the settings view, or directly in your `config.cson` file. See [Configuration][]
 for further details regarding the settings of this package.
 
+### Syntax Highlighting
+In order for this package to behave as expected, your Atom environment must
+contain a package that provides a LaTeX grammar. We suggest [language-latex][],
+but other valid options might exist. Additional syntax packages may be required
+to build document types other than LaTeX. For more details see
+[Builder Capabilities](#buildercapabilities) below.
+
 ### Builder Selection
 The `latex` package provides access to two automatic builders for LaTeX and
 knitr documents. By default the package will use `latexmk` for LaTeX documents
@@ -53,10 +60,20 @@ selecting the `Use DiCy` option in the settings page. [DiCy][] will be installed
 automatically and so no further action is required for either TeX Live or
 MiKTeX.
 
-### Syntax Highlighting
-In order for this package to behave as expected, your Atom environment must
-contain a package that provides a LaTeX grammar. We suggest
-[`language-latex`][language-latex-pkg], but other valid options might exist.
+### Builder Capabilities
+
+Document types other then LaTeX documents may be processed by this package. The
+availability and behavior of this feature depends upon the specific builder
+selection. The following table details the different types of documents that may
+be processed by each builder and any additional syntax package requirements.
+
+| Document Type    | latexmk based Builder | DiCy Builder | Required Language Packages            |
+|------------------|-----------------------|--------------|---------------------------------------|
+| LaTeX            | Yes                   | Yes          | [language-latex][]                    |
+| knitr            | Yes                   | Yes          | [language-r][] and [language-knitr][] |
+| literate Agda    | No preprocessing      | Yes          | [language-agda][]                     |
+| literate Haskell | No preprocessing      | Yes          | [language-haskell][]                  |
+| Pweave           | No                    | Yes          | [language-weave][]                    |
 
 ## Usage
 The `latex:build` command can be invoked from the LaTex menu or by pressing the
@@ -76,7 +93,7 @@ The `latex` package supports other commands as detailed in the table below.
 | `latex:sync-log`      | None                                        | Display and highlight log messages from the current cursor position.     |
 | `latex:check-runtime` | None                                        | Check for the existence of `latexmk`, `Rscript` and PDF/PS/DVI viewers.  |
 
-### Overriding Build settings
+### Overriding Build Settings
 Many of the build settings in the settings page of the `latex` package can be
 overridden on a per file basis. One way to override specific build settings is
 to use "magic" TeX comments in the form of `% !TEX <name> = <value>`. Another
@@ -99,6 +116,13 @@ for compatibility. More details can found at [Overridding Build Settings][].
 | `outputDirectory` or `output_directory` | directory path, e.g. `build`                   | Specify the output directory that should be used.                                         |
 | `producer`                              | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf`  | Override the PDF producer                                                                 |
 | `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |
+
+There are additional settings that may be configured for the DiCy builder that
+may not be accessible from this package's setting page but can be set via a YAML
+options file or TeX magic comments. For more details please
+[Options](https://yitzchak.github.io/dicy/options) and
+[Configuration](https://yitzchak.github.io/dicy/configuration) in the DiCy
+documentation.
 
 ### PDF/DVI/PS Viewers
 The `latex` package currently supports [Atril][], [Evince][], [Okular][],
@@ -125,7 +149,12 @@ Any and all help is greatly appreciated!
 [devDependency]: https://david-dm.org/thomasjo/atom-latex?type=dev
 [Evince]: https://wiki.gnome.org/Apps/Evince
 [knitr]: http://yihui.name/knitr/
-[language-latex-pkg]: https://atom.io/packages/language-latex
+[language-agda]: https://atom.io/packages/language-agda
+[language-haskell]: https://atom.io/packages/language-haskell
+[language-knitr]: https://atom.io/packages/language-knitr
+[language-latex]: https://atom.io/packages/language-latex
+[language-r]: https://atom.io/packages/language-r
+[language-weave]: https://atom.io/packages/language-weave
 [latexmk with MiKTeX]: https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX
 [MiKTeX]: http://miktex.org/
 [Okular]: https://okular.kde.org/
