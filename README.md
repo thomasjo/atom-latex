@@ -119,7 +119,7 @@ for compatibility. More details can found at [Overridding Build Settings][].
 
 There are additional settings that may be configured for the DiCy builder that
 may not be accessible from this package's setting page but can be set via a YAML
-options file or TeX magic comments. For more details please
+options file or TeX magic comments. For more details please see
 [Options](https://yitzchak.github.io/dicy/options) and
 [Configuration](https://yitzchak.github.io/dicy/configuration) in the DiCy
 documentation.
