@@ -64,7 +64,7 @@ MiKTeX.
 
 Document types other then LaTeX documents may be processed by this package. The
 availability and behavior of this feature depends upon the specific builder
-selection. The following table details the different types of documents that may
+selected. The following table details the different types of documents that may
 be processed by each builder and any additional syntax package requirements.
 
 | Document Type    | latexmk based Builder | DiCy Builder | Required Language Packages            |
@@ -120,8 +120,7 @@ for compatibility. More details can found at [Overridding Build Settings][].
 There are additional settings that may be configured for the DiCy builder that
 may not be accessible from this package's setting page but can be set via a YAML
 options file or TeX magic comments. For more details please see
-[Options](https://yitzchak.github.io/dicy/options) and
-[Configuration](https://yitzchak.github.io/dicy/configuration) in the DiCy
+[Options][DiCy Options] and [Configuration][DiCy Configuration] in the DiCy
 documentation.
 
 ### PDF/DVI/PS Viewers
@@ -143,6 +142,8 @@ Any and all help is greatly appreciated!
 [Atril]: http://mate-desktop.com/#atril
 [Configuration]: https://github.com/thomasjo/atom-latex/wiki/Configuration
 [DiCy]: https://yitzchak.github.io/dicy/
+[DiCy Options]: https://yitzchak.github.io/dicy/options
+[DiCy Configuration]: https://yitzchak.github.io/dicy/configuration
 [dependency svg]: https://david-dm.org/thomasjo/atom-latex.svg
 [dependency]: https://david-dm.org/thomasjo/atom-latex
 [devDependency svg]: https://david-dm.org/thomasjo/atom-latex/dev-status.svg
