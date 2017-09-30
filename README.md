@@ -44,7 +44,7 @@ In order for this package to behave as expected, your Atom environment must
 contain a package that provides a LaTeX grammar. We suggest [language-latex][],
 but other valid options might exist. Additional syntax packages may be required
 to build document types other than LaTeX. For more details see
-[Builder Capabilities](#buildercapabilities) below.
+[Builder Capabilities](#builder-capabilities) below.
 
 ### Builder Selection
 The `latex` package provides access to two automatic builders for LaTeX and
