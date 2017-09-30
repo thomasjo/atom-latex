@@ -4,7 +4,8 @@
 [![Dependency Status][dependency svg]][dependency]
 [![devDependency Status][devDependency svg]][devDependency]
 
-Compile LaTeX or [knitr][] documents from within Atom.
+Compile LaTeX, [knitr][], [literate Agda][], [literate Haskell][], or [Pweave][]
+documents from within Atom.
 
 ## Installing
 Use the Atom package manager and search for "latex", or run `apm install latex`
@@ -157,11 +158,14 @@ Any and all help is greatly appreciated!
 [language-r]: https://atom.io/packages/language-r
 [language-weave]: https://atom.io/packages/language-weave
 [latexmk with MiKTeX]: https://github.com/thomasjo/atom-latex/wiki/Using-latexmk-with-MiKTeX
+[literate Agda]: http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Main.LiterateAgda
+[literate Haskell]: https://wiki.haskell.org/Literate_programming
 [MiKTeX]: http://miktex.org/
 [Okular]: https://okular.kde.org/
 [Overridding Build Settings]: https://github.com/thomasjo/atom-latex/wiki/Overridding-Build-Settings
 [pdf-view]: https://atom.io/packages/pdf-view
 [Preview]: https://support.apple.com/en-us/HT201740
+[pweave]: https://github.com/mpastell/Pweave
 [Skim]: http://skim-app.sourceforge.net/
 [Sumatra PDF]: http://www.sumatrapdfreader.org/free-pdf-reader.html
 [Supported Viewers]: https://github.com/thomasjo/atom-latex/wiki/Supported-Viewers
