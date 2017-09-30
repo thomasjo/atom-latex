@@ -62,7 +62,7 @@ MiKTeX.
 
 ### Builder Capabilities
 
-Document types other then LaTeX documents may be processed by this package. The
+Document types other than LaTeX documents may be processed by this package. The
 availability and behavior of this feature depends upon the specific builder
 selected. The following table details the different types of documents that may
 be processed by each builder and any additional syntax package requirements.
@@ -118,8 +118,8 @@ for compatibility. More details can found at [Overridding Build Settings][].
 | `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |
 
 There are additional settings that may be configured for the DiCy builder that
-may not be accessible from this package's setting page but can be set via a YAML
-options file or TeX magic comments. For more details please see
+may not be accessible from this package's setting page, but can be set via a
+YAML options file or TeX magic comments. For more details please see
 [Options][DiCy Options] and [Configuration][DiCy Configuration] in the DiCy
 documentation.
 
