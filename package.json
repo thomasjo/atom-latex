@@ -1,7 +1,7 @@
 {
   "name": "latex",
   "version": "0.48.0",
-  "description": "Compile LaTeX documents from within Atom.",
+  "description": "Compile LaTeX documents from within Atom",
   "keywords": [
     "tex",
     "latex",
@@ -10,8 +10,12 @@
     "miktex"
   ],
   "license": "MIT",
-  "main": "./lib/main",
   "repository": "https://github.com/thomasjo/atom-latex",
+  "author": "Thomas Johansen <thomasjo@gmail.com>",
+  "contributors": [
+    "Tarn Burton <twburton@gmail.com>"
+  ],
+  "main": "./lib/main",
   "dependencies": {
     "@dicy/core": "^0.10.0",
     "dbus-native": "^0.2.1",
@@ -30,6 +34,9 @@
     "snazzy": "^7.0.0",
     "standard": "^10.0.2"
   },
+  "engines": {
+    "atom": ">=1.19.0 <2.0.0"
+  },
   "standard": {
     "parser": "babel-eslint",
     "globals": [
@@ -46,9 +53,6 @@
       "waitsFor",
       "waitsForPromise"
     ]
-  },
-  "engines": {
-    "atom": ">=1.19.0 <2.0.0"
   },
   "activationCommands": {
     "atom-workspace": [
