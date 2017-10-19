@@ -248,7 +248,7 @@ describe('LatexmkBuilder', () => {
         // since there will likely be font messages which may be dependent on
         // which TeX distribution is being used or which fonts are currently
         // installed.
-        console.log(logMessages)
+        console.log(JSON.stringify(logMessages))
         for (const message of messages) {
           expect(logMessages.some(
             logMessage => message.type === logMessage.type && message.text === logMessage.text && message.filePath === logMessage.filePath)).toBe(true, `Message = ${message.text}`)
