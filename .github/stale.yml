@@ -1,0 +1,8 @@
+only: issues
+staleLabel: stale
+daysUntilStale: 30
+daysUntilClose: 7
+
+markComment: >
+  This issue has been marked as stale because due to inactivity.
+  It will be closed in 7 days if no further activity occurs.
