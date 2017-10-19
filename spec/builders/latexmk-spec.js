@@ -215,6 +215,7 @@ describe('LatexmkBuilder', () => {
       filePath = path.join(fixturesPath, 'error-warning.tex')
       state.setFilePath(filePath)
       const subFilePath = path.join(fixturesPath, 'sub', 'wibble.tex')
+      const spacesFilePath = path.join(fixturesPath, 'sub', 'foo bar.tex')
 
       waitsForPromise(() => {
         return builder.run(jobState).then(code => {
@@ -231,10 +232,10 @@ describe('LatexmkBuilder', () => {
           { type: 'error', text: 'Paragraph ended before \\@sect was complete', filePath },
           { type: 'error', text: 'Extra alignment tab has been changed to \\cr', filePath },
           { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined', filePath: subFilePath },
-          { type: 'error', text: 'Class foo: Significant class issue', filePath },
-          { type: 'warning', text: 'Class foo: Class issue', filePath },
-          { type: 'warning', text: 'Class foo: Nebulous class issue', filePath },
-          { type: 'info', text: 'Class foo: Insignificant class issue', filePath },
+          { type: 'error', text: 'Class foo: Significant class issue', filePath: spacesFilePath },
+          { type: 'warning', text: 'Class foo: Class issue', filePath: spacesFilePath },
+          { type: 'warning', text: 'Class foo: Nebulous class issue', filePath: spacesFilePath },
+          { type: 'info', text: 'Class foo: Insignificant class issue', filePath: spacesFilePath },
           { type: 'error', text: 'Package bar: Significant package issue', filePath: subFilePath },
           { type: 'warning', text: 'Package bar: Package issue', filePath: subFilePath },
           { type: 'warning', text: 'Package bar: Nebulous package issue', filePath: subFilePath },
@@ -253,7 +254,7 @@ describe('LatexmkBuilder', () => {
         }
 
         expect(logMessages.every(
-          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
+          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath || logMessage.filePath === spacesFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 
         expect(builder.logStatusCode).toHaveBeenCalled()

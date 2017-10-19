@@ -25,11 +25,8 @@
     Foo & Bar & Snafu \\
   \end{tabular}
 
-  % Class errors, warnings, etc.
-  \ClassError{foo}{Significant class issue}{RTFM!}
-  \ClassWarning{foo}{Class issue}
-  \ClassWarningNoLine{foo}{Nebulous class issue}
-  \ClassInfo{foo}{Insignificant class issue}
+  % Generate errors and warnings in a subfile with spaces
+  \input{"sub/foo bar.tex"}
 
   % Generate errors and warnings in a subfile located in another directory
   \input{sub/wibble}
