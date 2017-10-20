@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased][]
+### Fixed
+- `latex:clean` includes dot files in glob patterns. Fixes
+  [#412](https://github.com/thomasjo/atom-latex/issues/412).
+
 ## [0.48.0][] / 2017-09-30
 ### Added
 - Document minimum language syntax requirements.  
@@ -659,6 +664,7 @@ minor release.
 - First release.
 
 <!--- refs --->
+[Unreleased]: https://github.com/thomasjo/atom-latex/compare/v0.48.0...master
 [0.48.0]: https://github.com/thomasjo/atom-latex/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/thomasjo/atom-latex/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/thomasjo/atom-latex/compare/v0.45.0...v0.46.0

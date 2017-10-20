@@ -298,6 +298,22 @@ describe('Composer', () => {
       })
     })
 
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory with dot in name', () => {
+      const outdir = '.build'
+      atom.config.set('latex.outputDirectory', outdir)
+      initializeSpies(path.join(fixturesPath, 'foo.tex'))
+
+      waitsForPromise(() => {
+        return composer.clean().catch(r => r)
+      })
+
+      runs(() => {
+        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      })
+    })
+
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with relative output directory', () => {
       const outdir = path.join('..', 'build')
       atom.config.set('latex.outputDirectory', outdir)
