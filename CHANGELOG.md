@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
+### Added
+- Support for parsing of source file references in warning messages. Resolves
+  [#430](https://github.com/thomasjo/atom-latex/issues/430).
+
 ### Fixed
 - `latex:clean` includes dot files in glob patterns. Fixes
   [#412](https://github.com/thomasjo/atom-latex/issues/412).
