@@ -17,7 +17,7 @@
   ],
   "main": "./lib/main",
   "dependencies": {
-    "@dicy/core": "^0.10.0",
+    "@dicy/core": "^0.11.1",
     "dbus-native": "^0.2.1",
     "etch": "0.12.6",
     "fs-plus": "^3.0.0",
