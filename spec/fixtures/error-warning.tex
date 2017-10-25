@@ -25,19 +25,10 @@
     Foo & Bar & Snafu \\
   \end{tabular}
 
-  % Class errors, warnings, etc.
-  \ClassError{foo}{Significant class issue}{RTFM!}
-  \ClassWarning{foo}{Class issue}
-  \ClassWarningNoLine{foo}{Nebulous class issue}
-  \ClassInfo{foo}{Insignificant class issue}
+  % Generate errors and warnings in a subfile with spaces
+  \input{"sub/foo bar.tex"}
 
-  % Package errors, warnings, etc.
-  \PackageError{bar}{Significant package issue}{RTFM!}
-  \PackageWarning{bar}{Package issue}
-  \PackageWarningNoLine{bar}{Nebulous package issue}
-  \PackageInfo{bar}{Insignificant package issue}
-
-  % Generate an error in a subfile located in another directory
+  % Generate errors and warnings in a subfile located in another directory
   \input{sub/wibble}
 
 \end{document}

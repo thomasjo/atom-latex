@@ -215,6 +215,7 @@ describe('LatexmkBuilder', () => {
       filePath = path.join(fixturesPath, 'error-warning.tex')
       state.setFilePath(filePath)
       const subFilePath = path.join(fixturesPath, 'sub', 'wibble.tex')
+      const spacesFilePath = path.join(fixturesPath, 'sub', 'foo bar.tex')
 
       waitsForPromise(() => {
         return builder.run(jobState).then(code => {
@@ -226,20 +227,20 @@ describe('LatexmkBuilder', () => {
       runs(() => {
         const logMessages = jobState.getLogMessages()
         const messages = [
-          { type: 'error', text: 'There\'s no line here to end' },
-          { type: 'error', text: 'Argument of \\@sect has an extra }' },
-          { type: 'error', text: 'Paragraph ended before \\@sect was complete' },
-          { type: 'error', text: 'Extra alignment tab has been changed to \\cr' },
-          { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined' },
-          { type: 'error', text: 'Class foo: Significant class issue' },
-          { type: 'warning', text: 'Class foo: Class issue' },
-          { type: 'warning', text: 'Class foo: Nebulous class issue' },
-          { type: 'info', text: 'Class foo: Insignificant class issue' },
-          { type: 'error', text: 'Package bar: Significant package issue' },
-          { type: 'warning', text: 'Package bar: Package issue' },
-          { type: 'warning', text: 'Package bar: Nebulous package issue' },
-          { type: 'info', text: 'Package bar: Insignificant package issue' },
-          { type: 'warning', text: 'There were undefined references' }
+          { type: 'error', text: 'There\'s no line here to end', filePath },
+          { type: 'error', text: 'Argument of \\@sect has an extra }', filePath },
+          { type: 'error', text: 'Paragraph ended before \\@sect was complete', filePath },
+          { type: 'error', text: 'Extra alignment tab has been changed to \\cr', filePath },
+          { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined', filePath: subFilePath },
+          { type: 'error', text: 'Class foo: Significant class issue', filePath: spacesFilePath },
+          { type: 'warning', text: 'Class foo: Class issue', filePath: spacesFilePath },
+          { type: 'warning', text: 'Class foo: Nebulous class issue', filePath: spacesFilePath },
+          { type: 'info', text: 'Class foo: Insignificant class issue', filePath: spacesFilePath },
+          { type: 'error', text: 'Package bar: Significant package issue', filePath: subFilePath },
+          { type: 'warning', text: 'Package bar: Package issue', filePath: subFilePath },
+          { type: 'warning', text: 'Package bar: Nebulous package issue', filePath: subFilePath },
+          { type: 'info', text: 'Package bar: Insignificant package issue', filePath: subFilePath },
+          { type: 'warning', text: 'There were undefined references', filePath }
         ]
 
         // Loop through the required messages and make sure that each one appears
@@ -249,11 +250,11 @@ describe('LatexmkBuilder', () => {
         // installed.
         for (const message of messages) {
           expect(logMessages.some(
-            logMessage => message.type === logMessage.type && message.text === logMessage.text)).toBe(true, `Message = ${message.text}`)
+            logMessage => message.type === logMessage.type && message.text === logMessage.text && message.filePath === logMessage.filePath)).toBe(true, `Message = ${message.text}`)
         }
 
         expect(logMessages.every(
-          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath))
+          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath || logMessage.filePath === spacesFilePath))
           .toBe(true, 'Incorrect file path resolution in log.')
 
         expect(builder.logStatusCode).toHaveBeenCalled()
