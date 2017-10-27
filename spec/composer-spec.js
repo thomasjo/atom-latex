@@ -921,7 +921,7 @@ describe('Composer', () => {
     it('does not open targets after successful build if open is not requested', () => {
       initializeSpies(true)
 
-      waitsForPromise(() => composer.runDiCy(['build'], false, false))
+      waitsForPromise(() => composer.runDiCy(['build'], { openResults: false }))
 
       runs(() => {
         expect(latex.opener.open).not.toHaveBeenCalled()
