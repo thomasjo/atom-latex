@@ -1,5 +1,8 @@
 /** @babel */
 
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from '../async-spec-helpers'
+
 import path from 'path'
 import MagicParser from '../../lib/parsers/magic-parser'
 

@@ -1,22 +1,23 @@
 /** @babel */
 
-import helpers from './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+import { activatePackages } from './spec-helpers'
+
 import MarkerManager from '../lib/marker-manager'
 
 describe('MarkerManager', () => {
-  beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+  beforeEach(async () => {
+    await activatePackages()
   })
 
   describe('addMarkers', () => {
-    let editor, manager
+    let manager
 
     beforeEach(() => {
-      editor = {
+      const editor = {
         getPath: () => 'foo.tex',
-        onDidDestroy: () => { return { dispose: () => null } }
+        onDidDestroy: () => ({ dispose: () => {} })
       }
       manager = new MarkerManager(editor)
       spyOn(manager, 'addMarker')
@@ -24,19 +25,11 @@ describe('MarkerManager', () => {
     })
 
     it('verifies that only messages that have a range and a matching file path are marked', () => {
-      const messages = [{
-        type: 'error',
-        range: [[0, 0], [0, 1]],
-        filePath: 'foo.tex'
-      }, {
-        type: 'warning',
-        range: [[0, 0], [0, 1]],
-        filePath: 'bar.tex'
-      }, {
-        type: 'info',
-        filePath: 'foo.tex'
-      }]
-
+      const messages = [
+        { type: 'error', range: [[0, 0], [0, 1]], filePath: 'foo.tex' },
+        { type: 'warning', range: [[0, 0], [0, 1]], filePath: 'bar.tex' },
+        { type: 'info', filePath: 'foo.tex' }
+      ]
       manager.addMarkers(messages, false)
 
       expect(manager.addMarker).toHaveBeenCalledWith('error', 'foo.tex', [[0, 0], [0, 1]])

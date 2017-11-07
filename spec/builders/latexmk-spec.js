@@ -1,6 +1,9 @@
 /** @babel */
 
-import helpers from '../spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from '../async-spec-helpers'
+import { activatePackages, cloneFixtures } from '../spec-helpers'
+
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
 import fs from 'fs-plus'
@@ -9,12 +12,11 @@ import BuildState from '../../lib/build-state'
 describe('LatexmkBuilder', () => {
   let builder, fixturesPath, filePath, extendedOutputPaths, state, jobState
 
-  beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+  beforeEach(async () => {
+    await activatePackages()
+
     builder = new LatexmkBuilder()
-    fixturesPath = helpers.cloneFixtures()
+    fixturesPath = cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
     state = new BuildState(filePath)
     state.setEngine('pdflatex')
@@ -28,8 +30,8 @@ describe('LatexmkBuilder', () => {
   function initializeExtendedBuild (name, extensions, outputDirectory = '') {
     let dir = path.join(fixturesPath, 'latexmk')
     filePath = path.format({ dir, name, ext: '.tex' })
-    state.setFilePath(filePath)
     dir = path.join(dir, outputDirectory)
+    state.setFilePath(filePath)
     state.setOutputDirectory(outputDirectory)
     extendedOutputPaths = extensions.map(ext => path.format({ dir, name, ext }))
   }
@@ -152,337 +154,248 @@ describe('LatexmkBuilder', () => {
   })
 
   describe('run', () => {
-    let exitCode
-
     beforeEach(() => {
       spyOn(builder, 'logStatusCode').andCallThrough()
     })
 
-    it('successfully executes latexmk when given a valid TeX file', () => {
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+    it('successfully executes latexmk when given a valid TeX file', async () => {
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expect(exitCode).toBe(0)
-      })
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expect(exitCode).toBe(0)
     })
 
-    it('successfully executes latexmk when given a file path containing spaces', () => {
+    it('successfully executes latexmk when given a file path containing spaces', async () => {
       filePath = path.join(fixturesPath, 'filename with spaces.tex')
       state.setFilePath(filePath)
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expect(exitCode).toBe(0)
-      })
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expect(exitCode).toBe(0)
     })
 
-    it('successfully executes latexmk when given a jobname', () => {
+    it('successfully executes latexmk when given a jobname', async () => {
       state.setJobNames(['foo'])
       jobState = state.getJobStates()[0]
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expect(exitCode).toBe(0)
-      })
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expect(exitCode).toBe(0)
     })
 
-    it('successfully executes latexmk when given a jobname with spaces', () => {
+    it('successfully executes latexmk when given a jobname with spaces', async () => {
       state.setJobNames(['foo bar'])
       jobState = state.getJobStates()[0]
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expect(exitCode).toBe(0)
-      })
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expect(exitCode).toBe(0)
     })
 
-    it('fails with code 12 and various errors, warnings and info messages are produced in log file', () => {
+    it('fails with code 12 and various errors, warnings and info messages are produced in log file', async () => {
       filePath = path.join(fixturesPath, 'error-warning.tex')
       state.setFilePath(filePath)
       const subFilePath = path.join(fixturesPath, 'sub', 'wibble.tex')
       const spacesFilePath = path.join(fixturesPath, 'sub', 'foo bar.tex')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => {
-          exitCode = code
-          builder.parseLogFile(jobState)
-        })
-      })
+      const exitCode = await builder.run(jobState)
+      builder.parseLogFile(jobState)
 
-      runs(() => {
-        const logMessages = jobState.getLogMessages()
-        const messages = [
-          { type: 'error', text: 'There\'s no line here to end', filePath },
-          { type: 'error', text: 'Argument of \\@sect has an extra }', filePath },
-          { type: 'error', text: 'Paragraph ended before \\@sect was complete', filePath },
-          { type: 'error', text: 'Extra alignment tab has been changed to \\cr', filePath },
-          { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined', filePath: subFilePath },
-          { type: 'error', text: 'Class foo: Significant class issue', filePath: spacesFilePath },
-          { type: 'warning', text: 'Class foo: Class issue', filePath: spacesFilePath },
-          { type: 'warning', text: 'Class foo: Nebulous class issue', filePath: spacesFilePath },
-          { type: 'info', text: 'Class foo: Insignificant class issue', filePath: spacesFilePath },
-          { type: 'error', text: 'Package bar: Significant package issue', filePath: subFilePath },
-          { type: 'warning', text: 'Package bar: Package issue', filePath: subFilePath },
-          { type: 'warning', text: 'Package bar: Nebulous package issue', filePath: subFilePath },
-          { type: 'info', text: 'Package bar: Insignificant package issue', filePath: subFilePath },
-          { type: 'warning', text: 'There were undefined references', filePath }
-        ]
+      const logMessages = jobState.getLogMessages()
+      const messages = [
+        { type: 'error', text: 'There\'s no line here to end', filePath },
+        { type: 'error', text: 'Argument of \\@sect has an extra }', filePath },
+        { type: 'error', text: 'Paragraph ended before \\@sect was complete', filePath },
+        { type: 'error', text: 'Extra alignment tab has been changed to \\cr', filePath },
+        { type: 'warning', text: 'Reference `tab:snafu\' on page 1 undefined', filePath: subFilePath },
+        { type: 'error', text: 'Class foo: Significant class issue', filePath: spacesFilePath },
+        { type: 'warning', text: 'Class foo: Class issue', filePath: spacesFilePath },
+        { type: 'warning', text: 'Class foo: Nebulous class issue', filePath: spacesFilePath },
+        { type: 'info', text: 'Class foo: Insignificant class issue', filePath: spacesFilePath },
+        { type: 'error', text: 'Package bar: Significant package issue', filePath: subFilePath },
+        { type: 'warning', text: 'Package bar: Package issue', filePath: subFilePath },
+        { type: 'warning', text: 'Package bar: Nebulous package issue', filePath: subFilePath },
+        { type: 'info', text: 'Package bar: Insignificant package issue', filePath: subFilePath },
+        { type: 'warning', text: 'There were undefined references', filePath }
+      ]
 
-        // Loop through the required messages and make sure that each one appears
-        // in the parsed log output. We do not do a direct one-to-one comparison
-        // since there will likely be font messages which may be dependent on
-        // which TeX distribution is being used or which fonts are currently
-        // installed.
-        for (const message of messages) {
-          expect(logMessages.some(
-            logMessage => message.type === logMessage.type && message.text === logMessage.text && message.filePath === logMessage.filePath)).toBe(true, `Message = ${message.text}`)
-        }
+      // Loop through the required messages and make sure that each one appears
+      // in the parsed log output. We do not do a direct one-to-one comparison
+      // since there will likely be font messages which may be dependent on
+      // which TeX distribution is being used or which fonts are currently
+      // installed.
+      for (const message of messages) {
+        expect(logMessages.some(logMessage =>
+          message.type === logMessage.type &&
+          message.text === logMessage.text &&
+          message.filePath === logMessage.filePath)
+        ).toBe(true, `Message = ${message.text}`)
+      }
 
-        expect(logMessages.every(
-          logMessage => !logMessage.filePath || logMessage.filePath === filePath || logMessage.filePath === subFilePath || logMessage.filePath === spacesFilePath))
-          .toBe(true, 'Incorrect file path resolution in log.')
+      expect(logMessages.every(logMessage =>
+        !logMessage.filePath ||
+        logMessage.filePath === filePath ||
+        logMessage.filePath === subFilePath ||
+        logMessage.filePath === spacesFilePath)
+      ).toBe(true, 'Incorrect file path resolution in log.')
 
-        expect(builder.logStatusCode).toHaveBeenCalled()
-        expect(exitCode).toBe(12)
-      })
+      expect(builder.logStatusCode).toHaveBeenCalled()
+      expect(exitCode).toBe(12)
     })
 
-    it('fails to execute latexmk when given invalid arguments', () => {
+    it('fails to execute latexmk when given invalid arguments', async () => {
       spyOn(builder, 'constructArgs').andReturn(['-invalid-argument'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(10)
-        expect(builder.logStatusCode).toHaveBeenCalled()
-      })
+      expect(exitCode).toBe(10)
+      expect(builder.logStatusCode).toHaveBeenCalled()
     })
 
-    it('fails to execute latexmk when given invalid file path', () => {
+    it('fails to execute latexmk when given invalid file path', async () => {
       state.setFilePath(path.join(fixturesPath, 'foo.tex'))
       const args = builder.constructArgs(jobState)
 
+      // TODO: Improve this approach.
       // Need to remove the 'force' flag to trigger the desired failure.
       const removed = args.splice(1, 1)
-      expect(removed).toEqual(['-f'])
+      if (removed.indexOf('-f') !== 0) {
+        throw new Error('The element "-f" was not removed from builder arguments!')
+      }
 
       spyOn(builder, 'constructArgs').andReturn(args)
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(11)
-        expect(builder.logStatusCode).toHaveBeenCalled()
-      })
+      expect(exitCode).toBe(11)
+      expect(builder.logStatusCode).toHaveBeenCalled()
     })
 
-    it('successfully creates asymptote files when using the asymptote package', () => {
-      initializeExtendedBuild('asymptote-test',
-        ['-1.tex', '.pdf'])
+    it('successfully creates asymptote files when using the asymptote package', async () => {
+      initializeExtendedBuild('asymptote-test', ['-1.tex', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates asymptote files when using the asymptote package with an output directory', () => {
-      initializeExtendedBuild('asymptote-test',
-        ['-1.tex', '.pdf'],
-        'build')
+    it('successfully creates asymptote files when using the asymptote package with an output directory', async () => {
+      initializeExtendedBuild('asymptote-test', ['-1.tex', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates glossary files when using the glossaries package', () => {
-      initializeExtendedBuild('glossaries-test',
-        ['.acn', '.acr', '.glo', '.gls', '.pdf'])
+    it('successfully creates glossary files when using the glossaries package', async () => {
+      initializeExtendedBuild('glossaries-test', ['.acn', '.acr', '.glo', '.gls', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates glossary files when using the glossaries package with an output directory', () => {
-      initializeExtendedBuild('glossaries-test',
-        ['.acn', '.acr', '.glo', '.gls', '.pdf'],
-        'build')
+    it('successfully creates glossary files when using the glossaries package with an output directory', async () => {
+      initializeExtendedBuild('glossaries-test', ['.acn', '.acr', '.glo', '.gls', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates metapost files when using the feynmp package', () => {
-      initializeExtendedBuild('mpost-test',
-        ['-feynmp.1', '.pdf'])
+    it('successfully creates metapost files when using the feynmp package', async () => {
+      initializeExtendedBuild('mpost-test', ['-feynmp.1', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates metapost files when using the feynmp package with an output directory', () => {
-      initializeExtendedBuild('mpost-test',
-        ['-feynmp.1', '.pdf'],
-        'build')
+    it('successfully creates metapost files when using the feynmp package with an output directory', async () => {
+      initializeExtendedBuild('mpost-test', ['-feynmp.1', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates nomenclature files when using the nomencl package', () => {
-      initializeExtendedBuild('nomencl-test',
-        ['.nlo', '.nls', '.pdf'])
+    it('successfully creates nomenclature files when using the nomencl package', async () => {
+      initializeExtendedBuild('nomencl-test', ['.nlo', '.nls', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates nomenclature files when using the nomencl package with an output directory', () => {
-      initializeExtendedBuild('nomencl-test',
-        ['.nlo', '.nls', '.pdf'],
-        'build')
+    it('successfully creates nomenclature files when using the nomencl package with an output directory', async () => {
+      initializeExtendedBuild('nomencl-test', ['.nlo', '.nls', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates index files when using the index package', () => {
-      initializeExtendedBuild('index-test',
-        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'])
+    it('successfully creates index files when using the index package', async () => {
+      initializeExtendedBuild('index-test', ['.idx', '.ind', '.ldx', '.lnd', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates index files when using the index package with an output directory', () => {
-      initializeExtendedBuild('index-test',
-        ['.idx', '.ind', '.ldx', '.lnd', '.pdf'],
-        'build')
+    it('successfully creates index files when using the index package with an output directory', async () => {
+      initializeExtendedBuild('index-test', ['.idx', '.ind', '.ldx', '.lnd', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
     // Sage only runs in a VM on Windows and installing Sage at 1GB for two tests
     // is excessive.
     if (process.platform === 'win32' || process.env.CI) return
 
-    it('successfully creates SageTeX files when using the sagetex package', () => {
-      initializeExtendedBuild('sagetex-test',
-        ['.sagetex.sage', '.sagetex.sout', '.pdf'])
+    it('successfully creates SageTeX files when using the sagetex package', async () => {
+      initializeExtendedBuild('sagetex-test', ['.sagetex.sage', '.sagetex.sout', '.pdf'])
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates SageTeX files when using the sagetex package with an output directory', () => {
-      initializeExtendedBuild('sagetex-test',
-        ['.sagetex.sage', '.sagetex.sout', '.pdf'],
-        'build')
+    it('successfully creates SageTeX files when using the sagetex package with an output directory', async () => {
+      initializeExtendedBuild('sagetex-test', ['.sagetex.sage', '.sagetex.sout', '.pdf'], 'build')
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expectExistenceOfExtendedOutputs()
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expectExistenceOfExtendedOutputs()
     })
   })
 

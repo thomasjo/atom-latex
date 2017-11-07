@@ -1,12 +1,12 @@
 /** @babel */
 
-import helpers from './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+import { activatePackages } from './spec-helpers'
 
 describe('Latex', () => {
-  beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+  beforeEach(async () => {
+    await activatePackages()
   })
 
   describe('initialize', () => {
