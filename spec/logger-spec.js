@@ -1,6 +1,8 @@
 /** @babel */
 
-import './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+
 import Logger from '../lib/logger'
 import werkzeug from '../lib/werkzeug'
 
@@ -23,43 +25,38 @@ describe('Logger', () => {
     it('verifies no messages filtered when logging level set to info', () => {
       initialize('info')
 
-      expect(logger.getMessages()).toEqual([{
-        type: 'info'
-      }, {
-        type: 'warning'
-      }, {
-        type: 'error'
-      }])
+      expect(logger.getMessages()).toEqual([
+        { type: 'info' },
+        { type: 'warning' },
+        { type: 'error' }
+      ])
     })
 
     it('verifies info messages filtered when logging level set to warning', () => {
       initialize('warning')
 
-      expect(logger.getMessages()).toEqual([{
-        type: 'warning'
-      }, {
-        type: 'error'
-      }])
+      expect(logger.getMessages()).toEqual([
+        { type: 'warning' },
+        { type: 'error' }
+      ])
     })
 
     it('verifies warning and info messages filtered when logging level set to error', () => {
       initialize('error')
 
-      expect(logger.getMessages()).toEqual([{
-        type: 'error'
-      }])
+      expect(logger.getMessages()).toEqual([
+        { type: 'error' }
+      ])
     })
 
     it('verifies no messages filtered when useFilters is false', () => {
       initialize('error')
 
-      expect(logger.getMessages(false)).toEqual([{
-        type: 'info'
-      }, {
-        type: 'warning'
-      }, {
-        type: 'error'
-      }])
+      expect(logger.getMessages(false)).toEqual([
+        { type: 'info' },
+        { type: 'warning' },
+        { type: 'error' }
+      ])
     })
   })
 
@@ -94,34 +91,31 @@ describe('Logger', () => {
 
     function initializeSpies (filePath, position) {
       initialize()
+
       logDock = jasmine.createSpyObj('LogDock', ['update'])
       spyOn(logger, 'show').andCallFake(() => Promise.resolve(logDock))
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, position })
     }
 
-    it('silently does nothing when the current editor is transient', () => {
+    it('silently does nothing when the current editor is transient', async () => {
       initializeSpies(null, null)
 
-      waitsForPromise(() => logger.sync())
+      await logger.sync()
 
-      runs(() => {
-        expect(logger.show).not.toHaveBeenCalled()
-        expect(logDock.update).not.toHaveBeenCalled()
-      })
+      expect(logger.show).not.toHaveBeenCalled()
+      expect(logDock.update).not.toHaveBeenCalled()
     })
 
-    it('shows and updates the log panel with the file path and position', () => {
+    it('shows and updates the log panel with the file path and position', async () => {
       const filePath = 'file.tex'
       const position = [[0, 0], [0, 10]]
 
       initializeSpies(filePath, position)
 
-      waitsForPromise(() => logger.sync())
+      await logger.sync()
 
-      runs(() => {
-        expect(logger.show).toHaveBeenCalled()
-        expect(logDock.update).toHaveBeenCalledWith({ filePath, position })
-      })
+      expect(logger.show).toHaveBeenCalled()
+      expect(logDock.update).toHaveBeenCalledWith({ filePath, position })
     })
   })
 

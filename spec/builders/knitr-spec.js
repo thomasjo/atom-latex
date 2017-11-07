@@ -1,26 +1,30 @@
 /** @babel */
 
-import helpers from '../spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from '../async-spec-helpers'
+import { activatePackages, cloneFixtures } from '../spec-helpers'
+
 import fs from 'fs-plus'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
 import BuildState from '../../lib/build-state'
 
 function getRawFile (filePath) {
-  return fs.readFileSync(filePath, {encoding: 'utf-8'})
+  return fs.readFileSync(filePath, { encoding: 'utf-8' })
 }
 
 describe('KnitrBuilder', () => {
   let builder, fixturesPath, filePath, state, jobState
 
-  beforeEach(() => {
-    waitsForPromise(() => {
-      return helpers.activatePackages()
-    })
+  beforeEach(async () => {
+    await activatePackages()
+
     builder = new KnitrBuilder()
     spyOn(builder, 'logStatusCode').andCallThrough()
-    fixturesPath = helpers.cloneFixtures()
+
+    fixturesPath = cloneFixtures()
     filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
+
     state = new BuildState(filePath)
     state.setEngine('pdflatex')
     state.setOutputFormat('pdf')
@@ -56,29 +60,21 @@ describe('KnitrBuilder', () => {
   })
 
   describe('run', () => {
-    let exitCode
+    it('successfully executes knitr when given a valid R Sweave file', async () => {
+      const outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
 
-    it('successfully executes knitr when given a valid R Sweave file', () => {
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        const outputFilePath = path.join(fixturesPath, 'knitr', 'file.tex')
-
-        expect(exitCode).toBe(0)
-        expect(builder.logStatusCode).not.toHaveBeenCalled()
-        expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
-      })
+      expect(exitCode).toBe(0)
+      expect(builder.logStatusCode).not.toHaveBeenCalled()
+      expect(getRawFile(outputFilePath)).toContain('$\\tau \\approx 6.2831853$')
     })
 
-    it('fails to execute knitr when given an invalid file path', () => {
+    it('fails to execute knitr when given an invalid file path', async () => {
       filePath = path.join(fixturesPath, 'foo.Rnw')
       state.setFilePath(filePath)
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
       runs(() => {
         expect(exitCode).toBe(1)
@@ -86,7 +82,7 @@ describe('KnitrBuilder', () => {
       })
     })
 
-    it('detects missing knitr library and logs an error', () => {
+    it('detects missing knitr library and logs an error', async () => {
       const directoryPath = path.dirname(filePath)
       const env = { 'R_LIBS_USER': '/dev/null', 'R_LIBS_SITE': '/dev/null' }
       const options = builder.constructChildProcessOptions(directoryPath)
@@ -94,17 +90,13 @@ describe('KnitrBuilder', () => {
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
       spyOn(latex.log, 'showMessage').andCallThrough()
 
-      waitsForPromise(() => {
-        return builder.run(jobState).then(code => { exitCode = code })
-      })
+      const exitCode = await builder.run(jobState)
 
-      runs(() => {
-        expect(exitCode).toBe(-1)
-        expect(builder.logStatusCode).toHaveBeenCalled()
-        expect(latex.log.showMessage).toHaveBeenCalledWith({
-          type: 'error',
-          text: 'The R package "knitr" could not be loaded.'
-        })
+      expect(exitCode).toBe(-1)
+      expect(builder.logStatusCode).toHaveBeenCalled()
+      expect(latex.log.showMessage).toHaveBeenCalledWith({
+        type: 'error',
+        text: 'The R package "knitr" could not be loaded.'
       })
     })
   })

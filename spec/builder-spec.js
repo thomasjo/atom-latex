@@ -1,6 +1,9 @@
 /** @babel */
 
-import helpers from './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+import { cloneFixtures } from './spec-helpers'
+
 import path from 'path'
 import Builder from '../lib/builder'
 import BuildState from '../lib/build-state'
@@ -10,7 +13,7 @@ describe('Builder', () => {
 
   beforeEach(() => {
     builder = new Builder()
-    fixturesPath = helpers.cloneFixtures()
+    fixturesPath = cloneFixtures()
     filePath = path.join(fixturesPath, 'file.tex')
     logFilePath = path.join(fixturesPath, 'file.log')
     fdbFilePath = path.join(fixturesPath, 'file.fdb_latexmk')
@@ -136,22 +139,12 @@ describe('Builder', () => {
 
   describe('parseLogAndFdbFiles', () => {
     it('verifies that the correct output file is selected when using various latexmk modes', () => {
-      const switches = [{
-        name: 'pdf',
-        format: 'pdf'
-      }, {
-        name: 'pdfdvi',
-        format: 'pdf'
-      }, {
-        name: 'pdfps',
-        format: 'pdf'
-      }, {
-        name: 'ps',
-        format: 'ps'
-      }, {
-        name: 'dvi',
-        format: 'dvi'
-      }]
+      const switches = [
+        { name: 'pdf', format: 'pdf' },
+        { name: 'pdfdvi', format: 'pdf' },
+        { name: 'pdfps', format: 'pdf' },
+        { name: 'ps', format: 'ps' },
+        { name: 'dvi', format: 'dvi' }]
       state.setOutputDirectory('log-parse')
 
       for (const { name, format } of switches) {

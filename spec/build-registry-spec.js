@@ -1,15 +1,18 @@
 /** @babel */
 
-import helpers from './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+import { activatePackages } from './spec-helpers'
 import { NullBuilder } from './stubs'
+
 import BuilderRegistry from '../lib/builder-registry'
 import BuildState from '../lib/build-state'
 
 describe('BuilderRegistry', () => {
   let builderRegistry
 
-  beforeEach(() => {
-    waitsForPromise(() => helpers.activatePackages())
+  beforeEach(async () => {
+    await activatePackages()
 
     atom.config.set('latex.builder', 'latexmk')
     builderRegistry = new BuilderRegistry()

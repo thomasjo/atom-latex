@@ -1,6 +1,7 @@
 /** @babel */
 
-import '../spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from '../async-spec-helpers'
 
 import path from 'path'
 import FdbParser from '../../lib/parsers/fdb-parser'

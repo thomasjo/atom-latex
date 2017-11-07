@@ -1,6 +1,9 @@
 /** @babel */
 
-import helpers from './spec-helpers'
+// eslint-disable-next-line no-unused-vars
+import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
+import { activatePackages, cloneFixtures } from './spec-helpers'
+
 import fs from 'fs-plus'
 import path from 'path'
 import werkzeug from '../lib/werkzeug'
@@ -8,8 +11,8 @@ import Composer from '../lib/composer'
 import BuildState from '../lib/build-state'
 
 describe('Composer', () => {
-  beforeEach(() => {
-    waitsForPromise(() => helpers.activatePackages())
+  beforeEach(async () => {
+    await activatePackages()
   })
 
   describe('build', () => {
@@ -17,9 +20,7 @@ describe('Composer', () => {
 
     function initializeSpies (filePath, jobNames = [null], statusCode = 0) {
       editor = jasmine.createSpyObj('MockEditor', ['save', 'isModified'])
-      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobNames)
-      })
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => { state.setJobNames(jobNames) })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ editor, filePath, lineNumber: 1 })
 
       builder = jasmine.createSpyObj('MockBuilder', ['run', 'constructArgs', 'parseLogAndFdbFiles'])
@@ -37,45 +38,35 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
+      fixturesPath = cloneFixtures()
       composer = new Composer()
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
-      fixturesPath = helpers.cloneFixtures()
       atom.config.set('latex.loggingLevel', 'error')
     })
 
-    it('does nothing for new, unsaved files', () => {
+    it('does nothing for new, unsaved files', async () => {
       initializeSpies(null)
 
-      let result = 'aaaaaaaaaaaa'
-      waitsForPromise(() => {
-        return composer.build().then(r => { result = r })
-      })
+      const result = await composer.build()
 
-      runs(() => {
-        expect(result).toBe(false)
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
-      })
+      expect(result).toBe(false)
+      expect(composer.showResult).not.toHaveBeenCalled()
+      expect(composer.showError).not.toHaveBeenCalled()
     })
 
-    it('does nothing for unsupported file extensions', () => {
+    it('does nothing for unsupported file extensions', async () => {
       initializeSpies('foo.bar')
       latex.builderRegistry.getBuilder.andReturn(null)
 
-      let result
-      waitsForPromise(() => {
-        return composer.build().then(r => { result = r })
-      })
+      const result = await composer.build()
 
-      runs(() => {
-        expect(result).toBe(false)
-        expect(composer.showResult).not.toHaveBeenCalled()
-        expect(composer.showError).not.toHaveBeenCalled()
-      })
+      expect(result).toBe(false)
+      expect(composer.showResult).not.toHaveBeenCalled()
+      expect(composer.showError).not.toHaveBeenCalled()
     })
 
-    it('saves the file before building, if modified', () => {
+    it('saves the file before building, if modified', async () => {
       initializeSpies('file.tex')
       editor.isModified.andReturn(true)
 
@@ -84,17 +75,13 @@ describe('Composer', () => {
         messages: []
       })
 
-      waitsForPromise(() => {
-        return composer.build()
-      })
+      await composer.build()
 
-      runs(() => {
-        expect(editor.isModified).toHaveBeenCalled()
-        expect(editor.save).toHaveBeenCalled()
-      })
+      expect(editor.isModified).toHaveBeenCalled()
+      expect(editor.save).toHaveBeenCalled()
     })
 
-    it('runs the build two times with multiple job names', () => {
+    it('runs the build two times with multiple job names', async () => {
       initializeSpies('file.tex', ['foo', 'bar'])
 
       builder.parseLogAndFdbFiles.andReturn({
@@ -102,141 +89,105 @@ describe('Composer', () => {
         messages: []
       })
 
-      waitsForPromise(() => {
-        return composer.build()
-      })
+      await composer.build()
 
-      runs(() => {
-        expect(builder.run.callCount).toBe(2)
-      })
+      expect(builder.run.callCount).toBe(2)
     })
 
-    it('invokes `showResult` after a successful build, with expected log parsing result', () => {
+    it('invokes `showResult` after a successful build, with expected log parsing result', async () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
         state.setLogMessages([])
         state.setOutputFilePath('file.pdf')
       })
 
-      waitsForPromise(() => {
-        return composer.build()
-      })
+      await composer.build()
 
-      runs(() => {
-        expect(composer.showResult).toHaveBeenCalled()
-      })
+      expect(composer.showResult).toHaveBeenCalled()
     })
 
-    it('treats missing output file data in log file as an error', () => {
+    it('treats missing output file data in log file as an error', async () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {
         state.setLogMessages([])
       })
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.showError).toHaveBeenCalled()
-      })
+      expect(composer.showError).toHaveBeenCalled()
     })
 
-    it('treats missing result from parser as an error', () => {
+    it('treats missing result from parser as an error', async () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {})
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.showError).toHaveBeenCalled()
-      })
+      expect(composer.showError).toHaveBeenCalled()
     })
 
-    it('handles active item not being a text editor', () => {
+    it('handles active item not being a text editor', async () => {
       spyOn(atom.workspace, 'getActiveTextEditor').andReturn()
       spyOn(werkzeug, 'getEditorDetails').andCallThrough()
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(werkzeug.getEditorDetails).toHaveBeenCalled()
-      })
+      expect(werkzeug.getEditorDetails).toHaveBeenCalled()
     })
 
-    it('successfully builds LaTeX file using DiCy', () => {
+    it('successfully builds LaTeX file using DiCy', async () => {
       const filePath = path.join(fixturesPath, 'file.tex')
       const targetPath = path.join(fixturesPath, 'file.pdf')
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.runDiCy).toHaveBeenCalled()
-        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.getMessages()).toEqual([])
-      })
+      expect(composer.runDiCy).toHaveBeenCalled()
+      expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+      expect(latex.log.getMessages()).toEqual([])
     })
 
-    it('successfully executes DiCy when given a file path containing spaces', () => {
+    it('successfully executes DiCy when given a file path containing spaces', async () => {
       const filePath = path.join(fixturesPath, 'filename with spaces.tex')
       const targetPath = path.join(fixturesPath, 'filename with spaces.pdf')
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.runDiCy).toHaveBeenCalled()
-        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.getMessages()).toEqual([])
-      })
+      expect(composer.runDiCy).toHaveBeenCalled()
+      expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+      expect(latex.log.getMessages()).toEqual([])
     })
 
-    it('fails to produce target when error messages are generated using DiCy', () => {
+    it('fails to produce target when error messages are generated using DiCy', async () => {
       const filePath = path.join(fixturesPath, 'error-warning.tex')
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.runDiCy).toHaveBeenCalled()
-        expect(latex.opener.open).not.toHaveBeenCalled()
-        expect(latex.log.getMessages().length).not.toBe(0)
-      })
+      expect(composer.runDiCy).toHaveBeenCalled()
+      expect(latex.opener.open).not.toHaveBeenCalled()
+      expect(latex.log.getMessages().length).not.toBe(0)
     })
 
-    it('successfully builds knitr file using DiCy', () => {
+    it('successfully builds knitr file using DiCy', async () => {
       const filePath = path.join(fixturesPath, 'knitr', 'file.Rnw')
       const targetPath = path.join(fixturesPath, 'knitr', 'file.pdf')
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
 
-      waitsForPromise(() => {
-        return composer.build().catch(r => r)
-      })
+      try { await composer.build() } catch (error) {}
 
-      runs(() => {
-        expect(composer.runDiCy).toHaveBeenCalled()
-        expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
-        expect(latex.log.getMessages()).toEqual([])
-      })
+      expect(composer.runDiCy).toHaveBeenCalled()
+      expect(latex.opener.open).toHaveBeenCalledWith(targetPath, filePath, 1)
+      expect(latex.log.getMessages()).toEqual([])
     })
   })
 
@@ -244,16 +195,17 @@ describe('Composer', () => {
     let fixturesPath, composer
 
     function initializeSpies (filePath, jobNames = [null]) {
-      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobNames)
-      })
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => { state.setJobNames(jobNames) })
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath })
       spyOn(composer, 'getGeneratedFileList').andCallFake((builder, state) => {
         let { dir, name } = path.parse(state.getFilePath())
         if (state.getOutputDirectory()) {
           dir = path.resolve(dir, state.getOutputDirectory())
         }
-        if (state.getJobName()) name = state.getJobName()
+        if (state.getJobName()) {
+          name = state.getJobName()
+        }
+
         return new Set([
           path.format({ dir, name, ext: '.log' }),
           path.format({ dir, name, ext: '.aux' })
@@ -262,118 +214,91 @@ describe('Composer', () => {
     }
 
     beforeEach(() => {
+      fixturesPath = cloneFixtures()
       composer = new Composer()
-      fixturesPath = helpers.cloneFixtures()
+
       spyOn(fs, 'removeSync').andCallThrough()
       atom.config.set('latex.cleanPatterns', ['**/*.aux', '/_minted-{jobname}'])
     })
 
-    it('deletes aux file but leaves log file when log file is not in cleanPatterns', () => {
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns', async () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
     })
 
-    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory', () => {
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory', async () => {
       const outdir = 'build'
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
-    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory with dot in name', () => {
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory with dot in name', async () => {
       const outdir = '.build'
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
-    it('deletes aux file but leaves log file when log file is not in cleanPatterns with relative output directory', () => {
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with relative output directory', async () => {
       const outdir = path.join('..', 'build')
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
-    it('deletes aux file but leaves log file when log file is not in cleanPatterns with absolute output directory', () => {
+    it('deletes aux file but leaves log file when log file is not in cleanPatterns with absolute output directory', async () => {
       const outdir = process.platform === 'win32' ? 'c:\\build' : '/build'
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(outdir, 'foo.log'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(outdir, 'foo.log'))
     })
 
-    it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', () => {
+    it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', async () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
-        expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
-        expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
-      })
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
     })
 
-    it('stops immediately if the file is not a TeX document', () => {
+    it('stops immediately if the file is not a TeX document', async () => {
       const filePath = 'foo.bar'
       initializeSpies(filePath, [])
 
-      waitsForPromise(() => {
-        return composer.clean().catch(r => r)
-      })
+      try { await composer.clean() } catch (error) {}
 
-      runs(() => {
-        expect(fs.removeSync).not.toHaveBeenCalled()
-      })
+      expect(fs.removeSync).not.toHaveBeenCalled()
     })
   })
 
@@ -424,68 +349,56 @@ describe('Composer', () => {
       composer = new Composer()
     })
 
-    it('silently does nothing when the current editor is transient', () => {
+    it('silently does nothing when the current editor is transient', async () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: null })
       spyOn(composer, 'resolveOutputFilePath').andCallThrough()
       spyOn(latex.opener, 'open').andReturn(true)
 
-      waitsForPromise(() => composer.sync())
+      await composer.sync()
 
-      runs(() => {
-        expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
-        expect(latex.opener.open).not.toHaveBeenCalled()
-      })
+      expect(composer.resolveOutputFilePath).not.toHaveBeenCalled()
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
-    it('logs a warning and returns when an output file cannot be resolved', () => {
+    it('logs a warning and returns when an output file cannot be resolved', async () => {
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: 'file.tex', lineNumber: 1 })
       spyOn(composer, 'resolveOutputFilePath').andReturn()
       spyOn(latex.opener, 'open').andReturn(true)
       spyOn(latex.log, 'warning').andCallThrough()
 
-      waitsForPromise(() => composer.sync())
+      await composer.sync()
 
-      runs(() => {
-        expect(latex.log.warning).toHaveBeenCalled()
-        expect(latex.opener.open).not.toHaveBeenCalled()
-      })
+      expect(latex.log.warning).toHaveBeenCalled()
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
-    it('launches the opener using editor metadata and resolved output file', () => {
+    it('launches the opener using editor metadata and resolved output file', async () => {
       const filePath = 'file.tex'
       const lineNumber = 1
       const outputFilePath = 'file.pdf'
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
       spyOn(composer, 'resolveOutputFilePath').andReturn(outputFilePath)
-
       spyOn(latex.opener, 'open').andReturn(true)
 
-      waitsForPromise(() => composer.sync())
+      await composer.sync()
 
-      runs(() => {
-        expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
-      })
+      expect(latex.opener.open).toHaveBeenCalledWith(outputFilePath, filePath, lineNumber)
     })
 
-    it('launches the opener using editor metadata and resolved output file with jobnames', () => {
+    it('launches the opener using editor metadata and resolved output file with jobnames', async () => {
       const filePath = 'file.tex'
       const lineNumber = 1
       const jobNames = ['foo', 'bar']
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, lineNumber })
       spyOn(composer, 'resolveOutputFilePath').andCallFake((builder, state) => state.getJobName() + '.pdf')
-      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => {
-        state.setJobNames(jobNames)
-      })
-
+      spyOn(composer, 'initializeBuildStateFromMagic').andCallFake(state => { state.setJobNames(jobNames) })
       spyOn(latex.opener, 'open').andReturn(true)
 
-      waitsForPromise(() => composer.sync())
+      await composer.sync()
 
-      runs(() => {
-        expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
-        expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
-      })
+      expect(latex.opener.open).toHaveBeenCalledWith('foo.pdf', filePath, lineNumber)
+      expect(latex.opener.open).toHaveBeenCalledWith('bar.pdf', filePath, lineNumber)
     })
   })
 
@@ -499,6 +412,7 @@ describe('Composer', () => {
       state = new BuildState(texFilePath)
       jobState = state.getJobStates()[0]
       jobState.setOutputFilePath(outputFilePath)
+
       spyOn(fs, 'removeSync')
       spyOn(fs, 'moveSync')
     })
@@ -664,7 +578,7 @@ describe('Composer', () => {
   describe('initializeBuild', () => {
     it('verifies that build state is cached and that old cached state is removed', () => {
       const composer = new Composer()
-      const fixturesPath = helpers.cloneFixtures()
+      const fixturesPath = cloneFixtures()
       const filePath = path.join(fixturesPath, 'file.tex')
       const subFilePath = path.join(fixturesPath, 'magic-comments', 'multiple-magic-comments.tex')
       const engine = 'lualatex'
@@ -804,6 +718,7 @@ describe('Composer', () => {
     beforeEach(() => {
       composer = new Composer()
       spyOn(composer, 'shouldUseDiCy').andReturn(true)
+
       fixturesPath = path.join(__dirname, 'fixtures')
       rootBaseName = 'file.tex'
       rootFilePath = path.join(fixturesPath, rootBaseName)
@@ -811,64 +726,34 @@ describe('Composer', () => {
       subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
     })
 
-    it('verifies that DiCy builder is created for a simple file', () => {
-      let result
+    it('verifies that DiCy builder is created for a simple file', async () => {
+      const result = await composer.getDiCy(rootFilePath)
 
-      waitsForPromise(() =>
-        composer.getDiCy(rootFilePath)
-          .then(dicy => { result = dicy })
-      )
-
-      runs(() => {
-        expect(result).toBeDefined()
-        expect(result.filePath).toEqual(rootBaseName)
-      })
+      expect(result).toBeDefined()
+      expect(result.filePath).toEqual(rootBaseName)
     })
 
-    it('verifies that root magic comment is detected', () => {
-      let result
+    it('verifies that root magic comment is detected', async () => {
+      const result = composer.getDiCy(subFilePath)
 
-      waitsForPromise(() =>
-        composer.getDiCy(subFilePath)
-          .then(dicy => { result = dicy })
-      )
-
-      runs(() => {
-        expect(result).toBeDefined()
-      })
+      expect(result).toBeDefined()
     })
 
-    it('verifies that DiCy builder is cached', () => {
-      let firstResult, secondResult
+    it('verifies that DiCy builder is cached', async () => {
+      const firstResult = await composer.getDiCy(rootFilePath)
+      const secondResult = await composer.getDiCy(rootFilePath)
 
-      waitsForPromise(() =>
-        composer.getDiCy(rootFilePath)
-          .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDiCy(rootFilePath))
-          .then(dicy => { secondResult = dicy })
-      )
-
-      runs(() => {
-        expect(firstResult).toBeDefined()
-        expect(secondResult).toBe(firstResult)
-      })
+      expect(firstResult).toBeDefined()
+      expect(secondResult).toBe(firstResult)
     })
 
-    it('verifies that DiCy builder is not cached if shouldRebuild is set', () => {
-      let firstResult, secondResult
+    it('verifies that DiCy builder is not cached if shouldRebuild is set', async () => {
+      const firstResult = await composer.getDiCy(rootFilePath)
+      const secondResult = await composer.getDiCy(rootFilePath, true)
 
-      waitsForPromise(() =>
-        composer.getDiCy(rootFilePath)
-          .then(dicy => { firstResult = dicy })
-          .then(() => composer.getDiCy(rootFilePath, true))
-          .then(dicy => { secondResult = dicy })
-      )
-
-      runs(() => {
-        expect(firstResult).toBeDefined()
-        expect(secondResult).toBeDefined()
-        expect(secondResult).not.toBe(firstResult)
-      })
+      expect(firstResult).toBeDefined()
+      expect(secondResult).toBeDefined()
+      expect(secondResult).not.toBe(firstResult)
     })
   })
 
@@ -889,43 +774,39 @@ describe('Composer', () => {
       dicy.run.andCallFake(() => Promise.resolve(result))
       dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputBaseName, synctexBaseName]))
       dicy.rootPath = fixturesPath
+
       sourcePath = path.join(fixturesPath, sourceBaseName)
       outputPath = path.join(fixturesPath, outputBaseName)
       synctexPath = path.join(fixturesPath, synctexBaseName)
+
       spyOn(composer, 'getDiCy').andCallFake(() => Promise.resolve(dicy))
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
       spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
     }
 
-    it('opens PDF after successful build, but does open SyncTeX file', () => {
+    it('opens PDF after successful build, but does open SyncTeX file', async () => {
       initializeSpies()
 
-      waitsForPromise(() => composer.runDiCy(['build']))
+      await composer.runDiCy(['build'])
 
-      runs(() => {
-        expect(latex.opener.open).toHaveBeenCalledWith(outputPath, sourcePath, 1)
-        expect(latex.opener.open).not.toHaveBeenCalledWith(synctexPath, sourcePath, 1)
-      })
+      expect(latex.opener.open).toHaveBeenCalledWith(outputPath, sourcePath, 1)
+      expect(latex.opener.open).not.toHaveBeenCalledWith(synctexPath, sourcePath, 1)
     })
 
-    it('does not open targets after unsuccessful build', () => {
+    it('does not open targets after unsuccessful build', async () => {
       initializeSpies(false)
 
-      waitsForPromise(() => composer.runDiCy(['build']))
+      await composer.runDiCy(['build'])
 
-      runs(() => {
-        expect(latex.opener.open).not.toHaveBeenCalled()
-      })
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
 
-    it('does not open targets after successful build if open is not requested', () => {
+    it('does not open targets after successful build if open is not requested', async () => {
       initializeSpies(true)
 
-      waitsForPromise(() => composer.runDiCy(['build'], { openResults: false }))
+      await composer.runDiCy(['build'], { openResults: false })
 
-      runs(() => {
-        expect(latex.opener.open).not.toHaveBeenCalled()
-      })
+      expect(latex.opener.open).not.toHaveBeenCalled()
     })
   })
 })
