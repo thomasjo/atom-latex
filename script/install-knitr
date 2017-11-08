@@ -8,6 +8,10 @@ shopt -s nocasematch
 
 ensure_r_installed() {
   if [[ "${APPVEYOR:-}" == true ]]; then
+    # TODO: Remove when 'R.Project' package adds it as a dependency.
+    echo "Installing chocolatey-core.extension..."
+    choco install chocolatey-core.extension
+
     echo "Installing R..."
     choco install R.Project --allow-empty-checksums --ia="/DIR=\"${R_HOME}\""
 
