@@ -88,16 +88,16 @@ describe('KnitrBuilder', () => {
       const options = builder.constructChildProcessOptions(directoryPath)
       Object.assign(options.env, env)
       spyOn(builder, 'constructChildProcessOptions').andReturn(options)
-      spyOn(latex.log, 'showMessage').andCallThrough()
+      spyOn(latex.log, 'showMessages').andCallThrough()
 
       const exitCode = await builder.run(jobState)
 
       expect(exitCode).toBe(-1)
       expect(builder.logStatusCode).toHaveBeenCalled()
-      expect(latex.log.showMessage).toHaveBeenCalledWith({
+      expect(latex.log.showMessages).toHaveBeenCalledWith([{
         type: 'error',
         text: 'The R package "knitr" could not be loaded.'
-      })
+      }])
     })
   })
 
