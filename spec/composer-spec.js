@@ -45,6 +45,10 @@ describe('Composer', () => {
       atom.config.set('latex.loggingLevel', 'error')
     })
 
+    afterEach(() => {
+      composer.dispose()
+    })
+
     it('does nothing for new, unsaved files', async () => {
       initializeSpies(null)
 
@@ -720,7 +724,7 @@ describe('Composer', () => {
       spyOn(composer, 'shouldUseDiCy').andReturn(true)
       spyOn(composer, 'startDiCy').andCallFake(() => {
         composer.dicy = jasmine.createSpyObj('MockDiCy', [
-          'clear', 'run', 'getTargetPaths', 'setInstanceOptions', 'updateOptions'])
+          'clear', 'run', 'getTargetPaths', 'setInstanceOptions', 'setUserOptions'])
       })
 
       fixturesPath = path.join(__dirname, 'fixtures')
@@ -738,7 +742,7 @@ describe('Composer', () => {
       expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
         severity: 'info'
       })
-      expect(composer.dicy.updateOptions).toHaveBeenCalled()
+      expect(composer.dicy.setUserOptions).toHaveBeenCalled()
       expect(result).toEqual(rootFilePath)
     })
 
@@ -756,7 +760,7 @@ describe('Composer', () => {
       expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
         severity: 'info'
       })
-      expect(composer.dicy.updateOptions).toHaveBeenCalled()
+      expect(composer.dicy.setUserOptions).toHaveBeenCalled()
       expect(result).toEqual(rootFilePath)
     })
 
@@ -778,11 +782,11 @@ describe('Composer', () => {
       expect(composer.dicy.clear).toHaveBeenCalled()
     })
 
-    it('verifies that DiCy.updateOptions is not called if updateDiCyUserOptions is not set', async () => {
+    it('verifies that DiCy.setUserOptions is not called if updateDiCyUserOptions is not set', async () => {
       composer.updateDiCyUserOptions = false
       await composer.initializeDiCy(rootFilePath)
 
-      expect(composer.dicy.updateOptions).not.toHaveBeenCalled()
+      expect(composer.dicy.setUserOptions).not.toHaveBeenCalled()
     })
   })
 
@@ -799,7 +803,7 @@ describe('Composer', () => {
     })
 
     function initializeSpies (result = true) {
-      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths', 'setInstanceOptions', 'updateOptions'])
+      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths', 'setInstanceOptions', 'setUserOptions'])
       dicy.run.andCallFake(() => Promise.resolve(result))
       dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputPath, synctexPath]))
       composer.dicy = dicy
