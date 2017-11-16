@@ -145,6 +145,7 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
+      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -159,6 +160,7 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
+      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -172,6 +174,7 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
+      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -186,6 +189,7 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
+      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -718,18 +722,20 @@ describe('Composer', () => {
 
   describe('getDiCy', () => {
     let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
+    let rootUri
 
     beforeEach(() => {
       composer = new Composer()
       spyOn(composer, 'shouldUseDiCy').andReturn(true)
       spyOn(composer, 'startDiCy').andCallFake(() => {
         composer.dicy = jasmine.createSpyObj('MockDiCy', [
-          'clear', 'run', 'getTargetPaths', 'setInstanceOptions', 'setUserOptions'])
+          'clear', 'run', 'getTargets', 'setInstanceOptions', 'setUserOptions'])
       })
 
       fixturesPath = path.join(__dirname, 'fixtures')
       rootBaseName = 'file.tex'
       rootFilePath = path.join(fixturesPath, rootBaseName)
+      rootUri = werkzeug.pathToUri(rootFilePath)
       subFileBaseName = 'root-comment.tex'
       subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
     })
@@ -739,17 +745,17 @@ describe('Composer', () => {
 
       expect(composer.startDiCy).toHaveBeenCalled()
       expect(composer.dicy.clear).not.toHaveBeenCalled()
-      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
         severity: 'info'
       })
       expect(composer.dicy.setUserOptions).toHaveBeenCalled()
-      expect(result).toEqual(rootFilePath)
+      expect(result).toEqual(rootUri)
     })
 
     it('verifies that root magic comment is detected', async () => {
       const result = await composer.initializeDiCy(subFilePath)
 
-      expect(result).toEqual(rootFilePath)
+      expect(result).toEqual(rootUri)
     })
 
     it('verifies that DiCy is correctly initialized for a simple file', async () => {
@@ -757,16 +763,16 @@ describe('Composer', () => {
 
       expect(composer.startDiCy).toHaveBeenCalled()
       expect(composer.dicy.clear).not.toHaveBeenCalled()
-      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
         severity: 'info'
       })
       expect(composer.dicy.setUserOptions).toHaveBeenCalled()
-      expect(result).toEqual(rootFilePath)
+      expect(result).toEqual(rootUri)
     })
 
     it('verifies that correct optins are set when fastLoad is enabled', async () => {
       await composer.initializeDiCy(rootFilePath, false, true)
-      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
         severity: 'info',
         validateCache: false
       })
@@ -775,7 +781,7 @@ describe('Composer', () => {
     it('verifies that DiCy.clear is called if shouldRebuild is set', async () => {
       await composer.initializeDiCy(rootFilePath, true)
 
-      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootFilePath, {
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
         severity: 'info',
         loadCache: false
       })
@@ -803,9 +809,9 @@ describe('Composer', () => {
     })
 
     function initializeSpies (result = true) {
-      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths', 'setInstanceOptions', 'setUserOptions'])
+      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargets', 'setInstanceOptions', 'setUserOptions'])
       dicy.run.andCallFake(() => Promise.resolve(result))
-      dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputPath, synctexPath]))
+      dicy.getTargets.andCallFake(() => Promise.resolve([outputPath, synctexPath]))
       composer.dicy = dicy
 
       sourcePath = path.join(fixturesPath, sourceBaseName)
