@@ -248,6 +248,7 @@
         "okular",
         "pdf-view",
         "preview",
+        "qpdfview",
         "shell-open",
         "skim",
         "sumatra",
@@ -296,12 +297,18 @@
       "default": "/usr/bin/zathura",
       "order": 22
     },
+    "qpdfviewPath": {
+      "description": "Full application path to qpdfview (*nix).",
+      "type": "string",
+      "default": "/usr/bin/qpdfview",
+      "order": 23
+    },
     "viewerPath": {
       "title": "Custom PDF Viewer Path",
       "description": "Full application path to your PDF viewer. Overrides Skim and SumatraPDF options.",
       "type": "string",
       "default": "",
-      "order": 23
+      "order": 24
     }
   }
 }
