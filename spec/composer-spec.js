@@ -802,6 +802,7 @@ describe('Composer', () => {
     const synctexBaseName = 'file.synctex.gz'
 
     let composer, dicy, fixturesPath, sourcePath, outputPath, synctexPath
+    let outputUri, synctexUri
 
     beforeEach(() => {
       composer = new Composer()
@@ -811,12 +812,15 @@ describe('Composer', () => {
     function initializeSpies (result = true) {
       dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargets', 'setInstanceOptions', 'setUserOptions'])
       dicy.run.andCallFake(() => Promise.resolve(result))
-      dicy.getTargets.andCallFake(() => Promise.resolve([outputPath, synctexPath]))
+      dicy.getTargets.andCallFake(() => Promise.resolve([outputUri, synctexUri]))
       composer.dicy = dicy
 
       sourcePath = path.join(fixturesPath, sourceBaseName)
       outputPath = path.join(fixturesPath, outputBaseName)
       synctexPath = path.join(fixturesPath, synctexBaseName)
+
+      outputUri = werkzeug.pathToUri(outputPath)
+      synctexUri = werkzeug.pathToUri(synctexPath)
 
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
       spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
