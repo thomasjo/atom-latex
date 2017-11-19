@@ -34,6 +34,13 @@ describe('Composer', () => {
       spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
 
       spyOn(composer, 'runDiCy').andCallThrough()
+      // Set options in '$ROOTDIR/.dicy.yaml' so we don't overwrite the user's
+      // configuration.
+      spyOn(composer, 'doUpdateDiCyUserOptions').andCallFake((uri, options) =>
+        composer.dicy.setDirectoryOptions(uri, options, true))
+      // Ignore the user's options.
+      spyOn(composer, 'doUpdateDiCyInstanceOptions').andCallFake((uri, options) =>
+        composer.dicy.setInstanceOptions(uri, Object.assign({ loadUserOptions: false }, options)))
       spyOn(latex.opener, 'open')
     }
 
@@ -145,7 +152,6 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
-      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -160,7 +166,6 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
-      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -174,7 +179,6 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
-      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
@@ -189,7 +193,6 @@ describe('Composer', () => {
 
       initializeSpies(filePath)
       atom.config.set('latex.useDicy', true)
-      composer.updateDiCyUserOptions = false
 
       try { await composer.build() } catch (error) {}
 
