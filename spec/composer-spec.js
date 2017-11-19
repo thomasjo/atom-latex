@@ -723,7 +723,7 @@ describe('Composer', () => {
     })
   })
 
-  describe('getDiCy', () => {
+  describe('initializeDiCy', () => {
     let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
     let rootUri
 
@@ -773,7 +773,7 @@ describe('Composer', () => {
       expect(result).toEqual(rootUri)
     })
 
-    it('verifies that correct optins are set when fastLoad is enabled', async () => {
+    it('verifies that correct options are set when fastLoad is enabled', async () => {
       await composer.initializeDiCy(rootFilePath, false, true)
       expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
         severity: 'info',
