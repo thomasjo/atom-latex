@@ -28,7 +28,7 @@ cache:
   - '%R_LIBS_USER%'
 
 build_script:
-  - set PATH=C:\Program Files\Git\mingw64\bin;%PATH%
+  - set PATH=C:\Program Files\Git\mingw64\bin;%R_HOME%\bin;%PATH%
   - sh ./script/cibuild
 
 test: off
