@@ -378,7 +378,7 @@ describe('LatexmkBuilder', () => {
     // is excessive.
     if (process.platform === 'win32' || process.env.CI) return
 
-    it('successfully creates SageTeX files when using the sagetex package', async () => {
+    xit('successfully creates SageTeX files when using the sagetex package', async () => {
       initializeExtendedBuild('sagetex-test', ['.sagetex.sage', '.sagetex.sout', '.pdf'])
 
       const exitCode = await builder.run(jobState)
@@ -388,7 +388,7 @@ describe('LatexmkBuilder', () => {
       expectExistenceOfExtendedOutputs()
     })
 
-    it('successfully creates SageTeX files when using the sagetex package with an output directory', async () => {
+    xit('successfully creates SageTeX files when using the sagetex package with an output directory', async () => {
       initializeExtendedBuild('sagetex-test', ['.sagetex.sage', '.sagetex.sout', '.pdf'], 'build')
 
       const exitCode = await builder.run(jobState)
