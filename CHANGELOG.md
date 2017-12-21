@@ -8,6 +8,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     ~ [#442](https://github.com/thomasjo/atom-latex/pull/442)
     / [@skidpa](https://github.com/skidpa)
 
+### Changed
+- Added `.tikz` extension to allowed file types for build command. Resolves
+  [#444](https://github.com/thomasjo/atom-latex/issues/444).
+
 ## [0.49.0][] / 2017-10-27
 ### Added
 - Support for parsing of source file references in warning messages. Resolves
