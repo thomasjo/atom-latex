@@ -19,7 +19,6 @@ ensure_r_installed() {
   elif [[ "${TRAVIS_OS_NAME:-}" == "osx" ]]; then
     echo "Installing R..."
     brew update
-    brew tap homebrew/science
     brew install r
   fi
 }
