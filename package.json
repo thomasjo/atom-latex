@@ -22,7 +22,7 @@
     "etch": "0.12.6",
     "fs-plus": "^3.0.0",
     "glob": "^7.1.1",
-    "js-yaml": "^3.8.4",
+    "js-yaml": "^3.11.0",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.4",
     "temp": "^0.8.3",
@@ -30,9 +30,9 @@
     "wrench": "^1.5.9"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.0",
-    "snazzy": "^7.0.0",
-    "standard": "^10.0.2"
+    "babel-eslint": "^8.2.2",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.0"
   },
   "engines": {
     "atom": ">=1.19.0 <2.0.0"
