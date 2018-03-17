@@ -6,7 +6,7 @@ import { activatePackages, cloneFixtures } from '../spec-helpers'
 
 import path from 'path'
 import LatexmkBuilder from '../../lib/builders/latexmk'
-import fs from 'fs-plus'
+import fs from 'fs'
 import BuildState from '../../lib/build-state'
 
 describe('LatexmkBuilder', () => {

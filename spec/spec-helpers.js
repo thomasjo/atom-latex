@@ -1,6 +1,6 @@
 /** @babel */
 
-import fs from 'fs-plus'
+import fs from 'fs'
 import temp from 'temp'
 import wrench from 'wrench'
 

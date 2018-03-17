@@ -4,8 +4,9 @@
 import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
 import { activatePackages, cloneFixtures } from './spec-helpers'
 
-import fs from 'fs-plus'
+import fs from 'fs'
 import path from 'path'
+import rimraf from 'rimraf'
 import werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
 import BuildState from '../lib/build-state'
@@ -164,7 +165,7 @@ describe('Composer', () => {
       fixturesPath = cloneFixtures()
       composer = new Composer()
 
-      spyOn(fs, 'removeSync').andCallThrough()
+      spyOn(rimraf, 'sync').andCallThrough()
       atom.config.set('latex.cleanPatterns', ['**/*.aux', '/_minted-{jobname}'])
     })
 
@@ -173,9 +174,9 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'foo.log'))
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory', async () => {
@@ -185,9 +186,9 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with output directory with dot in name', async () => {
@@ -197,9 +198,9 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with relative output directory', async () => {
@@ -209,9 +210,9 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.log'))
     })
 
     it('deletes aux file but leaves log file when log file is not in cleanPatterns with absolute output directory', async () => {
@@ -221,9 +222,9 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(outdir, 'foo.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(outdir, 'foo.log'))
     })
 
     it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', async () => {
@@ -231,12 +232,12 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
-      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
-      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-bar'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.aux'))
+      expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'wibble.log'))
+      expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
     })
 
     it('stops immediately if the file is not a TeX document', async () => {
@@ -245,7 +246,7 @@ describe('Composer', () => {
 
       try { await composer.clean() } catch (error) {}
 
-      expect(fs.removeSync).not.toHaveBeenCalled()
+      expect(rimraf.sync).not.toHaveBeenCalled()
     })
   })
 
@@ -360,8 +361,8 @@ describe('Composer', () => {
       jobState = state.getJobStates()[0]
       jobState.setOutputFilePath(outputFilePath)
 
-      spyOn(fs, 'removeSync')
-      spyOn(fs, 'moveSync')
+      spyOn(fs, 'unlinkSync')
+      spyOn(fs, 'renameSync')
     })
 
     it('verifies that the output file and the synctex file are moved when they exist', () => {
@@ -372,20 +373,20 @@ describe('Composer', () => {
       spyOn(fs, 'existsSync').andReturn(true)
 
       composer.moveResult(jobState)
-      expect(fs.removeSync).toHaveBeenCalledWith(destOutputFilePath)
-      expect(fs.removeSync).toHaveBeenCalledWith(destSyncTexPath)
-      expect(fs.moveSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
-      expect(fs.moveSync).toHaveBeenCalledWith(syncTexPath, destSyncTexPath)
+      expect(fs.unlinkSync).toHaveBeenCalledWith(destOutputFilePath)
+      expect(fs.unlinkSync).toHaveBeenCalledWith(destSyncTexPath)
+      expect(fs.renameSync).toHaveBeenCalledWith(outputFilePath, destOutputFilePath)
+      expect(fs.renameSync).toHaveBeenCalledWith(syncTexPath, destSyncTexPath)
     })
 
     it('verifies that the output file and the synctex file are not moved when they do not exist', () => {
       spyOn(fs, 'existsSync').andReturn(false)
 
       composer.moveResult(jobState)
-      expect(fs.removeSync).not.toHaveBeenCalled()
-      expect(fs.removeSync).not.toHaveBeenCalled()
-      expect(fs.moveSync).not.toHaveBeenCalled()
-      expect(fs.moveSync).not.toHaveBeenCalled()
+      expect(fs.unlinkSync).not.toHaveBeenCalled()
+      expect(fs.unlinkSync).not.toHaveBeenCalled()
+      expect(fs.renameSync).not.toHaveBeenCalled()
+      expect(fs.renameSync).not.toHaveBeenCalled()
     })
   })
 

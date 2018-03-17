@@ -4,7 +4,7 @@
 import { afterEach, beforeEach, it, fit } from '../async-spec-helpers'
 import { activatePackages, cloneFixtures } from '../spec-helpers'
 
-import fs from 'fs-plus'
+import fs from 'fs'
 import path from 'path'
 import KnitrBuilder from '../../lib/builders/knitr'
 import BuildState from '../../lib/build-state'

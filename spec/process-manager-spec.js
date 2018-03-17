@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
 
-import fs from 'fs-plus'
+import fs from 'fs'
 import path from 'path'
 import temp from 'temp'
 import ProcessManager from '../lib/process-manager'
