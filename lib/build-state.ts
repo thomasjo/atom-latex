@@ -1,18 +1,23 @@
-/** @babel */
-
 import path from 'path'
 import { isTexFile, isKnitrFile } from './werkzeug'
 
-function toArray (value) {
+function toArray (value: any): string[] {
+  if (value === undefined || value == null) { return [] }
   return (typeof value === 'string') ? value.split(',').map(item => item.trim()) : Array.from(value)
 }
 
-function toBoolean (value) {
+function toBoolean (value: any): boolean {
   return (typeof value === 'string') ? !!value.match(/^(true|yes)$/i) : !!value
 }
 
 class JobState {
-  constructor (parent, jobName) {
+  parent: BuildState
+  jobName: string
+  outputFilePath: string | null = null
+  fileDatabase: any
+  logMessages: string[] | null = null
+
+  constructor (parent: BuildState, jobName: string) {
     this.parent = parent
     this.jobName = jobName
   }
@@ -21,7 +26,7 @@ class JobState {
     return this.outputFilePath
   }
 
-  setOutputFilePath (value) {
+  setOutputFilePath (value: string) {
     this.outputFilePath = value
   }
 
@@ -29,7 +34,7 @@ class JobState {
     return this.fileDatabase
   }
 
-  setFileDatabase (value) {
+  setFileDatabase (value: any) {
     this.fileDatabase = value
   }
 
@@ -37,7 +42,7 @@ class JobState {
     return this.logMessages
   }
 
-  setLogMessages (value) {
+  setLogMessages (value: string[]) {
     this.logMessages = value
   }
 
@@ -57,7 +62,7 @@ class JobState {
     return this.parent.getTexFilePath()
   }
 
-  setTexFilePath (value) {
+  setTexFilePath (value: string | null) {
     this.parent.setTexFilePath(value)
   }
 
@@ -65,7 +70,7 @@ class JobState {
     return this.parent.getKnitrFilePath()
   }
 
-  setKnitrFilePath (value) {
+  setKnitrFilePath (value: string | null) {
     this.parent.setKnitrFilePath(value)
   }
 
@@ -111,21 +116,38 @@ class JobState {
 }
 
 export default class BuildState {
-  constructor (filePath, jobNames = [null], shouldRebuild = false) {
+  subfiles: Set<string> = new Set()
+  knitrFilePath: string | null = null
+  texFilePath: string | null = null
+  projectPath: string | null = null
+  cleanPatterns: string[] | null = null
+  enableSynctex: boolean = false
+  enableShellEscape: boolean = false
+  enableExtendedBuildMode: boolean = false
+  engine: any
+  jobStates: JobState[] = []
+  moveResultToSourceDirectory: boolean = false
+  outputFormat: string | null = null
+  outputDirectory: string | null = null
+  producer: string | null = null
+  shouldRebuild: boolean = false
+  filePath: string | null = null
+
+  // TODO: Revisit the default value for 'jobNames'.
+  constructor (filePath: string, jobNames: string[] = [''], shouldRebuild = false) {
     this.setFilePath(filePath)
     this.setJobNames(jobNames)
     this.setShouldRebuild(shouldRebuild)
     this.setEnableSynctex(false)
     this.setEnableShellEscape(false)
     this.setEnableExtendedBuildMode(false)
-    this.subfiles = new Set()
   }
 
   getKnitrFilePath () {
     return this.knitrFilePath
   }
 
-  setKnitrFilePath (value) {
+  setKnitrFilePath (value: string | null) {
     this.knitrFilePath = value
   }
 
@@ -133,7 +155,7 @@ export default class BuildState {
     return this.texFilePath
   }
 
-  setTexFilePath (value) {
+  setTexFilePath (value: string | null) {
     this.texFilePath = value
   }
 
@@ -141,7 +163,7 @@ export default class BuildState {
     return this.projectPath
   }
 
-  setProjectPath (value) {
+  setProjectPath (value: string | null) {
     this.projectPath = value
   }
 
@@ -149,15 +171,15 @@ export default class BuildState {
     return this.cleanPatterns
   }
 
-  setCleanPatterns (value) {
+  setCleanPatterns (value: string[] | null) {
     this.cleanPatterns = toArray(value)
-  }
 
+  }
   getEnableSynctex () {
     return this.enableSynctex
   }
 
-  setEnableSynctex (value) {
+  setEnableSynctex (value: boolean) {
     this.enableSynctex = toBoolean(value)
   }
 
@@ -165,7 +187,7 @@ export default class BuildState {
     return this.enableShellEscape
   }
 
-  setEnableShellEscape (value) {
+  setEnableShellEscape (value: boolean) {
     this.enableShellEscape = toBoolean(value)
   }
 
@@ -173,7 +195,7 @@ export default class BuildState {
     return this.enableExtendedBuildMode
   }
 
-  setEnableExtendedBuildMode (value) {
+  setEnableExtendedBuildMode (value: boolean) {
     this.enableExtendedBuildMode = toBoolean(value)
   }
 
@@ -181,7 +203,7 @@ export default class BuildState {
     return this.engine
   }
 
-  setEngine (value) {
+  setEngine (value: any) {
     this.engine = value
   }
 
@@ -189,7 +211,7 @@ export default class BuildState {
     return this.jobStates
   }
 
-  setJobStates (value) {
+  setJobStates (value: JobState[]) {
     this.jobStates = value
   }
 
@@ -197,7 +219,7 @@ export default class BuildState {
     return this.moveResultToSourceDirectory
   }
 
-  setMoveResultToSourceDirectory (value) {
+  setMoveResultToSourceDirectory (value: boolean) {
     this.moveResultToSourceDirectory = toBoolean(value)
   }
 
@@ -205,7 +227,7 @@ export default class BuildState {
     return this.outputFormat
   }
 
-  setOutputFormat (value) {
+  setOutputFormat (value: string | null) {
     this.outputFormat = value
   }
 
@@ -213,7 +235,7 @@ export default class BuildState {
     return this.outputDirectory
   }
 
-  setOutputDirectory (value) {
+  setOutputDirectory (value: string | null) {
     this.outputDirectory = value
   }
 
@@ -221,7 +243,7 @@ export default class BuildState {
     return this.producer
   }
 
-  setProducer (value) {
+  setProducer (value: string | null) {
     this.producer = value
   }
 
@@ -229,11 +251,11 @@ export default class BuildState {
     return Array.from(this.subfiles.values())
   }
 
-  addSubfile (value) {
+  addSubfile (value: string) {
     this.subfiles.add(value)
   }
 
-  hasSubfile (value) {
+  hasSubfile (value: string) {
     return this.subfiles.has(value)
   }
 
@@ -241,7 +263,7 @@ export default class BuildState {
     return this.shouldRebuild
   }
 
-  setShouldRebuild (value) {
+  setShouldRebuild (value: boolean) {
     this.shouldRebuild = toBoolean(value)
   }
 
@@ -249,18 +271,22 @@ export default class BuildState {
     return this.filePath
   }
 
-  setFilePath (value) {
+  setFilePath (value: string | null) {
     this.filePath = value
-    this.texFilePath = isTexFile(value) ? value : undefined
-    this.knitrFilePath = isKnitrFile(value) ? value : undefined
-    this.projectPath = path.dirname(value)
+    this.texFilePath = isTexFile(value) ? value : null
+    this.knitrFilePath = isKnitrFile(value) ? value : null
+    this.projectPath = value ? path.dirname(value) : null
   }
 
   getJobNames () {
-    return this.jobStates.map(jobState => jobState.getJobName())
+    if (this.jobStates) {
+      return this.jobStates.map(jobState => jobState.getJobName())
+    }
+
+    return []
   }
 
-  setJobNames (value) {
+  setJobNames (value: string[] | null) {
     this.jobStates = toArray(value).map(jobName => new JobState(this, jobName))
   }
 }
