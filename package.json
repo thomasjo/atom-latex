@@ -17,6 +17,7 @@
   ],
   "main": "./lib/main",
   "dependencies": {
+    "atom-ts-transpiler": "^1.4.3",
     "dbus-native": "^0.4.0",
     "etch": "0.12.6",
     "glob": "^7.1.1",
@@ -48,6 +49,18 @@
   "engines": {
     "atom": ">=1.19.0 <2.0.0"
   },
+  "atomTranspilers": [
+    {
+      "transpiler": "atom-ts-transpiler",
+      "glob": "{!(node_modules)/**/,}lib/*.ts?(x)",
+      "options": {
+        "verbose": true,
+        "cacheKeyFiles": [
+          "tsconfig.json"
+        ]
+      }
+    }
+  ],
   "standard": {
     "parser": "babel-eslint",
     "globals": [
