@@ -7,7 +7,7 @@ import { activatePackages, cloneFixtures } from './spec-helpers'
 import fs from 'fs'
 import path from 'path'
 import rimraf from 'rimraf'
-import werkzeug from '../lib/werkzeug'
+import * as werkzeug from '../lib/werkzeug'
 import Composer from '../lib/composer'
 import BuildState from '../lib/build-state'
 

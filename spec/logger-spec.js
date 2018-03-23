@@ -4,7 +4,7 @@
 import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
 
 import Logger from '../lib/logger'
-import werkzeug from '../lib/werkzeug'
+import * as werkzeug from '../lib/werkzeug'
 
 describe('Logger', () => {
   let logger, messagesListener
