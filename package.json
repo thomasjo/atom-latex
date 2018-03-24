@@ -52,7 +52,7 @@
   "atomTranspilers": [
     {
       "transpiler": "atom-ts-transpiler",
-      "glob": "{!(node_modules)/**/,}lib/*.ts?(x)",
+      "glob": "{!(node_modules)/**/,}lib/**/*.ts?(x)",
       "options": {
         "verbose": true,
         "cacheKeyFiles": [
