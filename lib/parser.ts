@@ -1,15 +1,15 @@
-/** @babel */
-
 import fs from 'fs'
 
-export default class Parser {
-  constructor (filePath) {
+export default abstract class Parser {
+  filePath: string
+
+  constructor (filePath: string) {
     this.filePath = filePath
   }
 
   parse () {}
 
-  getLines (defaultLines) {
+  getLines (defaultLines: string[] | null = null) {
     if (!fs.existsSync(this.filePath)) {
       if (defaultLines) return defaultLines
       throw new Error(`No such file: ${this.filePath}`)

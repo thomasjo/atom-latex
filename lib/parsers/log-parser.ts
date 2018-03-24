@@ -1,5 +1,3 @@
-/** @babel */
-
 import Parser from '../parser'
 import path from 'path'
 
@@ -46,14 +44,17 @@ const INPUT_FILE_PATTERN = /(\([^()[]+|\))/g
 const INPUT_FILE_TRIM_PATTERN = /(^\([\s"]*|[\s"]+$)/g
 
 export default class LogParser extends Parser {
-  constructor (filePath, texFilePath) {
+  texFilePath: string
+  projectPath: string
+
+  constructor (filePath: string, texFilePath: string) {
     super(filePath)
     this.texFilePath = texFilePath
     this.projectPath = path.dirname(texFilePath)
   }
 
   parse () {
-    const result = {
+    let result: any = {
       logFilePath: this.filePath,
       outputFilePath: null,
       messages: []

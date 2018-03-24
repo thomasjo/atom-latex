@@ -1,5 +1,3 @@
-/** @babel */
-
 import Parser from '../parser'
 
 /* eslint-disable no-multi-spaces */
@@ -24,7 +22,7 @@ const LATEX_COMMAND_PATTERN = new RegExp('' +
 
 export default class MagicParser extends Parser {
   parse () {
-    const result = {}
+    const result: { [id: string]: any } = {}
     const lines = this.getLines([])
     for (const line of lines) {
       const latexCommandMatch = line.match(LATEX_COMMAND_PATTERN)

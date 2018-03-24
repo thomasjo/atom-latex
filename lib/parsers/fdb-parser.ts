@@ -1,5 +1,3 @@
-/** @babel */
-
 import Parser from '../parser'
 
 const SECTION_PATTERN = /^\["([^"]+)"]/
@@ -8,8 +6,8 @@ const FILE_PATTERN = /^\s+"([^"]*)"/
 
 export default class FdbParser extends Parser {
   parse () {
-    let results = {}
-    let section
+    let results: { [key: string]: any } = {}
+    let section: string | undefined
     let group
 
     for (const line of this.getLines()) {
