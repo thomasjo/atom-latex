@@ -292,6 +292,18 @@ describe('Composer', () => {
       expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, '_minted-wibble'))
     })
 
+    it('does not unintentionally delete other files with the same leading name', async () => {
+      atom.config.unset('latex.cleanPatterns')
+      initializeSpies(path.join(fixturesPath, 'file.tex'))
+      composer.getGeneratedFileList.andCallThrough()
+
+      try { await composer.clean() } catch (error) { console.log(error) }
+
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'file.aux'))
+      expect(fs.removeSync).toHaveBeenCalledWith(path.join(fixturesPath, 'file.log'))
+      expect(fs.removeSync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'filename with spaces.log'))
+    })
+
     it('stops immediately if the file is not a TeX document', async () => {
       const filePath = 'foo.bar'
       initializeSpies(filePath, [])
