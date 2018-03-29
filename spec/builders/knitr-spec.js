@@ -36,7 +36,7 @@ describe('KnitrBuilder', () => {
     it('produces default arguments containing expected file path', () => {
       const expectedArgs = [
         '-e "library(knitr)"',
-        '-e "opts_knit$set(concordance = TRUE)"',
+        '-e "opts_knit$set(concordance=TRUE)"',
         `-e "knit('${filePath.replace(/\\/g, '\\\\')}')"`
       ]
 
