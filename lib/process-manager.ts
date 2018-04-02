@@ -1,5 +1,3 @@
-/** @babel */
-
 import childProcess from 'child_process'
 import kill from 'tree-kill'
 import { Disposable } from 'atom'
@@ -11,13 +9,13 @@ export default class ProcessManager extends Disposable {
     super(() => this.killChildProcesses())
   }
 
-  executeChildProcess (command, options = {}) {
+  executeChildProcess (command: any, options: any = {}) {
     const { allowKill, showError, ...execOptions } = options
     return new Promise(resolve => {
       // Windows does not like \$ appearing in command lines so only escape
       // if we need to.
       if (process.platform !== 'win32') command = command.replace('$', '\\$')
-      const { pid } = childProcess.exec(command, execOptions, (error, stdout, stderr) => {
+      const { pid } = childProcess.exec(command, execOptions, (error: any, stdout, stderr) => {
         if (allowKill) {
           this.processes.delete(pid)
         }
