@@ -1,5 +1,3 @@
-/** @babel */
-
 import _ from 'lodash'
 import path from 'path'
 import { CompositeDisposable, Disposable } from 'atom'
@@ -14,7 +12,7 @@ export default class OpenerRegistry extends Disposable {
   }
 
   initializeOpeners () {
-    const schema = atom.config.getSchema('latex.opener')
+    const schema: any = atom.config.getSchema('latex.opener')
     const dir = path.join(__dirname, 'openers')
     const ext = '.js'
     for (const openerName of schema.enum) {
@@ -51,7 +49,7 @@ export default class OpenerRegistry extends Disposable {
     }
   }
 
-  async open (filePath, texPath, lineNumber) {
+  async open (filePath: string, texPath: string, lineNumber: number) {
     const name = atom.config.get('latex.opener')
     let opener = this.openers.get(name)
 
@@ -66,7 +64,7 @@ export default class OpenerRegistry extends Disposable {
     }
   }
 
-  getCandidateOpeners (filePath) {
+  getCandidateOpeners (filePath: string) {
     const candidates = new Map()
     for (const [name, opener] of this.openers.entries()) {
       if (opener.canOpen(filePath)) candidates.set(name, opener)
@@ -74,14 +72,14 @@ export default class OpenerRegistry extends Disposable {
     return candidates
   }
 
-  findOpener (filePath) {
+  findOpener (filePath: string) {
     const openResultInBackground = atom.config.get('latex.openResultInBackground')
     const enableSynctex = atom.config.get('latex.enableSynctex')
     const candidates = Array.from(this.getCandidateOpeners(filePath).values())
 
     if (!candidates.length) return
 
-    const rankedCandidates = _.orderBy(candidates,
+    const rankedCandidates: any[] = _.orderBy(candidates,
       [opener => opener.hasSynctex(), opener => opener.canOpenInBackground()],
       ['desc', 'desc'])
 
