@@ -34,6 +34,13 @@ describe('Composer', () => {
       spyOn(latex.builderRegistry, 'getBuilder').andReturn(builder)
 
       spyOn(composer, 'runDiCy').andCallThrough()
+      // Set options in '$ROOTDIR/.dicy.yaml' so we don't overwrite the user's
+      // configuration.
+      spyOn(composer, 'doUpdateDiCyUserOptions').andCallFake((uri, options) =>
+        composer.dicy.setDirectoryOptions(uri, options, true))
+      // Ignore the user's options.
+      spyOn(composer, 'doUpdateDiCyInstanceOptions').andCallFake((uri, options) =>
+        composer.dicy.setInstanceOptions(uri, Object.assign({ loadUserOptions: false }, options)))
       spyOn(latex.opener, 'open')
     }
 
@@ -43,6 +50,10 @@ describe('Composer', () => {
       spyOn(composer, 'showResult').andReturn()
       spyOn(composer, 'showError').andReturn()
       atom.config.set('latex.loggingLevel', 'error')
+    })
+
+    afterEach(() => {
+      composer.dispose()
     })
 
     it('does nothing for new, unsaved files', async () => {
@@ -712,48 +723,79 @@ describe('Composer', () => {
     })
   })
 
-  describe('getDiCy', () => {
+  describe('initializeDiCy', () => {
     let composer, fixturesPath, rootBaseName, subFileBaseName, rootFilePath, subFilePath
+    let rootUri
 
     beforeEach(() => {
       composer = new Composer()
       spyOn(composer, 'shouldUseDiCy').andReturn(true)
+      spyOn(composer, 'startDiCy').andCallFake(() => {
+        composer.dicy = jasmine.createSpyObj('MockDiCy', [
+          'clear', 'run', 'getTargets', 'setInstanceOptions', 'setUserOptions'])
+      })
 
       fixturesPath = path.join(__dirname, 'fixtures')
       rootBaseName = 'file.tex'
       rootFilePath = path.join(fixturesPath, rootBaseName)
+      rootUri = werkzeug.pathToUri(rootFilePath)
       subFileBaseName = 'root-comment.tex'
       subFilePath = path.join(fixturesPath, 'magic-comments', subFileBaseName)
     })
 
-    it('verifies that DiCy builder is created for a simple file', async () => {
-      const result = await composer.getDiCy(rootFilePath)
+    it('verifies that DiCy is correctly initialized for a simple file', async () => {
+      const result = await composer.initializeDiCy(rootFilePath)
 
-      expect(result).toBeDefined()
-      expect(result.filePath).toEqual(rootBaseName)
+      expect(composer.startDiCy).toHaveBeenCalled()
+      expect(composer.dicy.clear).not.toHaveBeenCalled()
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
+        severity: 'info'
+      })
+      expect(composer.dicy.setUserOptions).toHaveBeenCalled()
+      expect(result).toEqual(rootUri)
     })
 
     it('verifies that root magic comment is detected', async () => {
-      const result = composer.getDiCy(subFilePath)
+      const result = await composer.initializeDiCy(subFilePath)
 
-      expect(result).toBeDefined()
+      expect(result).toEqual(rootUri)
     })
 
-    it('verifies that DiCy builder is cached', async () => {
-      const firstResult = await composer.getDiCy(rootFilePath)
-      const secondResult = await composer.getDiCy(rootFilePath)
+    it('verifies that DiCy is correctly initialized for a simple file', async () => {
+      const result = await composer.initializeDiCy(rootFilePath)
 
-      expect(firstResult).toBeDefined()
-      expect(secondResult).toBe(firstResult)
+      expect(composer.startDiCy).toHaveBeenCalled()
+      expect(composer.dicy.clear).not.toHaveBeenCalled()
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
+        severity: 'info'
+      })
+      expect(composer.dicy.setUserOptions).toHaveBeenCalled()
+      expect(result).toEqual(rootUri)
     })
 
-    it('verifies that DiCy builder is not cached if shouldRebuild is set', async () => {
-      const firstResult = await composer.getDiCy(rootFilePath)
-      const secondResult = await composer.getDiCy(rootFilePath, true)
+    it('verifies that correct options are set when fastLoad is enabled', async () => {
+      await composer.initializeDiCy(rootFilePath, false, true)
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
+        severity: 'info',
+        validateCache: false
+      })
+    })
 
-      expect(firstResult).toBeDefined()
-      expect(secondResult).toBeDefined()
-      expect(secondResult).not.toBe(firstResult)
+    it('verifies that DiCy.clear is called if shouldRebuild is set', async () => {
+      await composer.initializeDiCy(rootFilePath, true)
+
+      expect(composer.dicy.setInstanceOptions).toHaveBeenCalledWith(rootUri, {
+        severity: 'info',
+        loadCache: false
+      })
+      expect(composer.dicy.clear).toHaveBeenCalled()
+    })
+
+    it('verifies that DiCy.setUserOptions is not called if updateDiCyUserOptions is not set', async () => {
+      composer.updateDiCyUserOptions = false
+      await composer.initializeDiCy(rootFilePath)
+
+      expect(composer.dicy.setUserOptions).not.toHaveBeenCalled()
     })
   })
 
@@ -763,6 +805,7 @@ describe('Composer', () => {
     const synctexBaseName = 'file.synctex.gz'
 
     let composer, dicy, fixturesPath, sourcePath, outputPath, synctexPath
+    let outputUri, synctexUri
 
     beforeEach(() => {
       composer = new Composer()
@@ -770,16 +813,18 @@ describe('Composer', () => {
     })
 
     function initializeSpies (result = true) {
-      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargetPaths'])
+      dicy = jasmine.createSpyObj('MockDiCy', ['run', 'getTargets', 'setInstanceOptions', 'setUserOptions'])
       dicy.run.andCallFake(() => Promise.resolve(result))
-      dicy.getTargetPaths.andCallFake(() => Promise.resolve([outputBaseName, synctexBaseName]))
-      dicy.rootPath = fixturesPath
+      dicy.getTargets.andCallFake(() => Promise.resolve([outputUri, synctexUri]))
+      composer.dicy = dicy
 
       sourcePath = path.join(fixturesPath, sourceBaseName)
       outputPath = path.join(fixturesPath, outputBaseName)
       synctexPath = path.join(fixturesPath, synctexBaseName)
 
-      spyOn(composer, 'getDiCy').andCallFake(() => Promise.resolve(dicy))
+      outputUri = werkzeug.pathToUri(outputPath)
+      synctexUri = werkzeug.pathToUri(synctexPath)
+
       spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath: sourcePath, lineNumber: 1 })
       spyOn(latex.opener, 'open').andCallFake(() => Promise.resolve(true))
     }
