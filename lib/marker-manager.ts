@@ -1,17 +1,17 @@
-/** @babel */
-
 import { CompositeDisposable, Disposable } from 'atom'
 
 export default class MarkerManager extends Disposable {
+	editor: any
+  markers: any[]
   disposables = new CompositeDisposable()
 
-  constructor (editor) {
+  constructor (editor: any) {
     super(() => this.disposables.dispose())
 
     this.editor = editor
     this.markers = []
 
-    this.disposables.add(latex.log.onMessages(({ messages, reset }) => this.addMarkers(messages, reset)))
+    this.disposables.add(latex.log.onMessages(({ messages, reset }: any) => this.addMarkers(messages, reset)))
     this.disposables.add(new Disposable(() => this.clear()))
     this.disposables.add(this.editor.onDidDestroy(() => this.dispose()))
     this.disposables.add(atom.config.onDidChange('latex.loggingLevel', () => this.update()))
@@ -23,11 +23,11 @@ export default class MarkerManager extends Disposable {
     this.addMarkers(latex.log.getMessages(), true)
   }
 
-  addMarkers (messages, reset) {
+  addMarkers (messages: any[], reset?: boolean) {
     if (reset) this.clear()
 
     const editorPath = this.editor.getPath()
-    const isVisible = (filePath, range) => filePath && range && editorPath.includes(filePath)
+    const isVisible = (filePath: string, range: any) => filePath && range && editorPath.includes(filePath)
 
     if (editorPath) {
       for (const message of messages) {
@@ -41,7 +41,7 @@ export default class MarkerManager extends Disposable {
     }
   }
 
-  addMarker (type, filePath, range) {
+  addMarker (type: string, filePath: string, range: any) {
     const marker = this.editor.markBufferRange(range, { invalidate: 'touch' })
     this.editor.decorateMarker(marker, { type: 'line-number', class: `latex-${type}` })
     this.markers.push(marker)
