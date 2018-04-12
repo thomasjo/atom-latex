@@ -1,20 +1,25 @@
-/** @babel */
-
 import fs from 'fs'
 import path from 'path'
 import LogParser from './parsers/log-parser'
 import FdbParser from './parsers/fdb-parser'
+import BuildState from './build-state'
+import JobState from './job-state'
 import { heredoc, isPdfFile, isPsFile, isDviFile } from './werkzeug'
 
-export default class Builder {
+export default abstract class Builder {
+  executable?: string
   envPathKey = this.getEnvironmentPathKey(process.platform)
 
-  static canProcess (state) {}
-  async run (jobState) {}
-  constructArgs (jobState) {}
-  async checkRuntimeDependencies () {}
+  // TODO: Find a better way of solving the lack of support for static members on interfaces.
+  static canProcess (state: BuildState) {
+    throw new Error("Implementing class must override static function `canProcess`.")
+  }
 
-  logStatusCode (statusCode, stderr) {
+  abstract async run (jobState: JobState): Promise<number>
+  abstract constructArgs (jobState: JobState): string[]
+  abstract async checkRuntimeDependencies (): Promise<void>
+
+  logStatusCode (statusCode: number, stderr?: string) {
     switch (statusCode) {
       case 127:
         latex.log.error(heredoc(`
@@ -34,7 +39,7 @@ export default class Builder {
     }
   }
 
-  parseLogFile (jobState) {
+  parseLogFile (jobState: JobState) {
     const logFilePath = this.resolveLogFilePath(jobState)
     if (fs.existsSync(logFilePath)) {
       let filePath = jobState.getTexFilePath()
@@ -42,7 +47,7 @@ export default class Builder {
       // enable log parsing and finding the project root to continue without the
       // generated LaTeX file.
       if (!filePath) filePath = jobState.getFilePath()
-      const parser = this.getLogParser(logFilePath, filePath)
+      const parser = this.getLogParser(logFilePath, filePath!)
       const result = parser.parse()
       if (result) {
         if (result.messages) {
@@ -55,11 +60,11 @@ export default class Builder {
     }
   }
 
-  getLogParser (logFilePath, texFilePath) {
+  getLogParser (logFilePath: string, texFilePath: string) {
     return new LogParser(logFilePath, texFilePath)
   }
 
-  constructChildProcessOptions (directoryPath, defaultEnv) {
+  constructChildProcessOptions (directoryPath: string, defaultEnv?: any) {
     const env = Object.assign(defaultEnv || {}, process.env)
     const childPath = this.constructPath()
     if (childPath) {
@@ -92,7 +97,7 @@ export default class Builder {
       .join(path.delimiter)
   }
 
-  defaultTexPath (platform) {
+  defaultTexPath (platform: string) {
     if (platform === 'win32') {
       return [
         '%SystemDrive%\\texlive\\2017\\bin\\win32',
@@ -109,29 +114,29 @@ export default class Builder {
     ].join(':')
   }
 
-  resolveOutputFilePath (jobState, ext) {
-    let { dir, name } = path.parse(jobState.getFilePath())
+  resolveOutputFilePath (jobState: JobState, ext: string) {
+    let { dir, name } = path.parse(jobState.getFilePath()!)
     if (jobState.getJobName()) {
       name = jobState.getJobName()
     }
-    dir = path.resolve(dir, jobState.getOutputDirectory())
+    dir = path.resolve(dir, jobState.getOutputDirectory()!)
     return path.format({ dir, name, ext })
   }
 
-  resolveLogFilePath (jobState) {
+  resolveLogFilePath (jobState: JobState) {
     return this.resolveOutputFilePath(jobState, '.log')
   }
 
-  getEnvironmentPathKey (platform) {
+  getEnvironmentPathKey (platform: string) {
     if (platform === 'win32') { return 'Path' }
     return 'PATH'
   }
 
-  resolveFdbFilePath (jobState) {
+  resolveFdbFilePath (jobState: JobState) {
     return this.resolveOutputFilePath(jobState, '.fdb_latexmk')
   }
 
-  parseFdbFile (jobState) {
+  parseFdbFile (jobState: JobState) {
     const fdbFilePath = this.resolveFdbFilePath(jobState)
     if (fs.existsSync(fdbFilePath)) {
       const parser = this.getFdbParser(fdbFilePath)
@@ -142,11 +147,11 @@ export default class Builder {
     }
   }
 
-  getFdbParser (fdbFilePath) {
+  getFdbParser (fdbFilePath: string) {
     return new FdbParser(fdbFilePath)
   }
 
-  parseLogAndFdbFiles (jobState) {
+  parseLogAndFdbFiles (jobState: JobState) {
     this.parseLogFile(jobState)
     this.parseFdbFile(jobState)
 
@@ -159,19 +164,19 @@ export default class Builder {
         if (fdb[section] && fdb[section].generated) {
           const generated = fdb[section].generated
 
-          output = generated.find(output => isPdfFile(output))
+          output = generated.find((output: string) => isPdfFile(output))
           if (output) break
 
-          output = generated.find(output => isPsFile(output))
+          output = generated.find((output: string) => isPsFile(output))
           if (output) break
 
-          output = generated.find(output => isDviFile(output))
+          output = generated.find((output: string) => isDviFile(output))
           if (output) break
         }
       }
 
       if (output) {
-        jobState.setOutputFilePath(path.resolve(jobState.getProjectPath(), path.normalize(output)))
+        jobState.setOutputFilePath(path.resolve(jobState.getProjectPath()!, path.normalize(output)))
       }
     }
   }

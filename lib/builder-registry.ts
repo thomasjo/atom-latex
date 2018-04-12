@@ -31,7 +31,7 @@ export default class BuilderRegistry {
   getAllBuilders () {
     const moduleDir = this.getModuleDirPath()
     const entries = fs.readdirSync(moduleDir)
-    const builders = entries.map(entry => require(path.join(moduleDir, entry)))
+    const builders = entries.map(entry => require(path.join(moduleDir, entry)).default)
 
     return builders
   }

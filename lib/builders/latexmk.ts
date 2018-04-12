@@ -1,7 +1,7 @@
-/** @babel */
-
 import path from 'path'
 import Builder from '../builder'
+import BuildState from '../build-state'
+import JobState from '../job-state'
 
 const LATEX_PATTERN = /^latex|u?platex$/
 const LATEXMK_VERSION_PATTERN = /Version\s+(\S+)/i
@@ -11,14 +11,14 @@ const PDF_ENGINE_PATTERN = /^(xelatex|lualatex)$/
 export default class LatexmkBuilder extends Builder {
   executable = 'latexmk'
 
-  static canProcess (state) {
+  static canProcess (state: BuildState) {
     return !!state.getTexFilePath()
   }
 
-  async run (jobState) {
+  async run (jobState: JobState) {
     const args = this.constructArgs(jobState)
 
-    const { statusCode, stderr } = await this.execLatexmk(jobState.getProjectPath(), args, 'error')
+    const { statusCode, stderr } = await this.execLatexmk(jobState.getProjectPath()!, args, 'error')
     if (statusCode !== 0) {
       this.logStatusCode(statusCode, stderr)
     }
@@ -26,9 +26,10 @@ export default class LatexmkBuilder extends Builder {
     return statusCode
   }
 
-  async execLatexmk (directoryPath, args, type) {
+  async execLatexmk (directoryPath: string, args: string[], type: string) {
     const options = this.constructChildProcessOptions(directoryPath, { max_print_line: 1000 })
 
+    // NOTE: Temporary solution to latexmk no longer supporting special chars in paths.
     if (atom.config.get('latex.useRelativePaths') && options.cwd) {
       const absPath = args[args.length - 1].slice(1, -1)
       const relPath = path.relative(options.cwd, absPath)
@@ -65,7 +66,7 @@ export default class LatexmkBuilder extends Builder {
     latex.log.info(`latexmk check succeeded. Found version ${version}.`)
   }
 
-  logStatusCode (statusCode, stderr) {
+  logStatusCode (statusCode: number, stderr?: string) {
     switch (statusCode) {
       case 10:
         latex.log.error('latexmk: Bad command line arguments.')
@@ -87,7 +88,7 @@ export default class LatexmkBuilder extends Builder {
     }
   }
 
-  constructArgs (jobState) {
+  constructArgs (jobState: JobState) {
     const args = [
       '-interaction=nonstopmode',
       '-f',
@@ -139,7 +140,7 @@ export default class LatexmkBuilder extends Builder {
     return args
   }
 
-  constructPdfProducerArgs (jobState) {
+  constructPdfProducerArgs (jobState: JobState) {
     const producer = jobState.getProducer()
 
     switch (producer) {

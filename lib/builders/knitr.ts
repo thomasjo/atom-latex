@@ -1,40 +1,40 @@
-/** @babel */
-
 import path from 'path'
 import Builder from '../builder'
+import BuildState from '../build-state'
+import JobState from '../job-state'
 
 const MISSING_PACKAGE_PATTERN = /there is no package called [‘']([^’']+)[’']/g
 const OUTPUT_PATH_PATTERN = /\[\d+]\s+"(.*)"/
 const RSCRIPT_VERSION_PATTERN = /version\s+(\S+)/i
 const PACKAGE_VERSION_PATTERN = /^\[1] "([^"]*)"/
 
-function escapePath (filePath) {
+function escapePath (filePath: string) {
   return filePath.replace(/\\/g, '\\\\')
 }
 
 export default class KnitrBuilder extends Builder {
   executable = 'Rscript'
 
-  static canProcess (state) {
+  static canProcess (state: BuildState) {
     return !state.getTexFilePath() && !!state.getKnitrFilePath()
   }
 
-  async run (jobState) {
+  async run (jobState: JobState) {
     const args = this.constructArgs(jobState)
-    const { statusCode, stdout, stderr } = await this.execRscript(jobState.getProjectPath(), args, 'error')
+    const { statusCode, stdout, stderr } = await this.execRscript(jobState.getProjectPath()!, args, 'error')
     if (statusCode !== 0) {
       this.logStatusCode(statusCode, stderr)
       return statusCode
     }
 
-    jobState.setTexFilePath(this.resolveOutputPath(jobState.getKnitrFilePath(), stdout))
+    jobState.setTexFilePath(this.resolveOutputPath(jobState.getKnitrFilePath()!, stdout))
 
     const builder = latex.builderRegistry.getBuilder(jobState.parent)
     const code = await builder.run(jobState)
 
     if (code === 0 && jobState.getEnableSynctex()) {
       const args = this.constructPatchSynctexArgs(jobState)
-      await this.execRscript(jobState.getProjectPath(), args, 'warning')
+      await this.execRscript(jobState.getProjectPath()!, args, 'warning')
     }
 
     return code
@@ -63,7 +63,7 @@ export default class KnitrBuilder extends Builder {
     await this.checkRscriptPackageVersion('patchSynctex', '0.1-4')
   }
 
-  async checkRscriptPackageVersion (packageName, minimumVersion) {
+  async checkRscriptPackageVersion (packageName: string, minimumVersion?: string) {
     const result = await this.execRscript('.', [`-e "installed.packages()['${packageName}','Version']"`], 'warning')
 
     if (result.statusCode === 0) {
@@ -83,7 +83,7 @@ export default class KnitrBuilder extends Builder {
     latex.log.warning(`Rscript package ${packageName} was not found.`)
   }
 
-  async execRscript (directoryPath, args, type) {
+  async execRscript (directoryPath: string, args: string[], type: string) {
     const command = `${this.executable} ${args.join(' ')}`
     const options = this.constructChildProcessOptions(directoryPath)
 
@@ -102,29 +102,29 @@ export default class KnitrBuilder extends Builder {
     return { statusCode, stdout, stderr }
   }
 
-  constructArgs (jobState) {
+  constructArgs (jobState: JobState) {
     const args = [
       '-e "library(knitr)"',
       '-e "opts_knit$set(concordance = TRUE)"',
-      `-e "knit('${escapePath(jobState.getKnitrFilePath())}')"`
+      `-e "knit('${escapePath(jobState.getKnitrFilePath()!)}')"`
     ]
 
     return args
   }
 
-  constructPatchSynctexArgs (jobState) {
+  constructPatchSynctexArgs (jobState: JobState) {
     let synctexPath = this.resolveOutputFilePath(jobState, '')
 
     const args = [
       '-e "library(patchSynctex)"',
-      `-e "patchSynctex('${escapePath(jobState.getKnitrFilePath())}',syncfile='${escapePath(synctexPath)}')"`
+      `-e "patchSynctex('${escapePath(jobState.getKnitrFilePath()!)}',syncfile='${escapePath(synctexPath)}')"`
     ]
 
     return args
   }
 
-  resolveOutputPath (sourcePath, stdout) {
-    const candidatePath = OUTPUT_PATH_PATTERN.exec(stdout)[1]
+  resolveOutputPath (sourcePath: string, stdout: string) {
+    const candidatePath = OUTPUT_PATH_PATTERN.exec(stdout)![1]
     if (path.isAbsolute(candidatePath)) {
       return candidatePath
     }
