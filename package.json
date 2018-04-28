@@ -57,9 +57,7 @@
       "glob": "{!(node_modules)/**/,}lib/**/*.ts?(x)",
       "options": {
         "verbose": true,
-        "cacheKeyFiles": [
-          "tsconfig.json"
-        ]
+        "cacheKeyFiles": []
       }
     }
   ],
