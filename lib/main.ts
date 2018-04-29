@@ -1,4 +1,5 @@
 import { CompositeDisposable, Disposable } from 'atom'
+import MarkerManager from './marker-manager'
 
 let disposables = new CompositeDisposable()
 
@@ -33,7 +34,6 @@ export function activate (serialized: any) {
     }))
   }))
 
-  const MarkerManager = require('./marker-manager')
   disposables.add(atom.workspace.observeTextEditors(editor => {
     disposables.add(new MarkerManager(editor))
   }))
