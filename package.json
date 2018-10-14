@@ -19,20 +19,20 @@
   "dependencies": {
     "@dicy/client": "^0.13.0",
     "dbus-native": "^0.2.1",
-    "etch": "0.12.6",
+    "etch": "^0.14.0",
     "fs-plus": "^3.0.0",
     "glob": "^7.1.1",
     "js-yaml": "^3.11.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "minimatch": "^3.0.4",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.2",
-    "snazzy": "^7.1.1",
-    "standard": "^11.0.0"
+    "babel-eslint": "^10.0.1",
+    "snazzy": "^8.0.0",
+    "standard": "^12.0.0"
   },
   "engines": {
     "atom": ">=1.19.0 <2.0.0"
