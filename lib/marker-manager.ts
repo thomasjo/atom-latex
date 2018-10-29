@@ -1,7 +1,7 @@
 import { CompositeDisposable, Disposable } from 'atom'
 
 export default class MarkerManager extends Disposable {
-	editor: any
+  editor: any
   markers: any[]
   disposables = new CompositeDisposable()
 
