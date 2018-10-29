@@ -29,7 +29,7 @@ export default class MagicParser extends Parser {
       if (latexCommandMatch) { break } // Stop parsing if a latex command was found
 
       const match = line.match(MAGIC_COMMENT_PATTERN)
-      if (match != null) {
+      if (match !== null) {
         result[match[1]] = match[2].trim()
       }
     }
