@@ -65,30 +65,30 @@ export function getEditorDetails () {
   return { editor, filePath, position, lineNumber }
 }
 
-export function replacePropertiesInString (text: string, properties: string[]) {
+export function replacePropertiesInString (text: string, properties: any) {
   return _.reduce(properties, (current, value, name) => current.replace(`{${name}}`, value), text)
 }
 
 export function isSourceFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.(?:tex|tikz|lhs|lagda|[prs]nw)$/i)
+  return !!filePath && !!filePath.match(/\.(?:tex|tikz|lhs|lagda|[prs]nw)$/i)
 }
 
 export function isTexFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.(?:tex|lhs|lagda)$/i)
+  return !!filePath && !!filePath.match(/\.(?:tex|lhs|lagda)$/i)
 }
 
 export function isKnitrFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.[rs]nw$/i)
+  return !!filePath && !!filePath.match(/\.[rs]nw$/i)
 }
 
 export function isPdfFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.pdf$/i)
+  return !!filePath && !!filePath.match(/\.pdf$/i)
 }
 
 export function isPsFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.ps$/i)
+  return !!filePath && !!filePath.match(/\.ps$/i)
 }
 
 export function isDviFile (filePath: string | null) {
-  return filePath && !!filePath.match(/\.(?:dvi|xdv)$/i)
+  return !!filePath && !!filePath.match(/\.(?:dvi|xdv)$/i)
 }
