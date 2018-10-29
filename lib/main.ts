@@ -25,11 +25,11 @@ export function activate (serialized: any) {
   }))
 
   disposables.add(atom.workspace.observeTextEditors(editor => {
-    disposables.add(editor.onDidSave(() => {
+    disposables.add(editor.onDidSave(async () => {
       // Let's play it safe; only trigger builds for the active editor.
       const activeEditor = atom.workspace.getActiveTextEditor()
       if (editor === activeEditor && atom.config.get('latex.buildOnSave')) {
-        latex.composer.build(false, false)
+        await latex.composer.build(false, false)
       }
     }))
   }))
@@ -65,15 +65,15 @@ export function consumeStatusBar (statusBar: any) {
 }
 
 export function deserializeLog (serialized: any) {
-  bootstrap()
-  const LogDock = require('./views/log-dock')
-  return new LogDock()
+  // bootstrap()
+  // const LogDock = require('./views/log-dock')
+  // return new LogDock()
 }
 
 function bootstrap () {
   if (global.latex) { return }
 
-  const Latex = require('./latex')
+  const Latex = require('./latex').default
   global.latex = new Latex()
   disposables.add(global.latex)
 }
