@@ -12,7 +12,7 @@ export default abstract class Builder {
 
   // TODO: Find a better way of solving the lack of support for static members on interfaces.
   static canProcess (state: BuildState) {
-    throw new Error("Implementing class must override static function `canProcess`.")
+    throw new Error('Implementing class must override static function `canProcess`.')
   }
 
   abstract async run (jobState: JobState): Promise<number>
@@ -47,7 +47,7 @@ export default abstract class Builder {
       // enable log parsing and finding the project root to continue without the
       // generated LaTeX file.
       if (!filePath) filePath = jobState.getFilePath()
-      const parser = this.getLogParser(logFilePath, filePath!)
+      const parser = this.getLogParser(logFilePath, filePath)
       const result = parser.parse()
       if (result) {
         if (result.messages) {
@@ -115,7 +115,7 @@ export default abstract class Builder {
   }
 
   resolveOutputFilePath (jobState: JobState, ext: string) {
-    let { dir, name } = path.parse(jobState.getFilePath()!)
+    let { dir, name } = path.parse(jobState.getFilePath())
     if (jobState.getJobName()) {
       name = jobState.getJobName()
     }
