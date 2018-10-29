@@ -23,7 +23,8 @@
     "js-yaml": "^3.11.0",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.4",
-    "react": "^16.2.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
     "rimraf": "^2.6.2",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
@@ -43,6 +44,7 @@
     "@types/lodash": "latest",
     "@types/minimatch": "latest",
     "@types/react": "latest",
+    "@types/react-dom": "latest",
     "@types/rimraf": "latest",
     "@types/temp": "latest",
     "@types/wrench": "latest"
