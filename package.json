@@ -34,7 +34,7 @@
     "snazzy": "^7.1.1",
     "standard": "^11.0.0",
     "tslint": "^5.9.1",
-    "tslint-config-standard": "^7.0.0",
+    "tslint-config-standard": "^8.0.0",
     "tslint-react": "^3.5.1",
     "typescript": "^2.8.0",
     "@types/atom": "latest",
