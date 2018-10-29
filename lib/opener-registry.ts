@@ -14,11 +14,11 @@ export default class OpenerRegistry extends Disposable {
   initializeOpeners () {
     const schema: any = atom.config.getSchema('latex.opener')
     const dir = path.join(__dirname, 'openers')
-    const ext = '.js'
+    const ext = '.ts'
     for (const openerName of schema.enum) {
       if (openerName !== 'automatic') {
         const name = `${openerName}-opener`
-        const OpenerImpl = require(path.format({ dir, name, ext }))
+        const OpenerImpl = require(path.format({ dir, name, ext })).default
         const opener = new OpenerImpl()
         this.disposables.add(opener)
         this.openers.set(openerName, opener)
