@@ -18,7 +18,6 @@
   "main": "./lib/main",
   "dependencies": {
     "atom-ts-transpiler": "^1.5.2",
-    "dbus-native": "^0.4.0",
     "etch": "0.12.6",
     "glob": "^7.1.1",
     "js-yaml": "^3.11.0",
@@ -267,8 +266,6 @@
       "type": "string",
       "enum": [
         "automatic",
-        "atril",
-        "evince",
         "okular",
         "pdf-view",
         "preview",
@@ -277,7 +274,6 @@
         "skim",
         "sumatra",
         "xdg-open",
-        "x-reader",
         "zathura",
         "custom"
       ],
