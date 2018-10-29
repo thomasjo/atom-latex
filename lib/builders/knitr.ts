@@ -91,11 +91,12 @@ export default class KnitrBuilder extends Builder {
 
     if (statusCode !== 0) {
       // Parse error message to detect missing libraries.
-      let match
-      while ((match = MISSING_PACKAGE_PATTERN.exec(stderr)) !== null) {
+      let match = MISSING_PACKAGE_PATTERN.exec(stderr)
+      while (match !== null) {
         const text = `The R package "${match[1]}" could not be loaded.`
         latex.log.showMessages([{ type, text }])
         statusCode = -1
+        match = MISSING_PACKAGE_PATTERN.exec(stderr)
       }
     }
 
