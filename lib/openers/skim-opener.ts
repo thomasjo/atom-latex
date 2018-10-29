@@ -1,11 +1,9 @@
-/** @babel */
-
 import fs from 'fs'
 import { heredoc } from '../werkzeug'
 import Opener from '../opener'
 
 export default class SkimOpener extends Opener {
-  async open (filePath, texPath, lineNumber) {
+  async open (filePath: string, texPath: string, lineNumber: number) {
     const skimPath = atom.config.get('latex.skimPath')
     const shouldActivate = !this.shouldOpenInBackground()
     const command = heredoc(`
@@ -30,7 +28,7 @@ export default class SkimOpener extends Opener {
     await latex.process.executeChildProcess(command, { showError: true })
   }
 
-  canOpen (filePath) {
+  canOpen (filePath: string) {
     return process.platform === 'darwin' && fs.existsSync(atom.config.get('latex.skimPath'))
   }
 

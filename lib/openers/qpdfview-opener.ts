@@ -1,11 +1,9 @@
-/** @babel */
-
 import fs from 'fs'
 import Opener from '../opener'
 import { isPdfFile, isPsFile } from '../werkzeug'
 
 export default class QpdfviewOpener extends Opener {
-  async open (filePath, texPath, lineNumber) {
+  async open (filePath: string, texPath: string, lineNumber: number) {
     const qpdfviewPath = atom.config.get('latex.qpdfviewPath')
     const args = [
       `--unique`,
@@ -15,7 +13,7 @@ export default class QpdfviewOpener extends Opener {
     await latex.process.executeChildProcess(command, { showError: true })
   }
 
-  canOpen (filePath) {
+  canOpen (filePath: string) {
     return process.platform === 'linux' &&
       (isPdfFile(filePath) || isPsFile(filePath)) &&
       fs.existsSync(atom.config.get('latex.qpdfviewPath'))

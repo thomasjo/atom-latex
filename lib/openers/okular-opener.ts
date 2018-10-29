@@ -1,11 +1,9 @@
-/** @babel */
-
 import fs from 'fs'
 import { pathToUri } from '../werkzeug'
 import Opener from '../opener'
 
 export default class OkularOpener extends Opener {
-  async open (filePath, texPath, lineNumber) {
+  async open (filePath: string, texPath: string, lineNumber: number) {
     const okularPath = atom.config.get('latex.okularPath')
     const uri = pathToUri(filePath, `src:${lineNumber} ${texPath}`)
     const args = [
@@ -19,7 +17,7 @@ export default class OkularOpener extends Opener {
     await latex.process.executeChildProcess(command, { showError: true })
   }
 
-  canOpen (filePath) {
+  canOpen (filePath: string) {
     return process.platform === 'linux' && fs.existsSync(atom.config.get('latex.okularPath'))
   }
 

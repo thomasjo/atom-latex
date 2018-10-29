@@ -1,10 +1,8 @@
-/** @babel */
-
 import Opener from '../opener'
 import { isPdfFile } from '../werkzeug'
 
 export default class PdfViewOpener extends Opener {
-  async open (filePath, texPath, lineNumber) {
+  async open (filePath: string, texPath: string, lineNumber: number) {
     const texPane = atom.workspace.paneForURI(texPath)
     const previousActivePane = atom.workspace.getActivePane()
 
@@ -18,7 +16,7 @@ export default class PdfViewOpener extends Opener {
       split: atom.config.get('latex.pdfViewSplitDirection')
     }
 
-    const item = await atom.workspace.open(filePath, options)
+    const item: any = await atom.workspace.open(filePath, options)
     if (item && item.forwardSync) {
       item.forwardSync(texPath, lineNumber)
     }
@@ -27,10 +25,10 @@ export default class PdfViewOpener extends Opener {
       previousActivePane.activate()
     }
 
-    return true
+    return Promise.resolve()
   }
 
-  canOpen (filePath) {
+  canOpen (filePath: string) {
     return isPdfFile(filePath) && atom.packages.isPackageActive('pdf-view')
   }
 }
