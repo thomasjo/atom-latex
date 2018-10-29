@@ -1,5 +1,3 @@
-/** @babel */
-
 import Composer from './composer'
 import OpenerRegistry from './opener-registry'
 import ProcessManager from './process-manager'
@@ -8,7 +6,7 @@ import BuilderRegistry from './builder-registry'
 import Logger from './logger'
 import { CompositeDisposable, Disposable } from 'atom'
 
-function defineImmutableProperty (obj, name, value) {
+function defineImmutableProperty (obj: Latex, name: string, value: any) {
   if (Disposable.isDisposable(value)) {
     obj.disposables.add(value)
   }
