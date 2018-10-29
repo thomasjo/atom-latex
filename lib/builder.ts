@@ -29,7 +29,7 @@ export default abstract class Builder {
               when resolved: ${this.constructPath()}
           Make sure latex.texPath is configured correctly either adjust it \
           via the settings view, or directly in your config.cson file.
-          `))
+          `)!)
         break
       case 0:
         break
