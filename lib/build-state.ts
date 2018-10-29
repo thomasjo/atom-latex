@@ -27,10 +27,12 @@ export default class BuildState {
   outputDirectory: string | null = null
   producer: string | null = null
   shouldRebuild: boolean = false
-  filePath: string | null = null
+  filePath: string
 
   // TODO: Revisit the default value for 'jobNames'.
   constructor (filePath: string, jobNames: string[] = [''], shouldRebuild = false) {
+    this.filePath = filePath
+
     this.setFilePath(filePath)
     this.setJobNames(jobNames)
     this.setShouldRebuild(shouldRebuild)
@@ -167,7 +169,7 @@ export default class BuildState {
     return this.filePath
   }
 
-  setFilePath (value: string | null) {
+  setFilePath (value: string) {
     this.filePath = value
     this.texFilePath = isTexFile(value) ? value : null
     this.knitrFilePath = isKnitrFile(value) ? value : null
