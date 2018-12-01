@@ -11,7 +11,7 @@ export default abstract class Builder {
   envPathKey = this.getEnvironmentPathKey(process.platform)
 
   // TODO: Find a better way of solving the lack of support for static members on interfaces.
-  static canProcess (state: BuildState) {
+  static canProcess (_state: BuildState) {
     throw new Error('Implementing class must override static function `canProcess`.')
   }
 
