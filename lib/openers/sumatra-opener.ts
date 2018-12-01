@@ -3,8 +3,17 @@ import Opener from '../opener'
 import { isPdfFile } from '../werkzeug'
 
 export default class SumatraOpener extends Opener {
+  hasSynctex () {
+    return true
+  }
+
+  canOpen (filePath: string) {
+    const supportedFile = isPdfFile(filePath)
+    const binaryExists = fs.existsSync(atom.config.get('latex.sumatraPath'))
+    return process.platform === 'win32' && supportedFile && binaryExists
+  }
+
   async open (filePath: string, texPath: string, lineNumber: number) {
-    const sumatraPath = `"${atom.config.get('latex.sumatraPath')}"`
     const atomPath = process.argv[0]
     const args = [
       '-reuse-instance',
@@ -16,17 +25,8 @@ export default class SumatraOpener extends Opener {
       `"${filePath}"`
     ]
 
+    const sumatraPath = `"${atom.config.get('latex.sumatraPath')}"`
     const command = `${sumatraPath} ${args.join(' ')}`
-
     await latex.process.executeChildProcess(command)
-  }
-
-  canOpen (filePath: string) {
-    return process.platform === 'win32' && isPdfFile(filePath) &&
-      fs.existsSync(atom.config.get('latex.sumatraPath'))
-  }
-
-  hasSynctex () {
-    return true
   }
 }

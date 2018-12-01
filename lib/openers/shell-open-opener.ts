@@ -1,14 +1,12 @@
 import Opener from '../opener'
 
 export default class ShellOpenOpener extends Opener {
-  // shell open does not support texPath and lineNumber.
-  async open (filePath: string, texPath: string, lineNumber: number) {
-    const command = `"${filePath}"`
-
-    await latex.process.executeChildProcess(command, { showError: true })
+  canOpen (_filePath: string) {
+    return process.platform === 'win32'
   }
 
-  canOpen (filePath: string) {
-    return process.platform === 'win32'
+  async open (filePath: string, _texPath: string, _lineNumber: number) {
+    const command = `"${filePath}"`
+    await latex.process.executeChildProcess(command, { showError: true })
   }
 }

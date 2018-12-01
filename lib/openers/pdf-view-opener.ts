@@ -2,6 +2,10 @@ import Opener from '../opener'
 import { isPdfFile } from '../werkzeug'
 
 export default class PdfViewOpener extends Opener {
+  canOpen (filePath: string) {
+    return isPdfFile(filePath) && atom.packages.isPackageActive('pdf-view')
+  }
+
   async open (filePath: string, texPath: string, lineNumber: number) {
     const texPane = atom.workspace.paneForURI(texPath)
     const previousActivePane = atom.workspace.getActivePane()
@@ -24,11 +28,5 @@ export default class PdfViewOpener extends Opener {
     if (previousActivePane && this.shouldOpenInBackground()) {
       previousActivePane.activate()
     }
-
-    return Promise.resolve()
-  }
-
-  canOpen (filePath: string) {
-    return isPdfFile(filePath) && atom.packages.isPackageActive('pdf-view')
   }
 }

@@ -1,8 +1,22 @@
 import fs from 'fs'
-import { heredoc } from '../werkzeug'
+import { heredoc, isPdfFile } from '../werkzeug'
 import Opener from '../opener'
 
 export default class SkimOpener extends Opener {
+  hasSynctex () {
+    return true
+  }
+
+  canOpenInBackground () {
+    return true
+  }
+
+  canOpen (filePath: string) {
+    const supportedFile = isPdfFile(filePath)
+    const binaryExists = fs.existsSync(atom.config.get('latex.skimPath'))
+    return process.platform === 'darwin' && supportedFile && binaryExists
+  }
+
   async open (filePath: string, texPath: string, lineNumber: number) {
     const skimPath = atom.config.get('latex.skimPath')
     const shouldActivate = !this.shouldOpenInBackground()
@@ -25,18 +39,6 @@ export default class SkimOpener extends Opener {
       "
       `)
 
-    await latex.process.executeChildProcess(command, { showError: true })
-  }
-
-  canOpen (filePath: string) {
-    return process.platform === 'darwin' && fs.existsSync(atom.config.get('latex.skimPath'))
-  }
-
-  hasSynctex () {
-    return true
-  }
-
-  canOpenInBackground () {
-    return true
+    await latex.process.executeChildProcess(command!, { showError: true })
   }
 }
