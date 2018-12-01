@@ -1,9 +1,10 @@
 import _ from 'lodash'
 import path from 'path'
 import { CompositeDisposable, Disposable } from 'atom'
+import Opener from './opener'
 
 export default class OpenerRegistry extends Disposable {
-  openers = new Map()
+  openers = new Map<string, Opener>()
   disposables = new CompositeDisposable()
 
   constructor () {
@@ -13,17 +14,26 @@ export default class OpenerRegistry extends Disposable {
 
   initializeOpeners () {
     const schema: any = atom.config.getSchema('latex.opener')
-    const dir = path.join(__dirname, 'openers')
-    const ext = '.ts'
     for (const openerName of schema.enum) {
       if (openerName !== 'automatic') {
-        const name = `${openerName}-opener`
-        const OpenerImpl = require(path.format({ dir, name, ext })).default
-        const opener = new OpenerImpl()
+        const opener = this.createOpener(openerName)
         this.disposables.add(opener)
         this.openers.set(openerName, opener)
       }
     }
+  }
+
+  createOpener (name: string) {
+    const OpenerImpl: new() => Opener = require(this.openerPath(name)).default
+    return new OpenerImpl()
+  }
+
+  openerPath (name: string) {
+    return path.format({
+      dir: path.join(__dirname, 'openers'),
+      name: `${name}-opener`,
+      ext: '.ts'
+    })
   }
 
   checkRuntimeDependencies () {
@@ -65,23 +75,26 @@ export default class OpenerRegistry extends Disposable {
   }
 
   getCandidateOpeners (filePath: string) {
-    const candidates = new Map()
-    for (const [name, opener] of this.openers.entries()) {
-      if (opener.canOpen(filePath)) candidates.set(name, opener)
+    const candidates = new Array<Opener>()
+    for (const candidate of this.openers.values()) {
+      if (candidate.canOpen(filePath)) {
+        candidates.push(candidate)
+      }
     }
+
     return candidates
   }
 
   findOpener (filePath: string) {
     const openResultInBackground = atom.config.get('latex.openResultInBackground')
     const enableSynctex = atom.config.get('latex.enableSynctex')
-    const candidates = Array.from(this.getCandidateOpeners(filePath).values())
-
+    const candidates = this.getCandidateOpeners(filePath)
     if (!candidates.length) return
 
-    const rankedCandidates: any[] = _.orderBy(candidates,
+    const rankedCandidates = _.orderBy(candidates,
       [opener => opener.hasSynctex(), opener => opener.canOpenInBackground()],
-      ['desc', 'desc'])
+      ['desc', 'desc']
+    )
 
     if (enableSynctex) {
       // If the user wants openResultInBackground also and there is an opener
