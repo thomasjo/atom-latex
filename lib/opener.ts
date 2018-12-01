@@ -1,14 +1,8 @@
 import { Disposable } from 'atom'
 
 export default abstract class Opener extends Disposable {
-  async abstract open (filePath: string, texPath: string, lineNumber: number): Promise<void>
-
   shouldOpenInBackground () {
     return atom.config.get('latex.openResultInBackground')
-  }
-
-  canOpen (filePath: string) {
-    return false
   }
 
   hasSynctex () {
@@ -18,4 +12,7 @@ export default abstract class Opener extends Disposable {
   canOpenInBackground () {
     return false
   }
+
+  abstract canOpen (filePath: string): boolean
+  abstract async open (filePath: string, texPath: string, lineNumber: number): Promise<void>
 }
