@@ -23,7 +23,7 @@ declare global {
 declare global {
   namespace NodeJS {
     interface Global {
-        latex: LatexGlobal
+      latex: LatexGlobal
     }
   }
 }
