@@ -18,7 +18,7 @@ export default class LatexmkBuilder extends Builder {
   async run (jobState: JobState) {
     const args = this.constructArgs(jobState)
 
-    const { statusCode, stderr } = await this.execLatexmk(jobState.getProjectPath()!, args, 'error')
+    const { statusCode, stderr }: any = await this.execLatexmk(jobState.getProjectPath()!, args)
     if (statusCode !== 0) {
       this.logStatusCode(statusCode, stderr)
     }
@@ -26,7 +26,7 @@ export default class LatexmkBuilder extends Builder {
     return statusCode
   }
 
-  async execLatexmk (directoryPath: string, args: string[], type: string) {
+  async execLatexmk (directoryPath: string, args: string[]) {
     const options = this.constructChildProcessOptions(directoryPath, { max_print_line: 1000 })
 
     // NOTE: Temporary solution to latexmk no longer supporting special chars in paths.
@@ -42,7 +42,7 @@ export default class LatexmkBuilder extends Builder {
   }
 
   async checkRuntimeDependencies () {
-    const { statusCode, stdout, stderr } = await this.execLatexmk('.', ['-v'], 'error')
+    const { statusCode, stdout, stderr }: any = await this.execLatexmk('.', ['-v'])
 
     if (statusCode !== 0) {
       latex.log.error(`latexmk check failed with code ${statusCode} and response of "${stderr}".`)

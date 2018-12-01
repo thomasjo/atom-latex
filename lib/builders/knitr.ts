@@ -22,7 +22,7 @@ export default class KnitrBuilder extends Builder {
   async run (jobState: JobState) {
     const args = this.constructArgs(jobState)
     const { statusCode, stdout, stderr } = await this.execRscript(jobState.getProjectPath()!, args, 'error')
-    if (statusCode !== 0) {
+    if (statusCode !== 0 || !stdout) {
       this.logStatusCode(statusCode, stderr)
       return statusCode
     }
@@ -48,25 +48,25 @@ export default class KnitrBuilder extends Builder {
       return
     }
 
-    const match = stderr.match(RSCRIPT_VERSION_PATTERN)
+    if (stderr) {
+      const match = stderr.match(RSCRIPT_VERSION_PATTERN)
+      if (!match) {
+        latex.log.warning(`Rscript check succeeded but with an unknown version response of "${stderr}".`)
+        return
+      }
 
-    if (!match) {
-      latex.log.warning(`Rscript check succeeded but with an unknown version response of "${stderr}".`)
-      return
+      const version = match[1]
+      latex.log.info(`Rscript check succeeded. Found version ${version}.`)
+
+      await this.checkRscriptPackageVersion('knitr')
+      await this.checkRscriptPackageVersion('patchSynctex', '0.1-4')
     }
-
-    const version = match[1]
-
-    latex.log.info(`Rscript check succeeded. Found version ${version}.`)
-
-    await this.checkRscriptPackageVersion('knitr')
-    await this.checkRscriptPackageVersion('patchSynctex', '0.1-4')
   }
 
   async checkRscriptPackageVersion (packageName: string, minimumVersion?: string) {
     const result = await this.execRscript('.', [`-e "installed.packages()['${packageName}','Version']"`], 'warning')
 
-    if (result.statusCode === 0) {
+    if (result.statusCode === 0 && result.stdout) {
       const match = result.stdout.match(PACKAGE_VERSION_PATTERN)
       if (match) {
         const version = match[1]
@@ -89,7 +89,7 @@ export default class KnitrBuilder extends Builder {
 
     let { statusCode, stdout, stderr } = await latex.process.executeChildProcess(command, options)
 
-    if (statusCode !== 0) {
+    if (statusCode !== 0 && stderr) {
       // Parse error message to detect missing libraries.
       let match = MISSING_PACKAGE_PATTERN.exec(stderr)
       while (match !== null) {
