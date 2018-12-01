@@ -64,10 +64,10 @@ export function consumeStatusBar (statusBar: any) {
   })
 }
 
-export function deserializeLog (serialized: any) {
-  // bootstrap()
-  // const LogDock = require('./views/log-dock')
-  // return new LogDock()
+export function deserializeLog (_serialized: any) {
+  bootstrap()
+  const LogDock = require('./views/log-dock')
+  return new LogDock()
 }
 
 function bootstrap () {
