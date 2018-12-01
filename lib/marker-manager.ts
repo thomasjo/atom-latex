@@ -32,16 +32,16 @@ export default class MarkerManager extends Disposable {
     if (editorPath) {
       for (const message of messages) {
         if (isVisible(message.filePath, message.range)) {
-          this.addMarker(message.type, message.filePath, message.range)
+          this.addMarker(message.type, message.range)
         }
         if (isVisible(message.logPath, message.logRange)) {
-          this.addMarker(message.type, message.logPath, message.logRange)
+          this.addMarker(message.type, message.logRange)
         }
       }
     }
   }
 
-  addMarker (type: string, filePath: string, range: any) {
+  addMarker (type: string, range: any) {
     const marker = this.editor.markBufferRange(range, { invalidate: 'touch' })
     this.editor.decorateMarker(marker, { type: 'line-number', class: `latex-${type}` })
     this.markers.push(marker)
