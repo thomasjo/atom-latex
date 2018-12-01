@@ -1,0 +1,5 @@
+{
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+}
