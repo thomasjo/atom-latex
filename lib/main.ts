@@ -37,11 +37,6 @@ export function activate (serialized: any) {
   disposables.add(atom.workspace.observeTextEditors(editor => {
     disposables.add(new MarkerManager(editor))
   }))
-
-  if (!atom.inSpecMode()) {
-    const checkConfigAndMigrate = require('./config-migrator')
-    checkConfigAndMigrate()
-  }
 }
 
 export function deactivate () {
