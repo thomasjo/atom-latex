@@ -198,11 +198,11 @@ export default class Composer extends Disposable {
     const { editor, filePath, lineNumber } = getEditorDetails()
 
     if (!editor || !filePath || !lineNumber) {
-      return false
+      return
     }
 
     if (!this.isValidSourceFile(filePath, enableLogging)) {
-      return false
+      return
     }
 
     if (editor.isModified()) {
@@ -210,7 +210,7 @@ export default class Composer extends Disposable {
     }
 
     const { builder, state } = this.initializeBuild(filePath)
-    if (!builder) return false
+    if (!builder) return
     state.setShouldRebuild(shouldRebuild)
 
     if (this.rebuildCompleted && !this.rebuildCompleted.has(state.getFilePath())) {
@@ -256,12 +256,12 @@ export default class Composer extends Disposable {
     const { filePath, lineNumber } = getEditorDetails()
 
     if (!this.isValidSourceFile(filePath)) {
-      return false
+      return
     }
 
     const { builder, state } = this.initializeBuild(filePath!, true)
     if (!builder) {
-      return false
+      return
     }
 
     const jobs = state.getJobStates().map(jobState => this.syncJob(filePath!, lineNumber!, builder, jobState))
@@ -281,12 +281,12 @@ export default class Composer extends Disposable {
   async clean () {
     const { filePath } = getEditorDetails()
     if (!this.isValidSourceFile(filePath)) {
-      return false
+      return
     }
 
     const { builder, state } = this.initializeBuild(filePath!, true)
     if (!builder) {
-      return false
+      return
     }
 
     latex.status.setBusy()
@@ -302,7 +302,7 @@ export default class Composer extends Disposable {
     const generatedFiles = this.getGeneratedFileList(builder, jobState)
     let files = new Set()
 
-    const patterns = this.getCleanPatterns(builder, jobState)
+    const patterns = this.getCleanPatterns(jobState)
     const projectPath = jobState.getProjectPath()
 
     for (const pattern of patterns) {
@@ -331,7 +331,7 @@ export default class Composer extends Disposable {
     }
   }
 
-  getCleanPatterns (builder: any, jobState: JobState) {
+  getCleanPatterns (jobState: JobState) {
     const { name, ext } = path.parse(jobState.getFilePath())
     const outputDirectory = jobState.getOutputDirectory()
     const properties = {

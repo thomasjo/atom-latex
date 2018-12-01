@@ -51,9 +51,8 @@ describe('Composer', () => {
     it('does nothing for new, unsaved files', async () => {
       initializeSpies(null)
 
-      const result = await composer.build()
+      await composer.build()
 
-      expect(result).toBe(false)
       expect(composer.showResult).not.toHaveBeenCalled()
       expect(composer.showError).not.toHaveBeenCalled()
     })
@@ -62,9 +61,8 @@ describe('Composer', () => {
       initializeSpies('foo.bar')
       latex.builderRegistry.getBuilder.andReturn(null)
 
-      const result = await composer.build()
+      await composer.build()
 
-      expect(result).toBe(false)
       expect(composer.showResult).not.toHaveBeenCalled()
       expect(composer.showError).not.toHaveBeenCalled()
     })
@@ -115,7 +113,7 @@ describe('Composer', () => {
         state.setLogMessages([])
       })
 
-      try { await composer.build() } catch (error) {}
+      await composer.build()
 
       expect(composer.showError).toHaveBeenCalled()
     })
@@ -124,7 +122,7 @@ describe('Composer', () => {
       initializeSpies('file.tex')
       builder.parseLogAndFdbFiles.andCallFake(state => {})
 
-      try { await composer.build() } catch (error) {}
+      await composer.build()
 
       expect(composer.showError).toHaveBeenCalled()
     })
@@ -133,7 +131,7 @@ describe('Composer', () => {
       spyOn(atom.workspace, 'getActiveTextEditor').andReturn()
       spyOn(werkzeug, 'getEditorDetails').andCallThrough()
 
-      try { await composer.build() } catch (error) {}
+      await composer.build()
 
       expect(werkzeug.getEditorDetails).toHaveBeenCalled()
     })
@@ -172,7 +170,7 @@ describe('Composer', () => {
     it('deletes aux file but leaves log file when log file is not in cleanPatterns', async () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, 'foo.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
@@ -184,7 +182,7 @@ describe('Composer', () => {
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
@@ -196,7 +194,7 @@ describe('Composer', () => {
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
@@ -208,7 +206,7 @@ describe('Composer', () => {
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, outdir, 'foo.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
@@ -220,7 +218,7 @@ describe('Composer', () => {
       atom.config.set('latex.outputDirectory', outdir)
       initializeSpies(path.join(fixturesPath, 'foo.tex'))
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(outdir, 'foo.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, '_minted-foo'))
@@ -230,7 +228,7 @@ describe('Composer', () => {
     it('deletes aux files but leaves log files when log file is not in cleanPatterns with jobnames', async () => {
       initializeSpies(path.join(fixturesPath, 'foo.tex'), ['bar', 'wibble'])
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).toHaveBeenCalledWith(path.join(fixturesPath, 'bar.aux'))
       expect(rimraf.sync).not.toHaveBeenCalledWith(path.join(fixturesPath, 'bar.log'))
@@ -244,7 +242,7 @@ describe('Composer', () => {
       const filePath = 'foo.bar'
       initializeSpies(filePath, [])
 
-      try { await composer.clean() } catch (error) {}
+      await composer.clean()
 
       expect(rimraf.sync).not.toHaveBeenCalled()
     })
