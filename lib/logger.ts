@@ -1,8 +1,8 @@
 import _ from 'lodash'
-// import React from 'react'
-// import ReactDOM from 'react-dom'
-import { CompositeDisposable, Disposable, Emitter } from 'atom'
-// import { getEditorDetails } from './werkzeug'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { CompositeDisposable, Disposable, Emitter, Point } from 'atom'
+import { getEditorDetails } from './werkzeug'
 import LogDock from './views/log-dock'
 
 export default class Logger extends Disposable {
@@ -24,15 +24,27 @@ export default class Logger extends Disposable {
     }))
 
     this.container = document.createElement('div')
-    // this.disposables.add(atom.workspace.addOpener(uri => {
-    //   if (uri === LogDock.LOG_DOCK_URI) {
-    //     // return new LogDock()
-    //     // ReactDOM.render(<LogDock />, this.container)
-    //     return this.container.firstChild
-    //   }
-    // }))
+    this.disposables.add(atom.workspace.addOpener(uri => {
+      if (uri === LogDock.LOG_DOCK_URI) {
+        const { filePath, position } = this.getEditorDetails()
+        return this.renderLogDockElement(filePath!, position!)
+      }
+    }))
 
     this.messages = []
+  }
+
+  getEditorDetails () {
+    return getEditorDetails()
+  }
+
+  renderLogDockElement (filePath: string, position: Point) {
+    const logDockElement = React.createElement(LogDock, {
+      filePath,
+      position
+    })
+
+    return ReactDOM.render(logDockElement, this.container)
   }
 
   onMessages (callback: any) {
@@ -90,26 +102,22 @@ export default class Logger extends Disposable {
   }
 
   async sync () {
-    // FIXME: There should be no direct interaction with editors. The required
-    //        values should be arguments.
-    // const { filePath, position } = getEditorDetails()
-    // if (filePath) {
-    //   const logDock = await this.show()
-    //   if (logDock) {
-    //     // logDock.update({ filePath, position })
-    //   }
-    // }
+    // FIXME: There should be no direct interaction with editors. The required values should be arguments.
+    const { filePath } = this.getEditorDetails()
+    if (filePath) {
+      await this.show()
+    }
   }
 
   async toggle () {
-    return atom.workspace.toggle(LogDock.LOG_DOCK_URI)
+    await atom.workspace.toggle(LogDock.LOG_DOCK_URI)
   }
 
   async show () {
-    return atom.workspace.open(LogDock.LOG_DOCK_URI)
+    await atom.workspace.open(LogDock.LOG_DOCK_URI)
   }
 
-  async hide () {
-    return atom.workspace.hide(LogDock.LOG_DOCK_URI)
+  hide () {
+    atom.workspace.hide(LogDock.LOG_DOCK_URI)
   }
 }

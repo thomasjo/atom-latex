@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { CompositeDisposable } from 'atom'
+import { CompositeDisposable, ViewModel } from 'atom'
 
 import LogMessage from './log-message'
 
@@ -13,10 +13,11 @@ interface State {
   messages: any[]
 }
 
-export default class LogDock extends React.Component<Props, State> {
+export default class LogDock extends React.Component<Props, State> implements ViewModel {
   static LOG_DOCK_URI = 'atom://latex/log'
 
   disposables = new CompositeDisposable()
+  element: React.RefObject<HTMLDivElement> = React.createRef()
 
   constructor (props: Props) {
     super(props)
@@ -48,7 +49,7 @@ export default class LogDock extends React.Component<Props, State> {
     })
 
     return (
-      <div className='latex-log'>
+      <div ref={this.element} className='latex-log'>
         <div className='log-block expand'>
           <table>
             <thead>
@@ -66,14 +67,6 @@ export default class LogDock extends React.Component<Props, State> {
     )
   }
 
-  // readAfterUpdate () {
-  //   // Look for highlighted messages and scroll to them
-  //   const highlighted = this.refs.body.getElementsByClassName('latex-highlight')
-  //   if (highlighted.length) {
-  //     highlighted[0].scrollIntoView()
-  //   }
-  // }
-
   getTitle () {
     return 'LaTeX Log'
   }
@@ -84,6 +77,10 @@ export default class LogDock extends React.Component<Props, State> {
 
   getDefaultLocation () {
     return 'bottom'
+  }
+
+  getElement () {
+    return this.element.current
   }
 
   serialize () {
