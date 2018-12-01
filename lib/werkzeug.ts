@@ -1,6 +1,6 @@
 /// <reference types="atom" />
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 import url from 'url'
 
 export function pathToUri (filePath: string, hash: string) {
