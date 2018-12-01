@@ -4,7 +4,6 @@
 import { afterEach, beforeEach, it, fit } from './async-spec-helpers'
 
 import Logger from '../lib/logger'
-import * as werkzeug from '../lib/werkzeug'
 
 describe('Logger', () => {
   let logger, messagesListener
@@ -87,14 +86,13 @@ describe('Logger', () => {
   })
 
   describe('sync', () => {
-    let logDock
-
     function initializeSpies (filePath, position) {
       initialize()
 
-      logDock = jasmine.createSpyObj('LogDock', ['update'])
-      spyOn(logger, 'show').andCallFake(() => Promise.resolve(logDock))
-      spyOn(werkzeug, 'getEditorDetails').andReturn({ filePath, position })
+      spyOn(logger, 'getEditorDetails').andReturn({ filePath, position })
+
+      spyOn(logger, 'show').andCallThrough()
+      spyOn(logger, 'renderLogDockElement').andReturn()
     }
 
     it('silently does nothing when the current editor is transient', async () => {
@@ -103,7 +101,7 @@ describe('Logger', () => {
       await logger.sync()
 
       expect(logger.show).not.toHaveBeenCalled()
-      expect(logDock.update).not.toHaveBeenCalled()
+      expect(logger.renderLogDockElement).not.toHaveBeenCalled()
     })
 
     it('shows and updates the log panel with the file path and position', async () => {
@@ -115,7 +113,7 @@ describe('Logger', () => {
       await logger.sync()
 
       expect(logger.show).toHaveBeenCalled()
-      expect(logDock.update).toHaveBeenCalledWith({ filePath, position })
+      expect(logger.renderLogDockElement).toHaveBeenCalledWith(filePath, position)
     })
   })
 
