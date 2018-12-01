@@ -32,7 +32,7 @@ describe('MarkerManager', () => {
       ]
       manager.addMarkers(messages, false)
 
-      expect(manager.addMarker).toHaveBeenCalledWith('error', 'foo.tex', [[0, 0], [0, 1]])
+      expect(manager.addMarker).toHaveBeenCalledWith('error', [[0, 0], [0, 1]])
       expect(manager.addMarker.calls.length).toEqual(1)
       expect(manager.clear).not.toHaveBeenCalled()
     })
