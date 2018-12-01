@@ -54,4 +54,8 @@ export default class StatusLabel extends React.Component<Props, State> {
 
     return className
   }
+
+  getElement () {
+    return this.element.current
+  }
 }
