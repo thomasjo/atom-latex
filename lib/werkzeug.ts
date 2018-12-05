@@ -1,5 +1,3 @@
-/// <reference types="atom" />
-
 import _ from 'lodash'
 import url from 'url'
 
