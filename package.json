@@ -309,12 +309,6 @@
       "type": "string",
       "default": "",
       "order": 24
-    },
-    "useRelativePaths": {
-      "description": "Execute compilation commands using relative paths from the main file",
-      "type": "boolean",
-      "default": false,
-      "order": 25
     }
   }
 }
