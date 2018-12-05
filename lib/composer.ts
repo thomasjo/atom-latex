@@ -192,7 +192,7 @@ export default class Composer extends Disposable {
   }
 
   async build (shouldRebuild = false, enableLogging = true) {
-    this.kill()
+    await this.kill()
 
     const { editor, filePath, lineNumber } = getEditorDetails()
 
