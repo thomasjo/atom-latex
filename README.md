@@ -137,6 +137,18 @@ some important features.
 
 Any and all help is greatly appreciated!
 
+**NOTE:** `latexmk` does not support file paths containing special characters such as `~`. To partially circumvent this, add `useRelativePaths: true` to your config file like so
+```cson
+# config.cson
+"*":
+  latex:
+    useRelativePaths: true
+```
+When set, this package will use a relative path in place of an absolute one. This will allow `latexmk` to compile projects stored in directories that contain special characters. Note that the project itself must not contain special characters in its directory or file names.
+
+This feature has not been fully tested yet, and there are no guarantees it will work in all cases. Please raise an issue if you find a case where it fails.
+
+
 <!--refs-->
 [appveyor svg]: https://ci.appveyor.com/api/projects/status/oc2v06stfwgd3bkn/branch/master?svg=true
 [appveyor]: https://ci.appveyor.com/project/thomasjo/atom-latex/branch/master
