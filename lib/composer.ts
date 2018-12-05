@@ -19,10 +19,9 @@ export default class Composer extends Disposable {
   constructor () {
     super(() => {
       this.disposables.dispose()
-      this.destroyDiCy()
     })
+
     this.disposables.add(atom.config.onDidChange('latex', () => this.updateConfiguration()))
-    this.disposables.add(atom.config.onDidChange('latex.useDicy', () => this.destroyDiCy()))
   }
 
   updateConfiguration () {
