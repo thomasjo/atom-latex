@@ -141,7 +141,7 @@ Any and all help is greatly appreciated!
 ```cson
 # config.cson
 "*":
-  "atom-latex":
+  latex:
     useRelativePaths: true
 ```
 When set, this package will use a relative path in place of an absolute one. This will allow `latexmk` to compile projects stored in directories that contain special characters. Note that the project itself must not contain special characters in its directory or file names.
