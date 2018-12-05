@@ -51,7 +51,6 @@ export default class Logger extends Disposable {
     return this.emitter.on('messages', callback)
   }
 
-
   error (text: string, filePath?: string, range?: any, logPath?: any, logRange?: any) {
     this.showMessages([{ type: 'error', text, filePath, range, logPath, logRange }])
   }
