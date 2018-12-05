@@ -18,7 +18,7 @@
   "main": "./lib/main",
   "dependencies": {
     "@dicy/client": "^0.13.0",
-    "dbus-native": "^0.2.1",
+    "dbus-native": "^0.4.0",
     "etch": "0.12.6",
     "fs-plus": "^3.0.0",
     "glob": "^7.1.1",
