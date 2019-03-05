@@ -27,7 +27,7 @@ describe('ProcessManager', () => {
     processManager.executeChildProcess(constructCommand('foo.tex'), { allowKill: true }).then(result => { killed = true })
     processManager.killChildProcesses()
 
-    waitsFor(() => killed, 10000)
+    waitsFor(() => killed, 5000)
   })
 
   it('kills old latexmk instances, but not ones created after the kill command', () => {
@@ -38,7 +38,7 @@ describe('ProcessManager', () => {
     processManager.killChildProcesses()
     processManager.executeChildProcess(constructCommand('new.tex'), { allowKill: true }).then(result => { newKilled = true })
 
-    waitsFor(() => oldKilled, 10000)
+    waitsFor(() => oldKilled, 5000)
 
     runs(() => {
       expect(newKilled).toBe(false)
