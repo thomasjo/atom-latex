@@ -1,106 +1,106 @@
-import BuildState from './build-state'
+import BuildState from "./build-state";
 
 export default class JobState {
-  parent: BuildState
-  jobName: string
-  outputFilePath: string | null = null
-  fileDatabase: any
-  logMessages: string[] | null = null
+  public parent: BuildState;
+  public jobName: string;
+  public outputFilePath: string | null = null;
+  public fileDatabase: any;
+  public logMessages: string[] | null = null;
 
-  constructor (parent: BuildState, jobName: string) {
-    this.parent = parent
-    this.jobName = jobName
+  constructor(parent: BuildState, jobName: string) {
+    this.parent = parent;
+    this.jobName = jobName;
   }
 
-  getOutputFilePath () {
-    return this.outputFilePath
+  public getOutputFilePath() {
+    return this.outputFilePath;
   }
 
-  setOutputFilePath (value: string) {
-    this.outputFilePath = value
+  public setOutputFilePath(value: string) {
+    this.outputFilePath = value;
   }
 
-  getFileDatabase () {
-    return this.fileDatabase
+  public getFileDatabase() {
+    return this.fileDatabase;
   }
 
-  setFileDatabase (value: any) {
-    this.fileDatabase = value
+  public setFileDatabase(value: any) {
+    this.fileDatabase = value;
   }
 
-  getLogMessages () {
-    return this.logMessages
+  public getLogMessages() {
+    return this.logMessages;
   }
 
-  setLogMessages (value: string[]) {
-    this.logMessages = value
+  public setLogMessages(value: string[]) {
+    this.logMessages = value;
   }
 
-  getJobName () {
-    return this.jobName
+  public getJobName() {
+    return this.jobName;
   }
 
-  getFilePath () {
-    return this.parent.getFilePath()
+  public getFilePath() {
+    return this.parent.getFilePath();
   }
 
-  getProjectPath () {
-    return this.parent.getProjectPath()
+  public getProjectPath() {
+    return this.parent.getProjectPath();
   }
 
-  getTexFilePath () {
-    return this.parent.getTexFilePath()
+  public getTexFilePath() {
+    return this.parent.getTexFilePath();
   }
 
-  setTexFilePath (value: string | null) {
-    this.parent.setTexFilePath(value)
+  public setTexFilePath(value: string | null) {
+    this.parent.setTexFilePath(value);
   }
 
-  getKnitrFilePath () {
-    return this.parent.getKnitrFilePath()
+  public getKnitrFilePath() {
+    return this.parent.getKnitrFilePath();
   }
 
-  setKnitrFilePath (value: string | null) {
-    this.parent.setKnitrFilePath(value)
+  public setKnitrFilePath(value: string | null) {
+    this.parent.setKnitrFilePath(value);
   }
 
-  getCleanPatterns () {
-    return this.parent.getCleanPatterns()
+  public getCleanPatterns() {
+    return this.parent.getCleanPatterns();
   }
 
-  getEnableSynctex () {
-    return this.parent.getEnableSynctex()
+  public getEnableSynctex() {
+    return this.parent.getEnableSynctex();
   }
 
-  getEnableShellEscape () {
-    return this.parent.getEnableShellEscape()
+  public getEnableShellEscape() {
+    return this.parent.getEnableShellEscape();
   }
 
-  getEnableExtendedBuildMode () {
-    return this.parent.getEnableExtendedBuildMode()
+  public getEnableExtendedBuildMode() {
+    return this.parent.getEnableExtendedBuildMode();
   }
 
-  getEngine () {
-    return this.parent.getEngine()
+  public getEngine() {
+    return this.parent.getEngine();
   }
 
-  getMoveResultToSourceDirectory () {
-    return this.parent.getMoveResultToSourceDirectory()
+  public getMoveResultToSourceDirectory() {
+    return this.parent.getMoveResultToSourceDirectory();
   }
 
-  getOutputDirectory () {
-    return this.parent.getOutputDirectory()
+  public getOutputDirectory() {
+    return this.parent.getOutputDirectory();
   }
 
-  getOutputFormat () {
-    return this.parent.getOutputFormat()
+  public getOutputFormat() {
+    return this.parent.getOutputFormat();
   }
 
-  getProducer () {
-    return this.parent.getProducer()
+  public getProducer() {
+    return this.parent.getProducer();
   }
 
-  getShouldRebuild () {
-    return this.parent.getShouldRebuild()
+  public getShouldRebuild() {
+    return this.parent.getShouldRebuild();
   }
 }
