@@ -1,44 +1,44 @@
-import Parser from '../parser'
+import Parser from "../parser";
 
-const SECTION_PATTERN = /^\["([^"]+)"]/
-const GROUP_PATTERN = /^\s+\(([^)]+)\)/
-const FILE_PATTERN = /^\s+"([^"]*)"/
+const SECTION_PATTERN = /^\["([^"]+)"]/;
+const GROUP_PATTERN = /^\s+\(([^)]+)\)/;
+const FILE_PATTERN = /^\s+"([^"]*)"/;
 
 export default class FdbParser extends Parser {
-  parse () {
-    let results: { [key: string]: any } = {}
-    let section: string | undefined
-    let group
+  public parse() {
+    const results: { [key: string]: any } = {};
+    let section: string | undefined;
+    let group;
 
     for (const line of this.getLines()) {
-      const sectionMatch = line.match(SECTION_PATTERN)
+      const sectionMatch = line.match(SECTION_PATTERN);
       if (sectionMatch) {
-        section = sectionMatch[1]
-        results[section] = {}
-        group = 'source'
-        results[section][group] = []
-        continue
+        section = sectionMatch[1];
+        results[section] = {};
+        group = "source";
+        results[section][group] = [];
+        continue;
       }
 
-      if (!section) continue
+      if (!section) { continue; }
 
-      const groupMatch = line.match(GROUP_PATTERN)
+      const groupMatch = line.match(GROUP_PATTERN);
       if (groupMatch) {
-        group = groupMatch[1]
+        group = groupMatch[1];
         if (!results[section][group]) {
-          results[section][group] = []
+          results[section][group] = [];
         }
-        continue
+        continue;
       }
 
-      if (!group) continue
+      if (!group) { continue; }
 
-      const fileMatch = line.match(FILE_PATTERN)
+      const fileMatch = line.match(FILE_PATTERN);
       if (fileMatch) {
-        results[section][group].push(fileMatch[1])
+        results[section][group].push(fileMatch[1]);
       }
     }
 
-    return results
+    return results;
   }
 }
