@@ -1,32 +1,33 @@
-import fs from 'fs'
-import Opener from '../opener'
-import { isPdfFile } from '../werkzeug'
+import fs from "fs";
+
+import Opener from "../opener";
+import { isPdfFile } from "../werkzeug";
 
 export default class SumatraOpener extends Opener {
-  hasSynctex () {
-    return true
+  public hasSynctex() {
+    return true;
   }
 
-  canOpen (filePath: string) {
-    const supportedFile = isPdfFile(filePath)
-    const binaryExists = fs.existsSync(atom.config.get('latex.sumatraPath'))
-    return process.platform === 'win32' && supportedFile && binaryExists
+  public canOpen(filePath: string) {
+    const supportedFile = isPdfFile(filePath);
+    const binaryExists = fs.existsSync(atom.config.get("latex.sumatraPath"));
+    return process.platform === "win32" && supportedFile && binaryExists;
   }
 
-  async open (filePath: string, texPath: string, lineNumber: number) {
-    const atomPath = process.argv[0]
+  public async open(filePath: string, texPath: string, lineNumber: number) {
+    const atomPath = process.argv[0];
     const args = [
-      '-reuse-instance',
-      '-forward-search',
+      "-reuse-instance",
+      "-forward-search",
       `"${texPath}"`,
       lineNumber,
-      '-inverse-search',
+      "-inverse-search",
       `"\\"${atomPath}\\" \\"%f:%l\\""`,
-      `"${filePath}"`
-    ]
+      `"${filePath}"`,
+    ];
 
-    const sumatraPath = `"${atom.config.get('latex.sumatraPath')}"`
-    const command = `${sumatraPath} ${args.join(' ')}`
-    await latex.process.executeChildProcess(command)
+    const sumatraPath = `"${atom.config.get("latex.sumatraPath")}"`;
+    const command = `${sumatraPath} ${args.join(" ")}`;
+    await latex.process.executeChildProcess(command);
   }
 }

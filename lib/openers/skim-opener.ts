@@ -1,25 +1,26 @@
-import fs from 'fs'
-import { heredoc, isPdfFile } from '../werkzeug'
-import Opener from '../opener'
+import fs from "fs";
+
+import Opener from "../opener";
+import { heredoc, isPdfFile } from "../werkzeug";
 
 export default class SkimOpener extends Opener {
-  hasSynctex () {
-    return true
+  public hasSynctex() {
+    return true;
   }
 
-  canOpenInBackground () {
-    return true
+  public canOpenInBackground() {
+    return true;
   }
 
-  canOpen (filePath: string) {
-    const supportedFile = isPdfFile(filePath)
-    const binaryExists = fs.existsSync(atom.config.get('latex.skimPath'))
-    return process.platform === 'darwin' && supportedFile && binaryExists
+  public canOpen(filePath: string) {
+    const supportedFile = isPdfFile(filePath);
+    const binaryExists = fs.existsSync(atom.config.get("latex.skimPath"));
+    return process.platform === "darwin" && supportedFile && binaryExists;
   }
 
-  async open (filePath: string, texPath: string, lineNumber: number) {
-    const skimPath = atom.config.get('latex.skimPath')
-    const shouldActivate = !this.shouldOpenInBackground()
+  public async open(filePath: string, texPath: string, lineNumber: number) {
+    const skimPath = atom.config.get("latex.skimPath");
+    const shouldActivate = !this.shouldOpenInBackground();
     const command = heredoc(`
       osascript -e \
       "
@@ -37,8 +38,8 @@ export default class SkimOpener extends Opener {
         tell front document to go to TeX line theLine from theSource
       end tell
       "
-      `)
+      `);
 
-    await latex.process.executeChildProcess(command!, { showError: true })
+    await latex.process.executeChildProcess(command!, { showError: true });
   }
 }
