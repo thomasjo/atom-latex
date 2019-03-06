@@ -1,6 +1,16 @@
 {
-  "extends": [
-    "tslint-config-standard",
-    "tslint-react"
-  ]
+  "extends": "tslint:recommended",
+  "defaultSeverity": "error",
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "ordered-imports": [true, { "grouped-imports": true }],
+    "prefer-const": [true, { "destructuring": "all" }],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ]
+  }
 }
