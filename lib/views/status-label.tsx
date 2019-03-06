@@ -1,61 +1,60 @@
-import React from 'react'
-import MessageCount from './message-count'
+import React from "react";
 
-interface Props {}
+import MessageCount from "./message-count";
 
 interface State {
-  busy: boolean
+  busy: boolean;
 }
 
-export default class StatusLabel extends React.Component<Props, State> {
-  element: React.RefObject<HTMLDivElement> = React.createRef()
-  tooltip: any
+export default class StatusLabel extends React.Component<{}, State> {
+  public element: React.RefObject<HTMLDivElement> = React.createRef();
+  public tooltip: any;
 
-  constructor (props: Props) {
-    super(props)
+  constructor(props: {}) {
+    super(props);
 
     this.state = {
-      busy: false
-    }
+      busy: false,
+    };
   }
 
-  handleClick = async () => {
-    await latex.log.show()
+  public handleClick = async () => {
+    await latex.log.show();
   }
 
-  componentDidMount () {
-    this.tooltip = atom.tooltips.add(this.element.current!, { title: 'Click to show LaTeX log' })
+  public componentDidMount() {
+    this.tooltip = atom.tooltips.add(this.element.current!, { title: "Click to show LaTeX log" });
   }
 
-  componentWillUnmount () {
+  public componentWillUnmount() {
     if (this.tooltip) {
-      this.tooltip.dispose()
+      this.tooltip.dispose();
     }
   }
 
-  render () {
+  public render() {
     return (
       <div ref={this.element} className={this.getClassNames()} onClick={this.handleClick}>
-        <span className='icon icon-sync busy' />
-        <a href='#'>LaTeX</a>
-        <MessageCount type='error' />
-        <MessageCount type='warning' />
-        <MessageCount type='info' />
+        <span className="icon icon-sync busy" />
+        <a href="#">LaTeX</a>
+        <MessageCount type="error" />
+        <MessageCount type="warning" />
+        <MessageCount type="info" />
       </div>
-    )
+    );
   }
 
-  getClassNames () {
-    const className = `latex-status inline-block`
+  public getClassNames() {
+    const className = `latex-status inline-block`;
 
     if (this.state.busy) {
-      return `${className} is-busy`
+      return `${className} is-busy`;
     }
 
-    return className
+    return className;
   }
 
-  getElement () {
-    return this.element.current
+  public getElement() {
+    return this.element.current;
   }
 }

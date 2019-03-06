@@ -1,43 +1,43 @@
-import _ from 'lodash'
-import React from 'react'
-import { CompositeDisposable, ViewModel } from 'atom'
+import { CompositeDisposable, ViewModel } from "atom";
+import _ from "lodash";
+import React from "react";
 
-import LogMessage from './log-message'
+import LogMessage from "./log-message";
 
 interface Props {
-  filePath: string
-  position: any
+  filePath: string;
+  position: any;
 }
 
 interface State {
-  messages: any[]
+  messages: any[];
 }
 
 export default class LogDock extends React.Component<Props, State> implements ViewModel {
-  static LOG_DOCK_URI = 'atom://latex/log'
+  public static LOG_DOCK_URI = "atom://latex/log";
 
-  disposables = new CompositeDisposable()
-  element: React.RefObject<HTMLDivElement> = React.createRef()
+  public disposables = new CompositeDisposable();
+  public element: React.RefObject<HTMLDivElement> = React.createRef();
 
-  constructor (props: Props) {
-    super(props)
+  constructor(props: Props) {
+    super(props);
 
     this.state = {
-      messages: []
-    }
+      messages: [],
+    };
   }
 
-  componentDidMount () {
+  public componentDidMount() {
     this.disposables.add(latex.log.onMessages((event: any) => {
       this.setState({
-        messages: event.messages
-      })
-    }))
+        messages: event.messages,
+      });
+    }));
   }
 
-  render () {
-    let index = 0
-    let content = this.state.messages.map(message => {
+  public render() {
+    let index = 0;
+    const content = this.state.messages.map((message) => {
       return (
         <LogMessage
           key={index++}
@@ -45,12 +45,12 @@ export default class LogDock extends React.Component<Props, State> implements Vi
           filePath={this.props.filePath}
           position={this.props.position}
         />
-      )
-    })
+      );
+    });
 
     return (
-      <div ref={this.element} className='latex-log'>
-        <div className='log-block expand'>
+      <div ref={this.element} className="latex-log">
+        <div className="log-block expand">
           <table>
             <thead>
               <tr>
@@ -64,28 +64,28 @@ export default class LogDock extends React.Component<Props, State> implements Vi
           </table>
         </div>
       </div>
-    )
+    );
   }
 
-  getTitle () {
-    return 'LaTeX Log'
+  public getTitle() {
+    return "LaTeX Log";
   }
 
-  getURI () {
-    return LogDock.LOG_DOCK_URI
+  public getURI() {
+    return LogDock.LOG_DOCK_URI;
   }
 
-  getDefaultLocation () {
-    return 'bottom'
+  public getDefaultLocation() {
+    return "bottom";
   }
 
-  getElement () {
-    return this.element.current
+  public getElement() {
+    return this.element.current;
   }
 
-  serialize () {
+  public serialize() {
     return {
-      deserializer: 'latex/log'
-    }
+      deserializer: "latex/log",
+    };
   }
 }

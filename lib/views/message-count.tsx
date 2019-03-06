@@ -1,52 +1,52 @@
-import _ from 'lodash'
-import React from 'react'
-import { CompositeDisposable } from 'atom'
+import { CompositeDisposable } from "atom";
+import _ from "lodash";
+import React from "react";
 
-import MessageIcon from './message-icon'
+import MessageIcon from "./message-icon";
 
 interface Props {
-  type: string
+  type: string;
 }
 
 interface State {
-  messages: any[]
+  messages: any[];
 }
 
 export default class MessageCount extends React.Component<Props, State> {
-  disposables = new CompositeDisposable()
+  public disposables = new CompositeDisposable();
 
-  constructor (props: Props = { type: 'error' }) {
-    super(props)
+  constructor(props: Props = { type: "error" }) {
+    super(props);
 
     this.state = {
-      messages: []
-    }
+      messages: [],
+    };
   }
 
-  componentDidMount () {
+  public componentDidMount() {
     this.disposables.add(latex.log.onMessages((event: any) => {
-      const messages = _.filter(event.messages, { 'type': this.props.type })
+      const messages = _.filter(event.messages, { type: this.props.type });
 
       this.setState({
-        'messages': messages
-      })
-    }))
+        messages,
+      });
+    }));
   }
 
-  componentWillUnmount () {
-    this.disposables.dispose()
+  public componentWillUnmount() {
+    this.disposables.dispose();
   }
 
-  render () {
+  public render() {
     if (latex.log.messageTypeIsVisible(this.props.type)) {
       return (
         <span className={`latex-${this.props.type} latex-message-count`}>
           <MessageIcon type={this.props.type} />
           {this.state.messages.length}
         </span>
-      )
+      );
     }
 
-    return <span />
+    return <span />;
   }
 }

@@ -1,23 +1,23 @@
-import React from 'react'
+import React from "react";
 
 interface Props {
-  type: string
+  type: string;
 }
 
 export default class MessageIcon extends React.Component<Props, {}> {
-  static icons: { [key: string]: string } = {
-    error: 'stop',
-    warning: 'alert',
-    info: 'info'
+  public static icons: { [key: string]: string } = {
+    error: "stop",
+    info: "info",
+    warning: "alert",
+  };
+
+  constructor(props: Props) {
+    super(props);
   }
 
-  constructor (props: Props) {
-    super(props)
-  }
-
-  render () {
+  public render() {
     return (
       <span className={`icon icon-${MessageIcon.icons[this.props.type]}`} />
-    )
+    );
   }
 }
