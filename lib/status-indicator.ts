@@ -1,54 +1,54 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Disposable } from 'atom'
+import { Disposable } from "atom";
+import React from "react";
+import ReactDOM from "react-dom";
 
-import StatusLabel from './views/status-label'
+import StatusLabel from "./views/status-label";
 
 export default class StatusIndicator extends Disposable {
-  container?: HTMLDivElement
-  statusLabel?: StatusLabel
-  statusTile?: any
+  public container?: HTMLDivElement;
+  public statusLabel?: StatusLabel;
+  public statusTile?: any;
 
-  constructor () {
-    super(() => this.detachStatusBar())
+  constructor() {
+    super(() => this.detachStatusBar());
   }
 
-  attachStatusBar (statusBar: any) {
-    this.container = document.createElement('div')
-    this.statusLabel = ReactDOM.render(React.createElement(StatusLabel), this.container)
+  public attachStatusBar(statusBar: any) {
+    this.container = document.createElement("div");
+    this.statusLabel = ReactDOM.render(React.createElement(StatusLabel), this.container);
 
     this.statusTile = statusBar.addLeftTile({
       item: this.statusLabel,
-      priority: 9001
-    })
+      priority: 9001,
+    });
   }
 
-  detachStatusBar () {
+  public detachStatusBar() {
     if (this.statusTile) {
-      this.statusTile.destroy()
-      this.statusTile = undefined
+      this.statusTile.destroy();
+      this.statusTile = undefined;
     }
     if (this.container && this.statusLabel) {
-      ReactDOM.unmountComponentAtNode(this.container)
-      this.statusLabel = undefined
+      ReactDOM.unmountComponentAtNode(this.container);
+      this.statusLabel = undefined;
     }
   }
 
-  setBusy () {
+  public setBusy() {
     if (this.statusLabel) {
-      this.statusLabel.setState({ busy: true })
+      this.statusLabel.setState({ busy: true });
     }
   }
 
-  setIdle () {
+  public setIdle() {
     if (this.statusLabel) {
-      this.statusLabel.setState({ busy: false })
+      this.statusLabel.setState({ busy: false });
     }
   }
 
-  show () {
+  public show() {
     if (this.statusLabel) {
-      this.statusLabel.setState({ busy: false })
+      this.statusLabel.setState({ busy: false });
     }
   }
 }
