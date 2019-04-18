@@ -1,3 +1,9 @@
-.DS_Store
+# Tooling
+.vscode/
+
+# Boilerplate
+node_modules/
 npm-debug.log
-node_modules
+
+# OS junk
+.DS_Store
