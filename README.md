@@ -194,27 +194,27 @@ This feature has not been fully tested yet, and there are no guarantees it will 
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/thomasjo/atom-latex/graphs/contributors"><img src="https://opencollective.com/atom-latex/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/thomasjo/atom-latex/graphs/contributors"><img src="https://opencollective.com/latex/contributors.svg?width=890&button=false" /></a>
 
 ### Financial Contributors
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/atom-latex/contribute)]
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/latex/contribute)]
 
 #### Individuals
 
-<a href="https://opencollective.com/atom-latex"><img src="https://opencollective.com/atom-latex/individuals.svg?width=890"></a>
+<a href="https://opencollective.com/latex"><img src="https://opencollective.com/latex/individuals.svg?width=890"></a>
 
 #### Organizations
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/atom-latex/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/latex/contribute)]
 
-<a href="https://opencollective.com/atom-latex/organization/0/website"><img src="https://opencollective.com/atom-latex/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/1/website"><img src="https://opencollective.com/atom-latex/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/2/website"><img src="https://opencollective.com/atom-latex/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/3/website"><img src="https://opencollective.com/atom-latex/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/4/website"><img src="https://opencollective.com/atom-latex/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/5/website"><img src="https://opencollective.com/atom-latex/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/6/website"><img src="https://opencollective.com/atom-latex/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/7/website"><img src="https://opencollective.com/atom-latex/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/8/website"><img src="https://opencollective.com/atom-latex/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/atom-latex/organization/9/website"><img src="https://opencollective.com/atom-latex/organization/9/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/0/website"><img src="https://opencollective.com/latex/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/1/website"><img src="https://opencollective.com/latex/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/2/website"><img src="https://opencollective.com/latex/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/atom-latex/organization/3/website"><img src="https://opencollective.com/latex/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/4/website"><img src="https://opencollective.com/latex/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/5/website"><img src="https://opencollective.com/latex/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/6/website"><img src="https://opencollective.com/latex/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/7/website"><img src="https://opencollective.com/latex/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/8/website"><img src="https://opencollective.com/latex/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/latex/organization/9/website"><img src="https://opencollective.com/latex/organization/9/avatar.svg"></a>
