@@ -243,10 +243,10 @@
       "type": "string",
       "enum": [
         "automatic",
+        "atom",
         "atril",
         "evince",
         "okular",
-        "pdf-view",
         "preview",
         "qpdfview",
         "shell-open",
