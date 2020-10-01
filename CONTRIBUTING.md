@@ -6,6 +6,12 @@ contributions are crucial.
 Before you set out on your adventure, please read this document carefully. It
 will save everyone involved both time and energy.
 
+## Code of Conduct
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+
+This project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+By participating, you are expected to uphold this code.
+
 ## Styleguides
 The short story is to use common sense and follow the existing styles and
 conventions, whether it's Git commit messages, JavaScript code, documentation,
