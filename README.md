@@ -116,7 +116,8 @@ for compatibility. More details can found at [Overridding Build Settings][].
 | `jobNames`, `jobnames` or `jobname`     | comma separated names, e.g. `foo, bar`         | Control the number and names of build jobs. Only a single name can be used for `jobname`. |
 | `outputDirectory` or `output_directory` | directory path, e.g. `build`                   | Specify the output directory that should be used.                                         |
 | `producer`                              | `dvipdf`, `dvipdfmx`, `xdvipdfmx` or `ps2pdf`  | Override the PDF producer                                                                 |
-| `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |
+| `openResultAfterBuild`                  | `yes`, `no`, `true` or `false`                 | Override open result after build (not available for DiCy)                                                                  |
+| `root`                                  | file path, e.g. `../file.tex`                  | Specify the root file that should be built. Only available via "magic" TeX comments.      |        
 
 There are additional settings that may be configured for the DiCy builder that
 may not be accessible from this package's setting page, but can be set via a
