@@ -46,3 +46,10 @@ changes are adhering to the rules, simply execute `script/lint`.
 <!--- refs --->
 [1]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [2]: http://standardjs.com/
+
+
+## Financial contributions
+
+We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/latex).
+Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
+

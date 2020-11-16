@@ -25,6 +25,7 @@
     "js-yaml": "^3.11.0",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.4",
+    "opencollective-postinstall": "^2.0.2",
     "temp": "^0.8.3",
     "tree-kill": "^1.1.0",
     "wrench": "^1.5.9"
@@ -310,5 +311,12 @@
       "default": "",
       "order": 24
     }
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/atom-latex"
+  },
+  "scripts": {
+    "postinstall": "opencollective-postinstall || true"
   }
 }
