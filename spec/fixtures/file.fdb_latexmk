@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1474559881 "file.tex" "/foo/output/file.pdf" "file" 1474559881
+["pdflatex"] 1474559881 "file.tex" "/foo/file.pdf" "file" 1474559881
   "/foo/output/file.aux" 1474559881 78 176b9809a80d53064f21009e02135ec4 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
@@ -17,11 +17,11 @@
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1471547796 3873677 271c6d05ce0a4f4e34be832490419ac2 ""
   "/usr/local/texlive/2016/texmf.cnf" 1465311657 1020 2966fa5b7c5b86b293259f0ebdcea22d ""
   "file.tex" 1474559763 108 e2f7eacca0e6c4d22260c2d4b1150d46 ""
-  "output/file.aux" 1474559881 78 176b9809a80d53064f21009e02135ec4 ""
+  "file.aux" 1474559881 78 176b9809a80d53064f21009e02135ec4 ""
   (generated)
-  "/foo/output/file.pdfsync"
-  "/foo/output/file.pdf"
-  "output/file.log"
-  "output/file.pdf"
-  "/foo/output/file.log"
-  "output/file.aux"
+  "/foo/file.pdfsync"
+  "/foo/file.pdf"
+  "file.log"
+  "file.pdf"
+  "/foo/file.log"
+  "file.aux"
