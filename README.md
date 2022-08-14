@@ -1,9 +1,9 @@
-# LaTeX package
-[![Build Status][travis svg]][travis]
-[![Windows Build Status][appveyor svg]][appveyor]
-[![Dependency Status][dependency svg]][dependency]
-[![devDependency Status][devDependency svg]][devDependency]
+This project is no longer maintained and — in light of the fact that the Atom editor will be [sunset on December 15, 2022](https://github.blog/2022-06-08-sunsetting-atom/) — has therefore been archived.
+If you wish to keep writing LaTeX documents in Atom and need new functionality, either fork this package or use another package that provides whatever  functionality you desire.
 
+---
+
+# LaTeX package
 Compile LaTeX, [knitr][], [literate Agda][], [literate Haskell][], or [Pweave][]
 documents from within Atom.
 
